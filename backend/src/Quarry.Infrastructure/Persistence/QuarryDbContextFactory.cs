@@ -8,7 +8,8 @@ public sealed class QuarryDbContextFactory : IDesignTimeDbContextFactory<QuarryD
     public QuarryDbContext CreateDbContext(string[] args)
     {
         var options = new DbContextOptionsBuilder<QuarryDbContext>();
-        options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings__Quarry")
+        options.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionStrings__QuarryMigrations")
+            ?? Environment.GetEnvironmentVariable("ConnectionStrings__Quarry")
             ?? "Server=.\\SQLEXPRESS;Database=Quarry;Trusted_Connection=True;TrustServerCertificate=True;");
         return new QuarryDbContext(options.Options);
     }

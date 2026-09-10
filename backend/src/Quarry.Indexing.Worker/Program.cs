@@ -5,7 +5,8 @@ using Quarry.Infrastructure.Persistence;
 using Quarry.Infrastructure.Recommendations;
 
 var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Quarry")));
+builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("QuarryWorker") ?? builder.Configuration.GetConnectionString("Quarry")));
 builder.Services.Configure<OllamaEmbeddingOptions>(builder.Configuration.GetSection(OllamaEmbeddingOptions.SectionName));
 builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client =>
 {

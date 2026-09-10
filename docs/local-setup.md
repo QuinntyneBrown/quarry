@@ -17,6 +17,29 @@ $env:ConnectionStrings__Quarry = 'Server=(localdb)\MSSQLLocalDB;Database=Quarry;
 
 On this Windows ARM64 machine, Express `17.0.1000.7` was verified on 2026-09-10. LocalDB instance-name connections failed to load `SQLUserInstance.dll` with error 193; the running Express service provides a working database connection. The migration chain has been applied to `Quarry`. No illustrative entries are imported by migration.
 
+For restricted runtime access, configure separate connections rather than the legacy shared `Quarry` fallback:
+
+| Environment variable | Consumer | Database role |
+|---|---|---|
+| `ConnectionStrings__QuarryRead` | Public API catalog/search/health reads | `QuarryRead` |
+| `ConnectionStrings__QuarryMaintenance` | Authorized API mutations and rebuild | `QuarryMaintenance` |
+| `ConnectionStrings__QuarryWorker` | Indexing host | `QuarryWorker` |
+| `ConnectionStrings__QuarryMigrations` | EF migration tooling only | Deployment administrator |
+
+Migrations create the roles, not logins or passwords. A database administrator maps separately provisioned login identities to them, for example:
+
+```sql
+USE Quarry;
+CREATE USER QuarryReadUser FOR LOGIN QuarryReadLogin;
+ALTER ROLE QuarryRead ADD MEMBER QuarryReadUser;
+CREATE USER QuarryMaintenanceUser FOR LOGIN QuarryMaintenanceLogin;
+ALTER ROLE QuarryMaintenance ADD MEMBER QuarryMaintenanceUser;
+CREATE USER QuarryWorkerUser FOR LOGIN QuarryWorkerLogin;
+ALTER ROLE QuarryWorker ADD MEMBER QuarryWorkerUser;
+```
+
+Keep these users out of elevated roles and store their connection strings privately. The API needs distinct credentials for read and maintenance connections. Two integrated-security strings in one process use the same Windows identity and therefore do not enforce that separation. SQL-authenticated logins require a suitably configured instance; see Microsoft's [SQL authentication documentation](https://learn.microsoft.com/en-us/sql/connect/ado-net/sql/authentication-sql-server?view=sql-server-ver17). The current local Express instance uses Windows-only authentication; its mode is unchanged. [Database-access verification](verification/database-access.md) distinguishes tested grants from runtime identity provisioning. Before rolling back the role migration, an administrator must remove any assigned role members.
+
 Install and verify the required local embedding model:
 
 ```powershell

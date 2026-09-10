@@ -78,7 +78,10 @@ builder.Services.AddRateLimiter(options =>
     options.AddPolicy("framework-search", httpContext => CreateFixedWindowPartition(httpContext, searchPermitLimit, rateLimitWindowSeconds));
 });
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(BrowseFrameworksQuery).Assembly));
-builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Quarry")));
+builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("QuarryRead") ?? builder.Configuration.GetConnectionString("Quarry")));
+builder.Services.AddKeyedScoped<QuarryDbContext>("maintenance", (_, _) => new QuarryDbContext(new DbContextOptionsBuilder<QuarryDbContext>()
+    .UseSqlServer(builder.Configuration.GetConnectionString("QuarryMaintenance") ?? builder.Configuration.GetConnectionString("Quarry")).Options));
 builder.Services.Configure<OllamaEmbeddingOptions>(builder.Configuration.GetSection(OllamaEmbeddingOptions.SectionName));
 builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client =>
 {
@@ -89,13 +92,15 @@ builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client =>
 builder.Services.AddScoped<ITextEmbeddingProvider>(serviceProvider => serviceProvider.GetRequiredService<OllamaTextEmbeddingProvider>());
 builder.Services.AddScoped<IServiceHealthReader, SqlServiceHealthReader>();
 builder.Services.AddScoped<IFrameworkVectorRepository, SqlFrameworkVectorRepository>();
-builder.Services.AddScoped<IFrameworkSearchIndexMaintenance, SqlFrameworkSearchIndexMaintenance>();
-builder.Services.AddScoped<SqlIndexWorkRepository>();
+builder.Services.AddScoped<IFrameworkSearchIndexMaintenance>(services => ActivatorUtilities.CreateInstance<SqlFrameworkSearchIndexMaintenance>(services,
+    services.GetRequiredKeyedService<QuarryDbContext>("maintenance")));
+builder.Services.AddScoped<SqlIndexWorkRepository>(services => new SqlIndexWorkRepository(services.GetRequiredKeyedService<QuarryDbContext>("maintenance")));
 builder.Services.AddSingleton<CosineSimilarityRanker>();
 builder.Services.AddScoped<SqlFrameworkCatalogReader>();
-builder.Services.AddScoped<IFrameworkDraftRepository, SqlFrameworkDraftRepository>();
-builder.Services.AddScoped<IFrameworkPublicationRepository, SqlFrameworkPublicationRepository>();
-builder.Services.AddScoped<IFrameworkRetirementRepository, SqlFrameworkRetirementRepository>();
+builder.Services.AddScoped<IFrameworkDraftRepository>(services => new SqlFrameworkDraftRepository(services.GetRequiredKeyedService<QuarryDbContext>("maintenance")));
+builder.Services.AddScoped<IFrameworkPublicationRepository>(services => ActivatorUtilities.CreateInstance<SqlFrameworkPublicationRepository>(services,
+    services.GetRequiredKeyedService<QuarryDbContext>("maintenance")));
+builder.Services.AddScoped<IFrameworkRetirementRepository>(services => new SqlFrameworkRetirementRepository(services.GetRequiredKeyedService<QuarryDbContext>("maintenance")));
 builder.Services.AddSingleton<DevelopmentFrameworkCatalogReader>();
 builder.Services.AddScoped<IFrameworkCatalogReader>(serviceProvider => builder.Configuration.GetValue<bool>("Catalog:SeedDevelopmentEvaluationData")
     ? serviceProvider.GetRequiredService<DevelopmentFrameworkCatalogReader>()
