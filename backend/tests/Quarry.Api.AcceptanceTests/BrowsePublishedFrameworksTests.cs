@@ -53,4 +53,17 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task GetFrameworksFiltersPublishedEntriesByTechnology()
+    {
+        using var seededFactory = _factory.WithWebHostBuilder(builder => builder.UseSetting("Catalog:SeedDevelopmentEvaluationData", "true"));
+        using var seededClient = seededFactory.CreateClient();
+        var response = await seededClient.GetAsync("/api/frameworks?technology=Angular");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.Equal(0, document.RootElement.GetProperty("total").GetInt32());
+        Assert.Empty(document.RootElement.GetProperty("items").EnumerateArray());
+    }
 }

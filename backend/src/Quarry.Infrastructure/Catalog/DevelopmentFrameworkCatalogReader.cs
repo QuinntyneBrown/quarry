@@ -12,7 +12,7 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader
         _configuration = configuration;
     }
 
-    public Task<CatalogPage> BrowseAsync(int pageSize, CancellationToken cancellationToken)
+    public Task<CatalogPage> BrowseAsync(int pageSize, string? technology, CancellationToken cancellationToken)
     {
         if (!bool.TryParse(_configuration["Catalog:SeedDevelopmentEvaluationData"], out var seed) || !seed)
         {
@@ -27,6 +27,9 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader
             ["Accessible"],
             2,
             "1");
-        return Task.FromResult(new CatalogPage([atlas], 1, false, null, "1"));
+        var items = string.IsNullOrWhiteSpace(technology) || string.Equals(atlas.Technology, technology, StringComparison.OrdinalIgnoreCase)
+            ? new List<FrameworkSummary> { atlas }
+            : [];
+        return Task.FromResult(new CatalogPage(items, items.Count, false, null, "1"));
     }
 }
