@@ -9,6 +9,8 @@ namespace Quarry.Api.Controllers;
 [Route("api/frameworks")]
 public sealed class FrameworksController : ControllerBase
 {
+    private static readonly string[] SupportedTechnologies = ["React", "Angular", "Vue", "Web Components"];
+
     private readonly ISender _sender;
 
     public FrameworksController(ISender sender)
@@ -24,6 +26,11 @@ public sealed class FrameworksController : ControllerBase
         if (pageSize is < 1 or > 24)
         {
             return BadRequest(new SafeErrorResponse("invalid_page_size", HttpContext.TraceIdentifier));
+        }
+
+        if (!string.IsNullOrWhiteSpace(technology) && !SupportedTechnologies.Contains(technology, StringComparer.Ordinal))
+        {
+            return BadRequest(new SafeErrorResponse("invalid_technology", HttpContext.TraceIdentifier));
         }
 
         var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology), cancellationToken);

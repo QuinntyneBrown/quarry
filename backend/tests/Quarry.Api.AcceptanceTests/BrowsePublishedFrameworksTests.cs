@@ -77,4 +77,12 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
         Assert.Equal("Atlas", document.RootElement.GetProperty("summary").GetProperty("name").GetString());
         Assert.Equal("1", document.RootElement.GetProperty("summary").GetProperty("revision").GetString());
     }
+
+    [Fact]
+    public async Task GetFrameworksRejectsUnsupportedTechnology()
+    {
+        var response = await _client.GetAsync("/api/frameworks?technology=Unsupported");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
