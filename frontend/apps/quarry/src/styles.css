@@ -38,6 +38,8 @@ main { max-width: 1216px; margin: auto; padding: 0 38px 32px; }
 .primary-button:hover { background: #394e8c; }
 .primary-button:focus-visible { outline-color: #172c55; }
 .clear-search { margin-top: 12px; font-size: .8rem; }
+.field-error { color: #9a2637; margin-top: 12px; font-size: .85rem; }
+input[aria-invalid="true"] { outline: 2px solid #9a2637; outline-offset: -2px; }
 .examples { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; text-align: left; }
 .examples p { font-size: .75rem; color: var(--muted); margin-right: 2px; }
 .examples button { font-size: .75rem; min-height: 32px; padding: 6px 10px; }

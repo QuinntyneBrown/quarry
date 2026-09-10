@@ -13,10 +13,12 @@ import type { FrameworkRecommendation } from "../types/FrameworkRecommendation";
 import { CatalogCard } from "./CatalogCard";
 import { FrameworkDetailsDialog } from "./FrameworkDetailsDialog";
 import { BrandMark } from "./BrandMark";
+import { SearchValidationError } from "../api/SearchValidationError";
 
 export function DiscoveryPage(): React.JSX.Element {
   const [frameworks, setFrameworks] = useState<FrameworkSummary[]>([]);
   const [error, setError] = useState<string>();
+  const [queryError, setQueryError] = useState<string>();
   const [draftQuery, setDraftQuery] = useState("");
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [technology, setTechnology] = useState<Technology>("All technologies");
@@ -80,6 +82,7 @@ export function DiscoveryPage(): React.JSX.Element {
   }
 
   function submitQuery(value: string, selectedTechnology: Technology = technology): void {
+    setQueryError(undefined);
     setRetryAt(undefined);
     setCatalogNotice(undefined);
     const query = value.trim();
@@ -91,10 +94,27 @@ export function DiscoveryPage(): React.JSX.Element {
     }
     const request = ++discoveryRequest.current;
     setIsLoading(true);
-    searchFrameworks(query, selectedTechnology, beginDiscoveryRequest()).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setRecommendations(response.items); setIsIndexIncomplete(response.isIndexIncomplete); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch((cause: unknown) => { if (request === discoveryRequest.current) { setRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined); setError(cause instanceof RateLimitError ? cause.message : "Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query, selectedTechnology)); setIsLoading(false); } });
+    searchFrameworks(query, selectedTechnology, beginDiscoveryRequest()).then((response) => {
+      if (request !== discoveryRequest.current) return;
+      setFrameworks(response.items);
+      setRecommendations(response.items);
+      setIsIndexIncomplete(response.isIndexIncomplete);
+      setError(undefined);
+      setRetry(undefined);
+      setIsLoading(false);
+    }).catch((cause: unknown) => {
+      if (request !== discoveryRequest.current) return;
+      const invalidQuery = cause instanceof SearchValidationError;
+      setQueryError(invalidQuery ? cause.message : undefined);
+      setRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined);
+      setError(invalidQuery ? "Update your project description to search again." : cause instanceof RateLimitError ? cause.message : "Framework search is unavailable. Try again.");
+      setRetry(invalidQuery ? undefined : () => () => submitQuery(query, selectedTechnology));
+      setIsLoading(false);
+    });
   }
 
   function loadCatalog(value: Technology, catalogUpdated = false): void {
+    setQueryError(undefined);
     setRetryAt(undefined);
     const request = ++discoveryRequest.current;
     setIsLoading(true);
@@ -254,9 +274,10 @@ export function DiscoveryPage(): React.JSX.Element {
     <form className="project-search" onSubmit={submit}>
       <label htmlFor="project-description">What are you building?</label>
       <div className="search-row">
-        <input ref={searchInput} id="project-description" name="project-description" placeholder="A place for your next idea…" maxLength={500} value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} />
+        <input ref={searchInput} id="project-description" name="project-description" placeholder="A place for your next idea…" maxLength={500} value={draftQuery} aria-invalid={queryError ? true : undefined} aria-describedby={queryError ? "project-error" : undefined} onChange={(event) => setDraftQuery(event.target.value)} />
         <button className="primary-button" type="submit">Find frameworks <span aria-hidden="true">↗</span></button>
       </div>
+      {queryError && <p className="field-error" id="project-error" role="alert">{queryError}</p>}
       {submittedQuery && <button className="clear-search" type="button" onClick={clearSearch}>Clear search</button>}
     </form>
     <section className="examples" aria-label="Project examples"><p>Try an example:</p>
@@ -278,7 +299,7 @@ export function DiscoveryPage(): React.JSX.Element {
     {catalogNotice && <p className="catalog-notice" role="status">{catalogNotice}</p>}
     {selectionCleared && <p role="status">No framework selected.</p>}
     <section className="framework-grid" aria-label="Framework catalog" aria-busy={isLoading}>
-      {isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role="alert">{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}</section> : <>
+      {isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role={queryError ? undefined : "alert"}>{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}</section> : <>
         {isIndexIncomplete && <section><p role="status">Results are temporarily incomplete while framework indexing finishes.</p>
           <button type="button" onClick={() => submitQuery(submittedQuery, technology)}>Retry</button><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>
         </section>}

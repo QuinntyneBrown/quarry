@@ -36,7 +36,8 @@ public sealed class FrameworkSearchesController : ControllerBase
         var query = request.Query?.Trim();
         if (query is null || query.Length > 500)
         {
-            return BadRequest(new SafeErrorResponse("invalid_search_query", HttpContext.TraceIdentifier));
+            return BadRequest(new MetadataValidationResponse("invalid_search_query", HttpContext.TraceIdentifier,
+                new Dictionary<string, string[]> { ["query"] = ["Use a project description of 500 characters or fewer."] }));
         }
 
         if (!string.IsNullOrWhiteSpace(request.Technology) && !SupportedTechnologies.Contains(request.Technology, StringComparer.Ordinal))
