@@ -39,6 +39,10 @@ export class DiscoveryPage {
     await expect(this.page.getByRole("heading", { name: "Describe your project" })).toBeVisible();
   }
 
+  public async resetBrowse(): Promise<void> {
+    await this.page.getByRole("button", { name: "Browse all frameworks" }).click();
+  }
+
   public async filterTechnology(technology: string): Promise<void> {
     await this.page.getByLabel("Technology").selectOption(technology);
   }

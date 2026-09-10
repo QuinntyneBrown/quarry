@@ -67,3 +67,18 @@ test("technology filtering reloads the current browse catalog", async ({ page })
   await discovery.filterTechnology("React");
   await expect.poll(() => requestedTechnologies).toContain("React");
 });
+
+test("empty search results explain recovery and allow a browse reset", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("unknown project");
+  await expect(page.getByRole("heading", { name: "No matching frameworks" })).toBeVisible();
+  await discovery.resetBrowse();
+  await discovery.expectBrowseMode();
+});
