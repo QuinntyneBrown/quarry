@@ -12,6 +12,7 @@ import type { FrameworkDetails } from "../types/FrameworkDetails";
 import type { FrameworkRecommendation } from "../types/FrameworkRecommendation";
 import { CatalogCard } from "./CatalogCard";
 import { FrameworkDetailsDialog } from "./FrameworkDetailsDialog";
+import { BrandMark } from "./BrandMark";
 
 export function DiscoveryPage(): React.JSX.Element {
   const [frameworks, setFrameworks] = useState<FrameworkSummary[]>([]);
@@ -238,33 +239,45 @@ export function DiscoveryPage(): React.JSX.Element {
     requestAnimationFrame(() => (document.getElementById(`framework-details-${id}`) ?? resultsHeading.current)?.focus({ preventScroll: true }));
   }
 
-  return <main>
-    {catalogNotice && <p role="status">{catalogNotice}</p>}
-    {!submittedQuery && !isLoading && !error && <p>Showing {frameworks.length} of {catalogTotal} frameworks</p>}
+  return <>
+    <a className="skip-link" href="#framework-results" onClick={() => resultsHeading.current?.focus()}>Skip to frameworks</a>
+    <header className="site-header">
+      <div className="brand"><BrandMark />quarry<span>.</span></div>
+      <p className="header-caption">A foundation for what comes next.</p>
+      <span className="header-note">UI framework discovery</span>
+    </header>
+    <main>
+    <section className="search-section" aria-label="Find your framework">
+    <p className="eyebrow">GOOD IDEAS START WITH THE RIGHT TOOLS</p>
     <h1>{submittedQuery ? `Frameworks for ${submittedQuery}` : "Describe your project"}</h1>
-    <form onSubmit={submit}>
+    <p className="search-intro">Discover a framework that fits what you want to build.<br />Explore its capabilities, try its components, and make it yours.</p>
+    <form className="project-search" onSubmit={submit}>
       <label htmlFor="project-description">What are you building?</label>
-      <input ref={searchInput} id="project-description" name="project-description" maxLength={500} value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} />
-      <button type="submit">Find frameworks</button>
-      {submittedQuery && <button type="button" onClick={clearSearch}>Clear search</button>}
+      <div className="search-row">
+        <input ref={searchInput} id="project-description" name="project-description" placeholder="A place for your next idea…" maxLength={500} value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} />
+        <button className="primary-button" type="submit">Find frameworks <span aria-hidden="true">↗</span></button>
+      </div>
+      {submittedQuery && <button className="clear-search" type="button" onClick={clearSearch}>Clear search</button>}
     </form>
-    <label htmlFor="technology">Technology</label>
-    <select id="technology" value={technology} onChange={(event) => changeTechnology(event.target.value as Technology)}>
-      {["All technologies", "React", "Angular", "Vue", "Web Components"].map((value) => <option key={value} value={value}>{value}</option>)}
-    </select>
-    <section aria-label="Project examples"><p>Try an example:</p>
+    <section className="examples" aria-label="Project examples"><p>Try an example:</p>
       {["Animal Hospital", "Online store", "Analytics dashboard"].map((example) => <button key={example} type="button" onClick={() => { setDraftQuery(example); submitQuery(example); }}>{example}</button>)}
     </section>
-    {selectedFramework && <aside role="status" aria-label="Selected framework">
-      <span>{selectedFramework.name} selected</span> <span>{selectedFramework.technology}</span>
-      {unavailableId === selectedFramework.id && <p>Unavailable — clear this selection or select another framework.</p>}
-      <button type="button" onClick={(event) => openFrameworkDetails(selectedFramework.id, event.currentTarget, selectedFramework.revision)}>Review selection</button>
-      <button type="button" onClick={clearSelection}>Clear selected framework</button>
-    </aside>}
+    <p className="search-help">Your project, your starting point. <kbd>Ctrl / ⌘ + K</kbd> to focus search.</p>
+    </section>
+    <div className="results-heading">
+      <div><p className="eyebrow">EXPLORE THE POSSIBILITIES</p><h2 id="framework-results" ref={resultsHeading} tabIndex={-1}>Framework results</h2>
+        {!submittedQuery && !isLoading && !error && <p aria-live="polite" aria-atomic="true">Showing {frameworks.length} of {catalogTotal} frameworks</p>}
+        {recommendations && !isLoading && !error && <p aria-live={isIndexIncomplete ? "off" : "polite"} aria-atomic="true">{recommendations.length} {recommendations.length === 1 ? "recommendation" : "recommendations"} ordered by relevance</p>}
+      </div>
+      <div className="technology-filter"><label htmlFor="technology">Technology</label>
+        <select id="technology" value={technology} onChange={(event) => changeTechnology(event.target.value as Technology)}>
+          {["All technologies", "React", "Angular", "Vue", "Web Components"].map((value) => <option key={value} value={value}>{value}</option>)}
+        </select>
+      </div>
+    </div>
+    {catalogNotice && <p className="catalog-notice" role="status">{catalogNotice}</p>}
     {selectionCleared && <p role="status">No framework selected.</p>}
-    <h2 ref={resultsHeading} tabIndex={-1}>Framework results</h2>
-    {recommendations && <p>{recommendations.length} {recommendations.length === 1 ? "recommendation" : "recommendations"} ordered by relevance</p>}
-    <section aria-label="Framework catalog" aria-live="polite">
+    <section className="framework-grid" aria-label="Framework catalog" aria-busy={isLoading}>
       {isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role="alert">{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}</section> : <>
         {isIndexIncomplete && <section><p role="status">Results are temporarily incomplete while framework indexing finishes.</p>
           <button type="button" onClick={() => submitQuery(submittedQuery, technology)}>Retry</button><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>
@@ -277,9 +290,16 @@ export function DiscoveryPage(): React.JSX.Element {
         </>}
       </>}
     </section>
+    <footer className="site-footer"><span><BrandMark />Built on possibilities.</span><span>Discover. Explore. Make it yours.</span></footer>
+    {selectedFramework && <aside className="selection-bar" role="status" aria-label="Selected framework">
+      <div><span className="eyebrow">YOUR FRAMEWORK</span><strong>{selectedFramework.name} selected</strong><span>{selectedFramework.technology}</span></div>
+      {unavailableId === selectedFramework.id && <p>Unavailable — clear this selection or select another framework.</p>}
+      <button type="button" onClick={(event) => openFrameworkDetails(selectedFramework.id, event.currentTarget, selectedFramework.revision)}>Review selection</button>
+      <button type="button" onClick={clearSelection}>Clear selected framework</button>
+    </aside>}
     {detailId && <FrameworkDetailsDialog details={details} error={detailError} retryAt={detailRetryAt} isLoading={!details && !detailError}
       isSelected={selectedFramework?.id === detailId} isUnavailable={detailUnavailable}
       isUpdated={!!details && !!detailSourceRevision && detailSourceRevision !== details.summary.revision} explanation={detailRecommendation?.explanation}
       onClose={closeFrameworkDetails} onRetry={() => loadFrameworkDetails(detailId)} onSelect={selectFramework} />}
-  </main>;
+  </main></>;
 }

@@ -38,13 +38,9 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
   }
 
   function moveTab(event: React.KeyboardEvent<HTMLButtonElement>): void {
-    if (event.key === "ArrowRight" || event.key === "End") {
+    if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) {
       event.preventDefault();
-      selectTab("components");
-    }
-    if (event.key === "ArrowLeft" || event.key === "Home") {
-      event.preventDefault();
-      selectTab("overview");
+      selectTab(event.key === "Home" ? "overview" : event.key === "End" ? "components" : activeTab === "overview" ? "components" : "overview");
     }
   }
 
@@ -63,9 +59,10 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
     }
   }
 
-  return <dialog ref={dialog} aria-label={`${details?.summary.name ?? "Framework"} details`} onKeyDown={trapFocus}
+  return <dialog className="detail-dialog" ref={dialog} aria-labelledby="detail-title" onKeyDown={trapFocus}
     onCancel={event => { event.preventDefault(); onClose(); }} onClick={dismissBackdrop}>
-    <h2>{details?.summary.name ?? "Framework details"}</h2>
+    <p className="eyebrow">A CLOSER LOOK</p>
+    <h2 id="detail-title">{details?.summary.name ? `${details.summary.name} details` : "Framework details"}</h2>
     {isLoading ? <p role="status">Loading framework details</p> : error ? <section><p role="alert">{error}</p>{!isUnavailable && <RetryButton retryAt={retryAt} onRetry={onRetry} />}</section> : details && <>
       {isUpdated && <p role="status">Framework information was updated.</p>}
       <div role="tablist" aria-label="Framework details">
@@ -74,8 +71,8 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
       </div>
       {activeTab === "overview" ? <section role="tabpanel" id="overview-panel" aria-labelledby="overview-tab">
         <p>{details.summary.description}</p><p>{details.summary.technology} · {details.summary.componentCount} components</p>
-        <ul aria-label="Framework tags">{details.summary.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
-        {explanation && <section aria-label="Why this framework"><h3>Why this framework</h3><p>{explanation}</p></section>}
+        <ul className="tags" aria-label="Framework tags">{details.summary.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
+        {explanation && <section className="recommendation-reason" aria-label="Why this framework"><h3>Why this framework</h3><p>{explanation}</p></section>}
         <h3>Capabilities</h3><ul>{(details.capabilities ?? []).map((capability) => <li key={capability.id}>{capability.description}</li>)}</ul>
         <h3>Suitable use cases</h3><ul>{(details.useCases ?? []).map((useCase) => <li key={useCase}>{useCase}</li>)}</ul>
         <p>Framework appearance is customized during implementation through its own themes and design tokens.</p>
@@ -86,9 +83,9 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
           onFocusExit={direction => (direction === "forward" ? selectionButton : componentsTab).current?.focus()} />
           : <p>Component previews are unavailable for this framework revision.</p>}
       </section>}
-      <button ref={selectionButton} type="button" onClick={onSelect}>{isSelected ? "Selected" : `Select ${details.summary.name}`}</button>
+      <button className="primary-button" ref={selectionButton} type="button" onClick={onSelect}>{isSelected ? "Selected" : `Select ${details.summary.name}`}</button>
       {isSelected && <p role="status">{details.summary.name} selected</p>}
     </>}
-    <button ref={closeButton} type="button" onClick={onClose}>Close details</button>
+    <button className="close-details" ref={closeButton} type="button" onClick={onClose}>Close details</button>
   </dialog>;
 }
