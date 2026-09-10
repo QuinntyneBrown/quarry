@@ -38,7 +38,7 @@ public sealed class RequestBoundaryTests
             builder.UseSetting("Catalog:SeedDevelopmentEvaluationData", "true");
             builder.ConfigureTestServices(services => services.AddSingleton<ITextEmbeddingProvider>(provider));
         });
-        factory.UseKestrel(0);
+        factory.UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
         using var client = factory.CreateClient();
         var json = "{\"query\":\"\",\"padding\":\"" + new string('界', 5000) + "\"}";
         var exactBody = json + new string(' ', 16 * 1024 - Encoding.UTF8.GetByteCount(json));
@@ -55,7 +55,7 @@ public sealed class RequestBoundaryTests
     public async Task OversizedMaintenanceBodiesCannotChangeMetadataOrScheduleWork()
     {
         await using var fixture = await SqlMaintenanceFixture.CreateAsync();
-        fixture.Factory.UseKestrel(0);
+        fixture.Factory.UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
         using var client = fixture.CreateClient();
         var id = Guid.NewGuid();
         Assert.Equal(HttpStatusCode.Created, (await client.PostAsJsonAsync("/api/maintenance/frameworks", SqlMaintenanceFixture.DraftBody(id))).StatusCode);

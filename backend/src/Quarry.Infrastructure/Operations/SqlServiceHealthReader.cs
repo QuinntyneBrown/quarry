@@ -1,6 +1,5 @@
 using System.Data;
 using System.Data.Common;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Quarry.Application.Operations;
@@ -52,7 +51,7 @@ public sealed class SqlServiceHealthReader(QuarryDbContext database, ITextEmbedd
             var revisions = rows.Select(row =>
             {
                 var searchable = row.Vector is { } vector && vector.SourceRevision == row.Revision && vector.Model == model
-                    && vector.Dimensions == options.Value.Dimensions && ValidVector(vector.ValuesJson, vector.Dimensions);
+                    && vector.Dimensions == options.Value.Dimensions && StoredEmbeddingVector.Read(vector.ValuesJson, vector.Dimensions) is not null;
                 var pendingSince = row.PublishedAtUtc ?? work.Where(item => item.FrameworkId == row.Id).Select(item => (DateTimeOffset?)item.CreatedAtUtc).Min();
                 double? age = !searchable && pendingSince is { } since ? Math.Max(0, (now - since).TotalSeconds) : null;
                 return new FrameworkIndexHealth(row.Id, row.Revision, row.Vector?.SourceRevision, searchable, age);
@@ -94,15 +93,5 @@ public sealed class SqlServiceHealthReader(QuarryDbContext database, ITextEmbedd
             }
         }
         return new ServiceHealthReport("healthy", searchStatus, indexingStatus, issues, index);
-    }
-
-    private static bool ValidVector(string json, int dimensions)
-    {
-        try
-        {
-            var values = JsonSerializer.Deserialize<float[]>(json);
-            return values?.Length == dimensions && values.All(float.IsFinite) && values.Any(value => value != 0);
-        }
-        catch (JsonException) { return false; }
     }
 }

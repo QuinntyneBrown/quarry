@@ -39,7 +39,7 @@ public sealed class InvalidRequestTests
                 services.AddLogging(logging => logging.AddProvider(logs));
             });
         });
-        factory.UseKestrel(0);
+        factory.UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
         using var client = factory.CreateClient();
         using var response = await client.PostAsync("/api/framework-searches", Json(body));
         await AssertSafeInvalidRequestAsync(response);
@@ -54,7 +54,7 @@ public sealed class InvalidRequestTests
     {
         using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
             builder.UseSetting("ConnectionStrings:Quarry", "Server=invalid.example;Database=Unavailable;Connect Timeout=1;"));
-        factory.UseKestrel(0);
+        factory.UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
         using var client = factory.CreateClient();
         using var response = await client.GetAsync("/api/frameworks?pageSize=" + pageSize);
         await AssertSafeInvalidRequestAsync(response);
@@ -65,7 +65,7 @@ public sealed class InvalidRequestTests
     public async Task MalformedMaintenanceBodiesCannotChangeDraftsPublicationsAuditOrWork()
     {
         await using var fixture = await SqlMaintenanceFixture.CreateAsync();
-        fixture.Factory.UseKestrel(0);
+        fixture.Factory.UseKestrel(options => options.Listen(IPAddress.Loopback, 0));
         using var client = fixture.CreateClient();
         var id = Guid.NewGuid();
         Assert.Equal(HttpStatusCode.Created, (await client.PostAsJsonAsync("/api/maintenance/frameworks", SqlMaintenanceFixture.DraftBody(id))).StatusCode);

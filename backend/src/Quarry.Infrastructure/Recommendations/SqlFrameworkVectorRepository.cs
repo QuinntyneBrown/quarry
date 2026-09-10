@@ -37,14 +37,18 @@ public sealed class SqlFrameworkVectorRepository : IFrameworkVectorRepository
                               framework.Id, framework.Name, framework.Description, framework.Technology, framework.TagsJson,
                               framework.ComponentCount, framework.Revision, framework.CapabilitiesJson, vector.ValuesJson
                           }).ToListAsync(cancellationToken);
-        var candidates = rows.Select(row => new FrameworkVectorCandidate(
-            row.Id,
-            row.Technology,
-            JsonSerializer.Deserialize<List<float>>(row.ValuesJson) ?? [])).ToList();
-        var metadata = rows.ToDictionary(row => row.Id, row => new FrameworkSearchMetadata(
-            new FrameworkSummary(row.Id, row.Name, row.Description, row.Technology,
-                JsonSerializer.Deserialize<List<string>>(row.TagsJson) ?? [], row.ComponentCount, row.Revision),
-            JsonSerializer.Deserialize<List<FrameworkCapability>>(row.CapabilitiesJson) ?? []));
+        var candidates = new List<FrameworkVectorCandidate>();
+        var metadata = new Dictionary<Guid, FrameworkSearchMetadata>();
+        foreach (var row in rows)
+        {
+            var values = StoredEmbeddingVector.Read(row.ValuesJson, dimensions);
+            if (values is null) continue;
+            candidates.Add(new FrameworkVectorCandidate(row.Id, row.Technology, values));
+            metadata.Add(row.Id, new FrameworkSearchMetadata(
+                new FrameworkSummary(row.Id, row.Name, row.Description, row.Technology,
+                    JsonSerializer.Deserialize<List<string>>(row.TagsJson) ?? [], row.ComponentCount, row.Revision),
+                JsonSerializer.Deserialize<List<FrameworkCapability>>(row.CapabilitiesJson) ?? []));
+        }
         await transaction.CommitAsync(cancellationToken);
         return new VectorSearchSnapshot(candidates, candidates.Count != eligibleCount,
             catalogRevision.ToString(CultureInfo.InvariantCulture), metadata);

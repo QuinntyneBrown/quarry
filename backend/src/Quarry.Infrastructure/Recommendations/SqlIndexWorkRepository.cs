@@ -10,6 +10,7 @@ public sealed class SqlIndexWorkRepository
 {
     public async Task<IndexWorkItemEntity?> ClaimAsync(string model, CancellationToken cancellationToken)
     {
+        await using var transaction = await _database.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         var leaseId = Guid.NewGuid();
         var claims = await _database.IndexWorkItems.FromSqlInterpolated($"""
             ;WITH candidate AS (
@@ -22,6 +23,7 @@ public sealed class SqlIndexWorkRepository
                 LeaseExpiresAtUtc = DATEADD(second, 30, SYSDATETIMEOFFSET()), AttemptCount = AttemptCount + 1
             OUTPUT inserted.*;
             """).AsNoTracking().ToListAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
         return claims.SingleOrDefault();
     }
 
