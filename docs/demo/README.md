@@ -17,7 +17,7 @@ Libraries, migration tooling, and test runners are not demo applications.
 
 [Watch video](quarry-indexing-worker.webm) · [Poster](quarry-indexing-worker-poster.png)
 
-Measured: **67.52 seconds**, **1280 × 720**, **2,917,503 bytes**. Silent, continuous WebM.
+Measured: **67.52 seconds**, **1280 × 720**, **3,355,441 bytes**. Continuous WebM with English voice narration.
 
 Source revision: `b8ea3042aa03ebacf4374387dc204bbf3ae4fd72`; run `mtw370kb95d69c`. Capture used the working tree, including the user's existing uncommitted UI/performance changes and recording-tool development. No product files were changed for these demos.
 
@@ -35,7 +35,7 @@ The encoded file was decoded from beginning to end at normal speed, with chapter
 
 [Watch video](quarry-api.webm) · [Poster](quarry-api-poster.png)
 
-Measured: **71.28 seconds**, **1280 × 720**, **2,800,637 bytes**. Silent, continuous WebM.
+Measured: **71.28 seconds**, **1280 × 720**, **3,245,877 bytes**. Continuous WebM with English voice narration.
 
 Source revision: `b8ea3042aa03ebacf4374387dc204bbf3ae4fd72`; run `mtw3h2gl5f9dbb`. Capture used the working tree, including the user's existing uncommitted UI/performance changes and recording-tool development. No product files were changed for these demos.
 
@@ -53,7 +53,7 @@ The encoded file was decoded from beginning to end at normal speed, with chapter
 
 [Watch video](quarry-previews.webm) · [Poster](quarry-previews-poster.png)
 
-Measured: **68.04 seconds**, **1280 × 720**, **3,353,685 bytes**. Silent, continuous WebM.
+Measured: **68.04 seconds**, **1280 × 720**, **3,809,485 bytes**. Continuous WebM with English voice narration.
 
 Source revision: `5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e`; run `mtw3n0sj1da236`. Capture used the working tree, including the user's existing uncommitted UI/performance changes and recording-tool development. No product files were changed for these demos.
 
@@ -71,7 +71,7 @@ The encoded file was decoded from beginning to end at normal speed, with chapter
 
 [Watch video](quarry.webm) · [Poster](quarry-poster.png)
 
-Measured: **99.64 seconds**, **1280 × 720**, **5,168,756 bytes**. Silent, continuous WebM.
+Measured: **99.64 seconds**, **1280 × 720**, **5,874,078 bytes**. Continuous WebM with English voice narration.
 
 Source revision: `5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e`; run `mtw3mfa724707f`. Capture used the working tree, including the user's existing uncommitted UI/performance changes and recording-tool development. No product files were changed for these demos.
 
@@ -87,6 +87,12 @@ Source revision: `5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e`; run `mtw3mfa724707f
 | 1:25 | Start another discovery: Selection, search, and technology filter are cleared. The full catalog is available again. |
 
 The encoded file was decoded from beginning to end at normal speed, with chapter frames inspected for readable captions and visible outcomes. Posters are decoded frames from the successful video. Chapter timestamps use the capture timeline and were checked against encoded playback.
+
+## Voice narration
+
+All four videos include an embedded English Opus voice track using Microsoft Zira Desktop. The narration reads each chapter title and caption at its recorded timestamp; the tables above provide the transcript. Each segment finishes before the next chapter. Video frames and resolution are unchanged. All four final files passed full audio/video decoding, with non-silent speech verified in every chapter.
+
+The capture and promotion commands below produce silent source footage. Narration was added after promotion; rerunning those commands replaces it with silent footage and requires adding narration again.
 
 ## Setup and rerun
 

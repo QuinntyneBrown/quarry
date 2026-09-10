@@ -38,7 +38,7 @@
       "duration": 67.52,
       "width": 1280,
       "height": 720,
-      "bytes": 2917503
+      "bytes": 3355441
     },
     "playback": {
       "normalSpeed": true,
@@ -47,7 +47,14 @@
       "errors": []
     },
     "runId": "mtw370kb95d69c",
-    "revision": "b8ea3042aa03ebacf4374387dc204bbf3ae4fd72"
+    "revision": "b8ea3042aa03ebacf4374387dc204bbf3ae4fd72",
+    "narration": {
+      "language": "en-US",
+      "voice": "Microsoft Zira Desktop",
+      "codec": "opus",
+      "transcript": "Each chapter title followed by its caption. Speech starts at the chapter seconds value.",
+      "verifiedChapters": 5
+    }
   },
   "quarry-api": {
     "slug": "quarry-api",
@@ -88,7 +95,7 @@
       "duration": 71.28,
       "width": 1280,
       "height": 720,
-      "bytes": 2800637
+      "bytes": 3245877
     },
     "playback": {
       "normalSpeed": true,
@@ -97,7 +104,14 @@
       "errors": []
     },
     "runId": "mtw3h2gl5f9dbb",
-    "revision": "b8ea3042aa03ebacf4374387dc204bbf3ae4fd72"
+    "revision": "b8ea3042aa03ebacf4374387dc204bbf3ae4fd72",
+    "narration": {
+      "language": "en-US",
+      "voice": "Microsoft Zira Desktop",
+      "codec": "opus",
+      "transcript": "Each chapter title followed by its caption. Speech starts at the chapter seconds value.",
+      "verifiedChapters": 5
+    }
   },
   "quarry-previews": {
     "slug": "quarry-previews",
@@ -138,7 +152,7 @@
       "duration": 68.04,
       "width": 1280,
       "height": 720,
-      "bytes": 3353685
+      "bytes": 3809485
     },
     "playback": {
       "normalSpeed": true,
@@ -147,7 +161,14 @@
       "errors": []
     },
     "runId": "mtw3n0sj1da236",
-    "revision": "5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e"
+    "revision": "5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e",
+    "narration": {
+      "language": "en-US",
+      "voice": "Microsoft Zira Desktop",
+      "codec": "opus",
+      "transcript": "Each chapter title followed by its caption. Speech starts at the chapter seconds value.",
+      "verifiedChapters": 5
+    }
   },
   "quarry": {
     "slug": "quarry",
@@ -206,7 +227,7 @@
       "duration": 99.64,
       "width": 1280,
       "height": 720,
-      "bytes": 5168756
+      "bytes": 5874078
     },
     "playback": {
       "normalSpeed": true,
@@ -215,6 +236,13 @@
       "errors": []
     },
     "runId": "mtw3mfa724707f",
-    "revision": "5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e"
+    "revision": "5fe9e8dbed3529176c4ff8350b6dacf3f0ad8e9e",
+    "narration": {
+      "language": "en-US",
+      "voice": "Microsoft Zira Desktop",
+      "codec": "opus",
+      "transcript": "Each chapter title followed by its caption. Speech starts at the chapter seconds value.",
+      "verifiedChapters": 8
+    }
   }
 }
