@@ -13,6 +13,8 @@ public sealed class QuarryDbContext : DbContext
 
     public DbSet<FrameworkVectorEntity> FrameworkVectors => Set<FrameworkVectorEntity>();
 
+    public DbSet<MaintenanceAuditRecordEntity> MaintenanceAuditRecords => Set<MaintenanceAuditRecordEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var framework = modelBuilder.Entity<FrameworkRevisionEntity>();
@@ -35,5 +37,14 @@ public sealed class QuarryDbContext : DbContext
         vector.Property(item => item.Model).HasMaxLength(200).IsRequired();
         vector.Property(item => item.ValuesJson).HasColumnType("nvarchar(max)").IsRequired();
         vector.HasIndex(item => new { item.Model, item.Dimensions });
+
+        var audit = modelBuilder.Entity<MaintenanceAuditRecordEntity>();
+        audit.ToTable("MaintenanceAuditRecords");
+        audit.HasKey(item => item.Id);
+        audit.Property(item => item.ActorId).IsRequired();
+        audit.Property(item => item.Operation).HasMaxLength(100).IsRequired();
+        audit.Property(item => item.Outcome).HasMaxLength(40).IsRequired();
+        audit.Property(item => item.CorrelationId).HasMaxLength(128).IsRequired();
+        audit.HasIndex(item => item.RecordedAtUtc);
     }
 }

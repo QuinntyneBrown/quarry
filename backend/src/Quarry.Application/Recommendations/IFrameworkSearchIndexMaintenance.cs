@@ -2,5 +2,5 @@ namespace Quarry.Application.Recommendations;
 
 public interface IFrameworkSearchIndexMaintenance
 {
-    Task RebuildAsync(CancellationToken cancellationToken);
+    Task RebuildAsync(string actorId, string correlationId, CancellationToken cancellationToken);
 }

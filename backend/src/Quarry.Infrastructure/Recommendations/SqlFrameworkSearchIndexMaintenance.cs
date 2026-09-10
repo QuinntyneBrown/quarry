@@ -13,8 +13,22 @@ public sealed class SqlFrameworkSearchIndexMaintenance : IFrameworkSearchIndexMa
         _dbContext = dbContext;
     }
 
-    public async Task RebuildAsync(CancellationToken cancellationToken)
+    public async Task RebuildAsync(string actorId, string correlationId, CancellationToken cancellationToken)
     {
-        await _dbContext.FrameworkVectors.ExecuteDeleteAsync(cancellationToken);
+        ArgumentException.ThrowIfNullOrWhiteSpace(actorId);
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        var invalidatedCount = await _dbContext.FrameworkVectors.ExecuteDeleteAsync(cancellationToken);
+        _dbContext.MaintenanceAuditRecords.Add(new MaintenanceAuditRecordEntity
+        {
+            Id = Guid.NewGuid(),
+            ActorId = actorId,
+            Operation = "search-index-rebuild",
+            Outcome = "accepted",
+            CorrelationId = correlationId,
+            InvalidatedVectorCount = invalidatedCount,
+            RecordedAtUtc = DateTimeOffset.UtcNow
+        });
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
     }
 }

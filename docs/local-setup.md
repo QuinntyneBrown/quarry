@@ -57,7 +57,7 @@ $maintenanceToken = ./tools/New-QuarryMaintenanceToken.ps1 -Subject "$env:USERDO
 Invoke-RestMethod -Method Post -Uri 'https://localhost:7015/api/maintenance/search-index/rebuild' -Headers @{ Authorization = "Bearer $maintenanceToken" }
 ```
 
-The current rebuild invalidates stored framework vectors; the running worker regenerates them from published metadata. Durable work scheduling and transactional audit remain pending implementation.
+The current rebuild invalidates stored framework vectors; the running worker regenerates them from published metadata. Invalidation and its audit record commit in one SQL transaction. The record contains the authenticated operator, operation, accepted outcome, request correlation ID, timestamp, and invalidated-vector count. Audit-write failure rolls back invalidation and returns a safe 503. Durable work scheduling remains pending implementation.
 
 Verify the application code:
 

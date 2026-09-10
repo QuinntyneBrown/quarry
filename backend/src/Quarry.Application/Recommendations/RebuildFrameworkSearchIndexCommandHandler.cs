@@ -13,6 +13,6 @@ public sealed class RebuildFrameworkSearchIndexCommandHandler : IRequestHandler<
 
     public Task Handle(RebuildFrameworkSearchIndexCommand request, CancellationToken cancellationToken)
     {
-        return _maintenance.RebuildAsync(cancellationToken);
+        return _maintenance.RebuildAsync(request.ActorId, request.CorrelationId, cancellationToken);
     }
 }

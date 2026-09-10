@@ -6,7 +6,7 @@ public sealed class RecordingSearchIndexMaintenance : IFrameworkSearchIndexMaint
 {
     public int RebuildCount { get; private set; }
 
-    public Task RebuildAsync(CancellationToken cancellationToken)
+    public Task RebuildAsync(string actorId, string correlationId, CancellationToken cancellationToken)
     {
         RebuildCount++;
         return Task.CompletedTask;
