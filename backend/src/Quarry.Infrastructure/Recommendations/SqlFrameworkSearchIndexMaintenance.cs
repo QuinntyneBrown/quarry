@@ -23,7 +23,7 @@ public sealed class SqlFrameworkSearchIndexMaintenance : IFrameworkSearchIndexMa
         ArgumentException.ThrowIfNullOrWhiteSpace(actorId);
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
         var invalidatedCount = await _dbContext.FrameworkVectors.ExecuteDeleteAsync(cancellationToken);
-        await _work.EnqueueInTransactionAsync(_options.Model, cancellationToken);
+        await _work.EnqueueInTransactionAsync(_options.CompatibilityKey, cancellationToken);
         _dbContext.MaintenanceAuditRecords.Add(new MaintenanceAuditRecordEntity
         {
             Id = Guid.NewGuid(),

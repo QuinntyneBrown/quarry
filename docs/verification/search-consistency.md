@@ -18,4 +18,4 @@ dotnet test backend/tests/Quarry.Api.AcceptanceTests/Quarry.Api.AcceptanceTests.
 dotnet build backend/Quarry.sln --no-restore
 ```
 
-These tests use a controlled query embedding to isolate consistency behavior. Real-model relevance calibration, model-digest compatibility, and workload performance remain separate implementation-plan gates.
+These tests use a controlled query embedding to isolate consistency behavior. [Model-digest compatibility](embedding-compatibility.md) is verified separately. Real-model relevance calibration and workload performance remain separate implementation-plan gates.

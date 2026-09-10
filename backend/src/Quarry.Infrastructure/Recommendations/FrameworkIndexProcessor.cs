@@ -14,6 +14,7 @@ public sealed class FrameworkIndexProcessor
     private readonly SqlIndexWorkRepository _repository;
     private readonly ITextEmbeddingProvider _provider;
     private readonly string _model;
+    private readonly int _dimensions;
     private readonly ILogger<FrameworkIndexProcessor> _logger;
 
     public FrameworkIndexProcessor(QuarryDbContext database, SqlIndexWorkRepository repository, ITextEmbeddingProvider provider,
@@ -22,7 +23,8 @@ public sealed class FrameworkIndexProcessor
         _database = database;
         _repository = repository;
         _provider = provider;
-        _model = options.Value.Model;
+        _model = options.Value.CompatibilityKey;
+        _dimensions = options.Value.Dimensions;
         _logger = logger;
     }
 
@@ -47,12 +49,17 @@ public sealed class FrameworkIndexProcessor
             using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             deadline.CancelAfter(TimeSpan.FromSeconds(5));
             var embedding = await _provider.EmbedAsync(FrameworkEmbeddingInput.ForFramework(framework.Description, tags), deadline.Token);
-            if (embedding.Model != _model) throw new InvalidDataException("Embedding model does not match the claimed work.");
+            if (embedding.Model != _model || embedding.Values.Count != _dimensions) throw new EmbeddingCompatibilityException();
             outcome = await _repository.CompleteAsync(work, embedding, cancellationToken) ? "completed" : "superseded";
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             category = "embedding_timeout";
+            await _repository.FailAsync(work, category, cancellationToken);
+        }
+        catch (EmbeddingCompatibilityException)
+        {
+            category = "embedding_model_incompatible";
             await _repository.FailAsync(work, category, cancellationToken);
         }
         catch (HttpRequestException)

@@ -25,7 +25,15 @@ ollama list
 Invoke-RestMethod -Uri 'http://localhost:11434/api/embed' -Method Post -ContentType 'application/json' -Body '{"model":"embeddinggemma:300m","input":["quarry-embedding-v1\nQuery: Accessible forms"]}'
 ```
 
-The verified local model on 2026-09-10 was `embeddinggemma:300m` with digest `85462619ee72` and 768 output dimensions. Run the indexing worker after migrations so published framework descriptions and tags receive compatible vectors:
+The pinned model is `embeddinggemma:300m`, digest `85462619ee721b466c5927d109d4cb765861907d5417b9109caebc4e614679f1`, with 768 output dimensions. Both API and worker configuration include `Embeddings:ModelDigest` and `Embeddings:Dimensions`. Inspect the installed digest with:
+
+```powershell
+(Invoke-RestMethod -Uri 'http://localhost:11434/api/tags').models | Select-Object name, digest
+```
+
+Quarry verifies that digest before and after each embedding call, validates the returned model and vector dimensions, and rejects zero or nonfinite vectors. The combined operation has a five-second deadline and disables silent input truncation. A mismatched installation produces a safe `embedding_model_incompatible` condition; Quarry does not silently accept a changed model under the same tag.
+
+Run the indexing worker after migrations so published framework descriptions and tags receive compatible vectors:
 
 ```powershell
 dotnet run --project backend/src/Quarry.Indexing.Worker
@@ -61,7 +69,11 @@ Rebuild invalidates stored framework vectors and schedules durable `IndexWorkIte
 
 The worker claims two jobs concurrently with 30-second leases, discovers missing compatible vectors every five seconds, and polls idle work every second. Failed embedding attempts persist retry delays of 1, 2, 4, 8, 16, then 30 seconds. Expired leases can be reclaimed after restart; the former owner cannot complete reclaimed work. Completion checks the current publication and source revision inside the vector-write transaction. Completed compatible jobs are not re-embedded by subsequent passes. See [durable indexing verification](verification/durable-indexing.md) for current evidence and remaining release gates.
 
-The same operator credentials can [create and inspect private catalog drafts](maintenance.md). Draft creation does not make an entry publicly visible.
+Stored vectors and durable jobs identify compatibility as `model@digest/dimensions/input-version`, using the existing `Model` columns. Older name-only vectors are excluded and replacement work is discovered automatically. Scheduling a different identity supersedes old pending work and clears old leases so late completions cannot overwrite replacement vectors. No schema migration is needed for this change.
+
+When intentionally changing the model, stop all API and worker instances, calibrate the replacement model, then set the same `Embeddings__Model`, `Embeddings__ModelDigest`, and `Embeddings__Dimensions` in their environments before restarting. Do not run worker instances configured for different identities against one catalog. The input format version is code-owned (`FrameworkEmbeddingInput.Version`); changing it also changes compatibility. Search reports incomplete indexing until replacement vectors are ready.
+
+Run the opt-in real SQL/Ollama smoke test with `QUARRY_TEST_SQL` configured and `QUARRY_TEST_OLLAMA=1`. See [compatibility verification](verification/embedding-compatibility.md). The same operator credentials can [maintain framework metadata](maintenance.md). Draft creation does not make an entry publicly visible.
 
 Verify the application code:
 

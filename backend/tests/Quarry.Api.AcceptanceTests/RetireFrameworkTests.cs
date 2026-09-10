@@ -169,10 +169,11 @@ public sealed class RetireFrameworkTests
             var id = await CreateAsync(client);
             await using var database = fixture.CreateContext();
             var repository = new SqlIndexWorkRepository(database);
-            var lease = await repository.ClaimAsync("embeddinggemma:300m", CancellationToken.None);
+            var modelKey = new OllamaEmbeddingOptions().CompatibilityKey;
+            var lease = await repository.ClaimAsync(modelKey, CancellationToken.None);
             Assert.NotNull(lease);
             Assert.Equal(HttpStatusCode.OK, (await RetireAsync(client, id, "2", delete)).StatusCode);
-            Assert.False(await repository.CompleteAsync(lease, new TextEmbedding("embeddinggemma:300m", [1f, 0f]), CancellationToken.None));
+            Assert.False(await repository.CompleteAsync(lease, new TextEmbedding(modelKey, [1f, 0f]), CancellationToken.None));
             Assert.Empty(await database.FrameworkVectors.ToListAsync());
             Assert.Equal("superseded", (await database.IndexWorkItems.SingleAsync()).State);
         }

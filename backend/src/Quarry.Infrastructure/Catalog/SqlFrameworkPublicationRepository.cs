@@ -17,7 +17,7 @@ public sealed class SqlFrameworkPublicationRepository : IFrameworkPublicationRep
 
     public SqlFrameworkPublicationRepository(QuarryDbContext database, SqlIndexWorkRepository work, IOptions<OllamaEmbeddingOptions> options)
     {
-        _database = database; _work = work; _model = options.Value.Model;
+        _database = database; _work = work; _model = options.Value.CompatibilityKey;
     }
 
     public async Task<PublicationResult> PublishAsync(Guid id, string expectedRevision, IReadOnlyList<PublicationEvidence?>? evidence,

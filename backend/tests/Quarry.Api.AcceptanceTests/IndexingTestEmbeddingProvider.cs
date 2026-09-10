@@ -7,6 +7,8 @@ public sealed class IndexingTestEmbeddingProvider : ITextEmbeddingProvider
     public int Calls { get; private set; }
     public string? LastInput { get; private set; }
     public bool FailNext { get; set; }
+    public IReadOnlyList<float> Values { get; set; } = [1, 0];
+    public string ModelKey { get; set; } = TestEmbeddingProfile.Key;
 
     public Task<TextEmbedding> EmbedAsync(string input, CancellationToken cancellationToken)
     {
@@ -17,6 +19,6 @@ public sealed class IndexingTestEmbeddingProvider : ITextEmbeddingProvider
             FailNext = false;
             throw new HttpRequestException("Synthetic provider failure");
         }
-        return Task.FromResult(new TextEmbedding("test-model", [1, 0]));
+        return Task.FromResult(new TextEmbedding(ModelKey, Values));
     }
 }

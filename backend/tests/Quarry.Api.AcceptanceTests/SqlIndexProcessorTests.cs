@@ -19,11 +19,11 @@ public sealed class SqlIndexProcessorTests
         var provider = new IndexingTestEmbeddingProvider();
         var repository = new SqlIndexWorkRepository(database);
         var processor = new FrameworkIndexProcessor(database, repository, provider,
-            Options.Create(new OllamaEmbeddingOptions { Model = "test-model" }), NullLogger<FrameworkIndexProcessor>.Instance);
+            Options.Create(TestEmbeddingProfile.Options), NullLogger<FrameworkIndexProcessor>.Instance);
         Assert.True(await processor.ProcessNextAsync(CancellationToken.None));
         Assert.Equal(FrameworkEmbeddingInput.ForFramework("Scheduling controls", ["booking"]), provider.LastInput);
         Assert.Equal(1, await database.FrameworkVectors.CountAsync());
-        await repository.EnqueueMissingAsync("test-model", CancellationToken.None);
+        await repository.EnqueueMissingAsync(TestEmbeddingProfile.Key, CancellationToken.None);
         Assert.False(await processor.ProcessNextAsync(CancellationToken.None));
         Assert.Equal(1, provider.Calls);
     }
@@ -36,7 +36,7 @@ public sealed class SqlIndexProcessorTests
         await using (var first = fixture.CreateContext())
         {
             var processor = new FrameworkIndexProcessor(first, new SqlIndexWorkRepository(first), provider,
-                Options.Create(new OllamaEmbeddingOptions { Model = "test-model" }), NullLogger<FrameworkIndexProcessor>.Instance);
+                Options.Create(TestEmbeddingProfile.Options), NullLogger<FrameworkIndexProcessor>.Instance);
             Assert.True(await processor.ProcessNextAsync(CancellationToken.None));
             Assert.Empty(await first.FrameworkVectors.ToListAsync());
             Assert.Equal("embedding_service_unavailable", (await first.IndexWorkItems.SingleAsync()).LastError);
@@ -44,7 +44,7 @@ public sealed class SqlIndexProcessorTests
         }
         await using var restarted = fixture.CreateContext();
         var replacement = new FrameworkIndexProcessor(restarted, new SqlIndexWorkRepository(restarted), provider,
-            Options.Create(new OllamaEmbeddingOptions { Model = "test-model" }), NullLogger<FrameworkIndexProcessor>.Instance);
+            Options.Create(TestEmbeddingProfile.Options), NullLogger<FrameworkIndexProcessor>.Instance);
         Assert.True(await replacement.ProcessNextAsync(CancellationToken.None));
         Assert.Equal("completed", (await restarted.IndexWorkItems.SingleAsync()).State);
         Assert.Equal(1, await restarted.FrameworkVectors.CountAsync());

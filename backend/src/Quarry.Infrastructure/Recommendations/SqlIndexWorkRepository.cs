@@ -100,6 +100,9 @@ public sealed class SqlIndexWorkRepository
             IF @result < 0 THROW 51000, 'Index scheduling lock unavailable', 1;
             """, cancellationToken);
         await _database.Database.ExecuteSqlInterpolatedAsync($"""
+            UPDATE IndexWorkItems SET State = 'superseded', LeaseId = NULL, LeaseExpiresAtUtc = NULL
+            WHERE Model <> {model} AND State IN ('pending', 'leased');
+
             UPDATE w SET State = 'pending', AttemptCount = 0, NextAttemptAtUtc = SYSDATETIMEOFFSET(),
                 LeaseId = NULL, LeaseExpiresAtUtc = NULL, LastError = NULL
             FROM IndexWorkItems w JOIN FrameworkRevisions f ON f.Id = w.FrameworkId AND f.Revision = w.SourceRevision

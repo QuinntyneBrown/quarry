@@ -2,7 +2,7 @@ namespace Quarry.Application.Recommendations;
 
 public static class FrameworkEmbeddingInput
 {
-    private const string Version = "quarry-embedding-v1";
+    public const string Version = "quarry-embedding-v1";
 
     public static string ForQuery(string query)
     {

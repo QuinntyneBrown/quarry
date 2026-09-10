@@ -15,7 +15,7 @@ public sealed class Worker : BackgroundService
     {
         _scopeFactory = scopeFactory;
         _logger = logger;
-        _model = options.Value.Model;
+        _model = options.Value.CompatibilityKey;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

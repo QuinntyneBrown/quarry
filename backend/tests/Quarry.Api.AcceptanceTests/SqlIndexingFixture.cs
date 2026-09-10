@@ -34,7 +34,7 @@ public sealed class SqlIndexingFixture : IAsyncDisposable
                 Technology = "React", Revision = "1", IsPublished = true
             });
             await database.SaveChangesAsync();
-            await new SqlIndexWorkRepository(database).EnqueueMissingAsync("test-model", CancellationToken.None);
+            await new SqlIndexWorkRepository(database).EnqueueMissingAsync(TestEmbeddingProfile.Key, CancellationToken.None);
             return fixture;
         }
         catch
