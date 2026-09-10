@@ -13,6 +13,24 @@ export class LayoutPage {
     if (await dialog.count()) expect(await dialog.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1);
   }
 
+  public async expectReducedMotion(): Promise<void> {
+    const moving = await this.page.evaluate(() => Array.from(document.querySelectorAll("*")).filter(element => {
+      const style = getComputedStyle(element);
+      return style.animationDuration.split(",").some(value => parseFloat(value) > 0)
+        || style.transitionDuration.split(",").some(value => parseFloat(value) > 0)
+        || style.scrollBehavior === "smooth";
+    }).map(element => element.tagName));
+    expect(moving).toEqual([]);
+  }
+
+  public async expectDialogActionsReachable(): Promise<void> {
+    const buttons = this.page.getByRole("dialog").getByRole("button");
+    for (const button of await buttons.all()) {
+      await button.scrollIntoViewIfNeeded();
+      await button.click({ trial: true });
+    }
+  }
+
   public async expectColumns(columns: number, count: number): Promise<void> {
     const cards = this.page.getByRole("article");
     await expect(cards).toHaveCount(count);

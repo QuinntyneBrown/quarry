@@ -19,6 +19,21 @@ export class PreviewPage {
   public async exitBackward() { await this.frame.getByLabel("Display name").press("Shift+Tab"); }
   public async exitForward() { await this.frame.getByRole("button", { name: "Reset", exact: true }).press("Tab"); }
   public async retry() { await this.page.getByRole("button", { name: "Retry preview" }).click(); }
+  public async expectLayout() {
+    expect(await this.frame.locator("html").evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1);
+    const controls = this.frame.locator("input, button");
+    for (const control of await controls.all()) {
+      const bounds = await control.evaluate(element => {
+        const target = element.matches('input[type="checkbox"]') ? element.closest("label")! : element;
+        const box = target.getBoundingClientRect();
+        return { width: box.width, height: box.height };
+      });
+      expect(bounds.width).toBeGreaterThanOrEqual(24);
+      expect(bounds.height).toBeGreaterThanOrEqual(24);
+      await control.scrollIntoViewIfNeeded();
+      await control.click({ trial: true });
+    }
+  }
   public async token() {
     return this.frame.locator("body").evaluate(() => String((window as Window & { previewTestHandshake?: Record<string, unknown> }).previewTestHandshake?.sessionToken));
   }
