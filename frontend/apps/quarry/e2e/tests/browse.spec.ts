@@ -146,3 +146,20 @@ test("a selected framework can be cleared without resetting discovery", async ({
   await expect(page.getByRole("status")).toHaveCount(0);
   await discovery.expectCatalog();
 });
+
+test("a catalog failure preserves discovery and offers an explicit retry", async ({ page }) => {
+  let attempts = 0;
+  await page.route("**/api/frameworks", async (route) => {
+    attempts += 1;
+    if (attempts <= 2) {
+      await route.fulfill({ status: 503 });
+      return;
+    }
+    await route.fulfill({ json: catalogResponse });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await expect(page.getByRole("alert")).toContainText("catalog is unavailable");
+  await discovery.retry();
+  await discovery.expectCatalog();
+});
