@@ -64,11 +64,12 @@ export class DiscoveryPage {
   }
 
   public async selectFramework(): Promise<void> {
-    await this.page.getByRole("button", { name: "Select framework" }).click();
+    await this.page.getByRole("dialog").getByRole("button", { name: /^Select / }).click();
+    await this.page.getByRole("button", { name: "Close details" }).click();
   }
 
   public async clearSelection(): Promise<void> {
-    await this.page.getByRole("button", { name: "Clear selection" }).click();
+    await this.page.getByRole("button", { name: "Clear selected framework" }).click();
   }
 
   public async reviewSelection(): Promise<void> {

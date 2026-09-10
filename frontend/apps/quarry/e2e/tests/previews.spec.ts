@@ -44,7 +44,7 @@ test("preview keyboard boundaries return to adjacent dialog controls", async ({ 
   await preview.exitBackward();
   await expect(page.getByRole("tab", { name: "Components" })).toBeFocused();
   await preview.exitForward();
-  await expect(page.getByRole("button", { name: "Select framework" })).toBeFocused();
+  await expect(page.getByRole("button", { name: "Select Atlas" })).toBeFocused();
   await preview.escape();
   await expect(page.getByRole("button", { name: "Explore Atlas" })).toBeFocused();
 });
@@ -81,7 +81,7 @@ test("preview timeout keeps review usable and retry creates a fresh frame", asyn
   await preview.openComponents();
   await expect(page.getByText("Loading component preview")).toBeVisible();
   await expect(page.getByRole("alert")).toContainText("component preview is unavailable", { timeout: 7000 });
-  await expect(page.getByRole("button", { name: "Select framework" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Select Atlas" })).toBeEnabled();
   await expect(page.getByRole("tab", { name: "Overview" })).toBeEnabled();
   await preview.retry();
   await preview.expectDefaults();

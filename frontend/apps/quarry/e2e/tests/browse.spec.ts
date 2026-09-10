@@ -383,7 +383,7 @@ test("a selected framework can be cleared without resetting discovery", async ({
   await expect(page.getByRole("dialog", { name: "Atlas details" })).toBeVisible();
   await discovery.selectFramework();
   await discovery.clearSelection();
-  await expect(page.getByRole("status")).toHaveCount(0);
+  await expect(page.getByRole("status")).toHaveText("No framework selected.");
   await discovery.expectCatalog();
 });
 

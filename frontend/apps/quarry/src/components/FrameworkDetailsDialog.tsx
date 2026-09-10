@@ -5,7 +5,7 @@ import { RetryButton } from "./RetryButton";
 import { ComponentPreviewPanel } from "./ComponentPreviewPanel";
 import { getPreviewManifest } from "../previews/getPreviewManifest";
 
-export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onClose, onRetry, onSelect }: FrameworkDetailsDialogProperties): React.JSX.Element {
+export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isSelected, isUnavailable, onClose, onRetry, onSelect }: FrameworkDetailsDialogProperties): React.JSX.Element {
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const overviewTab = useRef<HTMLButtonElement>(null);
@@ -66,7 +66,7 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onC
   return <dialog ref={dialog} aria-label={`${details?.summary.name ?? "Framework"} details`} onKeyDown={trapFocus}
     onCancel={event => { event.preventDefault(); onClose(); }} onClick={dismissBackdrop}>
     <h2>{details?.summary.name ?? "Framework details"}</h2>
-    {isLoading ? <p role="status">Loading framework details</p> : error ? <section><p role="alert">{error}</p><RetryButton retryAt={retryAt} onRetry={onRetry} /></section> : details && <>
+    {isLoading ? <p role="status">Loading framework details</p> : error ? <section><p role="alert">{error}</p>{!isUnavailable && <RetryButton retryAt={retryAt} onRetry={onRetry} />}</section> : details && <>
       <div role="tablist" aria-label="Framework details">
         <button ref={overviewTab} type="button" role="tab" id="overview-tab" aria-controls="overview-panel" aria-selected={activeTab === "overview"} tabIndex={activeTab === "overview" ? 0 : -1} onClick={() => selectTab("overview")} onKeyDown={moveTab}>Overview</button>
         <button ref={componentsTab} type="button" role="tab" id="components-tab" aria-controls="components-panel" aria-selected={activeTab === "components"} tabIndex={activeTab === "components" ? 0 : -1} onClick={() => selectTab("components")} onKeyDown={moveTab}>Components</button>
@@ -83,7 +83,8 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onC
           onFocusExit={direction => (direction === "forward" ? selectionButton : componentsTab).current?.focus()} />
           : <p>Component previews are unavailable for this framework revision.</p>}
       </section>}
-      <button ref={selectionButton} type="button" onClick={onSelect}>Select framework</button>
+      <button ref={selectionButton} type="button" onClick={onSelect}>{isSelected ? "Selected" : `Select ${details.summary.name}`}</button>
+      {isSelected && <p role="status">{details.summary.name} selected</p>}
     </>}
     <button ref={closeButton} type="button" onClick={onClose}>Close details</button>
   </dialog>;

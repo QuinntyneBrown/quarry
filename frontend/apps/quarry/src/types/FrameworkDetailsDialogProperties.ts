@@ -5,6 +5,8 @@ export type FrameworkDetailsDialogProperties = {
   error?: string;
   retryAt?: number;
   isLoading: boolean;
+  isSelected: boolean;
+  isUnavailable: boolean;
   onClose: () => void;
   onRetry: () => void;
   onSelect: () => void;
