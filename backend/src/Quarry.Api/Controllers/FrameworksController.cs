@@ -18,9 +18,15 @@ public sealed class FrameworksController : ControllerBase
 
     [HttpGet]
     [ProducesResponseType<CatalogPageResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, CancellationToken cancellationToken = default)
     {
-        var page = await _sender.Send(new BrowseFrameworksQuery(Math.Clamp(pageSize, 1, 24)), cancellationToken);
+        if (pageSize is < 1 or > 24)
+        {
+            return BadRequest(new SafeErrorResponse("invalid_page_size", HttpContext.TraceIdentifier));
+        }
+
+        var page = await _sender.Send(new BrowseFrameworksQuery(pageSize), cancellationToken);
         return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
     }
 }

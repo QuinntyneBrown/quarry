@@ -45,4 +45,12 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
         Assert.Equal(1, document.RootElement.GetProperty("total").GetInt32());
         Assert.False(document.RootElement.GetProperty("hasNextPage").GetBoolean());
     }
+
+    [Fact]
+    public async Task GetFrameworksRejectsAnOutOfRangePageSize()
+    {
+        var response = await _client.GetAsync("/api/frameworks?pageSize=25");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
