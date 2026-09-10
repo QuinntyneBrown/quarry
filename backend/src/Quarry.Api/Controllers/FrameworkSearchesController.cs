@@ -59,6 +59,11 @@ public sealed class FrameworkSearchesController : ControllerBase
         {
             return Ok(await _sender.Send(new SearchFrameworksCommand(query, request.Technology), cancellationToken));
         }
+        catch (SearchCatalogChangingException)
+        {
+            _logger.LogWarning("Semantic search catalog changed repeatedly. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_changing", HttpContext.TraceIdentifier));
+        }
         catch (HttpRequestException)
         {
             _logger.LogWarning("Semantic search embedding service unavailable. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);

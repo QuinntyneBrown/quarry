@@ -10,7 +10,7 @@ public sealed class SearchFrameworksCommandHandlerTests
     [Fact]
     public async Task HandleReturnsGroundedRankedItemsAndIncompleteStatus()
     {
-        var handler = new SearchFrameworksCommandHandler(new SearchTestEmbeddingProvider(), new SearchTestVectorRepository(), new CosineSimilarityRanker(), new SearchTestDetailsReader());
+        var handler = new SearchFrameworksCommandHandler(new SearchTestEmbeddingProvider(), new SearchTestVectorRepository(), new CosineSimilarityRanker());
 
         var result = await handler.Handle(new SearchFrameworksCommand("Accessible forms", "React"), CancellationToken.None);
 
