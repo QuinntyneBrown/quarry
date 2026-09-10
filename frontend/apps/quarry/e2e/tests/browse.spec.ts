@@ -254,6 +254,28 @@ test("details expose supported capabilities, use cases, and component descriptor
   await expect(dialog.getByRole("tabpanel")).toContainText("Triggers an action.");
 });
 
+test("a failed detail request remains retryable in its dialog", async ({ page }) => {
+  let attempts = 0;
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    attempts += 1;
+    if (attempts === 1) {
+      await route.fulfill({ status: 503 });
+      return;
+    }
+    await route.fulfill({ json: { summary: catalogResponse.items[0] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  const dialog = page.getByRole("dialog", { name: "Framework details" });
+  await expect(dialog.getByRole("alert")).toContainText("Framework details are unavailable");
+  await dialog.getByRole("button", { name: "Retry" }).click();
+  await expect(page.getByRole("dialog", { name: "Atlas details" })).toContainText("Published framework");
+});
+
 test("details tabs replace their panel and support arrow-key navigation", async ({ page }) => {
   await page.route("**/api/frameworks", async (route) => {
     await route.fulfill({ json: catalogResponse });
