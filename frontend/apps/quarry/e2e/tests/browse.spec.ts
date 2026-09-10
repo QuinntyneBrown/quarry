@@ -14,6 +14,26 @@ test("loads a published catalog before a project description is submitted", asyn
   await discovery.expectCatalog();
 });
 
+test("browse pagination appends the next catalog page", async ({ page }) => {
+  const requestedCursors: string[] = [];
+  await page.route("**/api/frameworks**", async (route) => {
+    const cursor = new URL(route.request().url()).searchParams.get("cursor");
+    requestedCursors.push(cursor ?? "first");
+    if (!cursor) {
+      await route.fulfill({ json: { ...catalogResponse, hasNextPage: true, nextCursor: "page-2" } });
+      return;
+    }
+    await route.fulfill({ json: { ...catalogResponse, items: [{ ...catalogResponse.items[0], id: "38e3afce-b79d-4dbb-aea9-1615cad67551", name: "Boreal" }], hasNextPage: false, nextCursor: null, total: 2 } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await expect(page.getByRole("button", { name: "Load more" })).toBeVisible();
+  await discovery.loadMore();
+  await expect.poll(() => requestedCursors).toContain("page-2");
+  await expect(page.getByRole("article")).toHaveCount(2);
+  await expect(page.getByRole("button", { name: "Load more" })).toHaveCount(0);
+});
+
 test("submits a trimmed project description only when requested", async ({ page }) => {
   await page.route("**/api/frameworks**", async (route) => {
     await route.fulfill({ json: catalogResponse });
