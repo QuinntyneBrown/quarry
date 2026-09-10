@@ -54,4 +54,8 @@ export class DiscoveryPage {
   public async dismissDetailsWithEscape(): Promise<void> {
     await this.page.keyboard.press("Escape");
   }
+
+  public async selectFramework(): Promise<void> {
+    await this.page.getByRole("button", { name: "Select framework" }).click();
+  }
 }
