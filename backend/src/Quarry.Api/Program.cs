@@ -64,6 +64,7 @@ builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client =>
 });
 builder.Services.AddScoped<ITextEmbeddingProvider>(serviceProvider => serviceProvider.GetRequiredService<OllamaTextEmbeddingProvider>());
 builder.Services.AddScoped<IFrameworkVectorRepository, SqlFrameworkVectorRepository>();
+builder.Services.AddScoped<IFrameworkSearchIndexMaintenance, SqlFrameworkSearchIndexMaintenance>();
 builder.Services.AddSingleton<CosineSimilarityRanker>();
 builder.Services.AddScoped<SqlFrameworkCatalogReader>();
 builder.Services.AddSingleton<DevelopmentFrameworkCatalogReader>();

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using Quarry.Application.Recommendations;
 
 namespace Quarry.Api.Controllers;
 
@@ -8,9 +10,17 @@ namespace Quarry.Api.Controllers;
 [Route("api/maintenance/search-index")]
 public sealed class SearchIndexMaintenanceController : ControllerBase
 {
-    [HttpPost("rebuild")]
-    public ActionResult Rebuild()
+    private readonly ISender _sender;
+
+    public SearchIndexMaintenanceController(ISender sender)
     {
+        _sender = sender;
+    }
+
+    [HttpPost("rebuild")]
+    public async Task<ActionResult> Rebuild(CancellationToken cancellationToken)
+    {
+        await _sender.Send(new RebuildFrameworkSearchIndexCommand(), cancellationToken);
         return Accepted();
     }
 }
