@@ -47,7 +47,11 @@ if (builder.Configuration.GetValue<bool>("seed-evaluation"))
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context => new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(
+        new SafeErrorResponse("invalid_request", context.HttpContext.TraceIdentifier));
+});
 builder.Services.AddSingleton(new SearchConcurrencyGate(builder.Configuration.GetValue("Search:MaximumConcurrentRequests", 16)));
 builder.Services.AddRequestTimeouts(options => options.AddPolicy("framework-search", new RequestTimeoutPolicy
 {
