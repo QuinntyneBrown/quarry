@@ -8,12 +8,31 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Globalization;
 using System.Threading.RateLimiting;
 using Quarry.Api.Contracts;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Quarry";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Quarry.Maintenance";
+var jwtSigningKey = builder.Configuration["Jwt:SigningKey"] ?? "development-only-signing-key-change-before-production";
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtIssuer,
+        ValidateAudience = true,
+        ValidAudience = jwtAudience,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey)),
+        ValidateLifetime = true
+    };
+});
+builder.Services.AddAuthorizationBuilder().AddPolicy("maintenance", policy => policy.RequireAuthenticatedUser().RequireClaim("permission", "maintenance"));
 var rateLimitWindowSeconds = builder.Configuration.GetValue("RateLimits:WindowSeconds", 60);
 var catalogReadPermitLimit = builder.Configuration.GetValue("RateLimits:CatalogReadPermitLimit", 120);
 var searchPermitLimit = builder.Configuration.GetValue("RateLimits:SearchPermitLimit", 30);
@@ -62,6 +81,8 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 app.UseRateLimiter();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
