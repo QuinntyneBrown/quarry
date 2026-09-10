@@ -236,6 +236,24 @@ test("a framework card opens published details in a dialog", async ({ page }) =>
   await expect(page.getByRole("dialog", { name: "Atlas details" })).toContainText("Published framework");
 });
 
+test("details expose supported capabilities, use cases, and component descriptors", async ({ page }) => {
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    await route.fulfill({ json: { summary: catalogResponse.items[0], capabilities: [{ id: "accessible-controls", description: "Accessible controls." }], useCases: ["Internal tools"], components: [{ id: "button", name: "Button", description: "Triggers an action." }] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  const dialog = page.getByRole("dialog", { name: "Atlas details" });
+  await expect(dialog).toContainText("Accessible controls.");
+  await expect(dialog).toContainText("Internal tools");
+  await dialog.getByRole("tab", { name: "Components" }).click();
+  await expect(dialog.getByRole("tabpanel")).toContainText("Button");
+  await expect(dialog.getByRole("tabpanel")).toContainText("Triggers an action.");
+});
+
 test("details tabs replace their panel and support arrow-key navigation", async ({ page }) => {
   await page.route("**/api/frameworks", async (route) => {
     await route.fulfill({ json: catalogResponse });
