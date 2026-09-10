@@ -12,6 +12,12 @@ public sealed class FrameworkRevisionEntity
 
     public string TagsJson { get; set; } = "[]";
 
+    public string CapabilitiesJson { get; set; } = "[]";
+
+    public string UseCasesJson { get; set; } = "[]";
+
+    public string ComponentsJson { get; set; } = "[]";
+
     public int ComponentCount { get; set; }
 
     public string Revision { get; set; } = "0";

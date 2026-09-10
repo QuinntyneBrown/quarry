@@ -51,6 +51,10 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
         }
 
         var summary = new FrameworkSummary(entry.Id, entry.Name, entry.Description, entry.Technology, JsonSerializer.Deserialize<List<string>>(entry.TagsJson) ?? [], entry.ComponentCount, entry.Revision);
-        return new FrameworkDetails(summary);
+        return new FrameworkDetails(
+            summary,
+            JsonSerializer.Deserialize<List<FrameworkCapability>>(entry.CapabilitiesJson) ?? [],
+            JsonSerializer.Deserialize<List<string>>(entry.UseCasesJson) ?? [],
+            JsonSerializer.Deserialize<List<FrameworkComponentDescriptor>>(entry.ComponentsJson) ?? []);
     }
 }

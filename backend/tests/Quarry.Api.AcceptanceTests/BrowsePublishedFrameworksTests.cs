@@ -76,6 +76,9 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         Assert.Equal("Atlas", document.RootElement.GetProperty("summary").GetProperty("name").GetString());
         Assert.Equal("1", document.RootElement.GetProperty("summary").GetProperty("revision").GetString());
+        Assert.NotEmpty(document.RootElement.GetProperty("capabilities").EnumerateArray());
+        Assert.NotEmpty(document.RootElement.GetProperty("useCases").EnumerateArray());
+        Assert.NotEmpty(document.RootElement.GetProperty("components").EnumerateArray());
     }
 
     [Fact]

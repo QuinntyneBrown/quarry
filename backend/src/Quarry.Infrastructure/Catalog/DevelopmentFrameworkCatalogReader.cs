@@ -44,6 +44,10 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader,
         }
 
         var summary = new FrameworkSummary(id, "Atlas", "An accessible published framework for evaluation.", "React", ["Accessible"], 2, "1");
-        return Task.FromResult<FrameworkDetails?>(new FrameworkDetails(summary));
+        return Task.FromResult<FrameworkDetails?>(new FrameworkDetails(
+            summary,
+            [new FrameworkCapability("accessible-controls", "Accessible controls for common form interactions.")],
+            ["Accessible internal tools"],
+            [new FrameworkComponentDescriptor("button", "Button", "An accessible action button."), new FrameworkComponentDescriptor("input", "Input", "An accessible text input.")]));
     }
 }
