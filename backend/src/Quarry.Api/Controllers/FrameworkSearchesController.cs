@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Quarry.Api.Contracts;
+using Quarry.Application.Recommendations;
+using MediatR;
 
 namespace Quarry.Api.Controllers;
 
@@ -8,11 +10,17 @@ namespace Quarry.Api.Controllers;
 public sealed class FrameworkSearchesController : ControllerBase
 {
     private static readonly string[] SupportedTechnologies = ["React", "Angular", "Vue", "Web Components"];
+    private readonly ISender _sender;
+
+    public FrameworkSearchesController(ISender sender)
+    {
+        _sender = sender;
+    }
 
     [HttpPost]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
-    public ActionResult Search([FromBody] FrameworkSearchRequest request)
+    public async Task<ActionResult<FrameworkSearchResult>> Search([FromBody] FrameworkSearchRequest request, CancellationToken cancellationToken)
     {
         var query = request.Query?.Trim();
         if (string.IsNullOrWhiteSpace(query) || query.Length > 500)
@@ -25,6 +33,13 @@ public sealed class FrameworkSearchesController : ControllerBase
             return BadRequest(new SafeErrorResponse("invalid_technology", HttpContext.TraceIdentifier));
         }
 
-        return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));
+        try
+        {
+            return Ok(await _sender.Send(new SearchFrameworksCommand(query, request.Technology), cancellationToken));
+        }
+        catch (HttpRequestException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));
+        }
     }
 }
