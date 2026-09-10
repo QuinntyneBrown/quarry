@@ -86,6 +86,7 @@ builder.Services.AddSingleton<CosineSimilarityRanker>();
 builder.Services.AddScoped<SqlFrameworkCatalogReader>();
 builder.Services.AddScoped<IFrameworkDraftRepository, SqlFrameworkDraftRepository>();
 builder.Services.AddScoped<IFrameworkPublicationRepository, SqlFrameworkPublicationRepository>();
+builder.Services.AddScoped<IFrameworkRetirementRepository, SqlFrameworkRetirementRepository>();
 builder.Services.AddSingleton<DevelopmentFrameworkCatalogReader>();
 builder.Services.AddScoped<IFrameworkCatalogReader>(serviceProvider => builder.Configuration.GetValue<bool>("Catalog:SeedDevelopmentEvaluationData")
     ? serviceProvider.GetRequiredService<DevelopmentFrameworkCatalogReader>()

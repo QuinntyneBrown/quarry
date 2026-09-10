@@ -73,4 +73,19 @@ Success returns 200 with `id`, the next framework `revision`, the incremented `c
 
 The public metadata, immutable snapshot with evidence, catalog revision, index work, and `framework-publish` audit commit in one SQL transaction. Audit or index scheduling failures roll everything back and return a safe 503. Republishing preserves earlier snapshots; SQL rejects updates and deletes of snapshot rows. Draft edits continue to leave the current publication unchanged until the next successful publication.
 
-Withdrawal and deletion remain subsequent implementation increments.
+## Withdraw or delete
+
+`POST /api/maintenance/frameworks/{id}/withdraw` and `DELETE /api/maintenance/frameworks/{id}` accept a JSON body containing `expectedRevision`, obtained from the maintenance GET. Both require the same operator credentials. Success returns 200 with `id`, the next framework `revision`, current `catalogRevision`, and status `withdrawn` or `deleted`.
+
+Withdrawal requires a currently published entry. It immediately removes browse, details, and search eligibility, while retaining the editable draft for later publication with new evidence. Withdrawing an unpublished draft or an already withdrawn entry returns 409.
+
+Deletion accepts a private draft, published entry, or withdrawn entry. It reserves the identity permanently and retains audit records and immutable publication history. Maintenance reads, updates, publication, and further deletion then return 404; creating another draft with that ID returns 409. Deletion is a lifecycle operation, not a purge of historical records.
+
+Both operations reject stale revisions with 409 and invalid revisions with 400. Removing a public entry increments the catalog revision; deleting a private draft does not. Audit and state changes commit together, and an audit failure rolls everything back. Previous vectors can remain stored but cannot qualify for discovery; pending or leased indexing work cannot restore a retired publication and is marked superseded when processed.
+
+```powershell
+$draft = Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+$change = @{ expectedRevision = $draft.revision } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId/withdraw" -Headers $headers -ContentType 'application/json' -Body $change
+# For permanent retirement, retrieve the latest revision and use DELETE on the framework URI.
+```

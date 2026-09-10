@@ -33,7 +33,7 @@ public sealed class SqlFrameworkDraftRepository : IFrameworkDraftRepository
 
     public async Task<FrameworkDraft?> GetAsync(Guid id, CancellationToken cancellationToken)
     {
-        var stored = await _database.FrameworkDrafts.AsNoTracking().SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
+        var stored = await _database.FrameworkDrafts.AsNoTracking().SingleOrDefaultAsync(item => item.Id == id && !item.IsDeleted, cancellationToken);
         if (stored is null) return null;
         var metadata = JsonSerializer.Deserialize<FrameworkMetadata>(stored.MetadataJson)!;
         return new FrameworkDraft(stored.Id, stored.Revision, "draft", metadata.Components!.Count, metadata);
@@ -43,7 +43,7 @@ public sealed class SqlFrameworkDraftRepository : IFrameworkDraftRepository
     {
         await using var transaction = await _database.Database.BeginTransactionAsync(cancellationToken);
         await LockFrameworkAsync(framework.Id, cancellationToken);
-        var draft = await _database.FrameworkDrafts.SingleOrDefaultAsync(item => item.Id == framework.Id, cancellationToken);
+        var draft = await _database.FrameworkDrafts.SingleOrDefaultAsync(item => item.Id == framework.Id && !item.IsDeleted, cancellationToken);
         if (draft is null) return DraftUpdateStatus.NotFound;
         if (draft.Revision != expectedRevision) return DraftUpdateStatus.Conflict;
         draft.MetadataJson = JsonSerializer.Serialize(framework.Metadata);

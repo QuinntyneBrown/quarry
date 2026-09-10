@@ -92,6 +92,42 @@ public sealed class FrameworkMaintenanceController : ControllerBase
         }
     }
 
+    [HttpPost("{id:guid}/withdraw")]
+    [RequestSizeLimit(1024)]
+    public Task<ActionResult<FrameworkRetirementResponse>> Withdraw(Guid id, RetireFrameworkRequest request, CancellationToken cancellationToken)
+        => RetireAsync(id, request, FrameworkRetirementKind.Withdraw, cancellationToken);
+
+    [HttpDelete("{id:guid}")]
+    [RequestSizeLimit(1024)]
+    public Task<ActionResult<FrameworkRetirementResponse>> Delete(Guid id, RetireFrameworkRequest request, CancellationToken cancellationToken)
+        => RetireAsync(id, request, FrameworkRetirementKind.Delete, cancellationToken);
+
+    private async Task<ActionResult<FrameworkRetirementResponse>> RetireAsync(Guid id, RetireFrameworkRequest request,
+        FrameworkRetirementKind kind, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _sender.Send(new RetireFrameworkCommand(id, request.ExpectedRevision, kind,
+                User.FindFirst("sub")!.Value, HttpContext.TraceIdentifier), cancellationToken);
+            return result.Status switch
+            {
+                FrameworkRetirementStatus.Accepted => Ok(new FrameworkRetirementResponse(id, result.Revision!, result.CatalogRevision!,
+                    kind == FrameworkRetirementKind.Delete ? "deleted" : "withdrawn")),
+                FrameworkRetirementStatus.NotFound => NotFound(new SafeErrorResponse("framework_not_found", HttpContext.TraceIdentifier)),
+                _ => Conflict(new MetadataValidationResponse("revision_conflict", HttpContext.TraceIdentifier,
+                    new Dictionary<string, string[]> { ["expectedRevision"] = ["Reload the draft and check its publication state before retrying."] }))
+            };
+        }
+        catch (FrameworkValidationException error)
+        {
+            return BadRequest(new MetadataValidationResponse("invalid_framework_revision", HttpContext.TraceIdentifier, error.Errors));
+        }
+        catch (Exception error) when (error is DbException or DbUpdateException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+        }
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FrameworkDraft>> Get(Guid id, CancellationToken cancellationToken)
     {

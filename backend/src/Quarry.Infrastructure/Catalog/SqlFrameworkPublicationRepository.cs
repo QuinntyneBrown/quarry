@@ -30,7 +30,7 @@ public sealed class SqlFrameworkPublicationRepository : IFrameworkPublicationRep
             EXEC @result = sp_getapplock @Resource = {lockName}, @LockMode = 'Exclusive', @LockOwner = 'Transaction', @LockTimeout = 5000;
             IF @result < 0 THROW 51000, 'Framework maintenance lock unavailable', 1;
             """, cancellationToken);
-        var draft = await _database.FrameworkDrafts.SingleOrDefaultAsync(item => item.Id == id, cancellationToken);
+        var draft = await _database.FrameworkDrafts.SingleOrDefaultAsync(item => item.Id == id && !item.IsDeleted, cancellationToken);
         if (draft is null) return new PublicationResult(PublicationStatus.NotFound, id);
         if (draft.Revision != expectedRevision) return new PublicationResult(PublicationStatus.Conflict, id);
         var framework = Framework.ReviseDraft(id, draft.Revision, JsonSerializer.Deserialize<FrameworkMetadata>(draft.MetadataJson)!);
