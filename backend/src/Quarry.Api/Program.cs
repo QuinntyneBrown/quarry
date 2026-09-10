@@ -15,6 +15,8 @@ builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(b
 builder.Services.Configure<OllamaEmbeddingOptions>(builder.Configuration.GetSection(OllamaEmbeddingOptions.SectionName));
 builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client => client.BaseAddress = new Uri(builder.Configuration["Embeddings:Endpoint"] ?? "http://localhost:11434/"));
 builder.Services.AddScoped<ITextEmbeddingProvider>(serviceProvider => serviceProvider.GetRequiredService<OllamaTextEmbeddingProvider>());
+builder.Services.AddScoped<IFrameworkVectorRepository, SqlFrameworkVectorRepository>();
+builder.Services.AddSingleton<CosineSimilarityRanker>();
 builder.Services.AddScoped<SqlFrameworkCatalogReader>();
 builder.Services.AddSingleton<DevelopmentFrameworkCatalogReader>();
 builder.Services.AddScoped<IFrameworkCatalogReader>(serviceProvider => builder.Configuration.GetValue<bool>("Catalog:SeedDevelopmentEvaluationData")
