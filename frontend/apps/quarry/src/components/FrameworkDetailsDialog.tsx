@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import type { FrameworkDetailsDialogProperties } from "../types/FrameworkDetailsDialogProperties";
 import type { FrameworkDetailsTab } from "../types/FrameworkDetailsTab";
 import { RetryButton } from "./RetryButton";
+import { ComponentPreviewPanel } from "./ComponentPreviewPanel";
+import { getPreviewManifest } from "../previews/getPreviewManifest";
 
 export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onClose, onRetry, onSelect }: FrameworkDetailsDialogProperties): React.JSX.Element {
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const overviewTab = useRef<HTMLButtonElement>(null);
   const componentsTab = useRef<HTMLButtonElement>(null);
+  const selectionButton = useRef<HTMLButtonElement>(null);
   const [activeTab, setActiveTab] = useState<FrameworkDetailsTab>("overview");
-  const [displayName, setDisplayName] = useState("Jamie");
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [previewFeedback, setPreviewFeedback] = useState("");
+  const previewManifest = details ? getPreviewManifest(details) : undefined;
 
   useEffect(() => {
     closeButton.current?.focus();
@@ -40,27 +41,19 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onC
     }
   }
 
-  function savePreview(): void {
-    setPreviewFeedback(`Changes saved for ${displayName.trim() || "you"} in the preview`);
-  }
-
-  function resetPreview(): void {
-    setDisplayName("Jamie");
-    setNotificationsEnabled(true);
-    setPreviewFeedback("Preview reset");
-  }
-
   function trapFocus(event: React.KeyboardEvent<HTMLDialogElement>): void {
     if (event.key !== "Tab") {
       return;
     }
-    const focusable = Array.from(dialog.current?.querySelectorAll<HTMLElement>("button:not([disabled]):not([tabindex='-1']), input:not([disabled])") ?? []);
+    const focusable = Array.from(dialog.current?.querySelectorAll<HTMLElement>("button:not([disabled]):not([tabindex='-1']), input:not([disabled]), iframe") ?? []);
     const currentIndex = focusable.indexOf(document.activeElement as HTMLElement);
     if (currentIndex === -1) {
       return;
     }
-    event.preventDefault();
-    focusable[(currentIndex + (event.shiftKey ? -1 : 1) + focusable.length) % focusable.length]?.focus();
+    if (currentIndex === 0 && event.shiftKey || currentIndex === focusable.length - 1 && !event.shiftKey) {
+      event.preventDefault();
+      focusable[event.shiftKey ? focusable.length - 1 : 0]?.focus();
+    }
   }
 
   return <dialog ref={dialog} open aria-label={`${details?.summary.name ?? "Framework"} details`} onKeyDown={trapFocus}>
@@ -76,19 +69,13 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onC
         <h3>Suitable use cases</h3><ul>{(details.useCases ?? []).map((useCase) => <li key={useCase}>{useCase}</li>)}</ul>
         <p>Framework appearance is customized during implementation through its own themes and design tokens.</p>
       </section> : <section role="tabpanel" id="components-panel" aria-labelledby="components-tab">
-        {(details.components ?? []).length === 0 ? <p>Component previews are unavailable for this framework revision.</p> : <>
-          <ul>{details.components.map((component) => <li key={component.id}><strong>{component.name}</strong><p>{component.description}</p></li>)}</ul>
-          <section aria-label="Illustrative component preview">
-            <p>This illustrative preview is local to this dialog.</p>
-            <label>Display name <input value={displayName} onChange={(event) => setDisplayName(event.target.value)} /></label>
-            <label><input type="checkbox" checked={notificationsEnabled} onChange={(event) => setNotificationsEnabled(event.target.checked)} /> Email notifications</label>
-            <button type="button" onClick={savePreview}>Save changes</button>
-            <button type="button" onClick={resetPreview}>Reset</button>
-            {previewFeedback && <p role="status">{previewFeedback}</p>}
-          </section>
-        </>}
+        <ul>{(details.components ?? []).map((component) => <li key={component.id}><strong>{component.name}</strong><p>{component.description}</p></li>)}</ul>
+        {previewManifest ? <ComponentPreviewPanel key={`${details.summary.id}:${details.summary.revision}:${previewManifest.buildId}`}
+          manifest={previewManifest} frameworkName={details.summary.name} onDismiss={onClose}
+          onFocusExit={direction => (direction === "forward" ? selectionButton : componentsTab).current?.focus()} />
+          : <p>Component previews are unavailable for this framework revision.</p>}
       </section>}
-      <button type="button" onClick={onSelect}>Select framework</button>
+      <button ref={selectionButton} type="button" onClick={onSelect}>Select framework</button>
     </>}
     <button ref={closeButton} type="button" onClick={onClose}>Close details</button>
   </dialog>;

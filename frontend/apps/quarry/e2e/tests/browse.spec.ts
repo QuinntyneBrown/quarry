@@ -264,27 +264,6 @@ test("details expose supported capabilities, use cases, and component descriptor
   await expect(dialog.getByRole("tabpanel")).toContainText("Triggers an action.");
 });
 
-test("an illustrative component preview saves local feedback and resets its controls", async ({ page }) => {
-  await page.route("**/api/frameworks", async (route) => {
-    await route.fulfill({ json: catalogResponse });
-  });
-  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
-    await route.fulfill({ json: { summary: catalogResponse.items[0], components: [{ id: "button", name: "Button", description: "Triggers an action." }] } });
-  });
-  const discovery = new DiscoveryPage(page);
-  await discovery.goto();
-  await discovery.openFramework("Atlas");
-  const dialog = page.getByRole("dialog", { name: "Atlas details" });
-  await dialog.getByRole("tab", { name: "Components" }).click();
-  await dialog.getByLabel("Display name").fill("Alex");
-  await dialog.getByLabel("Email notifications").uncheck();
-  await dialog.getByRole("button", { name: "Save changes" }).click();
-  await expect(dialog.getByRole("status")).toContainText("Changes saved for Alex in the preview");
-  await dialog.getByRole("button", { name: "Reset" }).click();
-  await expect(dialog.getByLabel("Display name")).toHaveValue("Jamie");
-  await expect(dialog.getByLabel("Email notifications")).toBeChecked();
-  await expect(dialog.getByRole("status")).toContainText("Preview reset");
-});
 
 test("a failed detail request remains retryable in its dialog", async ({ page }) => {
   let attempts = 0;

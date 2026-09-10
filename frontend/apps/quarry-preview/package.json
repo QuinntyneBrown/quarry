@@ -1,0 +1,10 @@
+{
+  "name": "@quarry/previews",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.mjs",
+    "build": "node --check server.mjs && node --check public/bundles/illustrative-v1/preview.js"
+  }
+}

@@ -1,0 +1,6 @@
+body { margin: 0; padding: 1rem; font: 1rem/1.5 system-ui, sans-serif; color: #17233a; background: #fff; }
+main { max-width: 32rem; } label { display: block; margin-block: .5rem; }
+input, button { font: inherit; } input:not([type=checkbox]) { box-sizing: border-box; width: 100%; padding: .5rem; }
+button { padding: .5rem .75rem; margin: .5rem .5rem 0 0; }
+:focus-visible { outline: 3px solid #185abc; outline-offset: 3px; }
+#feedback { min-height: 1.5rem; }
