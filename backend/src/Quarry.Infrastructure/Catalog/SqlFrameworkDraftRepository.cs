@@ -14,12 +14,7 @@ public sealed class SqlFrameworkDraftRepository : IFrameworkDraftRepository
     public async Task<bool> CreateAsync(Framework framework, string actorId, string correlationId, CancellationToken cancellationToken)
     {
         await using var transaction = await _database.Database.BeginTransactionAsync(cancellationToken);
-        var lockName = $"Quarry.Framework.{framework.Id:D}";
-        await _database.Database.ExecuteSqlInterpolatedAsync($"""
-            DECLARE @result int;
-            EXEC @result = sp_getapplock @Resource = {lockName}, @LockMode = 'Exclusive', @LockOwner = 'Transaction', @LockTimeout = 5000;
-            IF @result < 0 THROW 51000, 'Framework maintenance lock unavailable', 1;
-            """, cancellationToken);
+        await LockFrameworkAsync(framework.Id, cancellationToken);
         if (await _database.FrameworkDrafts.AnyAsync(item => item.Id == framework.Id, cancellationToken)
             || await _database.FrameworkRevisions.AnyAsync(item => item.Id == framework.Id, cancellationToken)) return false;
         _database.FrameworkDrafts.Add(new FrameworkDraftEntity
@@ -42,5 +37,34 @@ public sealed class SqlFrameworkDraftRepository : IFrameworkDraftRepository
         if (stored is null) return null;
         var metadata = JsonSerializer.Deserialize<FrameworkMetadata>(stored.MetadataJson)!;
         return new FrameworkDraft(stored.Id, stored.Revision, "draft", metadata.Components!.Count, metadata);
+    }
+
+    public async Task<DraftUpdateStatus> UpdateAsync(Framework framework, string expectedRevision, string actorId, string correlationId, CancellationToken cancellationToken)
+    {
+        await using var transaction = await _database.Database.BeginTransactionAsync(cancellationToken);
+        await LockFrameworkAsync(framework.Id, cancellationToken);
+        var draft = await _database.FrameworkDrafts.SingleOrDefaultAsync(item => item.Id == framework.Id, cancellationToken);
+        if (draft is null) return DraftUpdateStatus.NotFound;
+        if (draft.Revision != expectedRevision) return DraftUpdateStatus.Conflict;
+        draft.MetadataJson = JsonSerializer.Serialize(framework.Metadata);
+        draft.Revision = framework.Revision;
+        _database.MaintenanceAuditRecords.Add(new MaintenanceAuditRecordEntity
+        {
+            Id = Guid.NewGuid(), ActorId = actorId, Operation = "framework-update", Outcome = "accepted",
+            CorrelationId = correlationId, TargetId = framework.Id, SourceRevision = framework.Revision, RecordedAtUtc = DateTimeOffset.UtcNow
+        });
+        await _database.SaveChangesAsync(cancellationToken);
+        await transaction.CommitAsync(cancellationToken);
+        return DraftUpdateStatus.Updated;
+    }
+
+    private Task LockFrameworkAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var lockName = $"Quarry.Framework.{id:D}";
+        return _database.Database.ExecuteSqlInterpolatedAsync($"""
+            DECLARE @result int;
+            EXEC @result = sp_getapplock @Resource = {lockName}, @LockMode = 'Exclusive', @LockOwner = 'Transaction', @LockTimeout = 5000;
+            IF @result < 0 THROW 51000, 'Framework maintenance lock unavailable', 1;
+            """, cancellationToken);
     }
 }

@@ -7,6 +7,14 @@ namespace Quarry.Api.AcceptanceTests;
 
 public sealed class FrameworkMetadataValidationTests
 {
+    [Fact]
+    public void RevisionStringsPreservePrecisionBeyondJavaScriptIntegerLimits()
+    {
+        var revised = Framework.ReviseDraft(Guid.NewGuid(), "9007199254740993", ValidMetadata());
+        Assert.Equal("9007199254740994", revised.Revision);
+        Assert.Throws<FrameworkValidationException>(() => Framework.ReviseDraft(Guid.NewGuid(), new string('9', 30), ValidMetadata()));
+    }
+
     private static FrameworkMetadata ValidMetadata() => new("Fixture", "Documented controls", "React", ["forms"],
         [new("forms", "Data entry")], ["Internal tools"], [new("input", "Input", "Editable text")]);
 

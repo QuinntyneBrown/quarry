@@ -39,4 +39,17 @@ Names and descriptions are trimmed. Limits use UTF-16 string length after trimmi
 
 Creation stores the private draft and an audit containing actor, framework ID, revision, operation, outcome, correlation ID, and time in one SQL transaction. It does not create indexing work. An audit-write failure rolls back the draft and returns a safe 503. Concurrent requests for one identity create at most one draft and one accepted audit entry.
 
-Draft update, publication with supporting evidence, withdrawal, deletion, and immutable published history are subsequent implementation increments. The create/read routes do not publish entries.
+## Update a draft
+
+`PUT /api/maintenance/frameworks/{id}` accepts `expectedRevision` and a complete `metadata` object. Obtain both from the protected GET response. A successful update returns 200 with the next decimal-string revision. Revision values must stay strings to preserve numeric precision. Blank, noncanonical, or out-of-range revisions return 400; an outdated revision returns 409 with `revision_conflict`. Reload the draft before submitting a revised update. An unknown ID returns 404.
+
+```powershell
+$draft = Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+$draft.metadata.description = 'Revised description supported by framework documentation'
+$update = @{ expectedRevision = $draft.revision; metadata = $draft.metadata } | ConvertTo-Json -Depth 8
+Invoke-RestMethod -Method Put -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers -ContentType 'application/json' -Body $update
+```
+
+Updates use the same metadata validation as creation. The draft revision, metadata, and `framework-update` audit commit together. Concurrent updates with the same expected revision accept only one writer. Editing the draft leaves an existing published entry and its search index unchanged.
+
+Publication with supporting evidence, withdrawal, deletion, and immutable published history remain subsequent implementation increments. Draft maintenance does not publish entries.

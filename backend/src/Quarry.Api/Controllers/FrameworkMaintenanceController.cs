@@ -40,6 +40,32 @@ public sealed class FrameworkMaintenanceController : ControllerBase
         }
     }
 
+    [HttpPut("{id:guid}")]
+    [RequestSizeLimit(1024 * 1024)]
+    public async Task<ActionResult<FrameworkDraft>> Update(Guid id, UpdateFrameworkDraftRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _sender.Send(new UpdateFrameworkDraftCommand(id, request.ExpectedRevision, request.Metadata,
+                User.FindFirst("sub")!.Value, HttpContext.TraceIdentifier), cancellationToken);
+            return result.Status switch
+            {
+                DraftUpdateStatus.Updated => Ok(result.Draft),
+                DraftUpdateStatus.NotFound => NotFound(new SafeErrorResponse("framework_not_found", HttpContext.TraceIdentifier)),
+                _ => Conflict(new MetadataValidationResponse("revision_conflict", HttpContext.TraceIdentifier,
+                    new Dictionary<string, string[]> { ["expectedRevision"] = ["The draft changed. Reload it before updating."] }))
+            };
+        }
+        catch (FrameworkValidationException error)
+        {
+            return BadRequest(new MetadataValidationResponse("invalid_framework_metadata", HttpContext.TraceIdentifier, error.Errors));
+        }
+        catch (Exception error) when (error is DbException or DbUpdateException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+        }
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FrameworkDraft>> Get(Guid id, CancellationToken cancellationToken)
     {

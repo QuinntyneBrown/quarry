@@ -1,16 +1,32 @@
+using System.Globalization;
+using System.Numerics;
+
 namespace Quarry.Domain.Catalog;
 
 public sealed class Framework
 {
     public Guid Id { get; }
-    public string Revision { get; } = "1";
+    public string Revision { get; }
     public FrameworkMetadata Metadata { get; }
     public int ComponentCount => Metadata.Components!.Count;
 
-    private Framework(Guid id, FrameworkMetadata metadata)
+    private Framework(Guid id, FrameworkMetadata metadata, string revision = "1")
     {
         Id = id;
         Metadata = metadata;
+        Revision = revision;
+    }
+
+    public static Framework ReviseDraft(Guid id, string? expectedRevision, FrameworkMetadata metadata)
+    {
+        if (expectedRevision is not { Length: > 0 and <= 30 } || expectedRevision[0] == '0'
+            || expectedRevision.Any(character => character is < '0' or > '9'))
+            throw new FrameworkValidationException(new Dictionary<string, string[]> { ["expectedRevision"] = ["Supply a canonical positive decimal revision of at most 30 digits."] });
+        var revision = (BigInteger.Parse(expectedRevision, CultureInfo.InvariantCulture) + 1).ToString(CultureInfo.InvariantCulture);
+        if (revision.Length > 30)
+            throw new FrameworkValidationException(new Dictionary<string, string[]> { ["expectedRevision"] = ["The revision limit has been reached."] });
+        var validated = CreateDraft(id, metadata);
+        return new Framework(id, validated.Metadata, revision);
     }
 
     public static Framework CreateDraft(Guid id, FrameworkMetadata metadata)
