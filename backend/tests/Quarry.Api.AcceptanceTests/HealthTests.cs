@@ -4,6 +4,7 @@
 using System.Net;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Quarry.Api.AcceptanceTests;
 
@@ -29,8 +30,11 @@ public sealed class HealthTests : IClassFixture<WebApplicationFactory<Program>>
     [Fact]
     public async Task GetReadinessReflectsUnavailableCatalogWithoutChangingLiveness()
     {
-        var readiness = await _client.GetAsync("/health/ready");
-        var liveness = await _client.GetAsync("/health/live");
+        using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+            builder.UseSetting("ConnectionStrings:Quarry", UnavailableCatalogConfiguration.ConnectionString));
+        using var client = factory.CreateClient();
+        var readiness = await client.GetAsync("/health/ready");
+        var liveness = await client.GetAsync("/health/live");
 
         Assert.Equal(HttpStatusCode.ServiceUnavailable, readiness.StatusCode);
         Assert.Equal(HttpStatusCode.OK, liveness.StatusCode);

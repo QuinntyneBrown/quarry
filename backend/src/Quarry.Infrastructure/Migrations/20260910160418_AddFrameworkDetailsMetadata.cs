@@ -13,7 +13,7 @@ namespace Quarry.Infrastructure.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "CapabilitiesJson",
                 table: "FrameworkRevisions",
-                type: "nvarchar(8000)",
+                type: "nvarchar(max)",
                 maxLength: 8000,
                 nullable: false,
                 defaultValue: "[]");

@@ -101,7 +101,8 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
     [Fact]
     public async Task GetFrameworksReportsUnavailablePersistenceAsSafeServiceFailure()
     {
-        using var productionFactory = new WebApplicationFactory<Program>();
+        using var productionFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+            builder.UseSetting("ConnectionStrings:Quarry", UnavailableCatalogConfiguration.ConnectionString));
         using var productionClient = productionFactory.CreateClient();
 
         var response = await productionClient.GetAsync("/api/frameworks");
@@ -112,7 +113,8 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
     [Fact]
     public async Task GetFrameworkDetailsReportsUnavailablePersistenceAsSafeServiceFailure()
     {
-        using var productionFactory = new WebApplicationFactory<Program>();
+        using var productionFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+            builder.UseSetting("ConnectionStrings:Quarry", UnavailableCatalogConfiguration.ConnectionString));
         using var productionClient = productionFactory.CreateClient();
 
         var response = await productionClient.GetAsync("/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f");

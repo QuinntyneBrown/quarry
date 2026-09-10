@@ -4,7 +4,7 @@
 
 Build the complete Quarry application using `docs/specs/` as the behavioral authority, `docs/detailed-designs/` for architecture and contracts, and `docs/mocks/` for visual and interaction guidance.
 
-Delivery targets local Windows with LocalDB, local embeddings, and JWT-protected maintenance. Component-library development is excluded. Preserve the standalone mock and clearly distinguish evaluation fixtures from released frameworks.
+Delivery targets local Windows with SQL Server Express (or LocalDB where compatible), local embeddings, and JWT-protected maintenance. The installed `.\SQLEXPRESS` instance is the verified local default following the 2026-09-10 database unblock. Component-library development is excluded. Preserve the standalone mock and clearly distinguish evaluation fixtures from released frameworks.
 
 ## Architecture and interfaces
 

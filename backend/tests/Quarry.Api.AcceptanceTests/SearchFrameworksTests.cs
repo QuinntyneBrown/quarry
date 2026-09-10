@@ -4,6 +4,10 @@
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Quarry.Application.Recommendations;
 
 namespace Quarry.Api.AcceptanceTests;
 
@@ -43,7 +47,13 @@ public sealed class SearchFrameworksTests : IClassFixture<WebApplicationFactory<
     [Fact]
     public async Task PostFrameworkSearchesStopsAtTheConfiguredRequestDeadline()
     {
-        var response = await _client.PostAsJsonAsync("/api/framework-searches", new { query = "Accessible forms" });
+        using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder =>
+        {
+            builder.UseSetting("Search:RequestTimeoutSeconds", "1");
+            builder.ConfigureTestServices(services => services.AddSingleton<ITextEmbeddingProvider, WaitingTextEmbeddingProvider>());
+        });
+        using var client = factory.CreateClient();
+        var response = await client.PostAsJsonAsync("/api/framework-searches", new { query = "Accessible forms" });
 
         Assert.Equal(HttpStatusCode.GatewayTimeout, response.StatusCode);
     }
