@@ -257,6 +257,23 @@ test("the search shortcut remains inside an open detail dialog", async ({ page }
   await expect(page.getByRole("button", { name: "Close details" })).toBeFocused();
 });
 
+test("Tab cycles focus within the open detail dialog", async ({ page }) => {
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    await route.fulfill({ json: { summary: catalogResponse.items[0] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  await expect(page.getByRole("button", { name: "Close details" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("tab", { name: "Overview" })).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(page.getByRole("button", { name: "Close details" })).toBeFocused();
+});
+
 test("selecting a framework keeps a visible selection summary", async ({ page }) => {
   await page.route("**/api/frameworks", async (route) => {
     await route.fulfill({ json: catalogResponse });
