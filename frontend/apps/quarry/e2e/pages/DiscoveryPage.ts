@@ -50,4 +50,8 @@ export class DiscoveryPage {
   public async openFramework(name: string): Promise<void> {
     await this.page.getByRole("button", { name: `Explore ${name}` }).click();
   }
+
+  public async dismissDetailsWithEscape(): Promise<void> {
+    await this.page.keyboard.press("Escape");
+  }
 }
