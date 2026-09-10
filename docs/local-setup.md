@@ -86,16 +86,20 @@ dotnet run --project backend/src/Quarry.Indexing.Worker
 Run the API and frontend in separate terminals:
 
 ```powershell
-dotnet run --project backend/src/Quarry.Api
+dotnet run --project backend/src/Quarry.Api --launch-profile http
 Set-Location frontend
 npm ci
 npm run dev --workspace=@quarry/app
 ```
 
+Open `http://127.0.0.1:5173`. Vite forwards `/api` requests to `http://localhost:5137`, matching the API's explicit `http` launch profile. To use a different local API address, set `QUARRY_API_PROXY` in the frontend terminal before starting Vite. This value stays in the local server configuration; browser requests use the frontend origin. Ports are strict so a busy port produces an error instead of silently changing the documented address.
+
+To inspect the production frontend build locally, run `npm run build --workspace=@quarry/app` and `npm run preview --workspace=@quarry/app` from `frontend`, then open `http://127.0.0.1:4173`. The preview server uses the same API proxy. This local delivery setup uses loopback HTTP. A separate HTTPS deployment must configure its certificate and matching proxy target explicitly.
+
 Health endpoints are `/health/live` (process), `/health/catalog` or `/health/ready` (catalog), `/health/search` (embeddings plus current index), and `/health/indexing` (stored index only). Anonymous responses expose only coarse status. Search/indexing may return 503 while catalog browsing remains healthy. After obtaining a maintenance token, inspect protected diagnostics with:
 
 ```powershell
-Invoke-RestMethod -Uri 'https://localhost:7015/api/maintenance/diagnostics' -Headers @{ Authorization = "Bearer $maintenanceToken" }
+Invoke-RestMethod -Uri 'http://localhost:5137/api/maintenance/diagnostics' -Headers @{ Authorization = "Bearer $maintenanceToken" }
 ```
 
 The report includes pending/current revision counts, retry failures, oldest pending age, and a freshness flag above 60 seconds. See [operational health](verification/operational-health.md) for issue codes and their recovery actions.
@@ -132,11 +136,11 @@ $env:Jwt__SigningKey = '<a private high-entropy signing key>'
 
 For local development, a key can be generated with `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))`. Store it privately and set the same value in each terminal rather than generating a new key per terminal. Restart the API after changing its configuration.
 
-Start the API with `dotnet run --project backend/src/Quarry.Api --launch-profile https`. In the operator terminal, the provided script issues a 15-minute token (configurable from 1 to 60 minutes). Its `Subject` identifies the operator. Invoke the rebuild using the HTTPS port from the checked-in launch profile:
+Restart the API with `dotnet run --project backend/src/Quarry.Api --launch-profile http` after setting its signing configuration. In the operator terminal, the provided script issues a 15-minute token (configurable from 1 to 60 minutes). Its `Subject` identifies the operator. Invoke the rebuild through the same local API address:
 
 ```powershell
 $maintenanceToken = ./tools/New-QuarryMaintenanceToken.ps1 -Subject "$env:USERDOMAIN\$env:USERNAME"
-Invoke-RestMethod -Method Post -Uri 'https://localhost:7015/api/maintenance/search-index/rebuild' -Headers @{ Authorization = "Bearer $maintenanceToken" }
+Invoke-RestMethod -Method Post -Uri 'http://localhost:5137/api/maintenance/search-index/rebuild' -Headers @{ Authorization = "Bearer $maintenanceToken" }
 ```
 
 Rebuild invalidates stored framework vectors and schedules durable `IndexWorkItems` for current published revisions. Scheduling, invalidation, and the audit record commit in one SQL transaction. Repeated requests do not duplicate jobs for the same revision/model. The audit contains the authenticated operator, operation, accepted outcome, request correlation ID, timestamp, and invalidated-vector count. Audit-write failure rolls back all changes and returns a safe 503.

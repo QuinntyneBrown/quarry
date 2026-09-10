@@ -21,8 +21,8 @@ $draftBody = @{
     components = @(@{ id = 'text-input'; name = 'Text input'; description = 'Editable text' })
 } | ConvertTo-Json -Depth 5
 $headers = @{ Authorization = "Bearer $maintenanceToken" }
-Invoke-RestMethod -Method Post -Uri 'https://localhost:7015/api/maintenance/frameworks' -Headers $headers -ContentType 'application/json' -Body $draftBody
-Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+Invoke-RestMethod -Method Post -Uri 'http://localhost:5137/api/maintenance/frameworks' -Headers $headers -ContentType 'application/json' -Body $draftBody
+Invoke-RestMethod -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId" -Headers $headers
 ```
 
 Names and descriptions are trimmed. Limits use UTF-16 string length after trimming:
@@ -44,10 +44,10 @@ Creation stores the private draft and an audit containing actor, framework ID, r
 `PUT /api/maintenance/frameworks/{id}` accepts `expectedRevision` and a complete `metadata` object. Obtain both from the protected GET response. A successful update returns 200 with the next decimal-string revision. Revision values must stay strings to preserve numeric precision. Blank, noncanonical, or out-of-range revisions return 400; an outdated revision returns 409 with `revision_conflict`. Reload the draft before submitting a revised update. An unknown ID returns 404.
 
 ```powershell
-$draft = Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+$draft = Invoke-RestMethod -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId" -Headers $headers
 $draft.metadata.description = 'Revised description supported by framework documentation'
 $update = @{ expectedRevision = $draft.revision; metadata = $draft.metadata } | ConvertTo-Json -Depth 8
-Invoke-RestMethod -Method Put -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers -ContentType 'application/json' -Body $update
+Invoke-RestMethod -Method Put -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId" -Headers $headers -ContentType 'application/json' -Body $update
 ```
 
 Updates use the same metadata validation as creation. The draft revision, metadata, and `framework-update` audit commit together. Concurrent updates with the same expected revision accept only one writer. Editing the draft leaves an existing published entry and its search index unchanged.
@@ -57,7 +57,7 @@ Updates use the same metadata validation as creation. The draft revision, metada
 `POST /api/maintenance/frameworks/{id}/publish` accepts `expectedRevision` and an `evidence` array. Each reference supplies `targetType` (`capability` or `component`), `targetId`, `kind` (`documentation` or `working-example`), and `source` (an absolute HTTPS URL without credentials, at most 2,000 characters). Supply 1–250 references covering every capability and component in the draft. Operators must review the referenced material: the API validates reference structure and coverage, but does not fetch or verify source content.
 
 ```powershell
-$draft = Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+$draft = Invoke-RestMethod -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId" -Headers $headers
 $publish = @{
     expectedRevision = $draft.revision
     evidence = @(
@@ -66,7 +66,7 @@ $publish = @{
     )
 } | ConvertTo-Json -Depth 8
 # Replace the illustrative evidence URLs with reviewed framework references.
-Invoke-RestMethod -Method Post -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId/publish" -Headers $headers -ContentType 'application/json' -Body $publish
+Invoke-RestMethod -Method Post -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId/publish" -Headers $headers -ContentType 'application/json' -Body $publish
 ```
 
 Success returns 200 with `id`, the next framework `revision`, the incremented `catalogRevision`, and status `published`. The draft advances to that same framework revision. Public browse and details expose the published metadata immediately; semantic search includes it after the worker finishes indexing that revision. A stale expected revision returns 409, an unknown identity returns 404, and invalid evidence returns 400.
@@ -84,8 +84,8 @@ Deletion accepts a private draft, published entry, or withdrawn entry. It reserv
 Both operations reject stale revisions with 409 and invalid revisions with 400. Removing a public entry increments the catalog revision; deleting a private draft does not. Audit and state changes commit together, and an audit failure rolls everything back. Previous vectors can remain stored but cannot qualify for discovery; pending or leased indexing work cannot restore a retired publication and is marked superseded when processed.
 
 ```powershell
-$draft = Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+$draft = Invoke-RestMethod -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId" -Headers $headers
 $change = @{ expectedRevision = $draft.revision } | ConvertTo-Json
-Invoke-RestMethod -Method Post -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId/withdraw" -Headers $headers -ContentType 'application/json' -Body $change
+Invoke-RestMethod -Method Post -Uri "http://localhost:5137/api/maintenance/frameworks/$frameworkId/withdraw" -Headers $headers -ContentType 'application/json' -Body $change
 # For permanent retirement, retrieve the latest revision and use DELETE on the framework URI.
 ```

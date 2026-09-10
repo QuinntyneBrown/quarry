@@ -62,12 +62,16 @@ jobs:
         working-directory: frontend/apps/quarry
       - run: npm run typecheck
         working-directory: frontend
+      - run: npm run build --workspaces
+        working-directory: frontend
+      - run: npm run test:routing --workspace=@quarry/app -- --reporter=line,junit
+        working-directory: frontend
+        env:
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/routing.xml
       - run: npm run test:e2e --workspace=@quarry/app -- --reporter=line,junit
         working-directory: frontend
         env:
           PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/frontend.xml
-      - run: npm run build --workspaces
-        working-directory: frontend
       - uses: actions/upload-artifact@v4
         if: always()
         with:

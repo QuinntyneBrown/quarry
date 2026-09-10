@@ -299,7 +299,9 @@ export function DiscoveryPage(): React.JSX.Element {
     {catalogNotice && <p className="catalog-notice" role="status">{catalogNotice}</p>}
     {selectionCleared && <p role="status">No framework selected.</p>}
     <section className="framework-grid" aria-label="Framework catalog" aria-busy={isLoading}>
-      {isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role={queryError ? undefined : "alert"}>{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}</section> : <>
+      {isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role={queryError ? undefined : "alert"}>{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}
+        {submittedQuery && <button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>}
+      </section> : <>
         {isIndexIncomplete && <section><p role="status">Results are temporarily incomplete while framework indexing finishes.</p>
           <button type="button" onClick={() => submitQuery(submittedQuery, technology)}>Retry</button><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>
         </section>}

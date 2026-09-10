@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:routing": "playwright test --config=playwright.routing.config.ts"
   },
   "dependencies": {
     "@playwright/test": "latest",
