@@ -21,7 +21,7 @@ public sealed class SearchFrameworksCommandHandler : IRequestHandler<SearchFrame
 
     public async Task<FrameworkSearchResult> Handle(SearchFrameworksCommand request, CancellationToken cancellationToken)
     {
-        var embedding = await _embeddingProvider.EmbedAsync(request.Query, cancellationToken);
+        var embedding = await _embeddingProvider.EmbedAsync(FrameworkEmbeddingInput.ForQuery(request.Query), cancellationToken);
         var snapshot = await _vectorRepository.GetSnapshotAsync(request.Technology, embedding.Model, embedding.Values.Count, cancellationToken);
         var rankings = _ranker.Rank(embedding.Values, snapshot.Candidates, request.Technology, RelevanceThreshold);
         var items = new List<FrameworkSearchResultItem>();

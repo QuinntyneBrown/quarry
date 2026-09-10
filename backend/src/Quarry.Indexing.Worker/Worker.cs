@@ -41,7 +41,7 @@ public sealed class Worker : BackgroundService
         foreach (var framework in frameworks)
         {
             var tags = JsonSerializer.Deserialize<List<string>>(framework.TagsJson) ?? [];
-            var embedding = await embeddingProvider.EmbedAsync($"Description: {framework.Description}\nTags: {string.Join(", ", tags)}", cancellationToken);
+            var embedding = await embeddingProvider.EmbedAsync(FrameworkEmbeddingInput.ForFramework(framework.Description, tags), cancellationToken);
             var current = await dbContext.FrameworkRevisions.SingleOrDefaultAsync(item => item.Id == framework.Id && item.IsPublished, cancellationToken);
             if (current is null || current.Revision != framework.Revision)
             {
