@@ -33,6 +33,14 @@ public sealed class SearchFrameworksTests : IClassFixture<WebApplicationFactory<
     }
 
     [Fact]
+    public async Task PostFrameworkSearchesRejectsAnOversizedRequestBody()
+    {
+        var response = await _client.PostAsJsonAsync("/api/framework-searches", new { query = new string('a', 17 * 1024) });
+
+        Assert.Equal(HttpStatusCode.RequestEntityTooLarge, response.StatusCode);
+    }
+
+    [Fact]
     public async Task PostFrameworkSearchesReportsUnavailableCatalogAsSafeServiceFailure()
     {
         var response = await _client.PostAsJsonAsync("/api/framework-searches", new { query = "Accessible forms" });
