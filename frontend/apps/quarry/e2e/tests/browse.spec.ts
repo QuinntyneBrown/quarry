@@ -141,6 +141,21 @@ test("changing technology reruns the current submitted project", async ({ page }
   await discovery.expectSubmittedProject("Animal Hospital");
 });
 
+test("recommendation cards show rank and grounded explanation", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    await route.fulfill({ json: { items: [{ ...catalogResponse.items[0], rank: 1, explanation: "Supports accessible form controls.", supportingCapabilityIds: ["accessible-forms"] }], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("Animal Hospital");
+  await expect(page.getByText("1 recommendation ordered by relevance")).toBeVisible();
+  await expect(page.getByRole("article", { name: "Atlas framework" })).toContainText("Rank 1");
+  await expect(page.getByRole("article", { name: "Atlas framework" })).toContainText("Supports accessible form controls.");
+});
+
 test("a late search response cannot replace newer discovery results", async ({ page }) => {
   let delayedRoute: Route | undefined;
   await page.route("**/api/frameworks**", async (route) => {

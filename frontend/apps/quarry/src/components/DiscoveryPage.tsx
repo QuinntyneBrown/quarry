@@ -5,6 +5,7 @@ import { searchFrameworks } from "../api/searchFrameworks";
 import type { FrameworkSummary } from "../types/FrameworkSummary";
 import type { Technology } from "../types/Technology";
 import type { FrameworkDetails } from "../types/FrameworkDetails";
+import type { FrameworkRecommendation } from "../types/FrameworkRecommendation";
 import { CatalogCard } from "./CatalogCard";
 import { FrameworkDetailsDialog } from "./FrameworkDetailsDialog";
 
@@ -19,6 +20,7 @@ export function DiscoveryPage(): React.JSX.Element {
   const [retry, setRetry] = useState<(() => void)>();
   const [isLoading, setIsLoading] = useState(false);
   const [nextCursor, setNextCursor] = useState<string>();
+  const [recommendations, setRecommendations] = useState<FrameworkRecommendation[]>();
   const searchInput = useRef<HTMLInputElement>(null);
   const detailOpener = useRef<HTMLButtonElement | null>(null);
   const discoveryRequest = useRef(0);
@@ -49,13 +51,13 @@ export function DiscoveryPage(): React.JSX.Element {
     }
     const request = ++discoveryRequest.current;
     setIsLoading(true);
-    searchFrameworks(query, selectedTechnology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query, selectedTechnology)); setIsLoading(false); } });
+    searchFrameworks(query, selectedTechnology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setRecommendations(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query, selectedTechnology)); setIsLoading(false); } });
   }
 
   function loadCatalog(value: Technology): void {
     const request = ++discoveryRequest.current;
     setIsLoading(true);
-    getCatalogPage(value).then((page) => { if (request === discoveryRequest.current) { setFrameworks(page.items); setNextCursor(page.nextCursor ?? undefined); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("The catalog is unavailable. Try again."); setRetry(() => () => loadCatalog(value)); setIsLoading(false); } });
+    getCatalogPage(value).then((page) => { if (request === discoveryRequest.current) { setFrameworks(page.items); setRecommendations(undefined); setNextCursor(page.nextCursor ?? undefined); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("The catalog is unavailable. Try again."); setRetry(() => () => loadCatalog(value)); setIsLoading(false); } });
   }
 
   function loadMore(): void {
@@ -115,5 +117,5 @@ export function DiscoveryPage(): React.JSX.Element {
     }
   }
 
-  return <main><h1>{submittedQuery ? `Frameworks for ${submittedQuery}` : "Describe your project"}</h1><form onSubmit={submit}><label htmlFor="project-description">What are you building?</label><input ref={searchInput} id="project-description" name="project-description" maxLength={500} value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} /><button type="submit">Find frameworks</button>{submittedQuery && <button type="button" onClick={clearSearch}>Clear search</button>}</form><label htmlFor="technology">Technology</label><select id="technology" value={technology} onChange={(event) => changeTechnology(event.target.value as Technology)}>{["All technologies", "React", "Angular", "Vue", "Web Components"].map((value) => <option key={value} value={value}>{value}</option>)}</select><section aria-label="Project examples"><p>Try an example:</p>{["Animal Hospital", "Online store", "Analytics dashboard"].map((example) => <button key={example} type="button" onClick={() => { setDraftQuery(example); submitQuery(example); }}>{example}</button>)}</section>{selectedFramework && <aside role="status">{selectedFramework.name} selected <button type="button" onClick={() => setSelectedFramework(undefined)}>Clear selection</button></aside>}<section aria-label="Framework catalog" aria-live="polite">{isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role="alert">{error}</p>{retry && <button type="button" onClick={retry}>Retry</button>}</section> : submittedQuery && frameworks.length === 0 ? <section><h2>No matching frameworks</h2><p>Try revising your project description or changing technology.</p><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button></section> : <>{frameworks.map((framework) => <CatalogCard framework={framework} onExplore={openFrameworkDetails} key={framework.id} />)}{!submittedQuery && nextCursor && <button type="button" onClick={loadMore}>Load more</button>}</>}</section>{details && <FrameworkDetailsDialog details={details} onClose={closeFrameworkDetails} onSelect={selectFramework} />}</main>;
+  return <main><h1>{submittedQuery ? `Frameworks for ${submittedQuery}` : "Describe your project"}</h1><form onSubmit={submit}><label htmlFor="project-description">What are you building?</label><input ref={searchInput} id="project-description" name="project-description" maxLength={500} value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} /><button type="submit">Find frameworks</button>{submittedQuery && <button type="button" onClick={clearSearch}>Clear search</button>}</form><label htmlFor="technology">Technology</label><select id="technology" value={technology} onChange={(event) => changeTechnology(event.target.value as Technology)}>{["All technologies", "React", "Angular", "Vue", "Web Components"].map((value) => <option key={value} value={value}>{value}</option>)}</select><section aria-label="Project examples"><p>Try an example:</p>{["Animal Hospital", "Online store", "Analytics dashboard"].map((example) => <button key={example} type="button" onClick={() => { setDraftQuery(example); submitQuery(example); }}>{example}</button>)}</section>{selectedFramework && <aside role="status">{selectedFramework.name} selected <button type="button" onClick={() => setSelectedFramework(undefined)}>Clear selection</button></aside>}{recommendations && <p>{recommendations.length} {recommendations.length === 1 ? "recommendation" : "recommendations"} ordered by relevance</p>}<section aria-label="Framework catalog" aria-live="polite">{isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role="alert">{error}</p>{retry && <button type="button" onClick={retry}>Retry</button>}</section> : submittedQuery && frameworks.length === 0 ? <section><h2>No matching frameworks</h2><p>Try revising your project description or changing technology.</p><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button></section> : <>{frameworks.map((framework) => <CatalogCard framework={framework} recommendation={recommendations?.find((item) => item.id === framework.id)} onExplore={openFrameworkDetails} key={framework.id} />)}{!submittedQuery && nextCursor && <button type="button" onClick={loadMore}>Load more</button>}</>}</section>{details && <FrameworkDetailsDialog details={details} onClose={closeFrameworkDetails} onSelect={selectFramework} />}</main>;
 }

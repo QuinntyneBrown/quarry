@@ -1,7 +1,7 @@
-import type { FrameworkSummary } from "./FrameworkSummary";
+import type { FrameworkRecommendation } from "./FrameworkRecommendation";
 
 export type FrameworkSearchResponse = {
-  items: FrameworkSummary[];
+  items: FrameworkRecommendation[];
   catalogRevision: string;
   isIndexIncomplete: boolean;
 };
