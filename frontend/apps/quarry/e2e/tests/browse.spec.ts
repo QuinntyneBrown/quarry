@@ -103,6 +103,24 @@ test("a submitted project includes its selected technology", async ({ page }) =>
   await expect.poll(() => submittedTechnology).toBe("React");
 });
 
+test("changing technology reruns the current submitted project", async ({ page }) => {
+  const submittedTechnologies: string[] = [];
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    submittedTechnologies.push(JSON.parse(route.request().postData() ?? "{}").technology ?? "All technologies");
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("Animal Hospital");
+  await expect.poll(() => submittedTechnologies).toEqual(["All technologies"]);
+  await discovery.filterTechnology("React");
+  await expect.poll(() => submittedTechnologies).toEqual(["All technologies", "React"]);
+  await discovery.expectSubmittedProject("Animal Hospital");
+});
+
 test("a late search response cannot replace newer discovery results", async ({ page }) => {
   let delayedRoute: Route | undefined;
   await page.route("**/api/frameworks**", async (route) => {

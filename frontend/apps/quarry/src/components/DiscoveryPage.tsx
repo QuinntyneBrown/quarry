@@ -38,17 +38,17 @@ export function DiscoveryPage(): React.JSX.Element {
     return () => window.removeEventListener("keydown", focusSearch);
   }, [details]);
 
-  function submitQuery(value: string): void {
+  function submitQuery(value: string, selectedTechnology: Technology = technology): void {
     const query = value.trim();
     setSubmittedQuery(query);
     if (!query) {
       setDraftQuery("");
-      loadCatalog(technology);
+      loadCatalog(selectedTechnology);
       return;
     }
     const request = ++discoveryRequest.current;
     setIsLoading(true);
-    searchFrameworks(query, technology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query)); setIsLoading(false); } });
+    searchFrameworks(query, selectedTechnology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query, selectedTechnology)); setIsLoading(false); } });
   }
 
   function loadCatalog(value: Technology): void {
@@ -74,7 +74,9 @@ export function DiscoveryPage(): React.JSX.Element {
     setTechnology(value);
     if (!submittedQuery) {
       loadCatalog(value);
+      return;
     }
+    submitQuery(submittedQuery, value);
   }
 
   function browseAllFrameworks(): void {
