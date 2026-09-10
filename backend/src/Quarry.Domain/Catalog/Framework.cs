@@ -19,14 +19,34 @@ public sealed class Framework
 
     public static Framework ReviseDraft(Guid id, string? expectedRevision, FrameworkMetadata metadata)
     {
+        var revision = NextRevision(expectedRevision);
+        var validated = CreateDraft(id, metadata);
+        return new Framework(id, validated.Metadata, revision);
+    }
+
+    public static string NextRevision(string? expectedRevision)
+    {
         if (expectedRevision is not { Length: > 0 and <= 30 } || expectedRevision[0] == '0'
             || expectedRevision.Any(character => character is < '0' or > '9'))
             throw new FrameworkValidationException(new Dictionary<string, string[]> { ["expectedRevision"] = ["Supply a canonical positive decimal revision of at most 30 digits."] });
         var revision = (BigInteger.Parse(expectedRevision, CultureInfo.InvariantCulture) + 1).ToString(CultureInfo.InvariantCulture);
         if (revision.Length > 30)
             throw new FrameworkValidationException(new Dictionary<string, string[]> { ["expectedRevision"] = ["The revision limit has been reached."] });
-        var validated = CreateDraft(id, metadata);
-        return new Framework(id, validated.Metadata, revision);
+        return revision;
+    }
+
+    public IReadOnlyList<PublicationEvidence> ValidatePublicationEvidence(IReadOnlyList<PublicationEvidence?>? evidence)
+    {
+        var targets = Metadata.Capabilities!.Select(item => $"capability:{item!.Id}")
+            .Concat(Metadata.Components!.Select(item => $"component:{item!.Id}")).ToHashSet(StringComparer.Ordinal);
+        if (evidence is not { Count: > 0 and <= 250 } || evidence.Any(item => item is null
+            || !targets.Contains($"{item.TargetType}:{item.TargetId}")
+            || item.Kind is not ("documentation" or "working-example")
+            || item.Source is not { Length: > 0 and <= 2000 }
+            || !Uri.TryCreate(item.Source, UriKind.Absolute, out var uri) || uri.Scheme != "https" || uri.UserInfo.Length != 0)
+            || !targets.SetEquals(evidence.Select(item => $"{item!.TargetType}:{item.TargetId}")))
+            throw new FrameworkValidationException(new Dictionary<string, string[]> { ["evidence"] = ["Provide HTTPS documentation or working-example references covering every capability and component ID."] });
+        return Array.AsReadOnly(evidence.Select(item => item!).ToArray());
     }
 
     public static Framework CreateDraft(Guid id, FrameworkMetadata metadata)

@@ -18,6 +18,8 @@ public sealed class QuarryDbContext : DbContext
     public DbSet<IndexWorkItemEntity> IndexWorkItems => Set<IndexWorkItemEntity>();
 
     public DbSet<FrameworkDraftEntity> FrameworkDrafts => Set<FrameworkDraftEntity>();
+    public DbSet<PublishedFrameworkSnapshotEntity> PublishedFrameworkSnapshots => Set<PublishedFrameworkSnapshotEntity>();
+    public DbSet<CatalogStateEntity> CatalogState => Set<CatalogStateEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,9 +29,9 @@ public sealed class QuarryDbContext : DbContext
         framework.Property(item => item.Name).HasMaxLength(200).IsRequired();
         framework.Property(item => item.Description).HasMaxLength(4000).IsRequired();
         framework.Property(item => item.Technology).HasMaxLength(50).IsRequired();
-        framework.Property(item => item.TagsJson).HasMaxLength(4000).IsRequired();
+        framework.Property(item => item.TagsJson).HasColumnType("nvarchar(max)").IsRequired();
         framework.Property(item => item.CapabilitiesJson).HasMaxLength(8000).IsRequired();
-        framework.Property(item => item.UseCasesJson).HasMaxLength(4000).IsRequired();
+        framework.Property(item => item.UseCasesJson).HasColumnType("nvarchar(max)").IsRequired();
         framework.Property(item => item.ComponentsJson).HasMaxLength(16000).IsRequired();
         framework.Property(item => item.Revision).HasMaxLength(30).IsRequired();
         framework.HasIndex(item => new { item.IsPublished, item.Technology, item.Name });
@@ -67,5 +69,19 @@ public sealed class QuarryDbContext : DbContext
         draft.HasKey(item => item.Id);
         draft.Property(item => item.Revision).HasMaxLength(30).IsRequired();
         draft.Property(item => item.MetadataJson).IsRequired();
+
+        var snapshot = modelBuilder.Entity<PublishedFrameworkSnapshotEntity>();
+        snapshot.ToTable("PublishedFrameworkSnapshots");
+        snapshot.HasKey(item => new { item.FrameworkId, item.Revision });
+        snapshot.Property(item => item.Revision).HasMaxLength(30).IsRequired();
+        snapshot.Property(item => item.MetadataJson).IsRequired();
+        snapshot.Property(item => item.EvidenceJson).IsRequired();
+        snapshot.Property(item => item.PublishedBy).IsRequired();
+
+        var catalog = modelBuilder.Entity<CatalogStateEntity>();
+        catalog.ToTable("CatalogState");
+        catalog.HasKey(item => item.Id);
+        catalog.Property(item => item.Id).ValueGeneratedNever();
+        catalog.HasData(new CatalogStateEntity { Id = 1, Revision = 0 });
     }
 }

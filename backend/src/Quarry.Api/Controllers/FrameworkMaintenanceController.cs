@@ -66,6 +66,32 @@ public sealed class FrameworkMaintenanceController : ControllerBase
         }
     }
 
+    [HttpPost("{id:guid}/publish")]
+    [RequestSizeLimit(1024 * 1024)]
+    public async Task<ActionResult<FrameworkPublicationResponse>> Publish(Guid id, PublishFrameworkRequest request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _sender.Send(new PublishFrameworkCommand(id, request.ExpectedRevision, request.Evidence,
+                User.FindFirst("sub")!.Value, HttpContext.TraceIdentifier), cancellationToken);
+            return result.Status switch
+            {
+                PublicationStatus.Published => Ok(new FrameworkPublicationResponse(id, result.Revision!, result.CatalogRevision!, "published")),
+                PublicationStatus.NotFound => NotFound(new SafeErrorResponse("framework_not_found", HttpContext.TraceIdentifier)),
+                _ => Conflict(new MetadataValidationResponse("revision_conflict", HttpContext.TraceIdentifier,
+                    new Dictionary<string, string[]> { ["expectedRevision"] = ["The draft changed. Reload it before publishing."] }))
+            };
+        }
+        catch (FrameworkValidationException error)
+        {
+            return BadRequest(new MetadataValidationResponse("invalid_publication", HttpContext.TraceIdentifier, error.Errors));
+        }
+        catch (Exception error) when (error is DbException or DbUpdateException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+        }
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<FrameworkDraft>> Get(Guid id, CancellationToken cancellationToken)
     {

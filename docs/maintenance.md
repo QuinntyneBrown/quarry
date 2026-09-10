@@ -52,4 +52,25 @@ Invoke-RestMethod -Method Put -Uri "https://localhost:7015/api/maintenance/frame
 
 Updates use the same metadata validation as creation. The draft revision, metadata, and `framework-update` audit commit together. Concurrent updates with the same expected revision accept only one writer. Editing the draft leaves an existing published entry and its search index unchanged.
 
-Publication with supporting evidence, withdrawal, deletion, and immutable published history remain subsequent implementation increments. Draft maintenance does not publish entries.
+## Publish a draft
+
+`POST /api/maintenance/frameworks/{id}/publish` accepts `expectedRevision` and an `evidence` array. Each reference supplies `targetType` (`capability` or `component`), `targetId`, `kind` (`documentation` or `working-example`), and `source` (an absolute HTTPS URL without credentials, at most 2,000 characters). Supply 1–250 references covering every capability and component in the draft. Operators must review the referenced material: the API validates reference structure and coverage, but does not fetch or verify source content.
+
+```powershell
+$draft = Invoke-RestMethod -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId" -Headers $headers
+$publish = @{
+    expectedRevision = $draft.revision
+    evidence = @(
+        @{ targetType = 'capability'; targetId = 'data-entry'; kind = 'documentation'; source = 'https://example.test/docs/data-entry' }
+        @{ targetType = 'component'; targetId = 'text-input'; kind = 'working-example'; source = 'https://example.test/examples/text-input' }
+    )
+} | ConvertTo-Json -Depth 8
+# Replace the illustrative evidence URLs with reviewed framework references.
+Invoke-RestMethod -Method Post -Uri "https://localhost:7015/api/maintenance/frameworks/$frameworkId/publish" -Headers $headers -ContentType 'application/json' -Body $publish
+```
+
+Success returns 200 with `id`, the next framework `revision`, the incremented `catalogRevision`, and status `published`. The draft advances to that same framework revision. Public browse and details expose the published metadata immediately; semantic search includes it after the worker finishes indexing that revision. A stale expected revision returns 409, an unknown identity returns 404, and invalid evidence returns 400.
+
+The public metadata, immutable snapshot with evidence, catalog revision, index work, and `framework-publish` audit commit in one SQL transaction. Audit or index scheduling failures roll everything back and return a safe 503. Republishing preserves earlier snapshots; SQL rejects updates and deletes of snapshot rows. Draft edits continue to leave the current publication unchanged until the next successful publication.
+
+Withdrawal and deletion remain subsequent implementation increments.

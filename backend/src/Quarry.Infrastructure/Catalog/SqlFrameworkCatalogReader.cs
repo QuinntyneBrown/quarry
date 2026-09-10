@@ -1,4 +1,6 @@
 using System.Text.Json;
+using System.Data;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Quarry.Application.Catalog;
 using Quarry.Infrastructure.Persistence;
@@ -17,6 +19,8 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
     public async Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken)
     {
         CatalogCursor.TryDecode(cursor, out var offset);
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+        var catalogRevision = await _dbContext.CatalogState.AsNoTracking().Where(item => item.Id == 1).Select(item => item.Revision).SingleAsync(cancellationToken);
         var query = _dbContext.FrameworkRevisions.AsNoTracking().Where(item => item.IsPublished);
         if (!string.IsNullOrWhiteSpace(technology))
         {
@@ -39,7 +43,8 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
             item.ComponentCount,
             item.Revision)).ToList();
         var nextOffset = offset + items.Count;
-        return new CatalogPage(items, total, nextOffset < total, nextOffset < total ? CatalogCursor.Encode(nextOffset) : null, "0");
+        await transaction.CommitAsync(cancellationToken);
+        return new CatalogPage(items, total, nextOffset < total, nextOffset < total ? CatalogCursor.Encode(nextOffset) : null, catalogRevision.ToString(CultureInfo.InvariantCulture));
     }
 
     public async Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)
