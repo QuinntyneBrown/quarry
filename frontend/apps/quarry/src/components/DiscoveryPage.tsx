@@ -44,7 +44,7 @@ export function DiscoveryPage(): React.JSX.Element {
       return;
     }
     setIsLoading(true);
-    searchFrameworks(query).then((response) => { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); }).catch(() => { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query)); setIsLoading(false); });
+    searchFrameworks(query, technology).then((response) => { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); }).catch(() => { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query)); setIsLoading(false); });
   }
 
   function loadCatalog(value: Technology): void {

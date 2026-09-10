@@ -68,6 +68,22 @@ test("technology filtering reloads the current browse catalog", async ({ page })
   await expect.poll(() => requestedTechnologies).toContain("React");
 });
 
+test("a submitted project includes its selected technology", async ({ page }) => {
+  let submittedTechnology: string | undefined;
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    submittedTechnology = JSON.parse(route.request().postData() ?? "{}").technology;
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.filterTechnology("React");
+  await discovery.submitProject("Animal Hospital");
+  await expect.poll(() => submittedTechnology).toBe("React");
+});
+
 test("empty search results explain recovery and allow a browse reset", async ({ page }) => {
   await page.route("**/api/frameworks**", async (route) => {
     await route.fulfill({ json: catalogResponse });
