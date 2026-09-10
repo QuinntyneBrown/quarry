@@ -12,6 +12,8 @@ using Quarry.Api;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http.Timeouts;
+using Quarry.Application.Operations;
+using Quarry.Infrastructure.Operations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,10 +77,12 @@ builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(b
 builder.Services.Configure<OllamaEmbeddingOptions>(builder.Configuration.GetSection(OllamaEmbeddingOptions.SectionName));
 builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["Embeddings:Endpoint"] ?? "http://localhost:11434/");
+    if (Uri.TryCreate(builder.Configuration["Embeddings:Endpoint"] ?? "http://localhost:11434/", UriKind.Absolute, out var endpoint)
+        && endpoint.Scheme is "http" or "https") client.BaseAddress = endpoint;
     client.Timeout = TimeSpan.FromSeconds(5);
 });
 builder.Services.AddScoped<ITextEmbeddingProvider>(serviceProvider => serviceProvider.GetRequiredService<OllamaTextEmbeddingProvider>());
+builder.Services.AddScoped<IServiceHealthReader, SqlServiceHealthReader>();
 builder.Services.AddScoped<IFrameworkVectorRepository, SqlFrameworkVectorRepository>();
 builder.Services.AddScoped<IFrameworkSearchIndexMaintenance, SqlFrameworkSearchIndexMaintenance>();
 builder.Services.AddScoped<SqlIndexWorkRepository>();

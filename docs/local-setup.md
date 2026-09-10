@@ -48,6 +48,14 @@ npm ci
 npm run dev --workspace=@quarry/app
 ```
 
+Health endpoints are `/health/live` (process), `/health/catalog` or `/health/ready` (catalog), `/health/search` (embeddings plus current index), and `/health/indexing` (stored index only). Anonymous responses expose only coarse status. Search/indexing may return 503 while catalog browsing remains healthy. After obtaining a maintenance token, inspect protected diagnostics with:
+
+```powershell
+Invoke-RestMethod -Uri 'https://localhost:7015/api/maintenance/diagnostics' -Headers @{ Authorization = "Bearer $maintenanceToken" }
+```
+
+The report includes pending/current revision counts, retry failures, oldest pending age, and a freshness flag above 60 seconds. See [operational health](verification/operational-health.md) for issue codes and their recovery actions.
+
 For component previews, start the isolated static host in another terminal from `frontend`:
 
 ```powershell
