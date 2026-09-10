@@ -36,9 +36,17 @@ export function DiscoveryPage(): React.JSX.Element {
   const detailOpener = useRef<HTMLButtonElement | null>(null);
   const discoveryRequest = useRef(0);
   const detailRequest = useRef(0);
+  const discoveryController = useRef<AbortController | undefined>(undefined);
+  const detailController = useRef<AbortController | undefined>(undefined);
 
   useEffect(() => {
     loadCatalog("All technologies");
+    return () => {
+      discoveryRequest.current += 1;
+      detailRequest.current += 1;
+      discoveryController.current?.abort();
+      detailController.current?.abort();
+    };
   }, []);
 
   useEffect(() => {
@@ -53,6 +61,12 @@ export function DiscoveryPage(): React.JSX.Element {
     return () => window.removeEventListener("keydown", focusSearch);
   }, [detailId]);
 
+  function beginDiscoveryRequest(): AbortSignal {
+    discoveryController.current?.abort();
+    discoveryController.current = new AbortController();
+    return discoveryController.current.signal;
+  }
+
   function submitQuery(value: string, selectedTechnology: Technology = technology): void {
     setRetryAt(undefined);
     setCatalogNotice(undefined);
@@ -65,7 +79,7 @@ export function DiscoveryPage(): React.JSX.Element {
     }
     const request = ++discoveryRequest.current;
     setIsLoading(true);
-    searchFrameworks(query, selectedTechnology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setRecommendations(response.items); setIsIndexIncomplete(response.isIndexIncomplete); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch((cause: unknown) => { if (request === discoveryRequest.current) { setRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined); setError(cause instanceof RateLimitError ? cause.message : "Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query, selectedTechnology)); setIsLoading(false); } });
+    searchFrameworks(query, selectedTechnology, beginDiscoveryRequest()).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setRecommendations(response.items); setIsIndexIncomplete(response.isIndexIncomplete); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch((cause: unknown) => { if (request === discoveryRequest.current) { setRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined); setError(cause instanceof RateLimitError ? cause.message : "Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query, selectedTechnology)); setIsLoading(false); } });
   }
 
   function loadCatalog(value: Technology, catalogUpdated = false): void {
@@ -73,7 +87,7 @@ export function DiscoveryPage(): React.JSX.Element {
     const request = ++discoveryRequest.current;
     setIsLoading(true);
     setCatalogNotice(undefined);
-    getCatalogPage(value).then((page) => {
+    getCatalogPage(value, undefined, undefined, beginDiscoveryRequest()).then((page) => {
       if (request !== discoveryRequest.current) return;
       setFrameworks(page.items);
       setCatalogRevision(page.catalogRevision);
@@ -102,7 +116,7 @@ export function DiscoveryPage(): React.JSX.Element {
     const cursor = nextCursor;
     const request = ++discoveryRequest.current;
     setIsLoading(true);
-    getCatalogPage(technology, cursor, catalogRevision).then((page) => {
+    getCatalogPage(technology, cursor, catalogRevision, beginDiscoveryRequest()).then((page) => {
       if (request !== discoveryRequest.current) return;
       if (page.catalogRevision !== catalogRevision) {
         loadCatalog(technology, true);
@@ -168,12 +182,15 @@ export function DiscoveryPage(): React.JSX.Element {
   function loadFrameworkDetails(id: string): void {
     setDetailRetryAt(undefined);
     const request = ++detailRequest.current;
+    detailController.current?.abort();
+    detailController.current = new AbortController();
     setDetailError(undefined);
-    getFrameworkDetails(id).then((result) => { if (request === detailRequest.current) { setDetails(result); } }).catch((cause: unknown) => { if (request === detailRequest.current) { setDetailRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined); setDetailError(cause instanceof RateLimitError ? cause.message : "Framework details are unavailable. Try again."); } });
+    getFrameworkDetails(id, detailController.current.signal).then((result) => { if (request === detailRequest.current) { setDetails(result); } }).catch((cause: unknown) => { if (request === detailRequest.current) { setDetailRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined); setDetailError(cause instanceof RateLimitError ? cause.message : "Framework details are unavailable. Try again."); } });
   }
 
   function closeFrameworkDetails(): void {
     detailRequest.current += 1;
+    detailController.current?.abort();
     setDetailId(undefined);
     setDetails(undefined);
     setDetailError(undefined);

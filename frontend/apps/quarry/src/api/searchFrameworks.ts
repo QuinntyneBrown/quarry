@@ -2,9 +2,10 @@ import type { FrameworkSearchResponse } from "../types/FrameworkSearchResponse";
 import type { Technology } from "../types/Technology";
 import { RateLimitError } from "./RateLimitError";
 
-export async function searchFrameworks(query: string, technology: Technology): Promise<FrameworkSearchResponse> {
+export async function searchFrameworks(query: string, technology: Technology, signal?: AbortSignal): Promise<FrameworkSearchResponse> {
   const response = await fetch("/api/framework-searches", {
     method: "POST",
+    signal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query, technology: technology === "All technologies" ? undefined : technology })
   });

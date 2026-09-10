@@ -3,7 +3,7 @@ import type { Technology } from "../types/Technology";
 import { CatalogRevisionChangedError } from "./CatalogRevisionChangedError";
 import { RateLimitError } from "./RateLimitError";
 
-export async function getCatalogPage(technology: Technology = "All technologies", cursor?: string, expectedRevision?: string): Promise<CatalogPage> {
+export async function getCatalogPage(technology: Technology = "All technologies", cursor?: string, expectedRevision?: string, signal?: AbortSignal): Promise<CatalogPage> {
   const parameters = new URLSearchParams();
   if (technology !== "All technologies") {
     parameters.set("technology", technology);
@@ -13,7 +13,7 @@ export async function getCatalogPage(technology: Technology = "All technologies"
   }
   if (expectedRevision) parameters.set("expectedRevision", expectedRevision);
   const queryString = parameters.toString();
-  const response = await fetch(`/api/frameworks${queryString ? `?${queryString}` : ""}`);
+  const response = await fetch(`/api/frameworks${queryString ? `?${queryString}` : ""}`, { signal });
   if (!response.ok) {
     if (response.status === 429) throw new RateLimitError(response.headers.get("Retry-After"));
     if (response.status === 409) throw new CatalogRevisionChangedError();
