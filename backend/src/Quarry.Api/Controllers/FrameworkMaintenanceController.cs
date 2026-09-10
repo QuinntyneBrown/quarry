@@ -18,7 +18,6 @@ public sealed class FrameworkMaintenanceController : ControllerBase
     public FrameworkMaintenanceController(ISender sender) => _sender = sender;
 
     [HttpPost]
-    [RequestSizeLimit(1024 * 1024)]
     public async Task<ActionResult<FrameworkDraft>> Create(CreateFrameworkDraftRequest request, CancellationToken cancellationToken)
     {
         try
@@ -41,7 +40,6 @@ public sealed class FrameworkMaintenanceController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [RequestSizeLimit(1024 * 1024)]
     public async Task<ActionResult<FrameworkDraft>> Update(Guid id, UpdateFrameworkDraftRequest request, CancellationToken cancellationToken)
     {
         try
@@ -67,7 +65,6 @@ public sealed class FrameworkMaintenanceController : ControllerBase
     }
 
     [HttpPost("{id:guid}/publish")]
-    [RequestSizeLimit(1024 * 1024)]
     public async Task<ActionResult<FrameworkPublicationResponse>> Publish(Guid id, PublishFrameworkRequest request, CancellationToken cancellationToken)
     {
         try
@@ -93,12 +90,10 @@ public sealed class FrameworkMaintenanceController : ControllerBase
     }
 
     [HttpPost("{id:guid}/withdraw")]
-    [RequestSizeLimit(1024)]
     public Task<ActionResult<FrameworkRetirementResponse>> Withdraw(Guid id, RetireFrameworkRequest request, CancellationToken cancellationToken)
         => RetireAsync(id, request, FrameworkRetirementKind.Withdraw, cancellationToken);
 
     [HttpDelete("{id:guid}")]
-    [RequestSizeLimit(1024)]
     public Task<ActionResult<FrameworkRetirementResponse>> Delete(Guid id, RetireFrameworkRequest request, CancellationToken cancellationToken)
         => RetireAsync(id, request, FrameworkRetirementKind.Delete, cancellationToken);
 

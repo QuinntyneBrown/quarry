@@ -27,6 +27,10 @@ public sealed class FrameworksController : ControllerBase
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, [FromQuery] string? technology = null, [FromQuery] string? cursor = null, [FromQuery] string? expectedRevision = null, CancellationToken cancellationToken = default)
     {
+        if (Request.Query.Keys.Any(key => key.Equals("page", StringComparison.OrdinalIgnoreCase)
+            || key.Equals("pageNumber", StringComparison.OrdinalIgnoreCase) || key.Equals("page-number", StringComparison.OrdinalIgnoreCase)))
+            return BadRequest(new SafeErrorResponse("unsupported_pagination", HttpContext.TraceIdentifier));
+
         if (pageSize is < 1 or > 24)
         {
             return BadRequest(new SafeErrorResponse("invalid_page_size", HttpContext.TraceIdentifier));

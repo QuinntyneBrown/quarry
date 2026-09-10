@@ -28,17 +28,11 @@ public sealed class FrameworkSearchesController : ControllerBase
     }
 
     [HttpPost]
-    [RequestSizeLimit(16 * 1024)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status413PayloadTooLarge)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Search([FromBody] FrameworkSearchRequest request, CancellationToken cancellationToken)
     {
-        if (Request.ContentLength is > 16 * 1024)
-        {
-            return StatusCode(StatusCodes.Status413PayloadTooLarge, new SafeErrorResponse("request_body_too_large", HttpContext.TraceIdentifier));
-        }
-
         var query = request.Query?.Trim();
         if (query is null || query.Length > 500)
         {

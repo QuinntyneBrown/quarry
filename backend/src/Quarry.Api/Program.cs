@@ -153,6 +153,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
+app.UseMiddleware<RequestBodyLimitMiddleware>();
+
 app.MapControllers();
 
 app.Run();
