@@ -5,7 +5,7 @@ import { RetryButton } from "./RetryButton";
 import { ComponentPreviewPanel } from "./ComponentPreviewPanel";
 import { getPreviewManifest } from "../previews/getPreviewManifest";
 
-export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isSelected, isUnavailable, onClose, onRetry, onSelect }: FrameworkDetailsDialogProperties): React.JSX.Element {
+export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isSelected, isUnavailable, isUpdated, explanation, onClose, onRetry, onSelect }: FrameworkDetailsDialogProperties): React.JSX.Element {
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const overviewTab = useRef<HTMLButtonElement>(null);
@@ -67,12 +67,15 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
     onCancel={event => { event.preventDefault(); onClose(); }} onClick={dismissBackdrop}>
     <h2>{details?.summary.name ?? "Framework details"}</h2>
     {isLoading ? <p role="status">Loading framework details</p> : error ? <section><p role="alert">{error}</p>{!isUnavailable && <RetryButton retryAt={retryAt} onRetry={onRetry} />}</section> : details && <>
+      {isUpdated && <p role="status">Framework information was updated.</p>}
       <div role="tablist" aria-label="Framework details">
         <button ref={overviewTab} type="button" role="tab" id="overview-tab" aria-controls="overview-panel" aria-selected={activeTab === "overview"} tabIndex={activeTab === "overview" ? 0 : -1} onClick={() => selectTab("overview")} onKeyDown={moveTab}>Overview</button>
         <button ref={componentsTab} type="button" role="tab" id="components-tab" aria-controls="components-panel" aria-selected={activeTab === "components"} tabIndex={activeTab === "components" ? 0 : -1} onClick={() => selectTab("components")} onKeyDown={moveTab}>Components</button>
       </div>
       {activeTab === "overview" ? <section role="tabpanel" id="overview-panel" aria-labelledby="overview-tab">
         <p>{details.summary.description}</p><p>{details.summary.technology} · {details.summary.componentCount} components</p>
+        <ul aria-label="Framework tags">{details.summary.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
+        {explanation && <section aria-label="Why this framework"><h3>Why this framework</h3><p>{explanation}</p></section>}
         <h3>Capabilities</h3><ul>{(details.capabilities ?? []).map((capability) => <li key={capability.id}>{capability.description}</li>)}</ul>
         <h3>Suitable use cases</h3><ul>{(details.useCases ?? []).map((useCase) => <li key={useCase}>{useCase}</li>)}</ul>
         <p>Framework appearance is customized during implementation through its own themes and design tokens.</p>

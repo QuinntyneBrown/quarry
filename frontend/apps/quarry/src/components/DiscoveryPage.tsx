@@ -21,6 +21,7 @@ export function DiscoveryPage(): React.JSX.Element {
   const [technology, setTechnology] = useState<Technology>("All technologies");
   const [details, setDetails] = useState<FrameworkDetails>();
   const [detailId, setDetailId] = useState<string>();
+  const [detailSourceRevision, setDetailSourceRevision] = useState<string>();
   const [detailError, setDetailError] = useState<string>();
   const [selectedFramework, setSelectedFramework] = useState<FrameworkSummary>();
   const [unavailableId, setUnavailableId] = useState<string>();
@@ -43,6 +44,11 @@ export function DiscoveryPage(): React.JSX.Element {
   const detailRequest = useRef(0);
   const discoveryController = useRef<AbortController | undefined>(undefined);
   const detailController = useRef<AbortController | undefined>(undefined);
+  const detailRecommendation = !isLoading && !error && submittedQuery
+    ? recommendations?.find(item => item.id === detailId && item.revision === details?.summary.revision
+      && item.supportingCapabilityIds?.length > 0
+      && item.supportingCapabilityIds.every(id => details?.capabilities?.some(capability => capability.id === id)))
+    : undefined;
 
   useEffect(() => {
     loadCatalog("All technologies");
@@ -176,8 +182,9 @@ export function DiscoveryPage(): React.JSX.Element {
     loadCatalog("All technologies");
   }
 
-  function openFrameworkDetails(id: string, opener: HTMLButtonElement): void {
+  function openFrameworkDetails(id: string, opener: HTMLButtonElement, sourceRevision = frameworks.find(item => item.id === id)?.revision): void {
     detailOpener.current = opener;
+    setDetailSourceRevision(sourceRevision);
     setDetailId(id);
     setDetails(undefined);
     setDetailError(undefined);
@@ -251,7 +258,7 @@ export function DiscoveryPage(): React.JSX.Element {
     {selectedFramework && <aside role="status" aria-label="Selected framework">
       <span>{selectedFramework.name} selected</span> <span>{selectedFramework.technology}</span>
       {unavailableId === selectedFramework.id && <p>Unavailable — clear this selection or select another framework.</p>}
-      <button type="button" onClick={(event) => openFrameworkDetails(selectedFramework.id, event.currentTarget)}>Review selection</button>
+      <button type="button" onClick={(event) => openFrameworkDetails(selectedFramework.id, event.currentTarget, selectedFramework.revision)}>Review selection</button>
       <button type="button" onClick={clearSelection}>Clear selected framework</button>
     </aside>}
     {selectionCleared && <p role="status">No framework selected.</p>}
@@ -272,6 +279,7 @@ export function DiscoveryPage(): React.JSX.Element {
     </section>
     {detailId && <FrameworkDetailsDialog details={details} error={detailError} retryAt={detailRetryAt} isLoading={!details && !detailError}
       isSelected={selectedFramework?.id === detailId} isUnavailable={detailUnavailable}
+      isUpdated={!!details && !!detailSourceRevision && detailSourceRevision !== details.summary.revision} explanation={detailRecommendation?.explanation}
       onClose={closeFrameworkDetails} onRetry={() => loadFrameworkDetails(detailId)} onSelect={selectFramework} />}
   </main>;
 }
