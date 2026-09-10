@@ -11,6 +11,8 @@ public sealed class QuarryDbContext : DbContext
 
     public DbSet<FrameworkRevisionEntity> FrameworkRevisions => Set<FrameworkRevisionEntity>();
 
+    public DbSet<FrameworkVectorEntity> FrameworkVectors => Set<FrameworkVectorEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var framework = modelBuilder.Entity<FrameworkRevisionEntity>();
@@ -25,5 +27,13 @@ public sealed class QuarryDbContext : DbContext
         framework.Property(item => item.ComponentsJson).HasMaxLength(16000).IsRequired();
         framework.Property(item => item.Revision).HasMaxLength(30).IsRequired();
         framework.HasIndex(item => new { item.IsPublished, item.Technology, item.Name });
+
+        var vector = modelBuilder.Entity<FrameworkVectorEntity>();
+        vector.ToTable("FrameworkVectors");
+        vector.HasKey(item => item.FrameworkId);
+        vector.Property(item => item.SourceRevision).HasMaxLength(30).IsRequired();
+        vector.Property(item => item.Model).HasMaxLength(200).IsRequired();
+        vector.Property(item => item.ValuesJson).HasColumnType("nvarchar(max)").IsRequired();
+        vector.HasIndex(item => new { item.Model, item.Dimensions });
     }
 }
