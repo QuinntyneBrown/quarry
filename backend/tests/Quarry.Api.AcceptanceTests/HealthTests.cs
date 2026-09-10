@@ -25,4 +25,14 @@ public sealed class HealthTests : IClassFixture<WebApplicationFactory<Program>>
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
         Assert.Equal("healthy", document.RootElement.GetProperty("status").GetString());
     }
+
+    [Fact]
+    public async Task GetReadinessReflectsUnavailableCatalogWithoutChangingLiveness()
+    {
+        var readiness = await _client.GetAsync("/health/ready");
+        var liveness = await _client.GetAsync("/health/live");
+
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, readiness.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, liveness.StatusCode);
+    }
 }
