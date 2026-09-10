@@ -10,12 +10,14 @@ using System.Threading.RateLimiting;
 using Quarry.Api.Contracts;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http.Timeouts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddRequestTimeouts(options => options.AddPolicy("framework-search", TimeSpan.FromSeconds(builder.Configuration.GetValue("Search:RequestTimeoutSeconds", 8))));
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Quarry";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Quarry.Maintenance";
 var jwtSigningKey = builder.Configuration["Jwt:SigningKey"] ?? "development-only-signing-key-change-before-production";
@@ -80,6 +82,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+
+app.UseRequestTimeouts();
 
 app.UseRateLimiter();
 
