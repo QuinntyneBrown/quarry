@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Quarry.Api.Contracts;
 using Quarry.Application.Recommendations;
+using Quarry.Application.Catalog;
 using MediatR;
 using System.Data.Common;
 using Microsoft.AspNetCore.RateLimiting;
@@ -31,7 +32,7 @@ public sealed class FrameworkSearchesController : ControllerBase
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status413PayloadTooLarge)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<FrameworkSearchResult>> Search([FromBody] FrameworkSearchRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Search([FromBody] FrameworkSearchRequest request, CancellationToken cancellationToken)
     {
         if (Request.ContentLength is > 16 * 1024)
         {
@@ -39,7 +40,7 @@ public sealed class FrameworkSearchesController : ControllerBase
         }
 
         var query = request.Query?.Trim();
-        if (string.IsNullOrWhiteSpace(query) || query.Length > 500)
+        if (query is null || query.Length > 500)
         {
             return BadRequest(new SafeErrorResponse("invalid_search_query", HttpContext.TraceIdentifier));
         }
@@ -49,10 +50,25 @@ public sealed class FrameworkSearchesController : ControllerBase
             return BadRequest(new SafeErrorResponse("invalid_technology", HttpContext.TraceIdentifier));
         }
 
+        if (query.Length == 0)
+        {
+            try
+            {
+                var page = await _sender.Send(new BrowseFrameworksQuery(24,
+                    string.IsNullOrWhiteSpace(request.Technology) ? null : request.Technology, null), cancellationToken);
+                return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
+            }
+            catch (DbException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+            }
+        }
+
         if (!_concurrencyGate.TryEnter())
         {
             _logger.LogWarning("Semantic search rejected because the service is busy. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
-            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("search_service_busy", HttpContext.TraceIdentifier));
+            Response.Headers.RetryAfter = "1";
+            return StatusCode(StatusCodes.Status429TooManyRequests, new SafeErrorResponse("search_service_busy", HttpContext.TraceIdentifier));
         }
 
         try
@@ -74,7 +90,7 @@ public sealed class FrameworkSearchesController : ControllerBase
             _logger.LogWarning("Semantic search embedding service unavailable. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));
         }
-        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             _logger.LogWarning("Semantic search embedding request timed out. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));

@@ -21,7 +21,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton(new SearchConcurrencyGate(builder.Configuration.GetValue("Search:MaximumConcurrentRequests", 16)));
-builder.Services.AddRequestTimeouts(options => options.AddPolicy("framework-search", TimeSpan.FromSeconds(builder.Configuration.GetValue("Search:RequestTimeoutSeconds", 8))));
+builder.Services.AddRequestTimeouts(options => options.AddPolicy("framework-search", new RequestTimeoutPolicy
+{
+    Timeout = TimeSpan.FromSeconds(builder.Configuration.GetValue("Search:RequestTimeoutSeconds", 8)),
+    TimeoutStatusCode = StatusCodes.Status504GatewayTimeout,
+    WriteTimeoutResponse = context => context.Response.WriteAsJsonAsync(new SafeErrorResponse("search_deadline_exceeded", context.TraceIdentifier))
+}));
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Quarry";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Quarry.Maintenance";
 var jwtSigningKey = builder.Configuration["Jwt:SigningKey"];

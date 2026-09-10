@@ -148,12 +148,12 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
 
         for (var request = 0; request < 30; request++)
         {
-            using var content = new StringContent("{\"query\":\"\"}", Encoding.UTF8, "application/json");
+            using var content = new StringContent("{\"query\":null}", Encoding.UTF8, "application/json");
             using var response = await quotaClient.PostAsync("/api/framework-searches", content);
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
-        using var rejectedContent = new StringContent("{\"query\":\"\"}", Encoding.UTF8, "application/json");
+        using var rejectedContent = new StringContent("{\"query\":null}", Encoding.UTF8, "application/json");
         using var rejectedResponse = await quotaClient.PostAsync("/api/framework-searches", rejectedContent);
 
         Assert.Equal((HttpStatusCode)429, rejectedResponse.StatusCode);
