@@ -41,5 +41,13 @@ export function DiscoveryPage(): React.JSX.Element {
     submitQuery(draftQuery);
   }
 
-  return <main><h1>{submittedQuery ? `Frameworks for ${submittedQuery}` : "Describe your project"}</h1><form onSubmit={submit}><label htmlFor="project-description">What are you building?</label><input ref={searchInput} id="project-description" name="project-description" value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} /><button type="submit">Find frameworks</button></form><section aria-label="Project examples"><p>Try an example:</p>{["Animal Hospital", "Online store", "Analytics dashboard"].map((example) => <button key={example} type="button" onClick={() => { setDraftQuery(example); submitQuery(example); }}>{example}</button>)}</section><section aria-label="Framework catalog" aria-live="polite">{error ? <p role="alert">{error}</p> : frameworks.map((framework) => <CatalogCard framework={framework} key={framework.id} />)}</section></main>;
+  function clearSearch(): void {
+    setDraftQuery("");
+    setSubmittedQuery("");
+    setError(undefined);
+    searchInput.current?.focus();
+    getCatalogPage().then((page) => setFrameworks(page.items)).catch(() => setError("The catalog is unavailable. Try again."));
+  }
+
+  return <main><h1>{submittedQuery ? `Frameworks for ${submittedQuery}` : "Describe your project"}</h1><form onSubmit={submit}><label htmlFor="project-description">What are you building?</label><input ref={searchInput} id="project-description" name="project-description" value={draftQuery} onChange={(event) => setDraftQuery(event.target.value)} /><button type="submit">Find frameworks</button>{submittedQuery && <button type="button" onClick={clearSearch}>Clear search</button>}</form><section aria-label="Project examples"><p>Try an example:</p>{["Animal Hospital", "Online store", "Analytics dashboard"].map((example) => <button key={example} type="button" onClick={() => { setDraftQuery(example); submitQuery(example); }}>{example}</button>)}</section><section aria-label="Framework catalog" aria-live="polite">{error ? <p role="alert">{error}</p> : frameworks.map((framework) => <CatalogCard framework={framework} key={framework.id} />)}</section></main>;
 }

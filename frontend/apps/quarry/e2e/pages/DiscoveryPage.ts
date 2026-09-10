@@ -30,4 +30,12 @@ export class DiscoveryPage {
     await this.page.keyboard.press("Control+k");
     await expect(this.page.getByLabel("What are you building?")).toBeFocused();
   }
+
+  public async clearSearch(): Promise<void> {
+    await this.page.getByRole("button", { name: "Clear search" }).click();
+  }
+
+  public async expectBrowseMode(): Promise<void> {
+    await expect(this.page.getByRole("heading", { name: "Describe your project" })).toBeVisible();
+  }
 }

@@ -40,3 +40,18 @@ test("examples submit the current project and the shortcut focuses search", asyn
   await discovery.expectSubmittedProject("Animal Hospital");
   await discovery.focusSearchWithShortcut();
 });
+
+test("clear search returns to browse mode and focuses the project field", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("Animal Hospital");
+  await discovery.clearSearch();
+  await discovery.expectBrowseMode();
+  await discovery.focusSearchWithShortcut();
+});
