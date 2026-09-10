@@ -20,6 +20,7 @@ export function DiscoveryPage(): React.JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
   const searchInput = useRef<HTMLInputElement>(null);
   const detailOpener = useRef<HTMLButtonElement | null>(null);
+  const discoveryRequest = useRef(0);
 
   useEffect(() => {
     loadCatalog("All technologies");
@@ -39,17 +40,19 @@ export function DiscoveryPage(): React.JSX.Element {
 
   function submitQuery(value: string): void {
     const query = value.trim();
+    const request = ++discoveryRequest.current;
     setSubmittedQuery(query);
     if (!query) {
       return;
     }
     setIsLoading(true);
-    searchFrameworks(query, technology).then((response) => { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); }).catch(() => { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query)); setIsLoading(false); });
+    searchFrameworks(query, technology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query)); setIsLoading(false); } });
   }
 
   function loadCatalog(value: Technology): void {
+    const request = ++discoveryRequest.current;
     setIsLoading(true);
-    getCatalogPage(value).then((page) => { setFrameworks(page.items); setError(undefined); setRetry(undefined); setIsLoading(false); }).catch(() => { setError("The catalog is unavailable. Try again."); setRetry(() => () => loadCatalog(value)); setIsLoading(false); });
+    getCatalogPage(value).then((page) => { if (request === discoveryRequest.current) { setFrameworks(page.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("The catalog is unavailable. Try again."); setRetry(() => () => loadCatalog(value)); setIsLoading(false); } });
   }
 
   function submit(event: FormEvent<HTMLFormElement>): void {

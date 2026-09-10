@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-001, L2-009, L2-041
 // Description: A fresh discovery page loads a mocked published catalog.
-import { expect, test } from "@playwright/test";
+import { expect, test, type Route } from "@playwright/test";
 import { catalogResponse } from "../fixtures/catalog";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 
@@ -82,6 +82,31 @@ test("a submitted project includes its selected technology", async ({ page }) =>
   await discovery.filterTechnology("React");
   await discovery.submitProject("Animal Hospital");
   await expect.poll(() => submittedTechnology).toBe("React");
+});
+
+test("a late search response cannot replace newer discovery results", async ({ page }) => {
+  let delayedRoute: Route | undefined;
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    const query = JSON.parse(route.request().postData() ?? "{}").query;
+    if (query === "Animal Hospital") {
+      delayedRoute = route;
+      return;
+    }
+    await route.fulfill({ json: { items: [{ ...catalogResponse.items[0], name: "Orbit" }], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("Animal Hospital");
+  await expect.poll(() => delayedRoute).toBeDefined();
+  await discovery.submitProject("Analytics dashboard");
+  await expect(page.getByRole("heading", { name: "Frameworks for Analytics dashboard" })).toBeVisible();
+  await expect(page.getByRole("article", { name: "Orbit framework" })).toBeVisible();
+  await delayedRoute?.fulfill({ json: { items: [{ ...catalogResponse.items[0], name: "Atlas" }], catalogRevision: "1", isIndexIncomplete: false } });
+  await expect(page.getByRole("heading", { name: "Frameworks for Analytics dashboard" })).toBeVisible();
+  await expect(page.getByRole("article", { name: "Orbit framework" })).toBeVisible();
 });
 
 test("the project description field limits input to 500 characters", async ({ page }) => {
