@@ -31,6 +31,20 @@ npm ci
 npm run dev --workspace=@quarry/app
 ```
 
+Maintenance routes use bearer tokens and require a `permission` claim with value `maintenance`. The development defaults validate issuer `Quarry`, audience `Quarry.Maintenance`, and the signing key in `Jwt__SigningKey`. Before running outside a local development machine, set all three values through environment configuration and use a distinct, high-entropy signing key:
+
+```powershell
+$env:Jwt__Issuer = 'Quarry'
+$env:Jwt__Audience = 'Quarry.Maintenance'
+$env:Jwt__SigningKey = '<a private high-entropy signing key>'
+```
+
+Use a short-lived HS256 token with those issuer, audience, and signing-key values plus `permission: maintenance` to invoke the rebuild operation. The operation invalidates stored framework vectors and the worker rebuilds them from published metadata:
+
+```powershell
+Invoke-RestMethod -Method Post -Uri 'https://localhost:5001/api/maintenance/search-index/rebuild' -Headers @{ Authorization = 'Bearer <maintenance token>' }
+```
+
 Verify the application code:
 
 ```powershell
