@@ -12,4 +12,13 @@ export class DiscoveryPage {
     await expect(this.page.getByRole("button", { name: "Find frameworks" })).toBeVisible();
     await expect(this.page.getByRole("article")).toHaveCount(1);
   }
+
+  public async submitProject(description: string): Promise<void> {
+    await this.page.getByLabel("What are you building?").fill(description);
+    await this.page.getByRole("button", { name: "Find frameworks" }).click();
+  }
+
+  public async expectSubmittedProject(description: string): Promise<void> {
+    await expect(this.page.getByRole("heading", { name: `Frameworks for ${description}` })).toBeVisible();
+  }
 }

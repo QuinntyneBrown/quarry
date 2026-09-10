@@ -13,3 +13,16 @@ test("loads a published catalog before a project description is submitted", asyn
   await discovery.goto();
   await discovery.expectCatalog();
 });
+
+test("submits a trimmed project description only when requested", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("  Animal Hospital  ");
+  await discovery.expectSubmittedProject("Animal Hospital");
+});
