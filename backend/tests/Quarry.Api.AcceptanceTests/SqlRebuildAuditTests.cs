@@ -40,9 +40,18 @@ public sealed class SqlRebuildAuditTests
         try
         {
             await database.Database.MigrateAsync();
+            var publishedId = Guid.NewGuid();
+            database.FrameworkRevisions.Add(new FrameworkRevisionEntity
+            {
+                Id = publishedId, Name = "Published fixture", Description = "Scheduling tools", Technology = "React", Revision = "1", IsPublished = true
+            });
+            database.FrameworkRevisions.Add(new FrameworkRevisionEntity
+            {
+                Id = Guid.NewGuid(), Name = "Draft fixture", Description = "Private tools", Technology = "React", Revision = "1", IsPublished = false
+            });
             database.FrameworkVectors.Add(new FrameworkVectorEntity
             {
-                FrameworkId = Guid.NewGuid(), SourceRevision = "1", Model = "test-only",
+                FrameworkId = publishedId, SourceRevision = "1", Model = "test-only",
                 Dimensions = 2, ValuesJson = "[1,0]", IndexedAtUtc = DateTimeOffset.UtcNow
             });
             await database.SaveChangesAsync();
@@ -74,6 +83,7 @@ public sealed class SqlRebuildAuditTests
             Assert.Equal(failAudit ? HttpStatusCode.ServiceUnavailable : HttpStatusCode.Accepted, response.StatusCode);
             Assert.Equal(failAudit ? 1 : 0, await database.FrameworkVectors.CountAsync());
             Assert.Equal(failAudit ? 0 : 1, await database.Database.SqlQueryRaw<int>("SELECT COUNT(*) AS [Value] FROM dbo.MaintenanceAuditRecords").SingleAsync());
+            Assert.Equal(failAudit ? 0 : 1, await database.Database.SqlQueryRaw<int>("SELECT COUNT(*) AS [Value] FROM dbo.IndexWorkItems").SingleAsync());
             if (!failAudit)
             {
                 Assert.Equal("sql-test-operator", await database.Database.SqlQueryRaw<string>("SELECT ActorId AS [Value] FROM dbo.MaintenanceAuditRecords").SingleAsync());
@@ -81,6 +91,10 @@ public sealed class SqlRebuildAuditTests
                 Assert.Equal("accepted", await database.Database.SqlQueryRaw<string>("SELECT Outcome AS [Value] FROM dbo.MaintenanceAuditRecords").SingleAsync());
                 Assert.Equal(1, await database.Database.SqlQueryRaw<int>("SELECT InvalidatedVectorCount AS [Value] FROM dbo.MaintenanceAuditRecords").SingleAsync());
                 Assert.False(string.IsNullOrWhiteSpace(await database.Database.SqlQueryRaw<string>("SELECT CorrelationId AS [Value] FROM dbo.MaintenanceAuditRecords").SingleAsync()));
+                Assert.Equal(publishedId, await database.Database.SqlQueryRaw<Guid>("SELECT FrameworkId AS [Value] FROM dbo.IndexWorkItems").SingleAsync());
+                var repeated = await client.PostAsync("/api/maintenance/search-index/rebuild", null);
+                Assert.Equal(HttpStatusCode.Accepted, repeated.StatusCode);
+                Assert.Equal(1, await database.Database.SqlQueryRaw<int>("SELECT COUNT(*) AS [Value] FROM dbo.IndexWorkItems").SingleAsync());
             }
             else
             {

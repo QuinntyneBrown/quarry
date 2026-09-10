@@ -15,6 +15,8 @@ public sealed class QuarryDbContext : DbContext
 
     public DbSet<MaintenanceAuditRecordEntity> MaintenanceAuditRecords => Set<MaintenanceAuditRecordEntity>();
 
+    public DbSet<IndexWorkItemEntity> IndexWorkItems => Set<IndexWorkItemEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var framework = modelBuilder.Entity<FrameworkRevisionEntity>();
@@ -46,5 +48,15 @@ public sealed class QuarryDbContext : DbContext
         audit.Property(item => item.Outcome).HasMaxLength(40).IsRequired();
         audit.Property(item => item.CorrelationId).HasMaxLength(128).IsRequired();
         audit.HasIndex(item => item.RecordedAtUtc);
+
+        var work = modelBuilder.Entity<IndexWorkItemEntity>();
+        work.ToTable("IndexWorkItems");
+        work.HasKey(item => item.Id);
+        work.Property(item => item.SourceRevision).HasMaxLength(30).IsRequired();
+        work.Property(item => item.Model).HasMaxLength(200).IsRequired();
+        work.Property(item => item.State).HasMaxLength(20).IsRequired();
+        work.Property(item => item.LastError).HasMaxLength(100);
+        work.HasIndex(item => new { item.FrameworkId, item.SourceRevision, item.Model }).IsUnique();
+        work.HasIndex(item => new { item.State, item.NextAttemptAtUtc });
     }
 }
