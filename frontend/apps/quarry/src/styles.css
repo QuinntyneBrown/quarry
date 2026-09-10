@@ -1,0 +1,22 @@
+:root { color: #172033; background: #f4f7fb; font-family: Inter, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select { font: inherit; }
+button, select, input { min-height: 2.75rem; border-radius: .5rem; border: 1px solid #aab5c8; padding: .5rem .75rem; }
+button { background: #1b5bca; color: white; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #f0ad29; outline-offset: 2px; }
+main { width: min(100% - 2rem, 76rem); margin: 0 auto; padding: 2rem 0 4rem; }
+h1 { margin: 0 0 1.5rem; font-size: clamp(2rem, 5vw, 3.5rem); }
+form, main > section, main > label, main > select { margin-top: 1rem; }
+form { display: grid; gap: .75rem; max-width: 48rem; }
+form label { font-weight: 700; }
+main > section[aria-label="Project examples"] { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+main > section[aria-label="Project examples"] p { width: 100%; margin: 0; }
+main > section[aria-label="Framework catalog"] { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+article { padding: 1.25rem; border-radius: 1rem; background: white; box-shadow: 0 4px 18px #17203314; }
+article h2 { margin-top: 0; }
+aside[role="status"] { position: sticky; bottom: 1rem; z-index: 1; width: fit-content; padding: .75rem; border-radius: .75rem; background: #172033; color: white; }
+dialog { width: min(100% - 2rem, 42rem); border: 0; border-radius: 1rem; padding: 2rem; box-shadow: 0 24px 72px #0006; }
+dialog::backdrop { background: #17203399; }
+@media (min-width: 768px) { main > section[aria-label="Framework catalog"] { grid-template-columns: repeat(2, minmax(0, 1fr)); } form { grid-template-columns: 1fr auto; } form label { grid-column: 1 / -1; } }
+@media (min-width: 992px) { main > section[aria-label="Framework catalog"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
