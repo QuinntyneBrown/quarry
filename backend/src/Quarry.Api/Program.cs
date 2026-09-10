@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Globalization;
 using System.Threading.RateLimiting;
 using Quarry.Api.Contracts;
+using Quarry.Api;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http.Timeouts;
@@ -17,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddSingleton(new SearchConcurrencyGate(builder.Configuration.GetValue("Search:MaximumConcurrentRequests", 16)));
 builder.Services.AddRequestTimeouts(options => options.AddPolicy("framework-search", TimeSpan.FromSeconds(builder.Configuration.GetValue("Search:RequestTimeoutSeconds", 8))));
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Quarry";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Quarry.Maintenance";

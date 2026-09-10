@@ -16,10 +16,12 @@ public sealed class FrameworkSearchesController : ControllerBase
 {
     private static readonly string[] SupportedTechnologies = ["React", "Angular", "Vue", "Web Components"];
     private readonly ISender _sender;
+    private readonly SearchConcurrencyGate _concurrencyGate;
 
-    public FrameworkSearchesController(ISender sender)
+    public FrameworkSearchesController(ISender sender, SearchConcurrencyGate concurrencyGate)
     {
         _sender = sender;
+        _concurrencyGate = concurrencyGate;
     }
 
     [HttpPost]
@@ -45,6 +47,11 @@ public sealed class FrameworkSearchesController : ControllerBase
             return BadRequest(new SafeErrorResponse("invalid_technology", HttpContext.TraceIdentifier));
         }
 
+        if (!_concurrencyGate.TryEnter())
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("search_service_busy", HttpContext.TraceIdentifier));
+        }
+
         try
         {
             return Ok(await _sender.Send(new SearchFrameworksCommand(query, request.Technology), cancellationToken));
@@ -60,6 +67,10 @@ public sealed class FrameworkSearchesController : ControllerBase
         catch (DbException)
         {
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+        }
+        finally
+        {
+            _concurrencyGate.Exit();
         }
     }
 }
