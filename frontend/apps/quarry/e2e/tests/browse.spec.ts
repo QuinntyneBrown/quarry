@@ -163,3 +163,13 @@ test("a catalog failure preserves discovery and offers an explicit retry", async
   await discovery.retry();
   await discovery.expectCatalog();
 });
+
+test("a pending catalog load exposes a loading status", async ({ page }) => {
+  await page.route("**/api/frameworks", async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.goto("/");
+  await expect(page.getByRole("status")).toContainText("Loading frameworks");
+  await expect(page.getByRole("article")).toHaveCount(1);
+});
