@@ -14,8 +14,9 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
         _dbContext = dbContext;
     }
 
-    public async Task<CatalogPage> BrowseAsync(int pageSize, string? technology, CancellationToken cancellationToken)
+    public async Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken)
     {
+        CatalogCursor.TryDecode(cursor, out var offset);
         var query = _dbContext.FrameworkRevisions.AsNoTracking().Where(item => item.IsPublished);
         if (!string.IsNullOrWhiteSpace(technology))
         {
@@ -26,6 +27,7 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
         var entries = await query
             .OrderBy(item => item.Name)
             .ThenBy(item => item.Id)
+            .Skip(offset)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
         var items = entries.Select(item => new FrameworkSummary(
@@ -36,7 +38,8 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
             JsonSerializer.Deserialize<List<string>>(item.TagsJson) ?? [],
             item.ComponentCount,
             item.Revision)).ToList();
-        return new CatalogPage(items, total, total > items.Count, null, "0");
+        var nextOffset = offset + items.Count;
+        return new CatalogPage(items, total, nextOffset < total, nextOffset < total ? CatalogCursor.Encode(nextOffset) : null, "0");
     }
 
     public async Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)

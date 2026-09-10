@@ -12,7 +12,7 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader,
         _configuration = configuration;
     }
 
-    public Task<CatalogPage> BrowseAsync(int pageSize, string? technology, CancellationToken cancellationToken)
+    public Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken)
     {
         if (!bool.TryParse(_configuration["Catalog:SeedDevelopmentEvaluationData"], out var seed) || !seed)
         {
@@ -27,10 +27,13 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader,
             ["Accessible"],
             2,
             "1");
-        var items = string.IsNullOrWhiteSpace(technology) || string.Equals(atlas.Technology, technology, StringComparison.OrdinalIgnoreCase)
+        CatalogCursor.TryDecode(cursor, out var offset);
+        var matchingItems = string.IsNullOrWhiteSpace(technology) || string.Equals(atlas.Technology, technology, StringComparison.OrdinalIgnoreCase)
             ? new List<FrameworkSummary> { atlas }
             : [];
-        return Task.FromResult(new CatalogPage(items, items.Count, false, null, "1"));
+        var items = matchingItems.Skip(offset).Take(pageSize).ToList();
+        var nextOffset = offset + items.Count;
+        return Task.FromResult(new CatalogPage(items, matchingItems.Count, nextOffset < matchingItems.Count, nextOffset < matchingItems.Count ? CatalogCursor.Encode(nextOffset) : null, "1"));
     }
 
     public Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)

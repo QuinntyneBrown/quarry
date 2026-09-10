@@ -21,7 +21,7 @@ public sealed class FrameworksController : ControllerBase
     [HttpGet]
     [ProducesResponseType<CatalogPageResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, [FromQuery] string? technology = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, [FromQuery] string? technology = null, [FromQuery] string? cursor = null, CancellationToken cancellationToken = default)
     {
         if (pageSize is < 1 or > 24)
         {
@@ -33,7 +33,12 @@ public sealed class FrameworksController : ControllerBase
             return BadRequest(new SafeErrorResponse("invalid_technology", HttpContext.TraceIdentifier));
         }
 
-        var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology), cancellationToken);
+        if (!CatalogCursor.TryDecode(cursor, out _))
+        {
+            return BadRequest(new SafeErrorResponse("invalid_cursor", HttpContext.TraceIdentifier));
+        }
+
+        var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology, cursor), cancellationToken);
         return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
     }
 

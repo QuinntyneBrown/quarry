@@ -85,4 +85,12 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task GetFrameworksRejectsAnInvalidCursor()
+    {
+        var response = await _client.GetAsync("/api/frameworks?cursor=invalid");
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
