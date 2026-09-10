@@ -27,6 +27,25 @@ test("submits a trimmed project description only when requested", async ({ page 
   await discovery.expectSubmittedProject("Animal Hospital");
 });
 
+test("a blank submitted project returns to filtered browse mode without semantic search", async ({ page }) => {
+  let searchRequests = 0;
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    searchRequests += 1;
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: false } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("Animal Hospital");
+  await expect.poll(() => searchRequests).toBe(1);
+  await discovery.submitProject("   ");
+  await discovery.expectBrowseMode();
+  await discovery.expectCatalog();
+  await expect.poll(() => searchRequests).toBe(1);
+});
+
 test("examples submit the current project and the shortcut focuses search", async ({ page }) => {
   await page.route("**/api/frameworks**", async (route) => {
     await route.fulfill({ json: catalogResponse });

@@ -40,11 +40,13 @@ export function DiscoveryPage(): React.JSX.Element {
 
   function submitQuery(value: string): void {
     const query = value.trim();
-    const request = ++discoveryRequest.current;
     setSubmittedQuery(query);
     if (!query) {
+      setDraftQuery("");
+      loadCatalog(technology);
       return;
     }
+    const request = ++discoveryRequest.current;
     setIsLoading(true);
     searchFrameworks(query, technology).then((response) => { if (request === discoveryRequest.current) { setFrameworks(response.items); setError(undefined); setRetry(undefined); setIsLoading(false); } }).catch(() => { if (request === discoveryRequest.current) { setError("Framework search is unavailable. Try again."); setRetry(() => () => submitQuery(query)); setIsLoading(false); } });
   }
