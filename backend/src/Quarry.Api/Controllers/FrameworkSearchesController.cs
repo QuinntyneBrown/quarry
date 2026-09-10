@@ -17,11 +17,13 @@ public sealed class FrameworkSearchesController : ControllerBase
     private static readonly string[] SupportedTechnologies = ["React", "Angular", "Vue", "Web Components"];
     private readonly ISender _sender;
     private readonly SearchConcurrencyGate _concurrencyGate;
+    private readonly ILogger<FrameworkSearchesController> _logger;
 
-    public FrameworkSearchesController(ISender sender, SearchConcurrencyGate concurrencyGate)
+    public FrameworkSearchesController(ISender sender, SearchConcurrencyGate concurrencyGate, ILogger<FrameworkSearchesController> logger)
     {
         _sender = sender;
         _concurrencyGate = concurrencyGate;
+        _logger = logger;
     }
 
     [HttpPost]
@@ -49,6 +51,7 @@ public sealed class FrameworkSearchesController : ControllerBase
 
         if (!_concurrencyGate.TryEnter())
         {
+            _logger.LogWarning("Semantic search rejected because the service is busy. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("search_service_busy", HttpContext.TraceIdentifier));
         }
 
@@ -58,14 +61,17 @@ public sealed class FrameworkSearchesController : ControllerBase
         }
         catch (HttpRequestException)
         {
+            _logger.LogWarning("Semantic search embedding service unavailable. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));
         }
         catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
+            _logger.LogWarning("Semantic search embedding request timed out. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));
         }
         catch (DbException)
         {
+            _logger.LogWarning("Semantic search catalog service unavailable. CorrelationId: {CorrelationId}", HttpContext.TraceIdentifier);
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
         }
         finally
