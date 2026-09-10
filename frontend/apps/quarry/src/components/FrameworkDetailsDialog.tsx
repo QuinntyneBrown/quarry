@@ -75,7 +75,7 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
         {explanation && <section className="recommendation-reason" aria-label="Why this framework"><h3>Why this framework</h3><p>{explanation}</p></section>}
         <h3>Capabilities</h3><ul>{(details.capabilities ?? []).map((capability) => <li key={capability.id}>{capability.description}</li>)}</ul>
         <h3>Suitable use cases</h3><ul>{(details.useCases ?? []).map((useCase) => <li key={useCase}>{useCase}</li>)}</ul>
-        <p>Framework appearance is customized during implementation through its own themes and design tokens.</p>
+        <p>Every framework supports custom themes and skins during implementation.</p>
       </section> : <section role="tabpanel" id="components-panel" aria-labelledby="components-tab">
         <ul>{(details.components ?? []).map((component) => <li key={component.id}><strong>{component.name}</strong><p>{component.description}</p></li>)}</ul>
         {previewManifest ? <ComponentPreviewPanel key={`${details.summary.id}:${details.summary.revision}:${previewManifest.buildId}`}

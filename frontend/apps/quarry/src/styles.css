@@ -82,7 +82,7 @@ kbd { font: inherit; font-size: .7rem; border: 1px solid #9ba7ba; padding: 2px 5
 .selection-bar > div > span:last-child { font-size: .75rem; color: var(--muted); }
 .selection-bar button { font-size: .8rem; }
 .detail-dialog { width: min(100% - 32px, 670px); max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain; color: #252d38; background: #fff; border: 1px solid #dce3ee; border-radius: 13px; padding: 28px; box-shadow: 0 20px 90px #21355640; }
-.detail-dialog::backdrop { background: #27395299; backdrop-filter: blur(3px); }
+.detail-dialog::backdrop { background: #27395299; }
 .detail-dialog h2 { margin: 8px 0 24px; }
 .detail-dialog h3 { margin: 20px 0 10px; }
 .detail-dialog p { margin-bottom: 16px; }

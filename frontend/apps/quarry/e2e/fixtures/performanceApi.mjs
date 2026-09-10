@@ -23,6 +23,16 @@ createServer((request, response) => {
     const hasNextPage = offset + items.length < catalog.length;
     response.end(JSON.stringify({ items, total: catalog.length, hasNextPage,
       nextCursor: hasNextPage ? String(offset + items.length) : null, catalogRevision: "1" }));
+  } else if (request.method === "GET" && url.pathname.startsWith("/api/frameworks/")) {
+    const summary = catalog.find(item => url.pathname === `/api/frameworks/${item.id}`);
+    if (!summary) { response.writeHead(404); response.end(JSON.stringify({ code: "fixture_not_found" })); return; }
+    response.end(JSON.stringify({ summary, capabilities: [{ id: "forms", description: "Illustrative profile forms" }],
+      useCases: ["Browser performance measurement"],
+      components: [{ id: "profile-controls", name: "Illustrative profile controls", description: "Text, switch, save and reset." }],
+      previewManifest: { frameworkId: summary.id, revision: summary.revision,
+        previewUri: "http://localhost:4180/bundles/illustrative-v1/index.html",
+        componentIds: ["profile-controls"], buildId: "illustrative-v1", protocolVersion: 1, isIllustrative: true }
+    }));
   } else {
     response.writeHead(500);
     response.end(JSON.stringify({ code: "unexpected_performance_fixture_request" }));

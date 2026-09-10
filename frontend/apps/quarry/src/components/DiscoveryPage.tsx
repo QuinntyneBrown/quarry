@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { getCatalogPage } from "../api/getCatalogPage";
 import { CatalogRevisionChangedError } from "../api/CatalogRevisionChangedError";
 import { RateLimitError } from "../api/RateLimitError";
@@ -200,19 +200,11 @@ export function DiscoveryPage(): React.JSX.Element {
     setSubmittedQuery("");
     setTechnology("All technologies");
     setError(undefined);
+    searchInput.current?.focus();
     loadCatalog("All technologies");
   }
 
-  function openFrameworkDetails(id: string, opener: HTMLButtonElement, sourceRevision = frameworks.find(item => item.id === id)?.revision): void {
-    detailOpener.current = opener;
-    setDetailSourceRevision(sourceRevision);
-    setDetailId(id);
-    setDetails(undefined);
-    setDetailError(undefined);
-    loadFrameworkDetails(id);
-  }
-
-  function loadFrameworkDetails(id: string): void {
+  const loadFrameworkDetails = useCallback((id: string): void => {
     setDetailRetryAt(undefined);
     const request = ++detailRequest.current;
     detailController.current?.abort();
@@ -232,7 +224,16 @@ export function DiscoveryPage(): React.JSX.Element {
       setDetailRetryAt(cause instanceof RateLimitError ? cause.retryAt : undefined);
       setDetailError(cause instanceof RateLimitError || missing ? (cause as Error).message : "Framework details are unavailable. Try again.");
     });
-  }
+  }, []);
+
+  const openFrameworkDetails = useCallback((id: string, opener: HTMLButtonElement, sourceRevision = frameworks.find(item => item.id === id)?.revision): void => {
+    detailOpener.current = opener;
+    setDetailSourceRevision(sourceRevision);
+    setDetailId(id);
+    setDetails(undefined);
+    setDetailError(undefined);
+    loadFrameworkDetails(id);
+  }, [frameworks, loadFrameworkDetails]);
 
   function closeFrameworkDetails(): void {
     detailRequest.current += 1;
@@ -278,12 +279,13 @@ export function DiscoveryPage(): React.JSX.Element {
         <button className="primary-button" type="submit">Find frameworks <span aria-hidden="true">↗</span></button>
       </div>
       {queryError && <p className="field-error" id="project-error" role="alert">{queryError}</p>}
-      {submittedQuery && <button className="clear-search" type="button" onClick={clearSearch}>Clear search</button>}
+      {(draftQuery || submittedQuery) && <button className="clear-search" type="button" onClick={clearSearch}>Clear search</button>}
     </form>
     <section className="examples" aria-label="Project examples"><p>Try an example:</p>
       {["Animal Hospital", "Online store", "Analytics dashboard"].map((example) => <button key={example} type="button" onClick={() => { setDraftQuery(example); submitQuery(example); }}>{example}</button>)}
     </section>
     <p className="search-help">Your project, your starting point. <kbd>Ctrl / ⌘ + K</kbd> to focus search.</p>
+    <p className="search-help">Every framework supports custom themes and skins during implementation.</p>
     </section>
     <div className="results-heading">
       <div><p className="eyebrow">EXPLORE THE POSSIBILITIES</p><h2 id="framework-results" ref={resultsHeading} tabIndex={-1}>Framework results</h2>
@@ -294,18 +296,21 @@ export function DiscoveryPage(): React.JSX.Element {
         <select id="technology" value={technology} onChange={(event) => changeTechnology(event.target.value as Technology)}>
           {["All technologies", "React", "Angular", "Vue", "Web Components"].map((value) => <option key={value} value={value}>{value}</option>)}
         </select>
+        {technology !== "All technologies" && <button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>}
       </div>
     </div>
     {catalogNotice && <p className="catalog-notice" role="status">{catalogNotice}</p>}
     {selectionCleared && <p role="status">No framework selected.</p>}
     <section className="framework-grid" aria-label="Framework catalog" aria-busy={isLoading}>
-      {isLoading ? <p role="status">Loading frameworks</p> : error ? <section><p role={queryError ? undefined : "alert"}>{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}
+      {isLoading ? <p role="status">{submittedQuery ? `Finding frameworks for ${submittedQuery}` : "Loading framework catalog"}</p> : error ? <section><p role={queryError ? undefined : "alert"}>{error}</p>{retry && <RetryButton retryAt={retryAt} onRetry={retry} />}
         {submittedQuery && <button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>}
       </section> : <>
         {isIndexIncomplete && <section><p role="status">Results are temporarily incomplete while framework indexing finishes.</p>
           <button type="button" onClick={() => submitQuery(submittedQuery, technology)}>Retry</button><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>
         </section>}
-        {!submittedQuery && frameworks.length === 0 ? <p>No frameworks are available.</p> : submittedQuery && frameworks.length === 0 && !isIndexIncomplete ? <section>
+        {!submittedQuery && frameworks.length === 0 ? technology === "All technologies" ? <p>No frameworks are available.</p>
+          : <section><h2>No matching frameworks</h2><p>No frameworks are available for {technology}. Change technology or browse all frameworks.</p></section>
+          : submittedQuery && frameworks.length === 0 && !isIndexIncomplete ? <section>
           <h2>No matching frameworks</h2><p>Try revising your project description or changing technology.</p><button type="button" onClick={browseAllFrameworks}>Browse all frameworks</button>
         </section> : <>
           {frameworks.map((framework) => <CatalogCard framework={framework} recommendation={recommendations?.find((item) => item.id === framework.id)} isSelected={selectedFramework?.id === framework.id} onExplore={openFrameworkDetails} key={framework.id} />)}

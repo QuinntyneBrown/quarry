@@ -1,6 +1,6 @@
-# Production browser startup performance
+# Production browser performance
 
-The dedicated browser benchmark covers **L2-032.2** and the browser-report portion of **L2-032.4**. It serves the production Vite build through real HTTP and uses a separate HTTP mock API. The fixture contains 1,000 synthetic frameworks, each with a 2,000-character description and 20 tags. Before measurement, the test walks every 24-entry page and verifies all 1,000 unique records and payload sizes. These are illustrative fixtures, not released frameworks or persisted/indexed catalog entries.
+The dedicated browser benchmarks cover **L2-032.2**, **L2-032.3**, and the browser-report portion of **L2-032.4**. They serve the production Vite build through real HTTP and use a separate HTTP mock API. The fixture contains 1,000 synthetic frameworks, each with a 2,000-character description and 20 tags. Before startup measurement, the test walks every 24-entry page and verifies all 1,000 unique records and payload sizes. These are illustrative fixtures, not released frameworks or persisted/indexed catalog entries.
 
 Each of 20 measurements uses a fresh Chromium context, disabled browser cache, blocked service workers, and a 1440 × 900 viewport. [DevTools network emulation](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-emulateNetworkConditions) applies 10 Mbps download, 2 Mbps upload, and 100 ms latency; CPU throttling is fourfold. API responses travel over the same throttled connection as assets. There is no Playwright request fulfillment bypassing that connection. Traces, videos, screenshots, retries, and parallel workers are disabled during measurement.
 
@@ -8,7 +8,13 @@ A Page Object installs its observer before application scripts. Timing starts at
 
 The initial workload check failed against the existing one-entry routing fixture (`expected 1000, received 1`). The dedicated 1,000-entry fixture was then implemented. The final measurement passed all 20 loads with p95 **1,104 ms**, below the **3,000 ms** limit, using Chromium **153.0.8010.12**, Windows **10.0.26200 ARM64**, a **Snapdragon X1E80100**, 12 logical processors, and 16,757,260,288 bytes of host RAM. The initial full run also passed at 1,859 ms. The final run includes navigation response-completion timings showing the injected latency (the first three were 119, 111, and 115 ms); raw response-header timestamps alone exclude that delay in this browser. Both workspace builds and final type checking passed. Normal test discovery still contains 390 tests, without including the separate benchmark.
 
-Run from the repository root, with ports 4193 and 4194 free:
+The loaded-interaction benchmark records 20 detail-tab changes, 20 local selection/clear changes, and 20 changes **per preview control** (input, switch, save, reset), totaling 120 measured changes. Detail fetches and preview readiness are awaited outside these measurements. The preview is the real sandboxed illustrative bundle. Both the application and the preview renderer receive fourfold CPU throttling. If Chromium shares the parent renderer, Playwright's explicit shared-session result identifies the already-throttled target; unexpected CDP errors fail the run.
+
+Each measurement starts at a trusted `pointerdown` or `keydown` event's timestamp. A Page Object observes the changed expected value, checked state, panel, or selection feedback inside the viewport, then waits through a paint opportunity. The check rejects pre-existing feedback and untrusted synthetic events. Setup, scrolling, and Playwright locator waits are excluded; application event handling, rendering, and presentation opportunity are included. The 100-ms nearest-rank p95 limit applies independently to all six measured categories. This conservative frame-based measurement is not a compositor presentation timestamp.
+
+The interaction test first failed because the existing performance fixture did not supply details. Adding details and the real preview host made that flow executable. A later run exposed Playwright's injected `serviceWorkers: block` script reading `navigator.serviceWorker` in an opaque sandbox and producing page errors. The interaction benchmark instead bypasses service workers at the DevTools network layer and fails any registration. No sandbox permissions or application error checks were relaxed. The startup benchmark still uses fresh contexts with registration blocking because it does not open previews.
+
+Run from the repository root, with ports 4180, 4193 and 4194 free:
 
 ```powershell
 npm run build --workspaces --prefix frontend
@@ -18,4 +24,4 @@ npm run test:performance --workspace=@quarry/app --prefix frontend -- --reporter
 
 The latest JSON is under `frontend/apps/quarry/test-results/performance/`; generated reports remain ignored. The manual `.github/workflows/browser-performance.yml` job runs these build and benchmark steps and uploads JSON plus JUnit evidence. The hosted workflow has not been dispatched; local measurements do not prove hosted results. The normal responsive/zoom acceptance matrix excludes this separate benchmark.
 
-This is browser startup evidence with a mock backend. It does **not** establish the 1,000-entry persisted and fully indexed API workload, the combined 4-vCPU/8-GiB API/database allocation, real semantic latency, loaded interaction p95, overload memory recovery, freshness, or full rebuild time. Those remain separate completion gates. No embedding model is invoked by this browser test.
+This is browser evidence with a mock backend and illustrative preview. It does **not** establish the 1,000-entry persisted and fully indexed API workload, the combined 4-vCPU/8-GiB API/database allocation, real semantic latency, overload memory recovery, freshness, full rebuild time, or performance of future released component frameworks. Those remain separate completion gates. No embedding model is invoked by these browser tests.

@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  browser-startup:
+  browser-latency:
     runs-on: windows-latest
     timeout-minutes: 10
     steps:
@@ -23,7 +23,7 @@ jobs:
         working-directory: frontend/apps/quarry
       - run: npm run build --workspaces
         working-directory: frontend
-      - name: Measure twenty fresh production loads with a mock API
+      - name: Measure production startup and loaded interactions with a mock API
         run: npm run test:performance --workspace=@quarry/app -- --reporter=line,junit
         working-directory: frontend
         env:
