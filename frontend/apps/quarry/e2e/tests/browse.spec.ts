@@ -82,3 +82,19 @@ test("empty search results explain recovery and allow a browse reset", async ({ 
   await discovery.resetBrowse();
   await discovery.expectBrowseMode();
 });
+
+test("a framework card opens published details in a dialog", async ({ page }) => {
+  await page.route("**/api/frameworks?*", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    await route.fulfill({ json: { summary: catalogResponse.items[0] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  await expect(page.getByRole("dialog", { name: "Atlas details" })).toContainText("Published framework");
+});

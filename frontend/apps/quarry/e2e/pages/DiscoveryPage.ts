@@ -46,4 +46,8 @@ export class DiscoveryPage {
   public async filterTechnology(technology: string): Promise<void> {
     await this.page.getByLabel("Technology").selectOption(technology);
   }
+
+  public async openFramework(name: string): Promise<void> {
+    await this.page.getByRole("button", { name: `Explore ${name}` }).click();
+  }
 }
