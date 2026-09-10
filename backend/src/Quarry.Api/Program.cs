@@ -9,8 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(BrowseFrameworksQuery).Assembly));
-builder.Services.AddSingleton<IFrameworkCatalogReader, DevelopmentFrameworkCatalogReader>();
 builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Quarry")));
+builder.Services.AddScoped<SqlFrameworkCatalogReader>();
+builder.Services.AddSingleton<DevelopmentFrameworkCatalogReader>();
+builder.Services.AddScoped<IFrameworkCatalogReader>(serviceProvider => builder.Configuration.GetValue<bool>("Catalog:SeedDevelopmentEvaluationData")
+    ? serviceProvider.GetRequiredService<DevelopmentFrameworkCatalogReader>()
+    : serviceProvider.GetRequiredService<SqlFrameworkCatalogReader>());
 
 var app = builder.Build();
 

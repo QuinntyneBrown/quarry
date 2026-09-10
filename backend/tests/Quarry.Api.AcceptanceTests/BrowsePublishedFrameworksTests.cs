@@ -15,8 +15,8 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
 
     public BrowsePublishedFrameworksTests(WebApplicationFactory<Program> factory)
     {
-        _factory = factory;
-        _client = factory.CreateClient();
+        _factory = factory.WithWebHostBuilder(builder => builder.UseSetting("Catalog:SeedDevelopmentEvaluationData", "true"));
+        _client = _factory.CreateClient();
     }
 
     [Fact]
