@@ -8,4 +8,4 @@ The probe uses the fixed text `quarry-health-v1`, never user queries, and the ex
 
 ATDD on 2026-09-10: the first three SQL-backed scenarios failed on absent routes. They now cover authorization before probes, coarse public responses, empty-catalog readiness, stale revision/retry/freshness diagnostics, completion recovery, embedding failure, and invalid embedding configuration. Two additional scenarios cover corrupt vectors/model mismatch and malformed persistence settings; malformed settings initially returned 500 and now produce safe 503 health with actionable protected guidance.
 
-This slice supplies health reports and index metrics. Request diagnostic event coverage and measured freshness/rebuild performance remain separate gates.
+This slice supplies health reports and index metrics. [Diagnostic events](diagnostic-events.md) cover request and index operation logging. Measured freshness/rebuild performance remains a separate gate.

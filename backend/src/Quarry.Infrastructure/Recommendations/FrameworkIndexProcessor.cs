@@ -74,8 +74,8 @@ public sealed class FrameworkIndexProcessor
         }
         finally
         {
-            _logger.LogInformation("Index work {WorkId} for framework {FrameworkId} revision {SourceRevision}: {Outcome}, {ErrorCategory}, {DurationMs} ms",
-                work.Id, work.FrameworkId, work.SourceRevision, outcome, category, Stopwatch.GetElapsedTime(started).TotalMilliseconds);
+            _logger.LogInformation("{Operation} work {WorkId} for framework {FrameworkId} revision {SourceRevision}: {Outcome}, {ErrorCategory}, {DurationMs} ms",
+                "framework-index", work.Id, work.FrameworkId, work.SourceRevision, outcome, category, Stopwatch.GetElapsedTime(started).TotalMilliseconds);
         }
         return true;
     }
