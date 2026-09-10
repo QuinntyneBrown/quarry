@@ -66,6 +66,10 @@ export async function startDisplay({ previewUrl = '', mediaDir } = {}) {
     const url = new URL(request.url, 'http://localhost');
     if (request.method !== 'GET' && request.method !== 'HEAD') { response.writeHead(404); response.end(); return; }
     if (url.pathname === '/' || url.pathname === '/preview') { response.writeHead(200, { 'Content-Type': 'text/html' }); response.end(html); return; }
+    if (mediaDir && url.pathname === '/watch' && /^[a-z0-9-]+$/.test(url.searchParams.get('video') ?? '')) {
+      response.writeHead(200, { 'Content-Type': 'text/html' });
+      response.end(`<!doctype html><html><head><title>Quarry video review</title><style>body{margin:0;background:#0c1424;color:white;font:18px Segoe UI}video{display:block;width:100%;max-width:1280px;height:auto}p{margin:12px}</style></head><body><video controls autoplay muted src="/media/${url.searchParams.get('video')}.webm"></video><p>Encoded WebM review · normal speed</p></body></html>`); return;
+    }
     if (mediaDir && /^\/media\/[a-z0-9-]+\.webm$/.test(url.pathname)) {
       try {
         const path = join(mediaDir, basename(url.pathname)), info = await stat(path);
@@ -94,6 +98,14 @@ export async function narrate(page, text) {
       box.setAttribute('popover', 'manual'); document.body.append(box); box.showPopover();
       box.style.margin = '0'; box.style.top = 'auto';
     }
+    const hasDialog = !!document.querySelector('dialog[open]');
+    box.style.boxSizing = 'border-box';
+    Object.assign(box.style, hasDialog
+      ? { left: '20px', width: '250px', maxWidth: '250px', transform: 'none', fontSize: '18px' }
+      : { left: '50%', width: 'max-content', maxWidth: '1120px', transform: 'translateX(-50%)', fontSize: '19px' });
     box.textContent = value; box.style.display = value ? 'block' : 'none';
+    // Re-enter the top layer after a newly opened modal dialog.
+    if (box.matches(':popover-open')) box.hidePopover();
+    if (value) box.showPopover();
   }, text);
 }
