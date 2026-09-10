@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Quarry.Application.Catalog;
@@ -21,6 +22,7 @@ public sealed class FrameworksController : ControllerBase
     [HttpGet]
     [ProducesResponseType<CatalogPageResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, [FromQuery] string? technology = null, [FromQuery] string? cursor = null, CancellationToken cancellationToken = default)
     {
         if (pageSize is < 1 or > 24)
@@ -38,18 +40,33 @@ public sealed class FrameworksController : ControllerBase
             return BadRequest(new SafeErrorResponse("invalid_cursor", HttpContext.TraceIdentifier));
         }
 
-        var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology, cursor), cancellationToken);
-        return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
+        try
+        {
+            var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology, cursor), cancellationToken);
+            return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
+        }
+        catch (DbException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+        }
     }
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType<FrameworkDetails>(StatusCodes.Status200OK)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<FrameworkDetails>> GetFrameworkDetails(Guid id, CancellationToken cancellationToken)
     {
-        var details = await _sender.Send(new GetFrameworkDetailsQuery(id), cancellationToken);
-        return details is null
-            ? NotFound(new SafeErrorResponse("framework_not_found", HttpContext.TraceIdentifier))
-            : Ok(details);
+        try
+        {
+            var details = await _sender.Send(new GetFrameworkDetailsQuery(id), cancellationToken);
+            return details is null
+                ? NotFound(new SafeErrorResponse("framework_not_found", HttpContext.TraceIdentifier))
+                : Ok(details);
+        }
+        catch (DbException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
+        }
     }
 }
