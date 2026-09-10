@@ -14,6 +14,16 @@ test("loads a published catalog before a project description is submitted", asyn
   await discovery.expectCatalog();
 });
 
+test("an empty published catalog explains that no frameworks are available", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: { items: [], total: 0, hasNextPage: false, nextCursor: null, catalogRevision: "1" } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await expect(page.getByText("No frameworks are available")).toBeVisible();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
 test("browse pagination appends the next catalog page", async ({ page }) => {
   const requestedCursors: string[] = [];
   await page.route("**/api/frameworks**", async (route) => {
