@@ -1,0 +1,8 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Serve published frameworks
+Person(visitor, "Visitor", "Browses and inspects frameworks")
+System(quarry, "Quarry", "Publishes framework catalog data")
+Rel(visitor, quarry, "Reads catalog using", "HTTPS")
+@enduml

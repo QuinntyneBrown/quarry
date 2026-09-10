@@ -1,0 +1,46 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Serve published frameworks
+class FrameworkSummary {
+  +Guid Id
+  +string Name
+  +string Technology
+  +string Description
+  +string[] Tags
+  +int ComponentCount
+  +long Revision
+}
+class FrameworkDetails {
+  +FrameworkSummary Summary
+  +Capability[] Capabilities
+  +string[] UseCases
+  +ComponentDescriptor[] Components
+  +PreviewManifest? Preview
+}
+class BrowsePageResponse {
+  +FrameworkSummary[] Items
+  +int Total
+  +bool HasNextPage
+  +string? NextCursor
+  +long CatalogRevision
+}
+class BrowseFrameworksQueryHandler {
+  +Handle(query: BrowseFrameworksQuery): Task<BrowsePageResponse>
+}
+class GetFrameworkDetailsQueryHandler {
+  +Handle(query: GetFrameworkDetailsQuery): Task<FrameworkDetails>
+}
+FrameworkDetails *-- FrameworkSummary
+BrowsePageResponse *-- FrameworkSummary
+BrowseFrameworksQueryHandler ..> BrowsePageResponse
+GetFrameworkDetailsQueryHandler ..> FrameworkDetails
+@enduml

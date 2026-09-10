@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Select framework
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "FrameworkDetailsDialog" as dialog
+participant "FrameworkSelectionState" as state
+participant "SelectedFrameworkSummary" as summary
+participant "SelectionReviewAction" as review
+end box
+visitor -> dialog : Select available framework
+dialog -> state : Set sole ID and current summary L2-018
+state -> summary : Publish name, technology, selected text and status
+summary --> visitor : Show persistent selection
+visitor -> dialog : Select same ID or another framework
+dialog -> state : Same ID is idempotent; other ID replaces L2-019
+state -> summary : Current selection only
+visitor -> review : View selected framework
+review -> dialog : Open normal detail read for selected ID
+alt Current detail succeeds
+ dialog -> state : Refresh selected summary revision
+ dialog --> visitor : Selected state; only current-query/current-revision explanation
+else Detail returns 404
+ dialog -> state : Mark selected ID unavailable; never substitute
+ state -> summary : Retain clear and replacement path L2-019
+else Service failure
+ dialog --> visitor : Retryable error; selection remains known
+end
+visitor -> dialog : Close details before clearing summary
+visitor -> summary : Clear selected framework
+summary -> state : Clear without changing discovery
+state --> summary : Remove summary; announce no selection
+summary --> visitor : Focus selected card action or result heading L2-019
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Monitor service health
+Person(visitor, "Visitor", "Reads coarse public health")
+Person(operator, "Operator", "Reads detailed diagnostics")
+System(quarry, "Quarry", "Reports service health")
+Rel(visitor, quarry, "Reads coarse health from", "HTTPS")
+Rel(operator, quarry, "Reads protected diagnostics from", "Authorized HTTPS")
+@enduml

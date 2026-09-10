@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Monitor service health
+Container_Boundary(api, "Quarry API") {
+ Component(live, "LivenessHealthCheck", "ASP.NET Core health check", "Checks process only")
+ Component(catalog, "CatalogReadinessHealthCheck", "ASP.NET Core health check", "Checks SQL catalog")
+ Component(search, "SearchReadinessHealthCheck", "ASP.NET Core health check", "Checks search dependencies")
+ Component(index, "IndexingHealthReporter", "Application service", "Reports backlog and freshness")
+ Component(diagnostics, "DiagnosticEventWriter", "Infrastructure service", "Writes safe operation records")
+}
+Rel(search, index, "Reads searchable revisions")
+Rel(search, diagnostics, "Records safe outcome")
+Rel(index, diagnostics, "Records work outcome")
+@enduml

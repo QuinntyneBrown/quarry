@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Update framework metadata
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Operator" as operator
+box "Frontend — Operator command client" #E0F2FE
+participant "MaintenanceClient" as client
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "FrameworkMaintenanceController" as controller
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "UpdateFrameworkMetadataCommandHandler" as handler
+participant "Framework" as framework
+end box
+box "Backend — Quarry Infrastructure" #FFF4E5
+database "Quarry catalog database" as db
+end box
+box "Backend — Quarry indexing worker host" #FFF4E5
+participant "IndexingWorker" as worker
+end box
+operator -> client : Submit metadata and expected revision
+client -> controller : HTTPS maintenance command
+alt Missing credentials or permission
+ controller --> client : 401 or 403; no changes L2-028
+else Authorized operator
+ controller -> handler : Dispatch command with actor identity
+ handler -> framework : Validate required metadata, evidence and IDs L2-003
+ alt Invalid input or obsolete expected revision
+  framework --> handler : Field validation or concurrency failure
+  handler --> controller : Rejected without state change
+  controller --> client : Safe failure
+ else Valid revision
+  framework --> handler : New published metadata revision
+  handler -> db : Commit revision, catalog version, audit and index work L2-034
+  alt Transaction fails
+   db --> handler : Rolled back
+   handler --> controller : Failure; previous state retained
+  else Transaction commits
+   db --> handler : Durable revision and work
+   handler --> controller : Accepted revision
+  end
+  controller --> client : Operation outcome
+ end
+end
+note over worker, db : Refresh-index sequence owns embedding, retry and conditional completion.
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Interact with preview
+Person(visitor, "Visitor", "Operates preview controls")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Hosts preview dialog and iframe")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Serves published preview manifest")
+}
+System_Ext(preview, "Framework preview bundle", "Static web application executing in a browser sandbox")
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Gets manifest", "JSON/HTTPS")
+Rel(frontend, preview, "Embeds", "Sandboxed iframe")
+@enduml

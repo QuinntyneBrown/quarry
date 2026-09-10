@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Load a browse page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "DiscoveryPage" as page
+participant "DiscoveryState" as state
+participant "FrameworkCatalogClient" as client
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "FrameworksController" as controller
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "BrowseFrameworksQueryHandler" as handler
+end box
+box "Backend — Quarry Infrastructure" #FFF4E5
+database "Quarry catalog database" as db
+end box
+visitor -> page : Open browse or activate Load more
+page -> state : Capture mode, filter, cursor and L2-035 request identity
+state -> client : Request page with expected catalog revision
+client -> controller : GET /api/frameworks
+controller -> handler : Validate and admit read; send BrowseFrameworksQuery
+handler -> db : Read ordered published page, total and revision consistently
+db --> handler : Snapshot or revision conflict / failure
+handler --> controller : Page or safe error
+controller --> client : 200 page / 409 revision conflict / 503 failure
+client --> state : Response with captured request identity
+alt Identity is obsolete
+ state -> state : Ignore success, failure and revision conflict L2-035
+else Current request has revision conflict
+ state -> client : Start fresh page-one request without old cursor
+ client -> controller : GET /api/frameworks
+ controller --> client : Fresh page or safe failure
+ client --> state : Response with new request identity
+ state --> page : On current success replace list; announce update L2-009
+else Current page succeeds
+ state --> page : Establish revision or append matching page; total and Load more
+else Current page fails
+ state --> page : Retain recoverable state; explicit retry L2-036
+end
+@enduml

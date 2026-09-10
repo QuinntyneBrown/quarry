@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Reset discovery
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "DiscoveryActions" as actions
+participant "DiscoveryState" as state
+participant "FrameworkSearchClient" as search
+participant "FrameworkCatalogClient" as catalog
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "Quarry API" as api
+end box
+visitor -> actions : Change technology, clear search, reset or retry
+alt Change technology
+ actions -> state : Preserve draft/submitted query; change filter; reset cursor L2-010
+else Clear search
+ actions -> state : Clear both queries; retain technology and selection L2-011
+ actions --> visitor : Focus search field
+else Browse all frameworks
+ actions -> state : Clear both queries; select all technologies; retain selection
+ actions --> visitor : Focus search field
+else Retry
+ actions -> state : Retain draft; retry current submitted query/filter after quota delay
+end
+state -> state : Increment request identity and cancel older work
+state -> search : Cancel old search
+alt Current mode is search
+ state -> search : Request current submitted query and technology
+ search -> api : POST /api/framework-searches
+ api --> search : Current results, incomplete flag or safe failure
+ search --> state : Captured snapshot response
+else Current mode is browse
+ state -> catalog : Request initial browse snapshot
+ catalog -> api : GET /api/frameworks
+ api --> catalog : Current browse page or safe failure
+ catalog --> state : Captured snapshot response
+end
+state --> actions : Render only current snapshot; distinguish empty/index/error L2-036
+search --> state : Late old success or failure
+state -> state : Ignore obsolete response L2-035
+@enduml

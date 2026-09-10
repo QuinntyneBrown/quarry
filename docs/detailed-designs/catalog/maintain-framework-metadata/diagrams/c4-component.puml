@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Maintain framework metadata
+Container_Boundary(api, "Quarry maintenance") {
+ Component(controller, "FrameworkMaintenanceController", "ASP.NET Core controller", "Applies operator policy")
+ Component(handler, "UpdateFrameworkMetadataCommandHandler", "MediatR handler", "Validates and updates aggregate")
+ Component(repository, "FrameworkCatalogRepository", "Infrastructure repository", "Commits revision and work item")
+}
+Container(worker, "Indexing worker", ".NET hosted service", "Processes durable work in its own host")
+ContainerDb(sql, "Quarry catalog database", "SQL Server", "Durable catalog and work")
+Rel(controller, handler, "Sends update command")
+Rel(handler, repository, "Commits L2-034 transaction")
+Rel(repository, sql, "Writes")
+Rel(worker, sql, "Claims index work")
+@enduml

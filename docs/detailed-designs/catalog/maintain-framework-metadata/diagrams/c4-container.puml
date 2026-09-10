@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Maintain framework metadata
+Person(operator, "Operator", "Maintains framework metadata")
+System_Boundary(quarry, "Quarry") {
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Authorizes maintenance commands")
+ Container(worker, "Indexing worker", ".NET hosted service", "Processes durable index work")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "Metadata, revisions, vectors, work")
+}
+Rel(operator, api, "Uses", "HTTPS")
+Rel(api, sql, "Writes transaction", "EF Core")
+Rel(worker, sql, "Claims and completes work", "EF Core")
+@enduml

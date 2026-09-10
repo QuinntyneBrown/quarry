@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Inspect framework
+Container_Boundary(frontend, "Quarry frontend") {
+ Component(card, "FrameworkCard", "React component", "Opens details and becomes return target")
+ Component(dialog, "FrameworkDetailsDialog", "React component", "Renders published metadata and tabs")
+ Component(tabs, "FrameworkDetailsTabs", "React component", "Manages accessible tabs")
+ Component(focus, "ModalFocusTrap", "Frontend utility", "Constrains and restores focus")
+ Component(client, "FrameworkDetailsClient", "Typed API client", "Reads framework detail")
+}
+Rel(card, dialog, "Opens")
+Rel(dialog, tabs, "Displays")
+Rel(dialog, focus, "Uses")
+Rel(dialog, client, "Loads detail")
+@enduml

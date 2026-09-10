@@ -1,0 +1,8 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Browse frameworks
+Person(visitor, "Visitor", "Browses component frameworks")
+System(quarry, "Quarry", "Framework discovery application")
+Rel(visitor, quarry, "Browses published frameworks using", "HTTPS")
+@enduml

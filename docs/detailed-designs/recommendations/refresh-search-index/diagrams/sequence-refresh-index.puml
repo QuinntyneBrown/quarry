@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Refresh search index
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Backend — Quarry Infrastructure" #FFF4E5
+participant "IndexingWorker" as worker
+participant "IndexWorkItemRepository" as work
+database "Quarry catalog database" as db
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "FrameworkEmbeddingDocumentFactory" as document
+participant "ITextEmbeddingProvider" as embedding
+end box
+worker -> work : Claim pending/retry work or expired lease after restart
+work -> db : Atomically claim bounded batch with lease expiry
+db --> work : Work ID, framework ID, source revision, model version
+work --> worker : Claimed work
+worker -> document : Build published metadata input
+document --> worker : Description and tags only
+worker -> embedding : Create metadata vector with bounded wait
+alt Embedding succeeds
+ embedding --> worker : Compatible model/version vector
+ worker -> db : Atomically write vector and complete matching work
+ alt Still published with matching source revision and model
+  db --> worker : Searchable; clear incomplete condition L2-008
+ else Withdrawn or source/model changed
+  db --> worker : Supersede stale work; current work remains pending
+ end
+else Failure or timeout
+ embedding --> worker : Safe failure
+ worker -> work : Record safe category; schedule bounded retry
+ work -> db : Persist attempt, next attempt and lease release
+ db --> work : Durable retry state
+end
+note over worker, db : Healthy refresh/restart recovery <= 60 seconds L2-008/034.\nAuthorized rebuild enqueues current published entries; 1,000 entries <= 30 minutes.
+@enduml

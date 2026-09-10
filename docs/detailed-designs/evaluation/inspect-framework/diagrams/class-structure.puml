@@ -1,0 +1,38 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Inspect framework
+class DiscoveryReturnState {
+  +HTMLElement? Opener
+  +DiscoverySnapshot Snapshot
+  +number ScrollY
+  +Restore(): void
+}
+class FrameworkDetailsDialog {
+  +Guid FrameworkId
+  +Open(): void
+  +Close(): void
+}
+class FrameworkDetailsTabs {
+  +string ActiveTab
+  +SelectNext(): void
+  +SelectPrevious(): void
+  +SelectFirst(): void
+  +SelectLast(): void
+}
+class ModalFocusTrap {
+  +Activate(): void
+  +Deactivate(): void
+}
+FrameworkDetailsDialog --> DiscoveryReturnState : preserves
+FrameworkDetailsDialog *-- FrameworkDetailsTabs
+FrameworkDetailsDialog --> ModalFocusTrap : uses
+@enduml

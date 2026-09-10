@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Submit project search
+Person(visitor, "Visitor", "Describes a project")
+System(quarry, "Quarry", "Framework discovery application")
+System_Ext(embedding, "Embedding provider", "Produces semantic vectors")
+Rel(visitor, quarry, "Submits project text using", "HTTPS")
+Rel(quarry, embedding, "Embeds submitted text through", "HTTPS")
+@enduml

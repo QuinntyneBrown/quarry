@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Submit project search
+Person(visitor, "Visitor", "Submits a project description")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Owns draft and submitted query state")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Validates and admits semantic searches")
+}
+System_Ext(embedding, "Embedding provider", "Configured text embedding service")
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Posts submitted query", "JSON/HTTPS")
+Rel(api, embedding, "Requests embedding", "HTTPS")
+@enduml

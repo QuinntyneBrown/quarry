@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Verify service performance
+Person(operator, "Performance operator", "Runs benchmark")
+Container_Ext(runner, "Performance runner", "Load and browser tooling", "Drives API and browser scenarios")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Measured browser experience")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Measured catalog and search endpoints")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "1,000 published indexed fixtures")
+}
+System_Ext(embedding, "Embedding provider", "Recorded provider configuration")
+Rel(operator, runner, "Starts")
+Rel(runner, frontend, "Runs browser profile", "HTTPS")
+Rel(runner, api, "Runs API workload", "HTTPS")
+Rel(api, sql, "Reads", "SQL")
+Rel(api, embedding, "Embeds semantic queries", "HTTPS")
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Protect semantic search
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "FrameworkSearchClient" as client
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "RequestValidationFilter" as validation
+participant "ClientQuotaPolicy" as quota
+participant "SemanticSearchAdmissionPolicy" as admission
+participant "FrameworkSearchesController" as controller
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "SearchFrameworksCommandHandler" as handler
+end box
+visitor -> client : Submit query
+client -> validation : POST search body
+alt Malformed, oversized or invalid input
+ validation --> client : 400 field error or 413 without echoing query L2-029
+else Valid nonempty semantic query
+ validation -> quota : TryAdmitSearch using trusted client identity
+ alt Quota exhausted
+  quota --> client : 429 with rounded-up remaining window seconds
+ else Within quota
+  quota -> admission : TryAcquire without queue L2-033
+  alt Sixteen slots already held
+   admission --> client : 429, Retry-After: 1; no embedding
+  else Lease acquired
+   admission -> controller : Dispatch request with lease
+   controller -> handler : Send bounded command and cancellation
+   alt Result completes
+    handler --> controller : Current grounded response
+   else Dependency timeout, failure or cancellation
+    handler --> controller : Safe failure or canceled request
+   end
+   controller -> admission : Dispose lease in finally on every exit
+   controller --> client : Response or safe 503; no raw query in errors
+  end
+ end
+ client --> visitor : Current outcome; explicit retry after delay, no loop L2-036
+end
+note over validation : Empty trimmed input dispatches browse without embedding.\nRead quota is independent from semantic quota.
+@enduml

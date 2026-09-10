@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Verify service performance
+Person(operator, "Performance operator", "Runs defined workload and records evidence")
+System(quarry, "Quarry", "Framework discovery application under test")
+System_Ext(embedding, "Embedding provider", "Configured semantic embedding dependency")
+Rel(operator, quarry, "Exercises workload against", "HTTPS")
+Rel(quarry, embedding, "Uses during real semantic runs", "HTTPS")
+@enduml

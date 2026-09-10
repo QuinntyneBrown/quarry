@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Rank frameworks
+Person(visitor, "Visitor", "Submits a project description")
+System(quarry, "Quarry", "Ranks component frameworks")
+System_Ext(embedding, "Embedding provider", "Produces compatible text vectors")
+Rel(visitor, quarry, "Searches using", "HTTPS")
+Rel(quarry, embedding, "Requests query embeddings from", "HTTPS")
+@enduml

@@ -1,0 +1,34 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Select framework
+class SelectedFramework {
+  +Guid Id
+  +string Name
+  +string Technology
+  +string Revision
+  +bool Unavailable
+}
+class FrameworkSelectionState {
+  +SelectedFramework? Current
+  +Select(value: SelectedFramework): void
+  +Clear(): void
+}
+class SelectedFrameworkSummary {
+  +View(): ReactNode
+}
+class SelectionReviewAction {
+  +Review(): void
+}
+FrameworkSelectionState *-- "0..1" SelectedFramework
+SelectedFrameworkSummary --> FrameworkSelectionState : reads
+SelectionReviewAction --> FrameworkSelectionState : reads
+@enduml

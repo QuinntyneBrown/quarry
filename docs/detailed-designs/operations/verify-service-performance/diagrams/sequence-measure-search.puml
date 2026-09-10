@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Measure semantic search
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Performance runner" as runner
+box "Frontend — Performance tooling" #E0F2FE
+participant "ApiWorkloadRunner" as workload
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "API request timing" as timing
+participant "FrameworkSearchesController" as controller
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "SearchFrameworksCommandHandler" as handler
+end box
+box "Backend — Quarry Infrastructure" #FFF4E5
+database "Quarry catalog database" as db
+participant "Embedding provider" as embedding
+end box
+runner -> workload : Drive 20 admitted clients, 10 requests/second, 60/20/20 mix
+workload -> timing : HTTPS request arrives at API
+ timing -> timing : Start server receipt measurement L2-032
+ timing -> controller : Validated and admitted semantic search
+ controller -> handler : Dispatch command
+ handler -> embedding : Embed uncached synthetic query
+ embedding --> handler : Query vector
+ handler -> db : Read indexed candidates
+ db --> handler : Searchable revisions
+ handler --> controller : Ranked response
+ controller --> timing : Response body
+ timing --> workload : Complete HTTP response
+ timing -> timing : Record server duration, outcome and correlation ID
+ workload --> runner : Collect correlated server metrics; separate client round trip
+note over runner, timing : Warm up 2 minutes; measure 10 minutes.\nReal-search p95 <= 3 seconds; read p95 <= 500 ms; success >= 99%.\nBrowser, overload and recovery runs are separate evidence.
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Filter and reset discovery
+Container_Boundary(frontend, "Quarry frontend") {
+ Component(filter, "TechnologyFilter", "React component", "Selects eligible technology")
+ Component(actions, "DiscoveryActions", "React component", "Clears, resets, and retries")
+ Component(state, "DiscoveryState", "State model", "Creates state snapshots and rejects obsolete results")
+ Component(results, "DiscoveryResultRegion", "React component", "Renders status and cards")
+}
+Rel(filter, state, "Changes technology")
+Rel(actions, state, "Clears or resets")
+Rel(state, results, "Publishes current state")
+@enduml

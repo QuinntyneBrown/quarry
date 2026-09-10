@@ -1,0 +1,42 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Submit project search
+class DiscoveryState {
+  +string DraftQuery
+  +string SubmittedQuery
+  +int RequestIdentity
+  +Submit(): void
+}
+class FrameworkSearchRequest {
+  +string Query
+  +string Technology
+}
+class SearchFrameworksCommand {
+  +string Query
+  +string Technology
+}
+interface ITextEmbeddingProvider {
+  +Embed(text: string, cancellationToken: CancellationToken): Task<EmbeddingVector>
+}
+class EmbeddingVector {
+  +float[] Values
+  +string ModelVersion
+  +int Dimensions
+}
+class SearchFrameworksCommandHandler {
+  +Handle(command: SearchFrameworksCommand): Task<FrameworkSearchResponse>
+}
+DiscoveryState --> FrameworkSearchRequest : creates
+SearchFrameworksCommandHandler ..> SearchFrameworksCommand : handles
+SearchFrameworksCommandHandler --> ITextEmbeddingProvider : uses
+ITextEmbeddingProvider ..> EmbeddingVector : returns
+@enduml

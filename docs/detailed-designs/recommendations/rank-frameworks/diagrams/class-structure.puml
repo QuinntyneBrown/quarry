@@ -1,0 +1,51 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Rank frameworks
+class SearchFrameworksCommand {
+  +string Query
+  +string Technology
+}
+class FrameworkVector {
+  +Guid FrameworkId
+  +long SourceRevision
+  +string ModelVersion
+  +int Dimensions
+  +float[] Values
+}
+class CosineSimilarityRanker {
+  +Rank(query: float[], candidates: FrameworkVector[]): Recommendation[]
+}
+class Recommendation {
+  +FrameworkSummary Summary
+  +int Rank
+  +string Explanation
+  +string[] SupportingCapabilityIds
+}
+class RecommendationExplanationFactory {
+  +Create(metadata: FrameworkMetadata, context: ProjectContext): GroundedExplanation
+}
+class SearchFrameworksCommandHandler {
+  +Handle(command: SearchFrameworksCommand): Task<FrameworkSearchResponse>
+}
+class FrameworkSearchResponse {
+  +Recommendation[] Items
+  +long CatalogRevision
+  +bool ResultsIncomplete
+}
+SearchFrameworksCommandHandler ..> SearchFrameworksCommand : handles
+SearchFrameworksCommandHandler --> CosineSimilarityRanker : invokes
+SearchFrameworksCommandHandler --> RecommendationExplanationFactory : grounds
+FrameworkSearchResponse *-- Recommendation
+CosineSimilarityRanker --> FrameworkVector : compares
+CosineSimilarityRanker ..> Recommendation : produces
+RecommendationExplanationFactory --> Recommendation : explains
+@enduml

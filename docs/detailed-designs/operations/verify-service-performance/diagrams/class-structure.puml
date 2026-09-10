@@ -1,0 +1,44 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Verify service performance
+class BenchmarkConfiguration {
+  +int CatalogSize
+  +int ClientCount
+  +TimeSpan Warmup
+  +TimeSpan Duration
+  +int RequestsPerSecond
+}
+class WorkloadMix {
+  +decimal CatalogReads
+  +decimal Details
+  +decimal SemanticSearches
+}
+class Measurement {
+  +string Operation
+  +TimeSpan Latency
+  +bool Success
+  +string CorrelationId
+}
+class PerformanceReport {
+  +BenchmarkConfiguration Configuration
+  +Measurement[] Measurements
+  +string EmbeddingConfiguration
+}
+class LatencyRecorder {
+  +Record(measurement: Measurement): void
+  +GetP95(operation: string): TimeSpan
+}
+BenchmarkConfiguration *-- WorkloadMix
+PerformanceReport *-- BenchmarkConfiguration
+PerformanceReport *-- Measurement
+LatencyRecorder --> Measurement
+@enduml

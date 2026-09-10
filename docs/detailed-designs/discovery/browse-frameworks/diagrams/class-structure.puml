@@ -1,0 +1,49 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Browse frameworks
+class DiscoveryState {
+  +string DraftQuery
+  +string SubmittedQuery
+  +string Technology
+  +string? CatalogRevision
+  +int RequestIdentity
+  +LoadPage(cursor: string): void
+  +Accept(response: BrowsePageResponse): void
+}
+class FrameworkCatalogClient {
+  +GetPage(request: BrowseFrameworksRequest): Promise<BrowsePageResponse>
+}
+class BrowseFrameworksQuery {
+  +string Technology
+  +string? Cursor
+  +long? ExpectedRevision
+  +int PageSize
+}
+class BrowseFrameworksQueryHandler {
+  +Handle(query: BrowseFrameworksQuery): Task<BrowsePageResponse>
+}
+class BrowsePageResponse {
+  +FrameworkSummary[] Items
+  +int Total
+  +bool HasNextPage
+  +string? NextCursor
+  +long CatalogRevision
+}
+interface IFrameworkCatalogRepository {
+  +GetPublishedPage(query: BrowseFrameworksQuery): Task<BrowsePageResponse>
+}
+DiscoveryState --> FrameworkCatalogClient : calls
+FrameworkCatalogClient ..> BrowsePageResponse : returns
+BrowseFrameworksQueryHandler ..> BrowseFrameworksQuery : handles
+BrowseFrameworksQueryHandler --> IFrameworkCatalogRepository : reads
+BrowseFrameworksQueryHandler ..> BrowsePageResponse : returns
+@enduml

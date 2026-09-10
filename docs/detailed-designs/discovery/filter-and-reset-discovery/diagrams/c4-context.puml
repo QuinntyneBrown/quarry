@@ -1,0 +1,8 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Filter and reset discovery
+Person(visitor, "Visitor", "Filters and recovers discovery results")
+System(quarry, "Quarry", "Framework discovery application")
+Rel(visitor, quarry, "Filters, clears, resets, and retries using", "HTTPS")
+@enduml

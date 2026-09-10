@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Rank frameworks
+Person(visitor, "Visitor", "Searches frameworks")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Renders recommendations")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Accepts semantic requests")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "Published metadata and compatible vectors")
+}
+System_Ext(embedding, "Embedding provider", "Configured model")
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Posts search", "JSON/HTTPS")
+Rel(api, sql, "Reads vectors", "EF Core")
+Rel(api, embedding, "Embeds query", "HTTPS")
+@enduml

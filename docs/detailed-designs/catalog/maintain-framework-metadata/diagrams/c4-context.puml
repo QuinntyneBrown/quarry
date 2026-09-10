@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Maintain framework metadata
+Person(operator, "Operator", "Maintains framework metadata")
+System(quarry, "Quarry", "Framework discovery application")
+System_Ext(embedding, "Embedding provider", "Embeds published searchable metadata")
+Rel(operator, quarry, "Maintains catalog using", "Authorized HTTPS")
+Rel(quarry, embedding, "Embeds revision metadata through", "HTTPS")
+@enduml

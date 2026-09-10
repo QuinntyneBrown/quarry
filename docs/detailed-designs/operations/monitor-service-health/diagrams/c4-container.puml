@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Monitor service health
+Person(operator, "Operator", "Monitors Quarry")
+System_Boundary(quarry, "Quarry") {
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Runs health checks and exposes safe status")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "Catalog and indexing state")
+}
+System_Ext(embedding, "Embedding provider", "Search dependency")
+Rel(operator, api, "Reads diagnostics", "Authorized HTTPS")
+Rel(api, sql, "Checks catalog and indexing", "SQL")
+Rel(api, embedding, "Checks configured search dependency", "HTTPS")
+@enduml

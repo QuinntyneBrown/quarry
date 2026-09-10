@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Serve published frameworks
+Person(visitor, "Visitor", "Reads framework catalog")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Renders browse and detail content")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Serves anonymous catalog reads")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "Published metadata and revisions")
+}
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Gets catalog and detail", "JSON/HTTPS")
+Rel(api, sql, "Reads", "EF Core")
+@enduml

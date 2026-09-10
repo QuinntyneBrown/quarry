@@ -1,0 +1,8 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Inspect framework
+Person(visitor, "Visitor", "Inspects a framework before selection")
+System(quarry, "Quarry", "Framework discovery application")
+Rel(visitor, quarry, "Inspects details using", "HTTPS")
+@enduml

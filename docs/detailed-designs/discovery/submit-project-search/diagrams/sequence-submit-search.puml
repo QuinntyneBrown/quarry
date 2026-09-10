@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Submit project search
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "ProjectSearchForm" as form
+participant "DiscoveryState" as state
+participant "FrameworkSearchClient" as client
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "FrameworkSearchesController" as controller
+participant "SemanticSearchAdmissionPolicy" as admission
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "SearchFrameworksCommandHandler" as handler
+participant "ITextEmbeddingProvider" as embedding
+end box
+visitor -> form : Edit draft; results still describe submitted query
+visitor -> form : Find frameworks, Enter or example
+form -> state : Trim and submit L2-001 draft and current technology
+alt Query is empty
+ state --> form : Enter browse mode without embedding
+else Query invalid
+ state --> form : Associated field error L2-029
+else Query contains valid text
+ state -> client : Capture identity; show current-query loading
+ client -> controller : POST /api/framework-searches
+ controller -> controller : Validate and apply ClientQuotaPolicy L2-031
+ controller -> admission : Acquire L2-033 slot without queue
+ alt Rejected
+  admission --> controller : Saturated
+  controller --> client : 429 and Retry-After
+ else Admitted
+  admission --> controller : Lease
+  controller -> handler : Send bounded SearchFrameworksCommand
+  handler -> embedding : Embed with 5-second deadline
+  alt Embedding completes
+   embedding --> handler : Compatible query vector
+   handler -> handler : Retrieve eligible revisions, rank and ground L2-005/007/014
+   handler --> controller : FrameworkSearchResponse
+   controller --> client : 200 response
+  else Timeout or dependency failure
+   handler --> controller : Safe error within 8-second API deadline
+   controller --> client : 503, safe code and correlation ID
+  end
+  controller -> admission : Dispose lease on every completion or cancellation
+ end
+ client --> state : Success or failure with original identity
+ state -> state : Reject obsolete response before rendering L2-035
+ state --> form : Current results or explicit recovery L2-036
+end
+@enduml

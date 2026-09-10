@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Rank frameworks
+Container_Boundary(api, "Quarry API — Application components") {
+ Component(handler, "SearchFrameworksCommandHandler", "MediatR handler", "Coordinates semantic search")
+ Component(provider, "ITextEmbeddingProvider", "Application interface", "Embeds query text")
+ Component(repository, "IFrameworkVectorRepository", "Application interface", "Reads eligible searchable revisions")
+ Component(ranker, "CosineSimilarityRanker", "Application service", "Ranks and deterministically limits results")
+ Component(explainer, "RecommendationExplanationFactory", "Application service", "Builds grounded explanations")
+}
+Rel(handler, provider, "Embeds with deadline")
+Rel(handler, repository, "Gets technology-eligible revisions")
+Rel(handler, ranker, "Ranks L2-007 candidates")
+Rel(handler, explainer, "Builds L2-014 explanation")
+@enduml

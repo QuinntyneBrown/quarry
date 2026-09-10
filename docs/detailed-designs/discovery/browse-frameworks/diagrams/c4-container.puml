@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Browse frameworks
+Person(visitor, "Visitor", "Browses framework catalog")
+System_Boundary(quarry, "Quarry") {
+  Container(frontend, "Quarry frontend", "React and TypeScript", "Stores transient discovery state and renders cards")
+  Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Serves revision-aware catalog pages")
+  ContainerDb(sql, "Quarry catalog database", "SQL Server", "Published metadata and revision")
+}
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Gets catalog pages", "JSON/HTTPS")
+Rel(api, sql, "Reads published frameworks", "EF Core")
+@enduml

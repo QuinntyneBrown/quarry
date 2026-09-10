@@ -1,0 +1,49 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Refresh search index
+enum IndexWorkStatus {
+  Pending
+  Claimed
+  Complete
+  Failed
+  Superseded
+}
+class IndexWorkItem {
+  +Guid Id
+  +Guid FrameworkId
+  +long SourceRevision
+  +string ModelVersion
+  +IndexWorkStatus Status
+  +DateTimeOffset? LeaseExpiresAt
+  +DateTimeOffset NextAttemptAt
+  +int AttemptCount
+}
+class FrameworkRevision {
+  +Guid FrameworkId
+  +long Revision
+  +bool Published
+}
+class FrameworkVector {
+  +Guid FrameworkId
+  +long SourceRevision
+  +string ModelVersion
+  +int Dimensions
+  +float[] Values
+}
+class IndexingWorker {
+  +ExecuteAsync(cancellationToken: CancellationToken): Task
+}
+IndexWorkItem --> IndexWorkStatus : has
+IndexWorkItem --> FrameworkRevision : indexes
+FrameworkVector --> FrameworkRevision : represents
+IndexingWorker --> IndexWorkItem : processes
+@enduml

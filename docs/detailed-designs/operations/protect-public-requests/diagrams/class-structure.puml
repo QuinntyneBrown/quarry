@@ -1,0 +1,33 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Protect public requests
+class ClientQuotaPolicy {
+  +TryAdmitSearch(client: IPAddress): AdmissionResult
+  +TryAdmitRead(client: IPAddress): AdmissionResult
+}
+class SemanticSearchAdmissionPolicy {
+  +TryAcquire(): Lease?
+}
+class SearchDeadlinePolicy {
+  +CreateToken(request: CancellationToken): CancellationToken
+}
+class AdmissionResult {
+  +bool Accepted
+  +int RetryAfterSeconds
+}
+class SafeProblemDetailsFactory {
+  +Create(category: SafeErrorCategory): ProblemDetails
+}
+ClientQuotaPolicy ..> AdmissionResult
+SemanticSearchAdmissionPolicy --> AdmissionResult : returns on saturation
+SearchDeadlinePolicy --> SafeProblemDetailsFactory : maps failure
+@enduml

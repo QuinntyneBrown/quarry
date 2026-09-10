@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Refresh search index
+Container_Boundary(worker_host, "Quarry indexing worker") {
+ Component(worker, "IndexingWorker", "Hosted service", "Runs bounded work loop")
+ Component(work, "IndexWorkItemRepository", "Infrastructure repository", "Claims and records work")
+ Component(document, "FrameworkEmbeddingDocumentFactory", "Application service", "Builds allowed metadata input")
+ Component(provider, "ITextEmbeddingProvider", "Application interface", "Creates vector")
+ Component(vectors, "FrameworkVectorRepository", "Infrastructure repository", "Completes only matching revision")
+}
+ContainerDb(sql, "Quarry catalog database", "SQL Server", "Durable state")
+Rel(worker, work, "Claims pending work")
+Rel(worker, document, "Builds embedding input")
+Rel(worker, provider, "Embeds")
+Rel(worker, vectors, "Stores current revision vector")
+Rel(work, sql, "Records state")
+Rel(vectors, sql, "Writes conditionally")
+@enduml

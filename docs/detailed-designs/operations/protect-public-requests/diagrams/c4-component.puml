@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Protect public requests
+Container_Boundary(api, "Quarry API") {
+ Component(validation, "RequestValidationFilter", "ASP.NET Core filter", "Rejects invalid input")
+ Component(quota, "ClientQuotaPolicy", "API component", "Applies 60-second limits")
+ Component(admission, "SemanticSearchAdmissionPolicy", "API component", "Admits 16 concurrent searches")
+ Component(deadline, "SearchDeadlinePolicy", "API component", "Cancels bounded work")
+ Component(problem, "SafeProblemDetailsFactory", "API component", "Returns safe failures")
+}
+Rel(validation, quota, "Passes valid request")
+Rel(quota, admission, "Admits search")
+Rel(admission, deadline, "Starts bounded request")
+Rel(deadline, problem, "Maps timeout")
+@enduml

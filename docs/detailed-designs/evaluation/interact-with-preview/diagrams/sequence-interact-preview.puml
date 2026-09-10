@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Interact with preview
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "ComponentPreviewPanel" as panel
+participant "SandboxedPreviewFrame" as frame
+participant "PreviewMessageValidator" as validator
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "FrameworksController" as controller
+end box
+box "Frontend — Framework preview in sandbox" #E0F2FE
+participant "Preview application" as preview
+end box
+visitor -> panel : Open Components tab
+panel -> controller : Read manifest through published detail contract
+controller --> panel : Revision, component/build evidence and static preview URI
+panel -> frame : Create allow-scripts iframe and per-load token
+frame -> preview : Load isolated static bundle; initialize protocol
+alt Ready message received within 5 seconds
+ preview -> validator : ready with session token and protocol version
+ validator -> validator : Check current source window, null origin, token and schema
+ validator --> panel : Current frame is ready
+ visitor -> preview : Edit Jamie to Alex; toggle notifications; Save
+ preview --> visitor : Saved for Alex in this preview; no external action L2-016
+ visitor -> preview : Reset
+ preview --> visitor : Jamie, notifications on, Preview reset
+ opt Tab boundary or Escape inside iframe
+  preview -> validator : focus-exit direction or dismiss
+  validator --> panel : Validated keyboard message
+  panel --> visitor : Adjacent modal focus or dismissal L2-025
+ end
+else Missing ready or execution failure
+ frame --> panel : Timeout or validated failure
+ panel --> visitor : Inline error; Overview, Close and selection remain usable
+ visitor -> panel : Retry
+ panel -> frame : Replace iframe and token; fresh local state
+end
+note over validator : Invalid or old-frame messages are ignored.\nPreview feedback is announced in frame only.
+@enduml

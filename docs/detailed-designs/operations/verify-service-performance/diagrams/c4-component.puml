@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Verify service performance
+Container_Boundary(runner, "Performance runner") {
+ Component(seed, "BenchmarkCatalogSeeder", "Tool component", "Prepares 1,000 indexed fixtures")
+ Component(workload, "ApiWorkloadRunner", "Tool component", "Drives 60/20/20 API workload")
+ Component(browser, "BrowserPerformanceScenario", "Playwright scenario", "Measures browse and interaction timing")
+ Component(latency, "LatencyRecorder", "Tool component", "Aggregates API server durations and browser observations")
+ Component(report, "PerformanceReportWriter", "Tool component", "Writes environment and measurement evidence")
+}
+Rel(seed, workload, "Prepares data for")
+Rel(workload, latency, "Collects correlated server measurements")
+Rel(browser, latency, "Records browser measurements")
+Rel(latency, report, "Supplies results")
+@enduml

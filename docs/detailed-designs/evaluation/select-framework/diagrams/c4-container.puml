@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Select framework
+Person(visitor, "Visitor", "Chooses framework")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Stores one transient selection")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Serves selected framework details when reviewed")
+}
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Gets detail for review", "JSON/HTTPS")
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Refresh search index
+Person(operator, "Operator", "Monitors and rebuilds search index")
+System(quarry, "Quarry", "Refreshes framework metadata vectors")
+System_Ext(embedding, "Embedding provider", "Embeds framework metadata")
+Rel(operator, quarry, "Monitors and invokes recovery for", "Authorized HTTPS")
+Rel(quarry, embedding, "Embeds current metadata through", "HTTPS")
+@enduml

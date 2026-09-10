@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Select framework
+Container_Boundary(frontend, "Quarry frontend") {
+ Component(dialog, "FrameworkDetailsDialog", "React component", "Offers select action")
+ Component(state, "FrameworkSelectionState", "State model", "Stores one selected summary")
+ Component(summary, "SelectedFrameworkSummary", "React component", "Shows selection and actions")
+ Component(review, "SelectionReviewAction", "React component", "Reopens framework details")
+}
+Rel(dialog, state, "Selects or replaces")
+Rel(state, summary, "Publishes selected framework")
+Rel(summary, review, "Starts review")
+@enduml

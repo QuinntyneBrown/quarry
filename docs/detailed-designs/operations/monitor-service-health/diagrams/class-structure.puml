@@ -1,0 +1,50 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Monitor service health
+enum HealthState {
+  Healthy
+  Degraded
+  Unhealthy
+}
+class HealthReport {
+  +HealthState Liveness
+  +HealthState CatalogReadiness
+  +HealthState SearchReadiness
+  +HealthState IndexingHealth
+}
+class DiagnosticEvent {
+  +string CorrelationId
+  +string Operation
+  +TimeSpan Duration
+  +string Outcome
+  +string SafeErrorCategory
+}
+class IndexingHealthReporter {
+  +GetReport(): IndexingHealthReport
+}
+class PublicHealthController {
+  +Get(): CoarseHealthReport
+}
+class OperatorDiagnosticsController {
+  +Get(): HealthReport
+}
+class CoarseHealthReport {
+  +HealthState Liveness
+  +HealthState CatalogReadiness
+  +HealthState SearchReadiness
+  +HealthState IndexingHealth
+}
+HealthReport --> HealthState
+PublicHealthController ..> CoarseHealthReport
+OperatorDiagnosticsController --> HealthReport
+IndexingHealthReporter ..> DiagnosticEvent
+@enduml

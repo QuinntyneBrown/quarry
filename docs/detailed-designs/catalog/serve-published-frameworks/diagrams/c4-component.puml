@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Serve published frameworks
+Container_Boundary(api, "Quarry API") {
+ Component(controller, "FrameworksController", "ASP.NET Core controller", "Exposes public read endpoints")
+ Component(admission, "ClientQuotaPolicy", "API component", "Applies read quota")
+ Component(browse, "BrowseFrameworksQueryHandler", "MediatR handler", "Returns page and revision")
+ Component(details, "GetFrameworkDetailsQueryHandler", "MediatR handler", "Returns published detail")
+ Component(repository, "FrameworkCatalogRepository", "Infrastructure repository", "Reads published metadata")
+}
+Rel(controller, admission, "Applies L2-031 quota")
+Rel(controller, browse, "Sends browse query")
+Rel(controller, details, "Sends detail query")
+Rel(browse, repository, "Reads page")
+Rel(details, repository, "Reads detail")
+@enduml

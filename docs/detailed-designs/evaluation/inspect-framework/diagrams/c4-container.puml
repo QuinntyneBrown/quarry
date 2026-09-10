@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Inspect framework
+Person(visitor, "Visitor", "Opens framework details")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Displays modal and restores focus")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Serves published detail")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "Published details")
+}
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Gets detail", "JSON/HTTPS")
+Rel(api, sql, "Reads", "EF Core")
+@enduml

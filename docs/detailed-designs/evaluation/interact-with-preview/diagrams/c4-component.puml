@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Interact with preview
+Container_Boundary(frontend, "Quarry frontend") {
+ Component(panel, "ComponentPreviewPanel", "React component", "Renders preview status and retry")
+ Component(frame, "SandboxedPreviewFrame", "React component", "Loads isolated iframe")
+ Component(validator, "PreviewMessageValidator", "Frontend utility", "Accepts fixed trusted messages")
+ Component(client, "PreviewAvailabilityClient", "Typed API client", "Reads manifest")
+}
+Rel(panel, client, "Reads manifest")
+Rel(panel, frame, "Loads")
+Rel(frame, validator, "Validates messages")
+@enduml

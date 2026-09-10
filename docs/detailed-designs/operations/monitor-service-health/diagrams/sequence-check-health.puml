@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Check health
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Operator" as operator
+box "Backend — Quarry API application" #D1FADF
+participant "OperatorDiagnosticsController" as controller
+participant "LivenessHealthCheck" as live
+participant "CatalogReadinessHealthCheck" as catalog
+participant "SearchReadinessHealthCheck" as search
+end box
+box "Backend — Quarry Infrastructure" #FFF4E5
+database "Quarry catalog database" as db
+participant "Embedding provider" as embedding
+end box
+operator -> controller : Request diagnostics
+controller -> controller : Authenticate and authorize operator before detailed read L2-028
+controller -> live : Check process
+live --> controller : Healthy
+controller -> catalog : Check catalog readiness
+catalog -> db : Probe catalog
+db --> catalog : Healthy
+catalog --> controller : Healthy
+controller -> search : Check search readiness
+search -> embedding : Probe configured dependency
+embedding --> search : Unavailable
+search --> controller : Degraded or unhealthy
+controller -> db : Read indexing count, oldest age, failures and revisions
+db --> controller : Indexing health and freshness
+controller --> operator : Detailed safe report L2-037
+note over live, search : Database failure changes catalog/search readiness, not liveness.\nEmbedding/index failure does not change catalog readiness.\nPublicHealthController exposes coarse dimensions only.
+@enduml

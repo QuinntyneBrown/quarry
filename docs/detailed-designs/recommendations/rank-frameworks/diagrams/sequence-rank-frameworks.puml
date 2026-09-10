@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Rank frameworks
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "FrameworkSearchClient" as client
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "FrameworkSearchesController" as controller
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "SearchFrameworksCommandHandler" as handler
+participant "ITextEmbeddingProvider" as embedding
+participant "CosineSimilarityRanker" as ranker
+end box
+box "Backend — Quarry Infrastructure" #FFF4E5
+database "Quarry catalog database" as db
+end box
+visitor -> client : Submit project description
+client -> controller : POST semantic search
+controller -> handler : Send validated command after quota and slot admission
+handler -> embedding : Embed query within 5 seconds
+alt Embedding succeeds
+ embedding --> handler : Query vector with model version and dimensions
+ loop While catalog changes and original deadline permits
+  handler -> db : Read technology-eligible current published revisions and completeness
+  db --> handler : Consistent metadata, vectors and catalog revision
+  handler -> ranker : Exclude incompatible/stale vectors; cosine >= threshold; ID ties
+  ranker --> handler : Zero to three ordered candidates L2-007
+  handler -> handler : Build explanation with same-revision capability IDs L2-014
+  handler -> db : Recheck publication/catalog revision before response
+  db --> handler : Same revision or retry against new snapshot
+ end
+ alt Catalog revision verified within deadline
+  handler --> controller : Items, catalog revision and resultsIncomplete
+  controller --> client : 200 grounded response
+  client --> visitor : Results or honest empty / indexing notice L2-036
+ else Continual catalog changes exhaust deadline
+  handler --> controller : Retryable service condition
+  controller --> client : 503 safe failure
+ end
+else Deadline or dependency failure
+ handler --> controller : Safe service condition
+ controller --> client : 503 without query text; retry/browse recovery
+end
+note over controller : Slot released on every outcome including cancellation.
+@enduml

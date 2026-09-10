@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Interact with preview
+Person(visitor, "Visitor", "Interacts with component preview")
+System(quarry, "Quarry", "Hosts a sandboxed preview")
+System_Ext(preview, "Framework preview bundle", "Independently built static component example")
+Rel(visitor, quarry, "Uses", "HTTPS")
+Rel(quarry, preview, "Loads in sandboxed iframe", "HTTPS")
+@enduml

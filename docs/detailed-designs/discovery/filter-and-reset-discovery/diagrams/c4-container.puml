@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Filter and reset discovery
+Person(visitor, "Visitor", "Changes discovery state")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Owns state snapshots and recovery UI")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Serves catalog and search responses")
+}
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Gets filtered browse data or posts search", "JSON/HTTPS")
+@enduml

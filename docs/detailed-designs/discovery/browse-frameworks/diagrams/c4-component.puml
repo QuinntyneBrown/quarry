@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Browse frameworks
+Container_Boundary(api, "Quarry API") {
+  Component(controller, "FrameworksController", "ASP.NET Core controller", "Exposes GET /api/frameworks")
+  Component(handler, "BrowseFrameworksQueryHandler", "MediatR query handler", "Orders and pages published frameworks")
+  Component(repository, "FrameworkCatalogRepository", "Infrastructure repository", "Reads a revision-aware catalog page")
+}
+ContainerDb(sql, "Quarry catalog database", "SQL Server", "Stores published framework metadata")
+Rel(controller, handler, "Sends BrowseFrameworksQuery")
+Rel(handler, repository, "Reads page and revision")
+Rel(repository, sql, "Queries", "EF Core")
+@enduml

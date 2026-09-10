@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System context — Protect public requests
+Person(visitor, "Visitor", "Uses anonymous discovery")
+Person(operator, "Operator", "Uses protected maintenance")
+System(quarry, "Quarry", "Protects public discovery API")
+System_Ext(embedding, "Embedding provider", "Receives necessary text only")
+Rel(visitor, quarry, "Uses public reads and search", "HTTPS")
+Rel(operator, quarry, "Uses maintenance", "Authorized HTTPS")
+Rel(quarry, embedding, "Calls after admission", "HTTPS")
+@enduml

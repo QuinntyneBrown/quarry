@@ -1,0 +1,41 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Interact with preview
+class PreviewManifest {
+  +string FrameworkId
+  +string Revision
+  +Uri PreviewUri
+  +string[] ComponentIds
+  +string BuildId
+  +int ProtocolVersion
+}
+class PreviewMessage {
+  +string Type
+  +string SessionToken
+  +int ProtocolVersion
+  +string? Direction
+}
+class PreviewMessageValidator {
+  +Validate(event: MessageEvent, manifest: PreviewManifest): PreviewMessage?
+}
+class SandboxedPreviewFrame {
+  +Load(manifest: PreviewManifest): void
+  +Reset(): void
+}
+class ComponentPreviewPanel {
+  +Retry(): void
+  +ShowStatus(): void
+}
+SandboxedPreviewFrame --> PreviewManifest : loads
+PreviewMessageValidator --> PreviewManifest : validates against
+ComponentPreviewPanel --> SandboxedPreviewFrame : hosts
+@enduml

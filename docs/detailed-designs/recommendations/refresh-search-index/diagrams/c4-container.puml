@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Refresh search index
+System_Boundary(quarry, "Quarry") {
+ Container(worker, "Indexing worker", ".NET hosted service", "Claims and processes durable work")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Exposes operator recovery and health")
+ ContainerDb(sql, "Quarry catalog database", "SQL Server", "Metadata, work items, and vectors")
+}
+System_Ext(embedding, "Embedding provider", "Produces framework metadata vectors")
+Rel(api, sql, "Creates rebuild work", "EF Core")
+Rel(worker, sql, "Claims and completes work", "EF Core")
+Rel(worker, embedding, "Embeds metadata", "HTTPS")
+@enduml

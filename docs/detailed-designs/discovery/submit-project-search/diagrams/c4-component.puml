@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Submit project search
+Container_Boundary(api, "Quarry API") {
+ Component(controller, "FrameworkSearchesController", "ASP.NET Core controller", "Exposes POST /api/framework-searches")
+ Component(quota, "ClientQuotaPolicy", "API component", "Applies 30 searches per client per 60 seconds")
+ Component(limiter, "SemanticSearchAdmissionPolicy", "API component", "Applies 16-search concurrency limit without queue")
+ Component(handler, "SearchFrameworksCommandHandler", "MediatR handler", "Embeds and ranks a submitted query")
+ Component(provider, "ITextEmbeddingProvider", "Application interface", "Produces query vector")
+}
+Rel(controller, quota, "Applies L2-031 quota")
+Rel(controller, limiter, "Acquires L2-033 slot after quota admission")
+Rel(controller, handler, "Sends SearchFrameworksCommand")
+Rel(handler, provider, "Requests vector with L2-033 deadline")
+@enduml

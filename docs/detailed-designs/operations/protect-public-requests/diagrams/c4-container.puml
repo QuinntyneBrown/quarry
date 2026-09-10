@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Protect public requests
+Person(visitor, "Visitor", "Sends public request")
+System_Boundary(quarry, "Quarry") {
+ Container(frontend, "Quarry frontend", "React and TypeScript", "Retains recoverable state on errors")
+ Container(api, "Quarry API", "ASP.NET Core with Application and Infrastructure", "Validates and limits public traffic")
+}
+System_Ext(embedding, "Embedding provider", "Configured provider")
+Rel(visitor, frontend, "Uses", "HTTPS")
+Rel(frontend, api, "Calls", "JSON/HTTPS")
+Rel(api, embedding, "Calls with deadline", "HTTPS")
+@enduml

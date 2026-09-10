@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Get framework details
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Quarry application" #E0F2FE
+participant "FrameworkDetailsClient" as client
+end box
+box "Backend — Quarry API application" #D1FADF
+participant "FrameworksController" as controller
+participant "ClientQuotaPolicy" as admission
+end box
+box "Backend — Quarry Application and Domain" #ECFDF3
+participant "GetFrameworkDetailsQueryHandler" as handler
+end box
+box "Backend — Quarry Infrastructure" #FFF4E5
+database "Quarry catalog database" as db
+end box
+visitor -> client : Inspect framework
+client -> controller : GET /api/frameworks/{id}
+controller -> admission : Validate request and TryAdmitRead L2-031
+alt Read quota exhausted
+ admission --> controller : Retry delay
+ controller --> client : 429 and Retry-After
+else Admitted
+ admission --> controller : Accepted
+ controller -> handler : Send detail query
+ handler -> db : Read published revision and descriptors consistently
+ alt Published framework exists
+  db --> handler : Summary, capabilities, use cases, components, optional preview
+  handler --> controller : FrameworkDetails
+  controller --> client : 200 JSON L2-004
+ else Unknown, draft, deleted or withdrawn
+  db --> handler : No public result
+  handler --> controller : Not found
+  controller --> client : 404 safe error
+ else Dependency failure
+  db --> handler : Failure
+  handler --> controller : Unavailable
+  controller --> client : 503, safe code and correlation ID
+ end
+end
+@enduml

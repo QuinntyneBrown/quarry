@@ -1,0 +1,52 @@
+@startuml
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+title Class structure — Maintain framework metadata
+class Framework {
+  +Guid Id
+  +long CurrentRevision
+  +Publish(metadata: FrameworkMetadata): FrameworkRevision
+}
+class FrameworkMetadata {
+  +string Name
+  +string Description
+  +string Technology
+  +string[] Tags
+  +Capability[] Capabilities
+  +string[] UseCases
+  +ComponentDescriptor[] Components
+  +string PublicationEvidence
+  +Validate(): ValidationResult
+}
+class FrameworkRevision {
+  +Guid FrameworkId
+  +long Revision
+  +bool Published
+  +bool Searchable
+}
+class IndexWorkItem {
+  +Guid Id
+  +Guid FrameworkId
+  +long SourceRevision
+  +string ModelVersion
+  +IndexWorkStatus Status
+  +DateTimeOffset? LeaseExpiresAt
+  +DateTimeOffset NextAttemptAt
+  +int AttemptCount
+}
+class UpdateFrameworkMetadataCommandHandler {
+  +Handle(command: UpdateFrameworkMetadataCommand): Task
+}
+Framework *-- FrameworkRevision : creates
+FrameworkRevision --> FrameworkMetadata : contains
+IndexWorkItem --> FrameworkRevision : indexes
+UpdateFrameworkMetadataCommandHandler --> Framework : updates
+@enduml
