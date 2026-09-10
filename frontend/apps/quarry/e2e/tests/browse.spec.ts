@@ -84,6 +84,16 @@ test("a submitted project includes its selected technology", async ({ page }) =>
   await expect.poll(() => submittedTechnology).toBe("React");
 });
 
+test("the project description field limits input to 500 characters", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await page.getByLabel("What are you building?").fill("a".repeat(501));
+  await expect(page.getByLabel("What are you building?")).toHaveValue("a".repeat(500));
+});
+
 test("empty search results explain recovery and allow a browse reset", async ({ page }) => {
   await page.route("**/api/frameworks**", async (route) => {
     await route.fulfill({ json: catalogResponse });
