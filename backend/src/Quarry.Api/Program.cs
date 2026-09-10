@@ -22,9 +22,14 @@ builder.Services.AddSingleton(new SearchConcurrencyGate(builder.Configuration.Ge
 builder.Services.AddRequestTimeouts(options => options.AddPolicy("framework-search", TimeSpan.FromSeconds(builder.Configuration.GetValue("Search:RequestTimeoutSeconds", 8))));
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "Quarry";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "Quarry.Maintenance";
-var jwtSigningKey = builder.Configuration["Jwt:SigningKey"] ?? "development-only-signing-key-change-before-production";
+var jwtSigningKey = builder.Configuration["Jwt:SigningKey"];
+if (!string.IsNullOrWhiteSpace(jwtSigningKey) && Encoding.UTF8.GetByteCount(jwtSigningKey) < 32)
+{
+    throw new InvalidOperationException("Jwt:SigningKey must contain at least 32 UTF-8 bytes.");
+}
 builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false;
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -32,11 +37,18 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
         ValidateAudience = true,
         ValidAudience = jwtAudience,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey)),
-        ValidateLifetime = true
+        IssuerSigningKey = string.IsNullOrWhiteSpace(jwtSigningKey) ? null : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSigningKey)),
+        RequireSignedTokens = true,
+        ValidAlgorithms = [SecurityAlgorithms.HmacSha256],
+        RequireExpirationTime = true,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
     };
 });
-builder.Services.AddAuthorizationBuilder().AddPolicy("maintenance", policy => policy.RequireAuthenticatedUser().RequireClaim("permission", "maintenance"));
+builder.Services.AddAuthorizationBuilder().AddPolicy("maintenance", policy => policy
+    .RequireAuthenticatedUser()
+    .RequireClaim("permission", "maintenance")
+    .RequireAssertion(context => !string.IsNullOrWhiteSpace(context.User.FindFirst("sub")?.Value)));
 var rateLimitWindowSeconds = builder.Configuration.GetValue("RateLimits:WindowSeconds", 60);
 var catalogReadPermitLimit = builder.Configuration.GetValue("RateLimits:CatalogReadPermitLimit", 120);
 var searchPermitLimit = builder.Configuration.GetValue("RateLimits:SearchPermitLimit", 30);

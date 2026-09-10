@@ -40,7 +40,7 @@ npm ci
 npm run dev --workspace=@quarry/app
 ```
 
-Maintenance routes use bearer tokens and require a `permission` claim with value `maintenance`. The development defaults validate issuer `Quarry`, audience `Quarry.Maintenance`, and the signing key in `Jwt__SigningKey`. Before running outside a local development machine, set all three values through environment configuration and use a distinct, high-entropy signing key:
+Maintenance routes require a signed HS256 bearer token with a nonempty operator `sub`, `permission: maintenance`, and a future expiry. The API validates issuer `Quarry`, audience `Quarry.Maintenance`, signature, and lifetime with no clock-skew allowance. No signing key is shipped: without `Jwt__SigningKey`, maintenance rejects all tokens while public discovery remains available. Configure a private key (at least 32 UTF-8 bytes) in the API terminal and the operator terminal. Keep their key, issuer, and audience values identical; do not commit them.
 
 ```powershell
 $env:Jwt__Issuer = 'Quarry'
@@ -48,11 +48,16 @@ $env:Jwt__Audience = 'Quarry.Maintenance'
 $env:Jwt__SigningKey = '<a private high-entropy signing key>'
 ```
 
-Use a short-lived HS256 token with those issuer, audience, and signing-key values plus `permission: maintenance` to invoke the rebuild operation. The operation invalidates stored framework vectors and the worker rebuilds them from published metadata:
+For local development, a key can be generated with `[Convert]::ToBase64String([Security.Cryptography.RandomNumberGenerator]::GetBytes(32))`. Store it privately and set the same value in each terminal rather than generating a new key per terminal. Restart the API after changing its configuration.
+
+Start the API with `dotnet run --project backend/src/Quarry.Api --launch-profile https`. In the operator terminal, the provided script issues a 15-minute token (configurable from 1 to 60 minutes). Its `Subject` identifies the operator. Invoke the rebuild using the HTTPS port from the checked-in launch profile:
 
 ```powershell
-Invoke-RestMethod -Method Post -Uri 'https://localhost:5001/api/maintenance/search-index/rebuild' -Headers @{ Authorization = 'Bearer <maintenance token>' }
+$maintenanceToken = ./tools/New-QuarryMaintenanceToken.ps1 -Subject "$env:USERDOMAIN\$env:USERNAME"
+Invoke-RestMethod -Method Post -Uri 'https://localhost:7015/api/maintenance/search-index/rebuild' -Headers @{ Authorization = "Bearer $maintenanceToken" }
 ```
+
+The current rebuild invalidates stored framework vectors; the running worker regenerates them from published metadata. Durable work scheduling and transactional audit remain pending implementation.
 
 Verify the application code:
 
