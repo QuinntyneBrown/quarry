@@ -4,12 +4,37 @@ using Quarry.Infrastructure.Persistence;
 using Quarry.Infrastructure.Recommendations;
 using Quarry.Application.Recommendations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Globalization;
+using System.Threading.RateLimiting;
+using Quarry.Api.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+var rateLimitWindowSeconds = builder.Configuration.GetValue("RateLimits:WindowSeconds", 60);
+var catalogReadPermitLimit = builder.Configuration.GetValue("RateLimits:CatalogReadPermitLimit", 120);
+var searchPermitLimit = builder.Configuration.GetValue("RateLimits:SearchPermitLimit", 30);
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            context.HttpContext.Response.Headers.RetryAfter = Math.Max(1, Math.Ceiling(retryAfter.TotalSeconds)).ToString(CultureInfo.InvariantCulture);
+        }
+
+        await context.HttpContext.Response.WriteAsJsonAsync(
+            new SafeErrorResponse("rate_limit_exceeded", context.HttpContext.TraceIdentifier),
+            cancellationToken);
+    };
+
+    options.AddPolicy("catalog-read", httpContext => CreateFixedWindowPartition(httpContext, catalogReadPermitLimit, rateLimitWindowSeconds));
+    options.AddPolicy("framework-search", httpContext => CreateFixedWindowPartition(httpContext, searchPermitLimit, rateLimitWindowSeconds));
+});
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(BrowseFrameworksQuery).Assembly));
 builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Quarry")));
 builder.Services.Configure<OllamaEmbeddingOptions>(builder.Configuration.GetSection(OllamaEmbeddingOptions.SectionName));
@@ -36,8 +61,22 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+app.UseRateLimiter();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+static RateLimitPartition<string> CreateFixedWindowPartition(HttpContext httpContext, int permitLimit, int windowSeconds)
+{
+    var clientAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+    return RateLimitPartition.GetFixedWindowLimiter(clientAddress, _ => new FixedWindowRateLimiterOptions
+    {
+        PermitLimit = permitLimit,
+        Window = TimeSpan.FromSeconds(windowSeconds),
+        QueueLimit = 0,
+        AutoReplenishment = true
+    });
+}

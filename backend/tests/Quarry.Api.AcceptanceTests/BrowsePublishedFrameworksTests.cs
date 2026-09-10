@@ -2,6 +2,7 @@
 // Traces to: L2-004, L2-009, L2-028, L2-041
 // Description: Public catalog reads expose a bounded published page.
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -117,5 +118,43 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
         var response = await productionClient.GetAsync("/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f");
 
         Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetFrameworksRejectsTheOneHundredAndTwentyFirstReadInTheFixedWindow()
+    {
+        using var quotaFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder.UseSetting("Catalog:SeedDevelopmentEvaluationData", "true"));
+        using var quotaClient = quotaFactory.CreateClient();
+
+        for (var request = 0; request < 120; request++)
+        {
+            using var response = await quotaClient.GetAsync("/api/frameworks");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        using var rejectedResponse = await quotaClient.GetAsync("/api/frameworks");
+
+        Assert.Equal((HttpStatusCode)429, rejectedResponse.StatusCode);
+        Assert.True(rejectedResponse.Headers.Contains("Retry-After"));
+    }
+
+    [Fact]
+    public async Task SearchRejectsTheThirtyFirstRequestInTheFixedWindowBeforeProcessingIt()
+    {
+        using var quotaFactory = new WebApplicationFactory<Program>().WithWebHostBuilder(builder => builder.UseSetting("Catalog:SeedDevelopmentEvaluationData", "true"));
+        using var quotaClient = quotaFactory.CreateClient();
+
+        for (var request = 0; request < 30; request++)
+        {
+            using var content = new StringContent("{\"query\":\"\"}", Encoding.UTF8, "application/json");
+            using var response = await quotaClient.PostAsync("/api/framework-searches", content);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        using var rejectedContent = new StringContent("{\"query\":\"\"}", Encoding.UTF8, "application/json");
+        using var rejectedResponse = await quotaClient.PostAsync("/api/framework-searches", rejectedContent);
+
+        Assert.Equal((HttpStatusCode)429, rejectedResponse.StatusCode);
+        Assert.True(rejectedResponse.Headers.Contains("Retry-After"));
     }
 }

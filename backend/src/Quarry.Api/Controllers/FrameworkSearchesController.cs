@@ -3,11 +3,13 @@ using Quarry.Api.Contracts;
 using Quarry.Application.Recommendations;
 using MediatR;
 using System.Data.Common;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Quarry.Api.Controllers;
 
 [ApiController]
 [Route("api/framework-searches")]
+[EnableRateLimiting("framework-search")]
 public sealed class FrameworkSearchesController : ControllerBase
 {
     private static readonly string[] SupportedTechnologies = ["React", "Angular", "Vue", "Web Components"];

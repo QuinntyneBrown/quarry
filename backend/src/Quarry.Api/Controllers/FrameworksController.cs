@@ -1,4 +1,5 @@
 using System.Data.Common;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Quarry.Application.Catalog;
@@ -8,6 +9,7 @@ namespace Quarry.Api.Controllers;
 
 [ApiController]
 [Route("api/frameworks")]
+[EnableRateLimiting("catalog-read")]
 public sealed class FrameworksController : ControllerBase
 {
     private static readonly string[] SupportedTechnologies = ["React", "Angular", "Vue", "Web Components"];
