@@ -1,8 +1,6 @@
-using Quarry.Application.Catalog;
+namespace Quarry.Application.Catalog;
 
-namespace Quarry.Api.Contracts;
-
-public sealed record CatalogPageResponse(
+public sealed record CatalogPage(
     IReadOnlyList<FrameworkSummary> Items,
     int Total,
     bool HasNextPage,
