@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-025, L2-026, L2-041
 // Description: Keyboard page entry and wrapping detail tabs work in each viewport band.
-import { test } from "@playwright/test";
+import { test } from "../fixtures/browser";
 import { mockLayoutCatalog } from "../fixtures/layout";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 import { LayoutPage } from "../pages/LayoutPage";

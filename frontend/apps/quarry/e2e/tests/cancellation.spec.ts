@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-009, L2-010, L2-011, L2-017, L2-033, L2-035, L2-041
 // Description: Superseded browser requests abort without replacing current state or exposing errors.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockCancelableRequests } from "../fixtures/cancellation";
 import { catalogResponse } from "../fixtures/catalog";
 import { DiscoveryPage } from "../pages/DiscoveryPage";

@@ -23,7 +23,7 @@ export class DetailsPage {
   }
   public async expectFitsViewport() {
     const bounds = await this.dialog.boundingBox();
-    const viewport = this.page.viewportSize()!;
+    const viewport = await this.page.evaluate(() => ({ width: innerWidth, height: innerHeight }));
     expect(bounds).not.toBeNull();
     expect(bounds!.x).toBeGreaterThanOrEqual(0); expect(bounds!.y).toBeGreaterThanOrEqual(0);
     expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);

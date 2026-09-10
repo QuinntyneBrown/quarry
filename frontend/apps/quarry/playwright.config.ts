@@ -11,8 +11,9 @@ export default defineConfig({
       { name: "MD", width: 768, height: 1024 },
       { name: "LG", width: 992, height: 800 },
       { name: "XL", width: 1440, height: 900 }
-    ].map(({ name, width, height }) => ({ name, use: { viewport: { width, height } }, testIgnore: "**/layout.spec.ts" })),
-    { name: "layout-boundaries", testMatch: "**/layout.spec.ts" }
+    ].map(({ name, width, height }) => ({ name, use: { viewport: { width, height } }, testIgnore: ["**/layout.spec.ts", "**/zoom.spec.ts"] })),
+    { name: "layout-boundaries", testMatch: "**/layout.spec.ts" },
+    { name: "browser-zoom", testIgnore: "**/layout.spec.ts", use: { viewport: null } }
   ],
   webServer: [{
     command: "npm run dev -- --port 4173",

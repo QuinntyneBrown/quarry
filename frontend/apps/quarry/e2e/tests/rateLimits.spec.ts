@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-031, L2-036, L2-041
 // Description: Quota errors retain discovery state and permit only explicit retry after Retry-After.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockRateLimit } from "../fixtures/rateLimits";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 

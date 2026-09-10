@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-016, L2-017, L2-025, L2-030, L2-041
 // Description: Revision-bound previews run in an isolated frame with bounded lifecycle and keyboard messages.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { capturePreviewHandshake, failFirstPreviewInitialization, mockPreviewDetails, previewManifest } from "../fixtures/previews";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 import { PreviewPage } from "../pages/PreviewPage";

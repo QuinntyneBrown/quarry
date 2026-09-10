@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-015, L2-018, L2-019, L2-025, L2-041
 // Description: Selection remains singular, reconciles review metadata, and distinguishes unavailable entries.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockSelectionReview } from "../fixtures/selection";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 import { SelectionPage } from "../pages/SelectionPage";

@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-026, L2-029, L2-041
 // Description: Query rejection identifies its field without a service-outage retry or unsafe server text.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockQueryValidation } from "../fixtures/validation";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 

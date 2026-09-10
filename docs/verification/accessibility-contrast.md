@@ -12,4 +12,4 @@ The focused ten-test matrix passed on 2026-09-10. During verification, a trace s
 
 The complete browser suite then passed **322 tests in 3.8 minutes** with `CI=true` and two workers. Its 45 state reports contained zero violations and zero unresolved contrast findings. The application production build and preview-host syntax build both passed. The CI build now includes both workspaces.
 
-The separate [responsive verification](responsive-discovery.md) covers control sizes, scrolling, all viewport boundaries, and reduced motion. Actual 200% browser-zoom verification remains outstanding.
+The separate [responsive verification](responsive-discovery.md) covers control sizes, scrolling, all viewport boundaries, and reduced motion. [Actual browser-zoom verification](browser-zoom.md) adds 200% checks and measures affected text after exposing it within a scrolled dialog.

@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-025, L2-026, L2-027, L2-041
 // Description: Automated contrast/semantics and measured boundary indicators cover primary UI states.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockLayoutCatalog } from "../fixtures/layout";
 import { mockPreviewDetails } from "../fixtures/previews";
 import { mockQueryValidation } from "../fixtures/validation";

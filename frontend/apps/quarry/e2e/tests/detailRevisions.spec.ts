@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-014, L2-015, L2-017, L2-018, L2-035, L2-041
 // Description: Overview explanations must match the current submitted search and published revision.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { detailExplanation, mockDetailRevision } from "../fixtures/detailRevisions";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 import { DetailsPage } from "../pages/DetailsPage";

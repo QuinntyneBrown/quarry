@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-009, L2-017, L2-035, L2-041
 // Description: Changed browse revisions replace accumulated pages and preserve discovery state.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockCatalogRevisionChange } from "../fixtures/pagination";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 

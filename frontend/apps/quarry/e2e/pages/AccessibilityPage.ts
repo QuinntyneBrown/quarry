@@ -17,7 +17,16 @@ export class AccessibilityPage {
       const graphic = selector && await this.page.locator(selector).evaluate(element => element.matches('.framework-icon[aria-hidden="true"]'));
       const solidLayer = selector && node.any.some(check => check.data?.messageKey === "elmPartiallyObscuring")
         && await this.page.locator(selector).evaluate(element => !!element.closest("dialog[open], .selection-bar"));
-      if (selector && (graphic || solidLayer)) {
+      const scrolledDialog = selector && node.any.some(check => check.data?.messageKey === "elmPartiallyObscured"
+        && check.relatedNodes?.some(related => related.target?.length === 1 && related.target[0] === "dialog"))
+        && await this.page.locator(selector).evaluate(element => !!element.closest("dialog[open]"));
+      if (selector && (graphic || solidLayer || scrolledDialog)) {
+        if (scrolledDialog) {
+          // Zoomed dialogs scroll. Prove the reported text can be exposed before
+          // resolving contrast against its solid background.
+          await this.page.locator(selector).scrollIntoViewIfNeeded();
+          await expect(this.page.locator(selector)).toBeInViewport();
+        }
         const minimum = graphic ? 3 : parseFloat(node.any.find(check => check.data?.expectedContrastRatio)?.data.expectedContrastRatio ?? "4.5");
         manualContrast.push({ element: selector, minimum, ratio: await this.expectBoundaryContrast(selector, "color", "nearest-solid", minimum) });
       } else unresolved.push(node);

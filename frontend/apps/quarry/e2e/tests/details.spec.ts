@@ -1,7 +1,7 @@
 // Acceptance Test
 // Traces to: L2-017, L2-024, L2-025, L2-026, L2-041
 // Description: Details form a modal boundary with backdrop dismissal and scroll/focus restoration.
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures/browser";
 import { mockScrollableDetails } from "../fixtures/details";
 import { DetailsPage } from "../pages/DetailsPage";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
