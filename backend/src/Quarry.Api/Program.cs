@@ -1,5 +1,7 @@
 using Quarry.Application.Catalog;
 using Quarry.Infrastructure.Catalog;
+using Quarry.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(typeof(BrowseFrameworksQuery).Assembly));
 builder.Services.AddSingleton<IFrameworkCatalogReader, DevelopmentFrameworkCatalogReader>();
+builder.Services.AddDbContext<QuarryDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Quarry")));
 
 var app = builder.Build();
 
