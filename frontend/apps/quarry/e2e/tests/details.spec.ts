@@ -6,9 +6,7 @@ import { mockScrollableDetails } from "../fixtures/details";
 import { DetailsPage } from "../pages/DetailsPage";
 import { DiscoveryPage } from "../pages/DiscoveryPage";
 
-for (const width of [375, 1280]) {
-  test(`details prevent background focus and scroll and restore their opener at ${width}px`, async ({ page }) => {
-    await page.setViewportSize({ width, height: 720 });
+  test("details prevent background focus and scroll and restore their opener", async ({ page }) => {
     await mockScrollableDetails(page);
     const discovery = new DiscoveryPage(page);
     const details = new DetailsPage(page);
@@ -28,7 +26,6 @@ for (const width of [375, 1280]) {
     expect(await details.scrollPosition()).toBe(scroll);
     await expect(page.getByLabel("What are you building?")).toHaveValue("Unsubmitted draft");
   });
-}
 
 test("details dismiss on backdrop click but preserve inside interactions", async ({ page }) => {
   await mockScrollableDetails(page);

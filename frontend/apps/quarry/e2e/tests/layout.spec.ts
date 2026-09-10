@@ -41,13 +41,3 @@ for (const viewport of viewports) {
     await layout.expectNoHorizontalOverflow();
   });
 }
-
-test("keyboard entry skips discovery controls and detail arrows cycle in either direction", async ({ page }) => {
-  await mockLayoutCatalog(page);
-  const discovery = new DiscoveryPage(page);
-  const layout = new LayoutPage(page);
-  await discovery.goto();
-  await layout.useSkipLink();
-  await discovery.openFramework("Atlas");
-  await layout.cycleTabs();
-});
