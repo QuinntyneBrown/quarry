@@ -155,6 +155,8 @@ Run the opt-in real SQL/Ollama smoke test with `QUARRY_TEST_SQL` configured and 
 
 Run `./tools/Test-QuarryRelevance.ps1` with SQL test configuration and local Ollama available to execute the six real-model relevance judgments. It creates an isolated temporary database and retains reports under `test-results/relevance/`. The pinned configuration currently fails three required judgments; see [relevance evidence](verification/relevance-evaluation.md). The separate manual GitHub workflow runs the same command. Passing ordinary acceptance tests does not waive this release gate.
 
+For production browser startup measurements, build with `npm run build --workspaces --prefix frontend`, then run `npm run test:performance --workspace=@quarry/app --prefix frontend`. This separate benchmark performs 20 fresh loads under the required network/CPU profile using a 1,000-entry HTTP mock; no SQL or Ollama service is needed. See [browser performance evidence](verification/browser-performance.md) for reports, the manual workflow, and remaining performance gates.
+
 Verify the application code:
 
 ```powershell

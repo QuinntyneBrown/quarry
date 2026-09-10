@@ -1,0 +1,38 @@
+name: browser-performance
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-startup:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npx playwright install chromium
+        working-directory: frontend/apps/quarry
+      - run: npm run build --workspaces
+        working-directory: frontend
+      - name: Measure twenty fresh production loads with a mock API
+        run: npm run test:performance --workspace=@quarry/app -- --reporter=line,junit
+        working-directory: frontend
+        env:
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/browser-performance.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: browser-performance-results
+          path: |
+            frontend/apps/quarry/test-results/performance
+            frontend/apps/quarry/test-results/browser-performance.xml
+          if-no-files-found: error

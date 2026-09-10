@@ -9,7 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test",
-    "test:routing": "playwright test --config=playwright.routing.config.ts"
+    "test:routing": "playwright test --config=playwright.routing.config.ts",
+    "test:performance": "playwright test --config=playwright.performance.config.ts"
   },
   "dependencies": {
     "@playwright/test": "latest",
