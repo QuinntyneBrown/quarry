@@ -1,0 +1,60 @@
+name: real-model relevance
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  relevance:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Start isolated SQL instance
+        shell: pwsh
+        run: |
+          sqllocaldb create QuarryRelevance -s
+          if ($LASTEXITCODE -ne 0) { throw 'Could not start the evaluation SQL instance.' }
+          'QUARRY_TEST_SQL=Server=(localdb)\QuarryRelevance;Trusted_Connection=True;TrustServerCertificate=True;' >> $env:GITHUB_ENV
+      - name: Prepare local embedding model
+        shell: pwsh
+        run: |
+          $package = Join-Path $env:RUNNER_TEMP 'ollama.zip'
+          $install = Join-Path $env:RUNNER_TEMP 'quarry-ollama'
+          Invoke-WebRequest 'https://ollama.com/download/ollama-windows-amd64.zip' -OutFile $package
+          Expand-Archive -LiteralPath $package -DestinationPath $install
+          $executable = Join-Path $install 'ollama.exe'
+          $env:OLLAMA_HOST = '127.0.0.1:11434'
+          $env:OLLAMA_MODELS = Join-Path $env:RUNNER_TEMP 'quarry-models'
+          $server = Start-Process -FilePath $executable -ArgumentList 'serve' -WindowStyle Hidden -PassThru
+          "QUARRY_OLLAMA_PID=$($server.Id)" >> $env:GITHUB_ENV
+          $ready = $false
+          for ($attempt = 0; $attempt -lt 30; $attempt++) {
+            try { Invoke-RestMethod 'http://localhost:11434/api/version' -TimeoutSec 2 | Out-Null; $ready = $true; break } catch { Start-Sleep -Seconds 1 }
+          }
+          if (-not $ready) { throw 'Local Ollama did not start.' }
+          & $executable pull embeddinggemma:300m
+          if ($LASTEXITCODE -ne 0) { throw 'Embedding model acquisition failed.' }
+          # Model loading is setup work; timed provider calls keep their five-second deadline.
+          $warmup = @{ model='embeddinggemma:300m'; input=@('quarry-evaluation-warmup'); truncate=$false; keep_alive='10m' } | ConvertTo-Json
+          Invoke-RestMethod -Method Post -Uri 'http://localhost:11434/api/embed' -ContentType 'application/json' -Body $warmup -TimeoutSec 120 | Out-Null
+      - name: Run all six real relevance judgments
+        shell: pwsh
+        run: ./tools/Test-QuarryRelevance.ps1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-model-relevance
+          path: test-results/relevance
+          if-no-files-found: error
+      - name: Stop evaluation services
+        if: always()
+        shell: pwsh
+        run: |
+          if ($env:QUARRY_OLLAMA_PID) { Stop-Process -Id ([int]$env:QUARRY_OLLAMA_PID) -ErrorAction SilentlyContinue }
+          sqllocaldb stop QuarryRelevance

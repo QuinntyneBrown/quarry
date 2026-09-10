@@ -5,7 +5,6 @@ namespace Quarry.Application.Recommendations;
 
 public sealed class SearchFrameworksCommandHandler : IRequestHandler<SearchFrameworksCommand, FrameworkSearchResult>
 {
-    private const double RelevanceThreshold = 0.5d;
     private readonly ITextEmbeddingProvider _embeddingProvider;
     private readonly IFrameworkVectorRepository _vectorRepository;
     private readonly CosineSimilarityRanker _ranker;
@@ -24,7 +23,7 @@ public sealed class SearchFrameworksCommandHandler : IRequestHandler<SearchFrame
         {
             cancellationToken.ThrowIfCancellationRequested();
             var snapshot = await _vectorRepository.GetSnapshotAsync(request.Technology, embedding.Model, embedding.Values.Count, cancellationToken);
-            var rankings = _ranker.Rank(embedding.Values, snapshot.Candidates, request.Technology, RelevanceThreshold);
+            var rankings = _ranker.Rank(embedding.Values, snapshot.Candidates, request.Technology, SearchRankingConfiguration.RelevanceThreshold);
             var items = new List<FrameworkSearchResultItem>();
             foreach (var ranking in rankings)
             {

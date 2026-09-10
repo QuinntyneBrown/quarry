@@ -14,4 +14,4 @@ Local verification on 2026-09-10 used Express because this ARM64 machine cannot 
 - The workflow's Playwright reporter command passed 57 tests under `CI=true`, producing JUnit with zero failures and skips.
 - Workflow YAML parsed successfully. The hosted GitHub job has not been dispatched or verified from this workspace.
 
-Real-model evaluation and the specified benchmark/recovery jobs remain separate delivery work; this ordinary workflow does not substitute for those gates.
+The separate manual [real-model relevance workflow](../../.github/workflows/relevance.yml) now runs the six synthetic judgments with local Ollama and SQL, retains JSON/TRX evidence, and rejects skipped tests or unmet judgments. Its local command has been verified to fail for the three documented [relevance failures](relevance-evaluation.md). Hosted execution is still unverified. The specified benchmark/recovery jobs remain separate delivery work; the ordinary workflow does not substitute for those gates.

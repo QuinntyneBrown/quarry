@@ -149,6 +149,8 @@ When intentionally changing the model, stop all API and worker instances, calibr
 
 Run the opt-in real SQL/Ollama smoke test with `QUARRY_TEST_SQL` configured and `QUARRY_TEST_OLLAMA=1`. See [compatibility verification](verification/embedding-compatibility.md). The same operator credentials can [maintain framework metadata](maintenance.md). Draft creation does not make an entry publicly visible.
 
+Run `./tools/Test-QuarryRelevance.ps1` with SQL test configuration and local Ollama available to execute the six real-model relevance judgments. It creates an isolated temporary database and retains reports under `test-results/relevance/`. The pinned configuration currently fails three required judgments; see [relevance evidence](verification/relevance-evaluation.md). The separate manual GitHub workflow runs the same command. Passing ordinary acceptance tests does not waive this release gate.
+
 Verify the application code:
 
 ```powershell
