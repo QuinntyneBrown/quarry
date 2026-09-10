@@ -16,7 +16,7 @@ main > section[aria-label="Framework catalog"] { display: grid; gap: 1rem; grid-
 article { padding: 1.25rem; border-radius: 1rem; background: white; box-shadow: 0 4px 18px #17203314; }
 article h2 { margin-top: 0; }
 aside[role="status"] { position: sticky; bottom: 1rem; z-index: 1; width: fit-content; padding: .75rem; border-radius: .75rem; background: #172033; color: white; }
-dialog { width: min(100% - 2rem, 42rem); border: 0; border-radius: 1rem; padding: 2rem; box-shadow: 0 24px 72px #0006; }
+dialog { width: min(100% - 2rem, 42rem); max-height: calc(100dvh - 2rem); overflow: auto; overscroll-behavior: contain; border: 0; border-radius: 1rem; padding: 2rem; box-shadow: 0 24px 72px #0006; }
 dialog::backdrop { background: #17203399; }
 @media (min-width: 768px) { main > section[aria-label="Framework catalog"] { grid-template-columns: repeat(2, minmax(0, 1fr)); } form { grid-template-columns: 1fr auto; } form label { grid-column: 1 / -1; } }
 @media (min-width: 992px) { main > section[aria-label="Framework catalog"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

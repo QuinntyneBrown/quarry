@@ -177,7 +177,7 @@ export function DiscoveryPage(): React.JSX.Element {
     setDetailId(undefined);
     setDetails(undefined);
     setDetailError(undefined);
-    requestAnimationFrame(() => detailOpener.current?.focus());
+    requestAnimationFrame(() => detailOpener.current?.focus({ preventScroll: true }));
   }
 
   function selectFramework(): void {

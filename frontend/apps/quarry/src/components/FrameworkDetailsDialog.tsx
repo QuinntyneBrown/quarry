@@ -15,15 +15,22 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onC
   const previewManifest = details ? getPreviewManifest(details) : undefined;
 
   useEffect(() => {
-    closeButton.current?.focus();
-    function dismissWithEscape(event: KeyboardEvent): void {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    }
-    window.addEventListener("keydown", dismissWithEscape);
-    return () => window.removeEventListener("keydown", dismissWithEscape);
-  }, [onClose]);
+    const element = dialog.current!;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    element.showModal();
+    closeButton.current?.focus({ preventScroll: true });
+    return () => {
+      element.close();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
+
+  function dismissBackdrop(event: React.MouseEvent<HTMLDialogElement>): void {
+    if (event.target !== event.currentTarget) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose();
+  }
 
   function selectTab(tab: FrameworkDetailsTab): void {
     setActiveTab(tab);
@@ -56,7 +63,8 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, onC
     }
   }
 
-  return <dialog ref={dialog} open aria-label={`${details?.summary.name ?? "Framework"} details`} onKeyDown={trapFocus}>
+  return <dialog ref={dialog} aria-label={`${details?.summary.name ?? "Framework"} details`} onKeyDown={trapFocus}
+    onCancel={event => { event.preventDefault(); onClose(); }} onClick={dismissBackdrop}>
     <h2>{details?.summary.name ?? "Framework details"}</h2>
     {isLoading ? <p role="status">Loading framework details</p> : error ? <section><p role="alert">{error}</p><RetryButton retryAt={retryAt} onRetry={onRetry} /></section> : details && <>
       <div role="tablist" aria-label="Framework details">
