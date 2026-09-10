@@ -67,6 +67,10 @@ export class DiscoveryPage {
     await this.page.getByRole("button", { name: "Clear selection" }).click();
   }
 
+  public async reviewSelection(): Promise<void> {
+    await this.page.getByRole("button", { name: "Review selection" }).click();
+  }
+
   public async retry(): Promise<void> {
     await this.page.getByRole("button", { name: "Retry" }).click();
   }

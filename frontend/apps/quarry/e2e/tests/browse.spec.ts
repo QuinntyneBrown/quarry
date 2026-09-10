@@ -353,6 +353,21 @@ test("a selected framework can be cleared without resetting discovery", async ({
   await discovery.expectCatalog();
 });
 
+test("a selected framework can be reviewed in the detail dialog", async ({ page }) => {
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    await route.fulfill({ json: { summary: catalogResponse.items[0] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  await discovery.selectFramework();
+  await discovery.reviewSelection();
+  await expect(page.getByRole("dialog", { name: "Atlas details" })).toBeVisible();
+});
+
 test("a catalog failure preserves discovery and offers an explicit retry", async ({ page }) => {
   let attempts = 0;
   await page.route("**/api/frameworks", async (route) => {
