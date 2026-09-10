@@ -125,6 +125,25 @@ test("a framework card opens published details in a dialog", async ({ page }) =>
   await expect(page.getByRole("dialog", { name: "Atlas details" })).toContainText("Published framework");
 });
 
+test("details tabs replace their panel and support arrow-key navigation", async ({ page }) => {
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    await route.fulfill({ json: { summary: catalogResponse.items[0] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  const overview = page.getByRole("tab", { name: "Overview" });
+  await expect(overview).toHaveAttribute("aria-selected", "true");
+  await overview.press("ArrowRight");
+  await expect(page.getByRole("tab", { name: "Components" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("Component previews are unavailable");
+  await page.getByRole("tab", { name: "Components" }).press("Home");
+  await expect(overview).toHaveAttribute("aria-selected", "true");
+});
+
 test("Escape closes details and restores the opening card focus", async ({ page }) => {
   await page.route("**/api/frameworks", async (route) => {
     await route.fulfill({ json: catalogResponse });
