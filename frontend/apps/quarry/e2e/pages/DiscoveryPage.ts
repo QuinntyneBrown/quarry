@@ -61,6 +61,7 @@ export class DiscoveryPage {
 
   public async dismissDetailsWithEscape(): Promise<void> {
     await this.page.keyboard.press("Escape");
+    await expect(this.page.getByRole("dialog")).toHaveCount(0);
   }
 
   public async selectFramework(): Promise<void> {
