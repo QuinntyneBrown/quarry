@@ -334,6 +334,7 @@ test("selecting a framework keeps a visible selection summary", async ({ page })
   await expect(page.getByRole("dialog", { name: "Atlas details" })).toBeVisible();
   await discovery.selectFramework();
   await expect(page.getByRole("status")).toContainText("Atlas selected");
+  await expect(page.getByRole("article", { name: "Atlas framework" })).toContainText("Selected");
 });
 
 test("a selected framework can be cleared without resetting discovery", async ({ page }) => {
