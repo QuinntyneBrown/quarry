@@ -129,3 +129,20 @@ test("selecting a framework keeps a visible selection summary", async ({ page })
   await discovery.selectFramework();
   await expect(page.getByRole("status")).toContainText("Atlas selected");
 });
+
+test("a selected framework can be cleared without resetting discovery", async ({ page }) => {
+  await page.route("**/api/frameworks", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f", async (route) => {
+    await route.fulfill({ json: { summary: catalogResponse.items[0] } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.openFramework("Atlas");
+  await expect(page.getByRole("dialog", { name: "Atlas details" })).toBeVisible();
+  await discovery.selectFramework();
+  await discovery.clearSelection();
+  await expect(page.getByRole("status")).toHaveCount(0);
+  await discovery.expectCatalog();
+});
