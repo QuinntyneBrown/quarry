@@ -13,6 +13,6 @@ public sealed class BrowseFrameworksQueryHandler : IRequestHandler<BrowseFramewo
 
     public Task<CatalogPage> Handle(BrowseFrameworksQuery request, CancellationToken cancellationToken)
     {
-        return _catalogReader.BrowseAsync(request.PageSize, request.Technology, request.Cursor, cancellationToken);
+        return _catalogReader.BrowseAsync(request.PageSize, request.Technology, request.Cursor, cancellationToken, request.ExpectedRevision);
     }
 }

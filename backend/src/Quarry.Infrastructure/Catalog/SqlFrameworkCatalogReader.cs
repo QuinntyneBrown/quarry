@@ -16,25 +16,36 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
         _dbContext = dbContext;
     }
 
-    public async Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken)
+    public async Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken, string? expectedRevision = null)
     {
-        CatalogCursor.TryDecode(cursor, out var offset);
+        if (!CatalogCursor.TryDecode(cursor, out var position) || position is not null && position.Technology != technology)
+            throw new InvalidCatalogCursorException();
         await using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
         var catalogRevision = await _dbContext.CatalogState.AsNoTracking().Where(item => item.Id == 1).Select(item => item.Revision).SingleAsync(cancellationToken);
+        var revision = catalogRevision.ToString(CultureInfo.InvariantCulture);
+        if (expectedRevision is not null && expectedRevision != revision || position is not null && position.Revision != revision)
+            throw new CatalogRevisionChangedException();
         var query = _dbContext.FrameworkRevisions.AsNoTracking().Where(item => item.IsPublished);
         if (!string.IsNullOrWhiteSpace(technology))
         {
             query = query.Where(item => item.Technology == technology);
         }
 
-        var total = await query.CountAsync(cancellationToken);
-        var entries = await query
-            .OrderBy(item => item.Name)
-            .ThenBy(item => item.Id)
-            .Skip(offset)
-            .Take(pageSize)
-            .ToListAsync(cancellationToken);
-        var items = entries.Select(item => new FrameworkSummary(
+        // Read only sort keys for ordering; SQL locale collation must not determine public order.
+        var keys = (await query.Select(item => new { item.Id, item.Name }).ToListAsync(cancellationToken))
+            .OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(item => item.Id.ToString("D"), StringComparer.Ordinal).ToList();
+        var offset = 0;
+        if (position is not null)
+        {
+            var previous = keys.FindIndex(item => item.Id == position.LastId && item.Name == position.LastName);
+            if (previous < 0) throw new InvalidCatalogCursorException();
+            offset = previous + 1;
+        }
+        var pageKeys = keys.Skip(offset).Take(pageSize).ToList();
+        var ids = pageKeys.Select(item => item.Id).ToArray();
+        var entries = await query.Where(item => ids.Contains(item.Id)).ToDictionaryAsync(item => item.Id, cancellationToken);
+        var items = pageKeys.Select(key => entries[key.Id]).Select(item => new FrameworkSummary(
             item.Id,
             item.Name,
             item.Description,
@@ -44,7 +55,9 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
             item.Revision)).ToList();
         var nextOffset = offset + items.Count;
         await transaction.CommitAsync(cancellationToken);
-        return new CatalogPage(items, total, nextOffset < total, nextOffset < total ? CatalogCursor.Encode(nextOffset) : null, catalogRevision.ToString(CultureInfo.InvariantCulture));
+        var hasNextPage = nextOffset < keys.Count;
+        return new CatalogPage(items, keys.Count, hasNextPage,
+            hasNextPage ? CatalogCursor.Encode(new CatalogCursorPosition(items[^1].Name, items[^1].Id, technology, revision)) : null, revision);
     }
 
     public async Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)

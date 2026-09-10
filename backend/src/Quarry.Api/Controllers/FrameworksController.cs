@@ -25,7 +25,7 @@ public sealed class FrameworksController : ControllerBase
     [ProducesResponseType<CatalogPageResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, [FromQuery] string? technology = null, [FromQuery] string? cursor = null, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<CatalogPageResponse>> GetFrameworks([FromQuery] int pageSize = 24, [FromQuery] string? technology = null, [FromQuery] string? cursor = null, [FromQuery] string? expectedRevision = null, CancellationToken cancellationToken = default)
     {
         if (pageSize is < 1 or > 24)
         {
@@ -37,15 +37,27 @@ public sealed class FrameworksController : ControllerBase
             return BadRequest(new SafeErrorResponse("invalid_technology", HttpContext.TraceIdentifier));
         }
 
-        if (!CatalogCursor.TryDecode(cursor, out _))
+        technology = string.IsNullOrWhiteSpace(technology) ? null : technology;
+        if (!CatalogCursor.TryDecode(cursor, out var position) || position is not null && position.Technology != technology)
         {
             return BadRequest(new SafeErrorResponse("invalid_cursor", HttpContext.TraceIdentifier));
         }
 
+        if (expectedRevision is not null && !CatalogCursor.IsValidRevision(expectedRevision))
+            return BadRequest(new SafeErrorResponse("invalid_catalog_revision", HttpContext.TraceIdentifier));
+
         try
         {
-            var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology, cursor), cancellationToken);
+            var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology, cursor, expectedRevision), cancellationToken);
             return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
+        }
+        catch (CatalogRevisionChangedException)
+        {
+            return Conflict(new SafeErrorResponse("catalog_revision_changed", HttpContext.TraceIdentifier));
+        }
+        catch (InvalidCatalogCursorException)
+        {
+            return BadRequest(new SafeErrorResponse("invalid_cursor", HttpContext.TraceIdentifier));
         }
         catch (DbException)
         {

@@ -51,6 +51,10 @@ export class DiscoveryPage {
     await this.page.getByRole("button", { name: "Load more" }).click();
   }
 
+  public async draftProject(description: string): Promise<void> {
+    await this.page.getByLabel("What are you building?").fill(description);
+  }
+
   public async openFramework(name: string): Promise<void> {
     await this.page.getByRole("button", { name: `Explore ${name}` }).click();
   }

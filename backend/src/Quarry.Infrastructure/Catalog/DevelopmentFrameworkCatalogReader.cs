@@ -12,7 +12,7 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader,
         _configuration = configuration;
     }
 
-    public Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken)
+    public Task<CatalogPage> BrowseAsync(int pageSize, string? technology, string? cursor, CancellationToken cancellationToken, string? expectedRevision = null)
     {
         if (!bool.TryParse(_configuration["Catalog:SeedDevelopmentEvaluationData"], out var seed) || !seed)
         {
@@ -27,13 +27,18 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader,
             ["Accessible"],
             2,
             "1");
-        CatalogCursor.TryDecode(cursor, out var offset);
+        if (!CatalogCursor.TryDecode(cursor, out var position) || position is not null && position.Technology != technology)
+            throw new InvalidCatalogCursorException();
+        if (expectedRevision is not null && expectedRevision != "1" || position is not null && position.Revision != "1")
+            throw new CatalogRevisionChangedException();
+        if (position is not null && (position.LastId != atlas.Id || position.LastName != atlas.Name))
+            throw new InvalidCatalogCursorException();
+        var offset = position is null ? 0 : 1;
         var matchingItems = string.IsNullOrWhiteSpace(technology) || string.Equals(atlas.Technology, technology, StringComparison.OrdinalIgnoreCase)
             ? new List<FrameworkSummary> { atlas }
             : [];
         var items = matchingItems.Skip(offset).Take(pageSize).ToList();
-        var nextOffset = offset + items.Count;
-        return Task.FromResult(new CatalogPage(items, matchingItems.Count, nextOffset < matchingItems.Count, nextOffset < matchingItems.Count ? CatalogCursor.Encode(nextOffset) : null, "1"));
+        return Task.FromResult(new CatalogPage(items, matchingItems.Count, false, null, "1"));
     }
 
     public Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)
