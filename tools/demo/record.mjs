@@ -76,8 +76,9 @@ try {
   console.log(`Run ${runId}: preparing isolated capture`);
   console.log(`RUN_DIR=${runDir}`);
   const setup = await Promise.allSettled([
-    runCommand('dotnet', ['build', 'backend/Quarry.sln', '--nologo'], { cwd: root, env }),
-    runCommand(process.execPath, ['node_modules/typescript/bin/tsc', '--noEmit', '-p', 'apps/quarry/tsconfig.json'], { cwd: join(root, 'frontend') })
+    ...(selected === 'quarry-previews' ? [runCommand(process.execPath, ['--check', 'server.mjs'], { cwd: join(root, 'frontend/apps/quarry-preview') })]
+      : [runCommand('dotnet', ['build', 'backend/Quarry.sln', '--nologo'], { cwd: root, env }),
+        runCommand(process.execPath, ['node_modules/typescript/bin/tsc', '--noEmit', '-p', 'apps/quarry/tsconfig.json'], { cwd: join(root, 'frontend') })])
   ]);
   for (let i = 0; i < setup.length; i++) { await writeFile(join(runDir, `build-${i}.log`), setup[i].status === 'fulfilled' ? setup[i].value : setup[i].reason.message); if (setup[i].status === 'rejected') throw setup[i].reason; }
   const previewPort = await port(), apiPort = await port(), appPort = await port();
