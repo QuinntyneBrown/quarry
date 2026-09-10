@@ -38,4 +38,8 @@ export class DiscoveryPage {
   public async expectBrowseMode(): Promise<void> {
     await expect(this.page.getByRole("heading", { name: "Describe your project" })).toBeVisible();
   }
+
+  public async filterTechnology(technology: string): Promise<void> {
+    await this.page.getByLabel("Technology").selectOption(technology);
+  }
 }
