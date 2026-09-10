@@ -12,6 +12,10 @@ public sealed class MaintenanceAuditRecordEntity
 
     public string CorrelationId { get; set; } = string.Empty;
 
+    public Guid? TargetId { get; set; }
+
+    public string? SourceRevision { get; set; }
+
     public int InvalidatedVectorCount { get; set; }
 
     public DateTimeOffset RecordedAtUtc { get; set; }

@@ -17,6 +17,8 @@ public sealed class QuarryDbContext : DbContext
 
     public DbSet<IndexWorkItemEntity> IndexWorkItems => Set<IndexWorkItemEntity>();
 
+    public DbSet<FrameworkDraftEntity> FrameworkDrafts => Set<FrameworkDraftEntity>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var framework = modelBuilder.Entity<FrameworkRevisionEntity>();
@@ -47,6 +49,7 @@ public sealed class QuarryDbContext : DbContext
         audit.Property(item => item.Operation).HasMaxLength(100).IsRequired();
         audit.Property(item => item.Outcome).HasMaxLength(40).IsRequired();
         audit.Property(item => item.CorrelationId).HasMaxLength(128).IsRequired();
+        audit.Property(item => item.SourceRevision).HasMaxLength(30);
         audit.HasIndex(item => item.RecordedAtUtc);
 
         var work = modelBuilder.Entity<IndexWorkItemEntity>();
@@ -58,5 +61,11 @@ public sealed class QuarryDbContext : DbContext
         work.Property(item => item.LastError).HasMaxLength(100);
         work.HasIndex(item => new { item.FrameworkId, item.SourceRevision, item.Model }).IsUnique();
         work.HasIndex(item => new { item.State, item.NextAttemptAtUtc });
+
+        var draft = modelBuilder.Entity<FrameworkDraftEntity>();
+        draft.ToTable("FrameworkDrafts");
+        draft.HasKey(item => item.Id);
+        draft.Property(item => item.Revision).HasMaxLength(30).IsRequired();
+        draft.Property(item => item.MetadataJson).IsRequired();
     }
 }

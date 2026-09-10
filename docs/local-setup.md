@@ -61,6 +61,8 @@ Rebuild invalidates stored framework vectors and schedules durable `IndexWorkIte
 
 The worker claims two jobs concurrently with 30-second leases, discovers missing compatible vectors every five seconds, and polls idle work every second. Failed embedding attempts persist retry delays of 1, 2, 4, 8, 16, then 30 seconds. Expired leases can be reclaimed after restart; the former owner cannot complete reclaimed work. Completion checks the current publication and source revision inside the vector-write transaction. Completed compatible jobs are not re-embedded by subsequent passes. See [durable indexing verification](verification/durable-indexing.md) for current evidence and remaining release gates.
 
+The same operator credentials can [create and inspect private catalog drafts](maintenance.md). Draft creation does not make an entry publicly visible.
+
 Verify the application code:
 
 ```powershell
