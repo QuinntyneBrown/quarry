@@ -31,4 +31,12 @@ public sealed class SearchFrameworksTests : IClassFixture<WebApplicationFactory<
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task PostFrameworkSearchesReportsUnavailableCatalogAsSafeServiceFailure()
+    {
+        var response = await _client.PostAsJsonAsync("/api/framework-searches", new { query = "Accessible forms" });
+
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+    }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quarry.Api.Contracts;
 using Quarry.Application.Recommendations;
 using MediatR;
+using System.Data.Common;
 
 namespace Quarry.Api.Controllers;
 
@@ -44,6 +45,10 @@ public sealed class FrameworkSearchesController : ControllerBase
         catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
             return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("embedding_service_unavailable", HttpContext.TraceIdentifier));
+        }
+        catch (DbException)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new SafeErrorResponse("catalog_service_unavailable", HttpContext.TraceIdentifier));
         }
     }
 }
