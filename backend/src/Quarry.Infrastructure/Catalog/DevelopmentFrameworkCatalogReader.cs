@@ -3,7 +3,7 @@ using Quarry.Application.Catalog;
 
 namespace Quarry.Infrastructure.Catalog;
 
-public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader
+public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader, IFrameworkDetailsReader
 {
     private readonly IConfiguration _configuration;
 
@@ -31,5 +31,16 @@ public sealed class DevelopmentFrameworkCatalogReader : IFrameworkCatalogReader
             ? new List<FrameworkSummary> { atlas }
             : [];
         return Task.FromResult(new CatalogPage(items, items.Count, false, null, "1"));
+    }
+
+    public Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)
+    {
+        if (id != Guid.Parse("3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f") || !bool.TryParse(_configuration["Catalog:SeedDevelopmentEvaluationData"], out var seed) || !seed)
+        {
+            return Task.FromResult<FrameworkDetails?>(null);
+        }
+
+        var summary = new FrameworkSummary(id, "Atlas", "An accessible published framework for evaluation.", "React", ["Accessible"], 2, "1");
+        return Task.FromResult<FrameworkDetails?>(new FrameworkDetails(summary));
     }
 }

@@ -5,7 +5,7 @@ using Quarry.Infrastructure.Persistence;
 
 namespace Quarry.Infrastructure.Catalog;
 
-public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader
+public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFrameworkDetailsReader
 {
     private readonly QuarryDbContext _dbContext;
 
@@ -37,5 +37,17 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader
             item.ComponentCount,
             item.Revision)).ToList();
         return new CatalogPage(items, total, total > items.Count, null, "0");
+    }
+
+    public async Task<FrameworkDetails?> GetAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var entry = await _dbContext.FrameworkRevisions.AsNoTracking().SingleOrDefaultAsync(item => item.Id == id && item.IsPublished, cancellationToken);
+        if (entry is null)
+        {
+            return null;
+        }
+
+        var summary = new FrameworkSummary(entry.Id, entry.Name, entry.Description, entry.Technology, JsonSerializer.Deserialize<List<string>>(entry.TagsJson) ?? [], entry.ComponentCount, entry.Revision);
+        return new FrameworkDetails(summary);
     }
 }

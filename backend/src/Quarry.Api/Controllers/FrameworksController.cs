@@ -29,4 +29,15 @@ public sealed class FrameworksController : ControllerBase
         var page = await _sender.Send(new BrowseFrameworksQuery(pageSize, technology), cancellationToken);
         return Ok(new CatalogPageResponse(page.Items, page.Total, page.HasNextPage, page.NextCursor, page.CatalogRevision));
     }
+
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType<FrameworkDetails>(StatusCodes.Status200OK)]
+    [ProducesResponseType<SafeErrorResponse>(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<FrameworkDetails>> GetFrameworkDetails(Guid id, CancellationToken cancellationToken)
+    {
+        var details = await _sender.Send(new GetFrameworkDetailsQuery(id), cancellationToken);
+        return details is null
+            ? NotFound(new SafeErrorResponse("framework_not_found", HttpContext.TraceIdentifier))
+            : Ok(details);
+    }
 }

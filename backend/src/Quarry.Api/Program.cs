@@ -15,6 +15,9 @@ builder.Services.AddSingleton<DevelopmentFrameworkCatalogReader>();
 builder.Services.AddScoped<IFrameworkCatalogReader>(serviceProvider => builder.Configuration.GetValue<bool>("Catalog:SeedDevelopmentEvaluationData")
     ? serviceProvider.GetRequiredService<DevelopmentFrameworkCatalogReader>()
     : serviceProvider.GetRequiredService<SqlFrameworkCatalogReader>());
+builder.Services.AddScoped<IFrameworkDetailsReader>(serviceProvider => builder.Configuration.GetValue<bool>("Catalog:SeedDevelopmentEvaluationData")
+    ? serviceProvider.GetRequiredService<DevelopmentFrameworkCatalogReader>()
+    : serviceProvider.GetRequiredService<SqlFrameworkCatalogReader>());
 
 var app = builder.Build();
 

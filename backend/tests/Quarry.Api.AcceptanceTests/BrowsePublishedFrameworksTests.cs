@@ -66,4 +66,15 @@ public sealed class BrowsePublishedFrameworksTests : IClassFixture<WebApplicatio
         Assert.Equal(0, document.RootElement.GetProperty("total").GetInt32());
         Assert.Empty(document.RootElement.GetProperty("items").EnumerateArray());
     }
+
+    [Fact]
+    public async Task GetFrameworkDetailsReturnsPublishedMetadata()
+    {
+        var response = await _client.GetAsync("/api/frameworks/3a23bcd2-2b42-492d-a95e-1dd1e3e3cc3f");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.Equal("Atlas", document.RootElement.GetProperty("summary").GetProperty("name").GetString());
+        Assert.Equal("1", document.RootElement.GetProperty("summary").GetProperty("revision").GetString());
+    }
 }
