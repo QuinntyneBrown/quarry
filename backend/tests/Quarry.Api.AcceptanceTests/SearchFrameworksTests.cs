@@ -23,4 +23,12 @@ public sealed class SearchFrameworksTests : IClassFixture<WebApplicationFactory<
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
+
+    [Fact]
+    public async Task PostFrameworkSearchesRejectsUnsupportedTechnology()
+    {
+        var response = await _client.PostAsJsonAsync("/api/framework-searches", new { query = "Animal Hospital", technology = "Unsupported" });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
 }
