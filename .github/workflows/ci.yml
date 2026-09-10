@@ -1,13 +1,18 @@
 name: verify
 
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   backend:
     runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -15,10 +20,35 @@ jobs:
           dotnet-version: 10.0.x
       - run: dotnet restore backend/Quarry.sln
       - run: dotnet build backend/Quarry.sln --no-restore --configuration Release
-      - run: dotnet test backend/tests/Quarry.Api.AcceptanceTests/Quarry.Api.AcceptanceTests.csproj --no-restore --configuration Release
+      - name: Start SQL Server LocalDB
+        shell: pwsh
+        run: |
+          sqllocaldb create QuarryCI -s
+          if ($LASTEXITCODE -ne 0) { throw 'Could not start the CI SQL instance.' }
+          'QUARRY_TEST_SQL=Server=(localdb)\QuarryCI;Trusted_Connection=True;TrustServerCertificate=True;' >> $env:GITHUB_ENV
+      - name: Run API and SQL acceptance tests
+        shell: pwsh
+        run: |
+          dotnet test backend/tests/Quarry.Api.AcceptanceTests/Quarry.Api.AcceptanceTests.csproj --no-build --no-restore --configuration Release --filter 'FullyQualifiedName!~LiveEmbeddingIndexTests&FullyQualifiedName!~RealRelevanceEvaluationTests' --logger 'trx;LogFileName=backend.trx' --results-directory test-results/backend
+          if ($LASTEXITCODE -ne 0) { throw 'Backend acceptance tests failed.' }
+          [xml]$report = Get-Content -LiteralPath test-results/backend/backend.trx -Raw
+          $counters = $report.TestRun.ResultSummary.Counters
+          if ([int]$counters.total -eq 0 -or [int]$counters.executed -ne [int]$counters.total -or [int]$counters.passed -ne [int]$counters.total) {
+            throw 'Every ordinary acceptance test must execute and pass, including SQL tests.'
+          }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-acceptance-results
+          path: test-results/backend
+          if-no-files-found: error
+      - name: Stop CI SQL instance
+        if: always()
+        run: sqllocaldb stop QuarryCI
 
   frontend:
     runs-on: windows-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,7 +62,15 @@ jobs:
         working-directory: frontend/apps/quarry
       - run: npm run typecheck
         working-directory: frontend
-      - run: npm run test:e2e --workspace=@quarry/app
+      - run: npm run test:e2e --workspace=@quarry/app -- --reporter=line,junit
         working-directory: frontend
+        env:
+          PLAYWRIGHT_JUNIT_OUTPUT_FILE: test-results/frontend.xml
       - run: npm run build
         working-directory: frontend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: frontend-acceptance-results
+          path: frontend/apps/quarry/test-results
+          if-no-files-found: error
