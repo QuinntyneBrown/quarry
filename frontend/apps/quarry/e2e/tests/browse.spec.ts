@@ -156,6 +156,20 @@ test("recommendation cards show rank and grounded explanation", async ({ page })
   await expect(page.getByRole("article", { name: "Atlas framework" })).toContainText("Supports accessible form controls.");
 });
 
+test("an incomplete search response explains that results may be missing", async ({ page }) => {
+  await page.route("**/api/frameworks**", async (route) => {
+    await route.fulfill({ json: catalogResponse });
+  });
+  await page.route("**/api/framework-searches", async (route) => {
+    await route.fulfill({ json: { items: [], catalogRevision: "1", isIndexIncomplete: true } });
+  });
+  const discovery = new DiscoveryPage(page);
+  await discovery.goto();
+  await discovery.submitProject("Animal Hospital");
+  await expect(page.getByRole("status")).toContainText("Results are temporarily incomplete");
+  await expect(page.getByRole("heading", { name: "No matching frameworks" })).toHaveCount(0);
+});
+
 test("a late search response cannot replace newer discovery results", async ({ page }) => {
   let delayedRoute: Route | undefined;
   await page.route("**/api/frameworks**", async (route) => {
