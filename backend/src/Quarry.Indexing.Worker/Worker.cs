@@ -1,7 +1,7 @@
-using System.Text.Json;
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
-using Quarry.Application.Recommendations;
-using Quarry.Infrastructure.Persistence;
+using Microsoft.Extensions.Options;
+using Quarry.Infrastructure.Recommendations;
 
 namespace Quarry.Indexing.Worker;
 
@@ -9,57 +9,46 @@ public sealed class Worker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<Worker> _logger;
+    private readonly string _model;
 
-    public Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger)
+    public Worker(IServiceScopeFactory scopeFactory, ILogger<Worker> logger, IOptions<OllamaEmbeddingOptions> options)
     {
         _scopeFactory = scopeFactory;
         _logger = logger;
+        _model = options.Value.Model;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        var nextSchedule = DateTimeOffset.MinValue;
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
-                await IndexPublishedFrameworksAsync(stoppingToken);
+                if (DateTimeOffset.UtcNow >= nextSchedule)
+                {
+                    using var scope = _scopeFactory.CreateScope();
+                    await scope.ServiceProvider.GetRequiredService<SqlIndexWorkRepository>().EnqueueMissingAsync(_model, stoppingToken);
+                    nextSchedule = DateTimeOffset.UtcNow.AddSeconds(5);
+                }
+                var processed = await Task.WhenAll(ProcessNextAsync(stoppingToken), ProcessNextAsync(stoppingToken));
+                if (processed.Any(value => value)) continue;
             }
-            catch (HttpRequestException)
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
-                _logger.LogWarning("Embedding service is unavailable while indexing published frameworks.");
+                break;
             }
-            await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+            catch (Exception error) when (error is DbException or DbUpdateException)
+            {
+                _logger.LogWarning("Index work database is unavailable; pending work and expired leases will be retried.");
+            }
+            await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
         }
     }
 
-    private async Task IndexPublishedFrameworksAsync(CancellationToken cancellationToken)
+    private async Task<bool> ProcessNextAsync(CancellationToken cancellationToken)
     {
         using var scope = _scopeFactory.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<QuarryDbContext>();
-        var embeddingProvider = scope.ServiceProvider.GetRequiredService<ITextEmbeddingProvider>();
-        var frameworks = await dbContext.FrameworkRevisions.AsNoTracking().Where(item => item.IsPublished).ToListAsync(cancellationToken);
-        foreach (var framework in frameworks)
-        {
-            var tags = JsonSerializer.Deserialize<List<string>>(framework.TagsJson) ?? [];
-            var embedding = await embeddingProvider.EmbedAsync(FrameworkEmbeddingInput.ForFramework(framework.Description, tags), cancellationToken);
-            var current = await dbContext.FrameworkRevisions.SingleOrDefaultAsync(item => item.Id == framework.Id && item.IsPublished, cancellationToken);
-            if (current is null || current.Revision != framework.Revision)
-            {
-                continue;
-            }
-
-            var vector = await dbContext.FrameworkVectors.SingleOrDefaultAsync(item => item.FrameworkId == framework.Id, cancellationToken);
-            if (vector is null)
-            {
-                vector = new FrameworkVectorEntity { FrameworkId = framework.Id };
-                dbContext.FrameworkVectors.Add(vector);
-            }
-            vector.SourceRevision = framework.Revision;
-            vector.Model = embedding.Model;
-            vector.Dimensions = embedding.Values.Count;
-            vector.ValuesJson = JsonSerializer.Serialize(embedding.Values);
-            vector.IndexedAtUtc = DateTimeOffset.UtcNow;
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
+        return await scope.ServiceProvider.GetRequiredService<FrameworkIndexProcessor>().ProcessNextAsync(cancellationToken);
     }
 }

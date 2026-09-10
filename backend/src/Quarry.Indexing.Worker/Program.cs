@@ -13,6 +13,8 @@ builder.Services.AddHttpClient<OllamaTextEmbeddingProvider>(client =>
     client.Timeout = TimeSpan.FromSeconds(5);
 });
 builder.Services.AddScoped<ITextEmbeddingProvider>(serviceProvider => serviceProvider.GetRequiredService<OllamaTextEmbeddingProvider>());
+builder.Services.AddScoped<SqlIndexWorkRepository>();
+builder.Services.AddScoped<FrameworkIndexProcessor>();
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();

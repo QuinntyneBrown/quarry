@@ -15,7 +15,7 @@ To use a different SQL Server Express or LocalDB instance, set `ConnectionString
 $env:ConnectionStrings__Quarry = 'Server=(localdb)\MSSQLLocalDB;Database=Quarry;Trusted_Connection=True;TrustServerCertificate=True;'
 ```
 
-On this Windows ARM64 machine, Express `17.0.1000.7` was verified on 2026-09-10. LocalDB instance-name connections failed to load `SQLUserInstance.dll` with error 193; the running Express service provides a working database connection. All three migrations have been applied to `Quarry`. No illustrative entries are imported by migration.
+On this Windows ARM64 machine, Express `17.0.1000.7` was verified on 2026-09-10. LocalDB instance-name connections failed to load `SQLUserInstance.dll` with error 193; the running Express service provides a working database connection. The migration chain has been applied to `Quarry`. No illustrative entries are imported by migration.
 
 Install and verify the required local embedding model:
 
@@ -57,7 +57,9 @@ $maintenanceToken = ./tools/New-QuarryMaintenanceToken.ps1 -Subject "$env:USERDO
 Invoke-RestMethod -Method Post -Uri 'https://localhost:7015/api/maintenance/search-index/rebuild' -Headers @{ Authorization = "Bearer $maintenanceToken" }
 ```
 
-The current rebuild invalidates stored framework vectors; the running worker regenerates them from published metadata. Invalidation and its audit record commit in one SQL transaction. The record contains the authenticated operator, operation, accepted outcome, request correlation ID, timestamp, and invalidated-vector count. Audit-write failure rolls back invalidation and returns a safe 503. Durable work scheduling remains pending implementation.
+Rebuild invalidates stored framework vectors and schedules durable `IndexWorkItems` for current published revisions. Scheduling, invalidation, and the audit record commit in one SQL transaction. Repeated requests do not duplicate jobs for the same revision/model. The audit contains the authenticated operator, operation, accepted outcome, request correlation ID, timestamp, and invalidated-vector count. Audit-write failure rolls back all changes and returns a safe 503.
+
+The worker claims two jobs concurrently with 30-second leases, discovers missing compatible vectors every five seconds, and polls idle work every second. Failed embedding attempts persist retry delays of 1, 2, 4, 8, 16, then 30 seconds. Expired leases can be reclaimed after restart; the former owner cannot complete reclaimed work. Completion checks the current publication and source revision inside the vector-write transaction. Completed compatible jobs are not re-embedded by subsequent passes. See [durable indexing verification](verification/durable-indexing.md) for current evidence and remaining release gates.
 
 Verify the application code:
 
