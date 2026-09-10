@@ -44,3 +44,15 @@ test('captions remain beside an open product dialog without covering its control
     assert.ok(caption.y >= 0 && caption.y + caption.height <= 720);
   } finally { await browser.close(); }
 });
+
+test('captions leave the selection review controls visible', async () => {
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
+    await page.setContent('<section aria-label="Selected framework" style="position:fixed;bottom:16px;left:340px;width:600px;height:70px">Selected framework<button>Review selection</button></section>');
+    await narrate(page, 'The chosen framework stays available while you continue discovery.');
+    const caption = await page.locator('#demo-caption').boundingBox();
+    const selection = await page.getByLabel('Selected framework').boundingBox();
+    assert.ok(caption.x + caption.width < selection.x, 'Caption must leave selection controls visible');
+  } finally { await browser.close(); }
+});

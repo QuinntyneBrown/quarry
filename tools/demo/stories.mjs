@@ -4,8 +4,7 @@ import { QuarryDemoPage } from '../../frontend/apps/quarry/demo/QuarryDemoPage.m
 import { until } from './harness.mjs';
 
 const require = createRequire(new URL('../../frontend/package.json', import.meta.url));
-const { expect } = require('@playwright/test');
-expect.configure({ timeout: 30_000 });
+const expect = require('@playwright/test').expect.configure({ timeout: 30_000 });
 const query = 'Animal hospital appointments and patient records';
 
 async function show(page, request, result, projection = value => value) {
@@ -49,20 +48,20 @@ export async function apiStory({ page, chapter, pause, request }) {
   await page.locator('#title').evaluate(el => { el.textContent = 'A catalog API built for discovery'; });
   const catalog = await request('/api/frameworks');
   assert.equal(catalog.status, 200); assert.equal(catalog.body.total, 8);
-  await show(page, 'GET /api/frameworks', catalog, x => ({ total: x.total, catalogRevision: x.catalogRevision, frameworks: x.items.slice(0, 4).map(y => ({ name: y.name, technology: y.technology })) }));
+  await show(page, 'GET /api/frameworks', catalog, x => ({ total: x.total, catalogRevision: x.catalogRevision, firstFour: x.items.slice(0, 4).map(y => `${y.name} / ${y.technology}`) }));
   await chapter('Browse the catalog', 'The public API serves eight explicitly labeled evaluation frameworks from SQL Server.');
   await pause(9);
   const filtered = await request('/api/frameworks?technology=React');
   assert.equal(filtered.status, 200); assert.ok(filtered.body.items.length > 0); assert.ok(filtered.body.items.every(x => x.technology === 'React'));
-  await show(page, 'GET /api/frameworks?technology=React', filtered, x => ({ total: x.total, frameworks: x.items.map(y => ({ name: y.name, technology: y.technology })) }));
+  await show(page, 'GET /api/frameworks?technology=React', filtered, x => ({ total: x.total, frameworks: x.items.map(y => `${y.name} / ${y.technology}`) }));
   await chapter('Filter by technology', 'Technology filtering returns only React frameworks.'); await pause(8);
   const details = await request('/api/frameworks/' + filtered.body.items[0].id);
   assert.equal(details.status, 200); assert.equal(details.body.summary.id, filtered.body.items[0].id); assert.ok(details.body.capabilities.length > 0);
-  await show(page, `GET /api/frameworks/${filtered.body.items[0].id}`, details, x => ({ name: x.summary.name, capabilities: x.capabilities.map(y => y.description), useCases: x.useCases }));
+  await show(page, `GET /api/frameworks/${filtered.body.items[0].id}`, details, x => ({ name: x.summary.name, capabilities: x.capabilities.map(y => y.description), useCases: x.useCases.join('; ') }));
   await chapter('Inspect capabilities', 'Details describe component capabilities and suitable use cases.'); await pause(10);
   const search = await request('/api/framework-searches', { method: 'POST', body: { query } });
   assert.equal(search.status, 200); assert.ok(search.body.items.length > 0); assert.equal(search.body.isIndexIncomplete, false);
-  await show(page, `POST /api/framework-searches\n${JSON.stringify({ query })}`, search, x => ({ isIndexIncomplete: x.isIndexIncomplete, frameworks: x.items.slice(0, 3).map(y => ({ name: y.name, technology: y.technology })) }));
+  await show(page, `POST /api/framework-searches\n${JSON.stringify({ query })}`, search, x => ({ isIndexIncomplete: x.isIndexIncomplete, topThree: x.items.slice(0, 3).map(y => `${y.name} / ${y.technology}`) }));
   await chapter('Search by project intent', 'Ollama embeddings rank frameworks for an animal-hospital project.'); await pause(10);
   const denied = await request('/api/maintenance/search-index/rebuild', { method: 'POST' });
   assert.equal(denied.status, 401);
@@ -91,6 +90,8 @@ export async function quarryStory({ page, chapter, pause, appUrl }) {
   const dialog = page.getByRole('dialog');
   await expect(dialog.getByRole('heading', { name: 'Capabilities', exact: true })).toBeVisible();
   await chapter('Inspect the framework', 'Review capabilities and suitable use cases before making a choice.'); await pause(9);
+  await dialog.getByRole('heading', { name: 'Suitable use cases', exact: true }).scrollIntoViewIfNeeded();
+  await pause(4);
   await ui.select();
   await expect(dialog.getByRole('button', { name: 'Selected', exact: true })).toBeVisible();
   await ui.close();

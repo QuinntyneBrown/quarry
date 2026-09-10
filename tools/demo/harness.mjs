@@ -68,7 +68,7 @@ export async function startDisplay({ previewUrl = '', mediaDir } = {}) {
     if (url.pathname === '/' || url.pathname === '/preview') { response.writeHead(200, { 'Content-Type': 'text/html' }); response.end(html); return; }
     if (mediaDir && url.pathname === '/watch' && /^[a-z0-9-]+$/.test(url.searchParams.get('video') ?? '')) {
       response.writeHead(200, { 'Content-Type': 'text/html' });
-      response.end(`<!doctype html><html><head><title>Quarry video review</title><style>body{margin:0;background:#0c1424;color:white;font:18px Segoe UI}video{display:block;width:100%;max-width:1280px;height:auto}p{margin:12px}</style></head><body><video controls autoplay muted src="/media/${url.searchParams.get('video')}.webm"></video><p>Encoded WebM review · normal speed</p></body></html>`); return;
+      response.end(`<!doctype html><html><head><meta charset="utf-8"><title>Quarry video review</title><style>body{margin:0;background:#0c1424;color:white;font:18px Segoe UI}video{display:block;width:100%;max-width:1280px;height:auto}p{margin:12px}</style></head><body><video controls autoplay muted src="/media/${url.searchParams.get('video')}.webm"></video><p>Encoded WebM review · normal speed</p></body></html>`); return;
     }
     if (mediaDir && /^\/media\/[a-z0-9-]+\.webm$/.test(url.pathname)) {
       try {
@@ -98,11 +98,13 @@ export async function narrate(page, text) {
       box.setAttribute('popover', 'manual'); document.body.append(box); box.showPopover();
       box.style.margin = '0'; box.style.top = 'auto';
     }
-    const hasDialog = !!document.querySelector('dialog[open]');
+    const hasDialog = !!document.querySelector('dialog[open], [aria-label="Selected framework"]');
+    const hasPreview = !!document.querySelector('#preview:not([hidden])');
     box.style.boxSizing = 'border-box';
     Object.assign(box.style, hasDialog
-      ? { left: '20px', width: '250px', maxWidth: '250px', transform: 'none', fontSize: '18px' }
-      : { left: '50%', width: 'max-content', maxWidth: '1120px', transform: 'translateX(-50%)', fontSize: '19px' });
+      ? { left: '20px', right: 'auto', width: '250px', maxWidth: '250px', transform: 'none', fontSize: '18px' }
+      : hasPreview ? { left: 'auto', right: '20px', width: '900px', maxWidth: '900px', transform: 'none', fontSize: '19px' }
+      : { left: '50%', right: 'auto', width: 'max-content', maxWidth: '1120px', transform: 'translateX(-50%)', fontSize: '19px' });
     box.textContent = value; box.style.display = value ? 'block' : 'none';
     // Re-enter the top layer after a newly opened modal dialog.
     if (box.matches(':popover-open')) box.hidePopover();
