@@ -50,6 +50,7 @@ public sealed class SqlFrameworkPublicationRepository : IFrameworkPublicationRep
         published.CapabilitiesJson = JsonSerializer.Serialize(framework.Metadata.Capabilities);
         published.UseCasesJson = JsonSerializer.Serialize(framework.Metadata.UseCases);
         published.ComponentsJson = JsonSerializer.Serialize(framework.Metadata.Components);
+        published.PreviewJson = framework.Metadata.Preview is null ? null : JsonSerializer.Serialize(framework.Metadata.Preview);
         published.ComponentCount = framework.ComponentCount;
         published.Revision = framework.Revision;
         published.IsPublished = true;

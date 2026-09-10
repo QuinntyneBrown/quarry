@@ -33,6 +33,7 @@ public sealed class QuarryDbContext : DbContext
         framework.Property(item => item.CapabilitiesJson).HasMaxLength(8000).IsRequired();
         framework.Property(item => item.UseCasesJson).HasColumnType("nvarchar(max)").IsRequired();
         framework.Property(item => item.ComponentsJson).HasMaxLength(16000).IsRequired();
+        framework.Property(item => item.PreviewJson).HasColumnType("nvarchar(max)");
         framework.Property(item => item.Revision).HasMaxLength(30).IsRequired();
         framework.HasIndex(item => new { item.IsPublished, item.Technology, item.Name });
 

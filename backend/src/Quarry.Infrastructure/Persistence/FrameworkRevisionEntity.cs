@@ -18,6 +18,8 @@ public sealed class FrameworkRevisionEntity
 
     public string ComponentsJson { get; set; } = "[]";
 
+    public string? PreviewJson { get; set; }
+
     public int ComponentCount { get; set; }
 
     public string Revision { get; set; } = "0";

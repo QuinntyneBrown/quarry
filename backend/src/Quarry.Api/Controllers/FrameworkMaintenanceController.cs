@@ -24,7 +24,7 @@ public sealed class FrameworkMaintenanceController : ControllerBase
         try
         {
             var metadata = new FrameworkMetadata(request.Name, request.Description, request.Technology, request.Tags,
-                request.Capabilities, request.UseCases, request.Components);
+                request.Capabilities, request.UseCases, request.Components, request.Preview);
             var result = await _sender.Send(new CreateFrameworkDraftCommand(request.Id, metadata, User.FindFirst("sub")!.Value, HttpContext.TraceIdentifier), cancellationToken);
             return result is null
                 ? Conflict(new MetadataValidationResponse("framework_already_exists", HttpContext.TraceIdentifier, new Dictionary<string, string[]> { ["id"] = ["This framework ID already exists."] }))

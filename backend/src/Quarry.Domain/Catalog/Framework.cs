@@ -64,13 +64,16 @@ public sealed class Framework
         if (metadata.Components is not { Count: > 0 and <= 200 } || metadata.Components.Any(item => item is null || !ValidText(item.Id, 100) || !ValidText(item.Name, 200) || !ValidText(item.Description, 1000))
             || metadata.Components.Select(item => item!.Id!.Trim()).Distinct(StringComparer.Ordinal).Count() != metadata.Components.Count)
             errors["components"] = ["Supply 1–200 components with unique IDs, names, and descriptions within their limits."];
+        if (metadata.Preview is not null && !metadata.Preview.IsValid(metadata.Components))
+            errors["preview"] = ["Supply a version-1 preview with an explicit illustrative flag, unique known component IDs, a bounded build ID, and a credential-free HTTPS bundle URL (HTTP is allowed only on local loopback)."];
         if (errors.Count != 0) throw new FrameworkValidationException(errors);
 
         return new Framework(id, new FrameworkMetadata(metadata.Name!.Trim(), metadata.Description!.Trim(), metadata.Technology,
             Array.AsReadOnly(metadata.Tags!.Select(item => (string?)item!.Trim()).ToArray()),
             Array.AsReadOnly(metadata.Capabilities!.Select(item => (FrameworkCapabilityMetadata?)new FrameworkCapabilityMetadata(item!.Id!.Trim(), item.Description!.Trim())).ToArray()),
             Array.AsReadOnly(metadata.UseCases!.Select(item => (string?)item!.Trim()).ToArray()),
-            Array.AsReadOnly(metadata.Components!.Select(item => (FrameworkComponentMetadata?)new FrameworkComponentMetadata(item!.Id!.Trim(), item.Name!.Trim(), item.Description!.Trim())).ToArray())));
+            Array.AsReadOnly(metadata.Components!.Select(item => (FrameworkComponentMetadata?)new FrameworkComponentMetadata(item!.Id!.Trim(), item.Name!.Trim(), item.Description!.Trim())).ToArray()),
+            metadata.Preview?.Snapshot()));
     }
 
     private static bool ValidText(string? value, int maximum) => !string.IsNullOrWhiteSpace(value) && value.Trim().Length <= maximum;

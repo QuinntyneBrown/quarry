@@ -56,6 +56,20 @@ npm run dev --workspace=@quarry/previews
 
 Open Quarry at `http://127.0.0.1:5173`; preview assets use `http://localhost:4180`. Distinct hostnames keep Quarry host cookies off asset requests. The asset host has no credentials or API access. Its default `QUARRY_APP_ORIGINS` allows the local app and Playwright origin (`http://127.0.0.1:4173`). If changing deployment origins, configure that space-separated exact-origin list and rebuild the app with `VITE_PREVIEW_ORIGIN`; use a distinct credential-free hostname. The shipped bundle is explicitly illustrative and only appears for a matching published preview manifest.
 
+Authorized draft create/update metadata can include an optional definition:
+
+```json
+"preview": {
+  "previewUri": "http://localhost:4180/bundles/illustrative-v1/index.html",
+  "componentIds": ["profile-controls"],
+  "buildId": "illustrative-v1",
+  "protocolVersion": 1,
+  "isIllustrative": true
+}
+```
+
+Each component ID must exist in that draft's descriptors. Publication still requires evidence for every component and capability. The API supplies the published ID/revision in `previewManifest`; operators do not supply those fields. Use `preview: null` to remove a preview in the next published revision. Build IDs contain 1–64 lowercase letters, digits, or hyphens; URLs end in `/bundles/{buildId}/index.html` and contain no credentials, query, or fragment. This illustrative bundle cannot establish released-component evidence.
+
 Maintenance routes require a signed HS256 bearer token with a nonempty operator `sub`, `permission: maintenance`, and a future expiry. The API validates issuer `Quarry`, audience `Quarry.Maintenance`, signature, and lifetime with no clock-skew allowance. No signing key is shipped: without `Jwt__SigningKey`, maintenance rejects all tokens while public discovery remains available. Configure a private key (at least 32 UTF-8 bytes) in the API terminal and the operator terminal. Keep their key, issuer, and audience values identical; do not commit them.
 
 ```powershell

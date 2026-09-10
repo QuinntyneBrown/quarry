@@ -3,6 +3,7 @@ using System.Data;
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Quarry.Application.Catalog;
+using Quarry.Domain.Catalog;
 using Quarry.Infrastructure.Persistence;
 
 namespace Quarry.Infrastructure.Catalog;
@@ -69,10 +70,13 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
         }
 
         var summary = new FrameworkSummary(entry.Id, entry.Name, entry.Description, entry.Technology, JsonSerializer.Deserialize<List<string>>(entry.TagsJson) ?? [], entry.ComponentCount, entry.Revision);
+        var preview = entry.PreviewJson is null ? null : JsonSerializer.Deserialize<FrameworkPreviewDefinition>(entry.PreviewJson);
         return new FrameworkDetails(
             summary,
             JsonSerializer.Deserialize<List<FrameworkCapability>>(entry.CapabilitiesJson) ?? [],
             JsonSerializer.Deserialize<List<string>>(entry.UseCasesJson) ?? [],
-            JsonSerializer.Deserialize<List<FrameworkComponentDescriptor>>(entry.ComponentsJson) ?? []);
+            JsonSerializer.Deserialize<List<FrameworkComponentDescriptor>>(entry.ComponentsJson) ?? [],
+            preview is null ? null : new PreviewManifest(entry.Id, entry.Revision, preview.PreviewUri!,
+                preview.ComponentIds!.Select(id => id!).ToArray(), preview.BuildId!, preview.ProtocolVersion, preview.IsIllustrative!.Value));
     }
 }
