@@ -27,7 +27,7 @@ export function DiscoveryPage(): React.JSX.Element {
 
   useEffect(() => {
     function focusSearch(event: KeyboardEvent): void {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+      if (!details && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
         searchInput.current?.focus();
       }
@@ -35,7 +35,7 @@ export function DiscoveryPage(): React.JSX.Element {
 
     window.addEventListener("keydown", focusSearch);
     return () => window.removeEventListener("keydown", focusSearch);
-  }, []);
+  }, [details]);
 
   function submitQuery(value: string): void {
     const query = value.trim();
