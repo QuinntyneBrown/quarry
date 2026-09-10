@@ -21,4 +21,13 @@ export class DiscoveryPage {
   public async expectSubmittedProject(description: string): Promise<void> {
     await expect(this.page.getByRole("heading", { name: `Frameworks for ${description}` })).toBeVisible();
   }
+
+  public async useExample(description: string): Promise<void> {
+    await this.page.getByRole("button", { name: description }).click();
+  }
+
+  public async focusSearchWithShortcut(): Promise<void> {
+    await this.page.keyboard.press("Control+k");
+    await expect(this.page.getByLabel("What are you building?")).toBeFocused();
+  }
 }
