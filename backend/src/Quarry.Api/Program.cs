@@ -14,8 +14,36 @@ using System.Text;
 using Microsoft.AspNetCore.Http.Timeouts;
 using Quarry.Application.Operations;
 using Quarry.Infrastructure.Operations;
+using Quarry.Infrastructure.Evaluation;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Configuration.GetValue<bool>("seed-evaluation"))
+{
+    if (!builder.Environment.IsDevelopment())
+    {
+        Console.Error.WriteLine("Evaluation seeding is available only in Development.");
+        Environment.ExitCode = 1;
+        return;
+    }
+    try
+    {
+        var connection = builder.Configuration.GetConnectionString("QuarryEvaluation")
+            ?? throw new InvalidOperationException("Configure ConnectionStrings:QuarryEvaluation for a dedicated _Evaluation database.");
+        await using var database = new QuarryDbContext(new DbContextOptionsBuilder<QuarryDbContext>().UseSqlServer(connection).Options);
+        var embeddingOptions = builder.Configuration.GetSection("Embeddings").Get<OllamaEmbeddingOptions>() ?? new OllamaEmbeddingOptions();
+        var imported = await new SqlEvaluationCatalogSeeder(database).SeedAsync(Path.Combine(AppContext.BaseDirectory, "evaluation-catalog.json"),
+            Environment.UserName, embeddingOptions.CompatibilityKey, CancellationToken.None);
+        Console.WriteLine(imported ? "Imported eight illustrative evaluation frameworks and queued indexing." : "This evaluation catalog was already imported; no records changed.");
+    }
+    catch (Exception error) when (error is InvalidOperationException or ArgumentException or IOException or System.Text.Json.JsonException
+        or System.Data.Common.DbException or DbUpdateException or Quarry.Domain.Catalog.FrameworkValidationException)
+    {
+        Console.Error.WriteLine("Evaluation seed failed. Check Development mode, the dedicated _Evaluation connection, migrations, an empty catalog, and valid fixture/model configuration.");
+        Environment.ExitCode = 1;
+    }
+    return;
+}
 
 // Add services to the container.
 

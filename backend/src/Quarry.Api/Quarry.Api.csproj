@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Quarry.Application\Quarry.Application.csproj" />
     <ProjectReference Include="..\Quarry.Infrastructure\Quarry.Infrastructure.csproj" />
+    <None Include="../../evaluation/catalog.json" Link="evaluation-catalog.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

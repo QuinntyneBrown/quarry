@@ -17,6 +17,27 @@ $env:ConnectionStrings__Quarry = 'Server=(localdb)\MSSQLLocalDB;Database=Quarry;
 
 On this Windows ARM64 machine, Express `17.0.1000.7` was verified on 2026-09-10. LocalDB instance-name connections failed to load `SQLUserInstance.dll` with error 193; the running Express service provides a working database connection. The migration chain has been applied to `Quarry`. No illustrative entries are imported by migration.
 
+To populate a separate evaluation catalog, explicitly migrate and seed a database whose name ends in `_Evaluation`:
+
+```powershell
+$env:ConnectionStrings__QuarryMigrations = 'Server=.\SQLEXPRESS;Database=Quarry_Evaluation;Trusted_Connection=True;TrustServerCertificate=True;'
+dotnet ef database update --project backend/src/Quarry.Infrastructure --startup-project backend/src/Quarry.Api
+$env:ConnectionStrings__QuarryEvaluation = $env:ConnectionStrings__QuarryMigrations
+$env:DOTNET_ENVIRONMENT = 'Development'
+$env:ASPNETCORE_ENVIRONMENT = 'Development'
+dotnet run --project backend/src/Quarry.Api --no-launch-profile -- --seed-evaluation=true
+```
+
+The command exits after importing the eight `(evaluation)` entries from `backend/evaluation/catalog.json`. It records immutable snapshots explicitly marked as illustrative fixture evidence, an audit record, and eight durable indexing jobs in one transaction. These fixtures do not establish released-framework publication evidence. Running the same import again leaves records unchanged; an unrelated existing catalog is rejected. Seeding requires Development mode and the dedicated `QuarryEvaluation` connection. Ordinary API startup and production never import this data.
+
+To browse and index this catalog, set the following in both API and worker terminals before running their normal startup commands:
+
+```powershell
+$env:ConnectionStrings__Quarry = 'Server=.\SQLEXPRESS;Database=Quarry_Evaluation;Trusted_Connection=True;TrustServerCertificate=True;'
+```
+
+If separate `QuarryRead`, `QuarryMaintenance`, or `QuarryWorker` connections are already configured, point those at the evaluation database as well; they take precedence over `Quarry`. Seeding queues indexing but does not call Ollama. Start the configured worker to generate vectors; search remains incomplete until indexing succeeds. See [evaluation seed verification](verification/evaluation-seed.md).
+
 For restricted runtime access, configure separate connections rather than the legacy shared `Quarry` fallback:
 
 | Environment variable | Consumer | Database role |

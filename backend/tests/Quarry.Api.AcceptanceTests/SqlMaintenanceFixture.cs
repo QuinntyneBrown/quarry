@@ -15,17 +15,21 @@ namespace Quarry.Api.AcceptanceTests;
 public sealed class SqlMaintenanceFixture : IAsyncDisposable
 {
     private readonly string _key = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
-    private readonly string _connection = new SqlConnectionStringBuilder(Environment.GetEnvironmentVariable("QUARRY_TEST_SQL"))
+    private readonly string _connection;
+    private SqlMaintenanceFixture(bool evaluation)
     {
-        InitialCatalog = $"Quarry_Acceptance_{Guid.NewGuid():N}"
-    }.ConnectionString;
+        _connection = new SqlConnectionStringBuilder(Environment.GetEnvironmentVariable("QUARRY_TEST_SQL"))
+        {
+            InitialCatalog = $"Quarry_Acceptance_{Guid.NewGuid():N}" + (evaluation ? "_Evaluation" : "")
+        }.ConnectionString;
+    }
     public WebApplicationFactory<Program> Factory { get; private set; } = null!;
 
     public QuarryDbContext CreateContext() => new(new DbContextOptionsBuilder<QuarryDbContext>().UseSqlServer(_connection).Options);
 
-    public static async Task<SqlMaintenanceFixture> CreateAsync()
+    public static async Task<SqlMaintenanceFixture> CreateAsync(bool evaluation = false)
     {
-        var fixture = new SqlMaintenanceFixture();
+        var fixture = new SqlMaintenanceFixture(evaluation);
         try
         {
             await using var database = fixture.CreateContext();

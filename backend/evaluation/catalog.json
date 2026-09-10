@@ -1,0 +1,402 @@
+[
+  {
+    "id": "e0000000-0000-4000-8000-000000000001",
+    "fixture": "cornerstone",
+    "metadata": {
+      "name": "Cornerstone (evaluation)",
+      "description": "Structured components for managing appointments, records, and day-to-day operations in complex service applications. Patient and client record tables support practice management.",
+      "technology": "Angular",
+      "tags": [
+        "Scheduling",
+        "Record management",
+        "Staff workflows"
+      ],
+      "capabilities": [
+        {
+          "id": "cornerstone-1",
+          "description": "Appointment calendars and scheduling controls"
+        },
+        {
+          "id": "cornerstone-2",
+          "description": "Searchable patient and client record tables and detail panels"
+        },
+        {
+          "id": "cornerstone-3",
+          "description": "Staff task lists and status indicators"
+        }
+      ],
+      "useCases": [
+        "Practice management",
+        "Service operations",
+        "Internal workspaces"
+      ],
+      "components": [
+        {
+          "id": "cornerstone-1",
+          "name": "Cornerstone illustrative control 1",
+          "description": "Appointment calendars and scheduling controls"
+        },
+        {
+          "id": "cornerstone-2",
+          "name": "Cornerstone illustrative control 2",
+          "description": "Searchable patient and client record tables and detail panels"
+        },
+        {
+          "id": "cornerstone-3",
+          "name": "Cornerstone illustrative control 3",
+          "description": "Staff task lists and status indicators"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000002",
+    "fixture": "form",
+    "metadata": {
+      "name": "Form (evaluation)",
+      "description": "Form-focused components for collecting information, guiding onboarding, and helping people complete multi-step tasks. Client record inputs support patient intake.",
+      "technology": "React",
+      "tags": [
+        "Intake forms",
+        "Client portals",
+        "Onboarding"
+      ],
+      "capabilities": [
+        {
+          "id": "form-1",
+          "description": "Multi-step intake and registration forms"
+        },
+        {
+          "id": "form-2",
+          "description": "Input validation and helpful field messages"
+        },
+        {
+          "id": "form-3",
+          "description": "Client profiles, record inputs, and account settings"
+        }
+      ],
+      "useCases": [
+        "Patient intake",
+        "Customer onboarding",
+        "Self-service portals"
+      ],
+      "components": [
+        {
+          "id": "form-1",
+          "name": "Form illustrative control 1",
+          "description": "Multi-step intake and registration forms"
+        },
+        {
+          "id": "form-2",
+          "name": "Form illustrative control 2",
+          "description": "Input validation and helpful field messages"
+        },
+        {
+          "id": "form-3",
+          "name": "Form illustrative control 3",
+          "description": "Client profiles, record inputs, and account settings"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000003",
+    "fixture": "pulse",
+    "metadata": {
+      "name": "Pulse (evaluation)",
+      "description": "Interactive components for publishing media, connecting communities, and helping audiences discover new content.",
+      "technology": "React",
+      "tags": [
+        "Media players",
+        "Social feeds",
+        "Communities"
+      ],
+      "capabilities": [
+        {
+          "id": "pulse-1",
+          "description": "Audio and video player controls"
+        },
+        {
+          "id": "pulse-2",
+          "description": "Activity feeds and member profiles"
+        },
+        {
+          "id": "pulse-3",
+          "description": "Content collections and discovery lists"
+        }
+      ],
+      "useCases": [
+        "Streaming services",
+        "Creator platforms",
+        "Community apps"
+      ],
+      "components": [
+        {
+          "id": "pulse-1",
+          "name": "Pulse illustrative control 1",
+          "description": "Audio and video player controls"
+        },
+        {
+          "id": "pulse-2",
+          "name": "Pulse illustrative control 2",
+          "description": "Activity feeds and member profiles"
+        },
+        {
+          "id": "pulse-3",
+          "name": "Pulse illustrative control 3",
+          "description": "Content collections and discovery lists"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000004",
+    "fixture": "folio",
+    "metadata": {
+      "name": "Folio (evaluation)",
+      "description": "Content-led components for organizing articles, presenting services, and making information easy to navigate.",
+      "technology": "Vue",
+      "tags": [
+        "Publishing",
+        "Service pages",
+        "Knowledge bases"
+      ],
+      "capabilities": [
+        {
+          "id": "folio-1",
+          "description": "Article layouts and content navigation"
+        },
+        {
+          "id": "folio-2",
+          "description": "Service directories and profile pages"
+        },
+        {
+          "id": "folio-3",
+          "description": "Searchable knowledge base layouts"
+        }
+      ],
+      "useCases": [
+        "Publications",
+        "Informational websites",
+        "Help centers"
+      ],
+      "components": [
+        {
+          "id": "folio-1",
+          "name": "Folio illustrative control 1",
+          "description": "Article layouts and content navigation"
+        },
+        {
+          "id": "folio-2",
+          "name": "Folio illustrative control 2",
+          "description": "Service directories and profile pages"
+        },
+        {
+          "id": "folio-3",
+          "name": "Folio illustrative control 3",
+          "description": "Searchable knowledge base layouts"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000005",
+    "fixture": "orbit",
+    "metadata": {
+      "name": "Orbit (evaluation)",
+      "description": "Data-rich components for tracking performance, investigating trends, and monitoring operational activity.",
+      "technology": "React",
+      "tags": [
+        "Analytics",
+        "Dashboards",
+        "Reporting"
+      ],
+      "capabilities": [
+        {
+          "id": "orbit-1",
+          "description": "Charts and metric summary cards"
+        },
+        {
+          "id": "orbit-2",
+          "description": "Filterable data tables and reporting views"
+        },
+        {
+          "id": "orbit-3",
+          "description": "Operational monitoring dashboards"
+        }
+      ],
+      "useCases": [
+        "Business intelligence",
+        "Operations reporting",
+        "Performance monitoring"
+      ],
+      "components": [
+        {
+          "id": "orbit-1",
+          "name": "Orbit illustrative control 1",
+          "description": "Charts and metric summary cards"
+        },
+        {
+          "id": "orbit-2",
+          "name": "Orbit illustrative control 2",
+          "description": "Filterable data tables and reporting views"
+        },
+        {
+          "id": "orbit-3",
+          "name": "Orbit illustrative control 3",
+          "description": "Operational monitoring dashboards"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000006",
+    "fixture": "coast",
+    "metadata": {
+      "name": "Coast (evaluation)",
+      "description": "Booking and discovery components that help customers find a service, check availability, and reserve a time.",
+      "technology": "Vue",
+      "tags": [
+        "Bookings",
+        "Service discovery",
+        "Availability"
+      ],
+      "capabilities": [
+        {
+          "id": "coast-1",
+          "description": "Availability calendars and time-slot pickers"
+        },
+        {
+          "id": "coast-2",
+          "description": "Service listings and location cards"
+        },
+        {
+          "id": "coast-3",
+          "description": "Reservation summaries and confirmation views"
+        }
+      ],
+      "useCases": [
+        "Appointment booking",
+        "Travel reservations",
+        "Local service directories"
+      ],
+      "components": [
+        {
+          "id": "coast-1",
+          "name": "Coast illustrative control 1",
+          "description": "Availability calendars and time-slot pickers"
+        },
+        {
+          "id": "coast-2",
+          "name": "Coast illustrative control 2",
+          "description": "Service listings and location cards"
+        },
+        {
+          "id": "coast-3",
+          "name": "Coast illustrative control 3",
+          "description": "Reservation summaries and confirmation views"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000007",
+    "fixture": "mono",
+    "metadata": {
+      "name": "Mono (evaluation)",
+      "description": "Technical interfaces for inspecting systems, working with code, and configuring developer tools across stacks.",
+      "technology": "Web Components",
+      "tags": [
+        "Developer tools",
+        "Code editors",
+        "System consoles"
+      ],
+      "capabilities": [
+        {
+          "id": "mono-1",
+          "description": "Code editor and terminal layouts"
+        },
+        {
+          "id": "mono-2",
+          "description": "System status and log viewers"
+        },
+        {
+          "id": "mono-3",
+          "description": "Configuration panels and command menus"
+        }
+      ],
+      "useCases": [
+        "Developer platforms",
+        "Admin consoles",
+        "Infrastructure tools"
+      ],
+      "components": [
+        {
+          "id": "mono-1",
+          "name": "Mono illustrative control 1",
+          "description": "Code editor and terminal layouts"
+        },
+        {
+          "id": "mono-2",
+          "name": "Mono illustrative control 2",
+          "description": "System status and log viewers"
+        },
+        {
+          "id": "mono-3",
+          "name": "Mono illustrative control 3",
+          "description": "Configuration panels and command menus"
+        }
+      ]
+    }
+  },
+  {
+    "id": "e0000000-0000-4000-8000-000000000008",
+    "fixture": "mango",
+    "metadata": {
+      "name": "Mango (evaluation)",
+      "description": "Commerce components for showcasing products, building shopping carts, and guiding customers through checkout.",
+      "technology": "Web Components",
+      "tags": [
+        "Product catalogs",
+        "Shopping carts",
+        "Checkout"
+      ],
+      "capabilities": [
+        {
+          "id": "mango-1",
+          "description": "Product cards and catalog filters"
+        },
+        {
+          "id": "mango-2",
+          "description": "Shopping carts and checkout forms"
+        },
+        {
+          "id": "mango-3",
+          "description": "Order summaries and purchase history"
+        }
+      ],
+      "useCases": [
+        "Online stores",
+        "Retail storefronts",
+        "Product marketplaces"
+      ],
+      "components": [
+        {
+          "id": "mango-1",
+          "name": "Mango illustrative control 1",
+          "description": "Product cards and catalog filters"
+        },
+        {
+          "id": "mango-2",
+          "name": "Mango illustrative control 2",
+          "description": "Shopping carts and checkout forms"
+        },
+        {
+          "id": "mango-3",
+          "name": "Mango illustrative control 3",
+          "description": "Order summaries and purchase history"
+        }
+      ]
+    }
+  }
+]
