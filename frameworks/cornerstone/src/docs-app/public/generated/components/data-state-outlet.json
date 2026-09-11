@@ -1,0 +1,52 @@
+{
+  "kind": "class",
+  "name": "DataStateOutletComponent",
+  "sourcePath": "src/cornerstone/data-state-outlet/data-state-outlet.component.ts",
+  "category": "data-display",
+  "description": "Data State Outlet public API.",
+  "members": [
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "CsDataState<T>",
+      "required": true,
+      "description": "State public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-data-state-outlet",
+  "slug": "data-state-outlet",
+  "label": "Data State Outlet",
+  "tokens": [],
+  "relatedSymbols": ["CsDataState", "DataStateHostDirective"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsDataState",
+      "sourcePath": "src/cornerstone/core/platform/cs-data-state.type.ts",
+      "category": "platform",
+      "description": "Cs Data State public API.",
+      "declaration": "| { readonly status: 'idle' | 'loading' | 'empty' }\n  | { readonly status: 'error'; readonly error: CsDataStateError }\n  | { readonly status: 'ready'; readonly data: T }"
+    },
+    {
+      "kind": "class",
+      "name": "DataStateHostDirective",
+      "sourcePath": "src/cornerstone/data-state-outlet/data-state-host.directive.ts",
+      "category": "data-display",
+      "description": "Data State Host public API.",
+      "members": [
+        {
+          "name": "state",
+          "bindingName": "csDataState",
+          "role": "input",
+          "type": "CsDataState<T>",
+          "required": true,
+          "description": "State public API."
+        }
+      ]
+    }
+  ]
+}

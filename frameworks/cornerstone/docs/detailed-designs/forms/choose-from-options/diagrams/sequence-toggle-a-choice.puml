@@ -1,0 +1,71 @@
+@startuml
+title UML sequence behaviour — Toggle a choice
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+end box
+box "Frontend — Cornerstone choice controls" #D1FADF
+  participant "CheckboxComponent" as checkbox
+  participant "SwitchComponent" as switchc
+end box
+box "Browser — platform" #FFF4E5
+  participant "Native checkbox host" as native
+  participant "Assistive technology" as at
+end box
+
+page -> checkbox : Bind label, description, and the requiredTrue validator
+control -> checkbox : registerOnChange(fn)
+control -> checkbox : registerOnTouched(fn)
+control -> checkbox : writeValue(null)
+checkbox -> checkbox : Resolve the mixed selection to indeterminate
+checkbox -> native : Set aria-checked=mixed per L2-051
+checkbox -> native : Point aria-describedby at the description per L2-051
+
+user -> native : Press Space
+native -> checkbox : keydown and change
+checkbox -> checkbox : Apply the documented next state and clear indeterminate per L2-051
+checkbox -> control : onChange(true) exactly once
+control -> control : Run the requiredTrue validator
+checkbox -> native : Set aria-checked=true
+native -> at : Announce the new state
+
+alt Checklist-row presentation
+  user -> native : Activate the row's non-interactive area
+  native -> checkbox : Row activation
+  checkbox -> checkbox : Toggle and move focus to the checkbox per L2-051
+end
+
+opt Control is disabled
+  control -> checkbox : setDisabledState(true)
+  checkbox -> native : Set the native disabled attribute
+  user -> native : Attempt activation
+  checkbox --> control : No change emitted per L2-051
+end
+
+page -> switchc : Bind the switch to its own FormControl
+control -> switchc : writeValue(true)
+switchc -> native : Set role=switch and aria-checked=true per L2-053
+switchc --> control : No change emitted for a programmatic write per L2-053
+user -> native : Press Enter
+native -> switchc : keydown
+switchc -> control : onChange(false) exactly once per L2-053
+switchc -> native : Move the thumb without a transition under reduced motion per L2-053
+native -> checkbox : blur
+checkbox -> control : onTouched()
+control --> page : Group value and validity
+@enduml

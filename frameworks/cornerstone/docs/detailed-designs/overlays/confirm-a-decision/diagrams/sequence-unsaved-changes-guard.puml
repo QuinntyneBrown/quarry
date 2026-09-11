@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Guard an unsaved edit
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Angular router" as router
+  participant "Editor page" as editor
+  participant "Application services" as appsvc
+end box
+box "Frontend — Cornerstone overlay runtime" #D1FADF
+  participant "confirmLeave()" as guard
+  participant "DialogService" as service
+  participant "UnsavedChangesDialogComponent" as unsaved
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Dialog and FocusTrap" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and focus" as browser
+end box
+
+user -> browser : Activate a navigation link
+browser -> router : Begin navigation away from the editor
+router -> guard : Call the CanDeactivateFn
+guard -> editor : Read isDirty()
+editor --> guard : true
+
+guard -> service : Open the unsaved-changes dialog
+service -> cdk : Attach the dialog and record the trigger element per L2-105
+cdk -> unsaved : Instantiate with save, leave, and stay per L2-105
+unsaved -> browser : Move initial focus to the stay action per L2-105
+
+alt User chooses leave
+  user -> unsaved : Activate leave
+  unsaved -> guard : Resolve 'leave'
+  guard --> router : true
+  router -> browser : Complete the navigation
+else User chooses save
+  user -> unsaved : Activate save
+  unsaved -> unsaved : Enter the saving state
+  guard -> appsvc : Await the save callback
+  appsvc --> guard : Saved
+  unsaved -> guard : Resolve 'save'
+  guard --> router : true
+  router -> browser : Complete the navigation
+else User chooses stay or dismisses
+  user -> unsaved : Activate stay or press Escape
+  unsaved -> guard : Resolve 'stay' per L2-105
+  guard --> router : false
+  router -> editor : Cancel the navigation
+  cdk -> browser : Restore focus to the navigation trigger per L2-105
+  editor --> user : Editor retained with the edits intact
+end
+@enduml

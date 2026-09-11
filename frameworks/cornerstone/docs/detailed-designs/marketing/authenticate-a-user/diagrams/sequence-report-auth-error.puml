@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Report an authentication failure
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Sign-in route" as route
+  participant "Credential form" as form
+  participant "Application services" as appsvc
+end box
+box "Frontend — Cornerstone marketing components" #D1FADF
+  participant "AuthCardComponent" as card
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and focus" as browser
+end box
+
+user -> form : Submit credentials
+route -> appsvc : Request a session
+appsvc --> route : Rejected with a failure message
+route -> card : Set pending false and error to the message
+
+alt Error message present
+  card -> browser : Render the alert region between the lede and the form per L2-144
+  card -> browser : Move focus to the alert region
+  browser --> user : Failure announced by the screen reader
+  card -> form : Leave the submitted field values in place
+else Error cleared on the next attempt
+  card -> browser : Remove the alert region from the accessibility tree per L2-144
+  card -> browser : Return focus to the first invalid field
+end
+
+user -> form : Correct the entry and resubmit
+route -> appsvc : Request a session
+appsvc --> route : Session established
+route -> browser : Navigate to the workspace
+browser --> user : Authenticated workspace
+@enduml

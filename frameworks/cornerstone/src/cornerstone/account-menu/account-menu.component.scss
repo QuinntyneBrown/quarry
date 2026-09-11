@@ -1,0 +1,34 @@
+:host {
+  position: relative;
+  display: inline-block;
+}
+:host > button {
+  display: flex;
+  align-items: center;
+  gap: var(--cs-space-2);
+  border: 0;
+  background: transparent;
+  color: inherit;
+}
+[role='menu'] {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-end: 0;
+  z-index: 50;
+  min-inline-size: 14rem;
+  padding: var(--cs-space-2);
+  background: var(--cs-paper);
+  border: 1px solid var(--cs-border);
+  box-shadow: var(--cs-shadow-md);
+}
+[role='menuitem'] {
+  display: block;
+  inline-size: 100%;
+  padding: var(--cs-space-3);
+  border: 0;
+  text-align: start;
+  background: transparent;
+}
+.danger {
+  color: var(--cs-error);
+}

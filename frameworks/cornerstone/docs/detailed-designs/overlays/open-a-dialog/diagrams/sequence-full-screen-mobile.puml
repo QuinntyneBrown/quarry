@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Reflow a dialog to full screen on a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Cornerstone dialog runtime" #D1FADF
+  participant "DialogShellComponent" as shell
+  participant "DialogActionsDirective" as actions
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Panel styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and cascade" as browser
+end box
+
+user -> browser : Rotate the device or narrow the window
+browser -> styles : Re-evaluate the panel media query
+styles -> styles : Match the full-screen-mobile breakpoint per L2-102
+
+alt Viewport below the breakpoint and fullScreenOnMobile is set
+  styles -> shell : Apply the full-screen panel rules
+  shell -> browser : Occupy the viewport with no inset and no radius
+  actions -> browser : Stack the action bar to full-width controls
+else Viewport at or above the breakpoint
+  styles -> shell : Apply the configured small, default, or large size per L2-102
+  shell -> browser : Centre the panel within the viewport inset
+  actions -> browser : Lay the action bar out in a row
+end
+
+shell -> shell : Retain the focus trap and the focused element per L2-102
+browser --> user : Reflowed dialog with keyboard position preserved
+@enduml

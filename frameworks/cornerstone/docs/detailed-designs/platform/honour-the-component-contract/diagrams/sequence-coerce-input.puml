@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Coerce and diagnose an input
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page template" as tpl
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "BadgeComponent" as badge
+end box
+box "Frontend — Cornerstone contract layer" #ECFDF3
+  participant "Input transforms" as coerce
+end box
+box "Browser — platform" #FFF4E5
+  participant "Angular runtime and console" as ng
+end box
+
+dev -> tpl : Write <cs-badge dot count="3" tone="lavender">
+tpl -> badge : Bind the three attribute inputs
+badge -> coerce : csBooleanAttribute('')
+coerce --> badge : true per L2-021
+badge -> coerce : csNumberAttribute('3', 0)
+coerce --> badge : 3 per L2-021
+badge -> coerce : csEnumAttribute('lavender', allowed, 'neutral', 'tone')
+
+alt Development mode
+  coerce -> ng : Throw naming the input and the allowed values per L2-021
+  ng --> dev : Error identifying tone and its documented union
+else Production mode
+  coerce --> badge : 'neutral' documented default per L2-021
+  badge -> ng : Continue rendering without throwing
+  ng --> dev : Badge rendered in the default tone
+end
+
+opt Required input omitted
+  dev -> tpl : Omit a required input
+  tpl -> ng : Compile the template
+  ng --> dev : Angular required-input compilation error per L2-021
+end
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Read a record
+
+Person(mentor, "Mentor", "Reads the record and its history")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(list, "ListComponent", "Angular component", "Holds the item sequence, the dividers, and the selection model")
+  Component(item, "ListItemComponent", "Angular component", "Leading visual, title, meta, body, trailing status and actions")
+  Component(deflist, "DefinitionListComponent", "Angular component", "Native dl in inline, stacked, and compact layouts")
+  Component(timeline, "TimelineComponent", "Angular component", "Past, current, and future markers on a connected rail")
+  Component(quote, "ScriptureQuoteComponent", "Angular component", "Accent-face figure, blockquote, and figcaption")
+  Component(tooltip, "CsTooltipDirective", "Angular directive", "Hover, focus, and touch tooltip with collision-aware placement")
+  Component(types, "Record view-model types", "TypeScript types", "DefinitionItem, TimelineEntry, and the interaction unions")
+  Component(state, "CsDataState contract", "TypeScript types", "Idle, loading, empty, error, and ready conditions")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(structtokens, "Divider and marker tokens", "CSS custom properties", "Rule, marker, and rail values per timeline position")
+  Component(accenttokens, "Accent typography tokens", "CSS custom properties", "Scripture face, fluid size, and light and dark surfaces")
+}
+
+System_Ext(page, "Feature page", "Angular component owning the record")
+System_Ext(cdk, "Angular CDK", "Overlay and ListKeyManager")
+
+Rel(mentor, item, "Activates or selects a row in")
+Rel(mentor, tooltip, "Hovers, focuses, or long-presses a trigger carrying")
+Rel(page, list, "Passes the selection mode and the data state to")
+Rel(page, deflist, "Passes DefinitionItem values to")
+Rel(page, timeline, "Passes TimelineEntry values to")
+Rel(page, quote, "Passes the quotation and the citation to")
+Rel(list, item, "Contains and coordinates")
+Rel(list, cdk, "Manages roving focus through", "ListKeyManager")
+Rel(item, page, "Emits activation and selection intents to")
+Rel(timeline, page, "Emits CsTimelineEntryRef to")
+Rel(list, state, "Renders loading and empty conditions from")
+Rel(deflist, state, "Renders loading and empty conditions from")
+Rel(timeline, state, "Renders loading and empty conditions from")
+Rel(deflist, types, "Reads")
+Rel(timeline, types, "Reads")
+Rel(tooltip, cdk, "Attaches and positions the overlay through", "Overlay")
+Rel(list, structtokens, "Resolves divider values from")
+Rel(timeline, structtokens, "Resolves marker and rail values from")
+Rel(quote, accenttokens, "Resolves the accent face and surface from")
+@enduml

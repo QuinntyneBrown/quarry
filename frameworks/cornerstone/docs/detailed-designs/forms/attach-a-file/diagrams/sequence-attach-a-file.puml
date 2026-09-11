@@ -1,0 +1,83 @@
+@startuml
+title UML sequence behaviour — Attach a file by drop
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone file components" #D1FADF
+  participant "DropzoneComponent" as dropzone
+  participant "FilePickerComponent" as picker
+  participant "Object URL registry" as urls
+  participant "FileSummaryComponent" as summary
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "File browser and drag events" as dom
+  participant "Assistive technology" as at
+end box
+
+page -> picker : Bind accept, maxSizeBytes, and multiple
+control -> picker : registerOnChange(fn)
+control -> picker : registerOnTouched(fn)
+control -> picker : writeValue([])
+
+alt Pointer path
+  user -> dom : Drag a file over the region
+  dom -> dropzone : dragover
+  dropzone -> dropzone : Apply the visible drop-target state per L2-058
+  dropzone -> announcer : Announce the drop target politely per L2-058
+  announcer -> at : Polite announcement
+  user -> dom : Drop the file
+  dom -> dropzone : drop
+  dropzone -> picker : filesDropped(fileList)
+else Keyboard path
+  user -> dom : Focus the region and press Enter
+  dom -> dropzone : keydown
+  dropzone -> dom : Open the native file browser per L2-058
+  dom -> picker : change with the selected files
+end
+
+picker -> picker : Validate accept and size before any intent per L2-058
+picker -> urls : create(id, file)
+urls -> dom : Create an object URL
+urls --> picker : Preview URL
+picker -> summary : Render the entry with the image preview per L2-058
+summary -> at : Preview named from the file name
+picker -> control : onChange(entries)
+picker -> control : onTouched()
+picker -> page : uploadRequested(intent)
+
+page -> services : Transfer the named file
+services --> page : Progress updates
+page -> picker : Set uploads with the reported progress
+picker -> summary : Update aria-valuenow per L2-058
+summary -> at : Announce at the documented intervals only per L2-058
+services --> page : Transfer complete
+page -> picker : Mark the entry uploaded
+
+opt Entry removed or component destroyed
+  picker -> urls : revoke(id) or revokeAll()
+  urls -> dom : Revoke every created object URL per L2-058
+  picker -> dom : Detach every drag listener per L2-058
+end
+
+picker --> user : Queue state reflected in the summary
+@enduml

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/docs-app",
+    "types": [],
+    "resolveJsonModule": true
+  },
+  "files": ["main.ts"],
+  "include": ["**/*.d.ts"]
+}

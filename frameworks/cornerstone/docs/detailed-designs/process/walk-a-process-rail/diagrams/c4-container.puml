@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Walk a process rail
+
+Person(user, "Application user", "Reads and activates process stages")
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the stage view model and the process adapter")
+  Container(services, "Application services", "Angular injectables", "Own routing, persistence, and gate enforcement")
+  Container(shell, "Application shell", "Angular components", "Hosts the page and the theme class")
+}
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "ProcessRailComponent and ProcessJourneyComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Resolves the stage palette named by the adapter")
+  Container(docs, "Documentation site", "Angular application", "Publishes rail and journey examples with a neutral adapter")
+}
+
+System_Ext(cdk, "Angular CDK", "Breakpoint observer")
+System_Ext(browser, "Browser platform", "Cascade, layout, and assistive technology bridge")
+
+Rel(user, shell, "Reads and activates stages in")
+Rel(shell, page, "Renders")
+Rel(services, page, "Supply stage state and enforcement results to")
+Rel(page, lib, "Binds stages and the adapter to", "signal inputs")
+Rel(lib, page, "Emits CsStageActivation and StageActionIntent to", "output()")
+Rel(page, services, "Resolves intents into routing and persistence through")
+Rel(lib, theme, "Resolves stage colour and spacing from")
+Rel(lib, cdk, "Observes viewport breakpoints through")
+Rel(lib, browser, "Renders list semantics and state text to")
+Rel(docs, lib, "Documents the neutral adapter defaults of")
+@enduml

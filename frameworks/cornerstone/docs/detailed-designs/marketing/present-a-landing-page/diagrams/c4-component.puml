@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Present a landing page
+
+Person_Ext(visitor, "Application user", "Reads the page and selects an action")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(hero, "HeroComponent", "Standalone component", "Renders the eyebrow, h1 title, lede, actions, and media in light, dark, or brand tone")
+  Component(section, "ContentSectionComponent", "Standalone component", "Renders the prose, prose-media, card-grid, stats, callout, and scripture variants")
+  Component(cta, "CtaSectionComponent", "Standalone component", "Renders the primary and secondary actions in light, dark, or lime tone")
+  Component(anchord, "CsSectionAnchorDirective", "Attribute directive", "Stamps the section id and offsets the scroll target by the sticky header height")
+  Component(heroactd, "HeroActionsDirective", "Attribute directive", "Lays out the hero actions and stacks them on narrow viewports")
+  Component(heromedd, "CsHeroMediaDirective", "Attribute directive", "Reserves the media aspect ratio before the image loads")
+  Component(quote, "ScriptureQuoteComponent", "Standalone component", "Renders the scripture variant quotation and citation")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tones, "Section tone styles", "Component-scoped CSS", "Map light, dark, brand, and lime to surface and ink tokens")
+  Component(rhythm, "Section rhythm styles", "Component-scoped CSS", "Declare the vertical padding and container bound from --cs- tokens")
+}
+
+System_Ext(page, "Feature page", "Supplies the copy, images, and routes")
+System_Ext(browser, "Browser platform", "Rendering, scrolling, and viewport width")
+
+Rel(visitor, hero, "Selects a primary action in")
+Rel(visitor, cta, "Selects a closing action in")
+Rel(page, hero, "Supplies the eyebrow, title, lede, and media to")
+Rel(page, section, "Supplies the variant, cards, and stats to")
+Rel(page, cta, "Supplies the tone, width, and actions to")
+Rel(hero, page, "Emits HeroAction to")
+Rel(cta, page, "Emits CtaAction to")
+Rel(hero, heroactd, "Projects the action region through")
+Rel(hero, heromedd, "Projects the media region through")
+Rel(section, anchord, "Registers its anchor through")
+Rel(section, quote, "Renders the scripture variant through")
+Rel(hero, tones, "Resolves surface and ink from")
+Rel(section, rhythm, "Resolves vertical padding and container bound from")
+Rel(cta, tones, "Resolves surface and ink from")
+Rel(anchord, browser, "Scrolls the section into view in")
+@enduml

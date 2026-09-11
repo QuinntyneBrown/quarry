@@ -1,0 +1,11 @@
+:host {
+  display: grid;
+  gap: var(--cs-space-6);
+  padding: var(--cs-space-4);
+}
+section {
+  min-inline-size: 0;
+}
+output {
+  display: block;
+}

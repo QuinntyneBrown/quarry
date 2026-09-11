@@ -1,0 +1,15 @@
+{
+  "kind": "class",
+  "name": "ListComponent",
+  "sourcePath": "src/cornerstone/list/list.component.ts",
+  "category": "data-display",
+  "description": "List public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-list",
+  "slug": "list",
+  "label": "List",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

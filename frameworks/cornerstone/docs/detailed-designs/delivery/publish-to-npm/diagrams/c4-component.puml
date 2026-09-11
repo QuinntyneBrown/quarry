@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Publish to npm
+
+Person(maintainer, "Library maintainer", "Reads the derived version and the outcome")
+
+Container_Boundary(ciw, "CI workflow") {
+  Component(lintjob, "commit-lint job", "Workflow job", "Checks the pull request title and every commit subject against the convention")
+  Component(config, "commitlint.config.mjs", "Configuration", "Enumerates the accepted types and the bump each produces")
+  Component(dryrun, "Dry-run job", "Workflow job", "Reports the version a pull request would release without publishing")
+}
+
+Container_Boundary(rel, "Release workflow") {
+  Component(gate, "Verification gate", "Workflow steps", "Runs the test, build, budget, and audit suites before anything is derived")
+  Component(derive, "Version derivation", "npm run release:derive", "Computes the next version, the bump kind, and the reason from the commit range")
+  Component(probe, "Idempotency probe", "Registry query step", "Skips the publish when the derived version already exists")
+  Component(publish, "Publish step", "npm publish --provenance --access public --tag", "Uploads the tarball packed in the same run")
+  Component(tagger, "Tag and release step", "git tag and GitHub release", "Creates the annotated v<version> tag and the release body")
+  Component(chlog, "Changelog step", "Write-back commit", "Prepends the released section and pushes chore(release) with skip-ci")
+  Component(verifypub, "verify-published job", "Post-publish job", "Installs the published version into a clean application and resolves every exports subpath")
+  Component(summary, "Job summary step", "GITHUB_STEP_SUMMARY", "Records the version, the outcome, the tarball contents, and the attestation identifier")
+}
+
+System_Ext(npm, "npm registry", "Holds the published versions and the distribution tags")
+System_Ext(github, "GitHub repository", "Holds main, the tags, and the releases")
+System_Ext(channel, "Notification channel", "Receives release failures")
+
+Rel(lintjob, config, "Reads the accepted types from")
+Rel(lintjob, gate, "Guarantees the commit format relied on by")
+Rel(dryrun, derive, "Runs in report-only mode")
+Rel(gate, derive, "Precedes")
+Rel(derive, probe, "Passes the derived version to")
+Rel(probe, publish, "Allows or skips")
+Rel(publish, npm, "Uploads the tarball to")
+Rel(publish, tagger, "Confirms the publish before")
+Rel(tagger, github, "Creates the tag and release in")
+Rel(chlog, github, "Pushes the write-back commit to")
+Rel(tagger, chlog, "Precedes")
+Rel(publish, verifypub, "Hands the published version to")
+Rel(verifypub, npm, "Installs the exact version from")
+Rel(summary, maintainer, "Reports the outcome to")
+Rel(summary, channel, "Notifies on failure")
+@enduml

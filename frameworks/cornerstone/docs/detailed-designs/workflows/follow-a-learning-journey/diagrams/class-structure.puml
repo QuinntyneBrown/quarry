@@ -1,0 +1,103 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Follow a learning journey
+
+class LearningJourneyComponent {
+  +journey: InputSignal<LearningJourneyView>
+  +layout: InputSignal<JourneyLayout>
+  +busy: InputSignal<boolean>
+  +stepSelected: OutputEmitterRef<LessonStepSelect>
+  +moduleToggled: OutputEmitterRef<ModuleToggle>
+  -isEmpty: Signal<boolean>
+  -resolvedLayout: Signal<JourneyLayout>
+}
+
+class LessonStepListComponent {
+  +steps: InputSignal<readonly LessonStepView[]>
+  +activeStepId: InputSignal<string | null>
+  +dense: InputSignal<boolean>
+  +stepSelected: OutputEmitterRef<LessonStepSelect>
+  -onActivate(step: LessonStepView): void
+}
+
+class LearningJourneyView {
+  +journeyId: string
+  +title: string
+  +modules: readonly JourneyModuleView[]
+  +summary: JourneyProgress
+}
+
+class JourneyModuleView {
+  +moduleId: string
+  +title: string
+  +steps: readonly LessonStepView[]
+  +expanded: boolean
+  +summary: JourneyProgress
+}
+
+class LessonStepView {
+  +stepId: string
+  +title: string
+  +state: LessonStepState
+  +prerequisiteIds: readonly string[]
+  +prerequisiteLabel: string | null
+  +estimatedMinutes: number | null
+  +badgeIds: readonly string[]
+}
+
+class JourneyProgress {
+  +completedCount: number
+  +totalCount: number
+  +percent: number
+  +label: string
+}
+
+enum LessonStepState {
+  completed
+  current
+  available
+  locked
+}
+
+enum JourneyLayout {
+  auto
+  timeline
+  list
+}
+
+class LessonStepSelect {
+  +journeyId: string
+  +moduleId: string
+  +stepId: string
+  +state: LessonStepState
+}
+
+class ModuleToggle {
+  +moduleId: string
+  +expanded: boolean
+}
+
+LearningJourneyComponent *-- "1..*" LessonStepListComponent : renders one per module
+LearningJourneyComponent --> "1" LearningJourneyView : reads
+LearningJourneyComponent ..> ModuleToggle : emits
+LearningJourneyComponent --> JourneyLayout : has
+LearningJourneyView *-- "1..*" JourneyModuleView : contains
+LearningJourneyView o-- "1" JourneyProgress : summarised by
+JourneyModuleView *-- "0..*" LessonStepView : contains
+JourneyModuleView o-- "1" JourneyProgress : summarised by
+LessonStepView --> LessonStepState : has
+LessonStepListComponent --> "0..*" LessonStepView : reads
+LessonStepListComponent ..> LessonStepSelect : emits
+LessonStepSelect --> LessonStepState : carries
+@enduml

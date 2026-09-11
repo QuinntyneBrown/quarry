@@ -1,0 +1,11 @@
+<ul role="tree">
+  @for (node of nodes(); track node.id) {
+    <li
+      role="treeitem"
+      [attr.aria-expanded]="node.children?.length ? true : null"
+      aria-selected="false"
+    >
+      <button (click)="selected.emit(node.id)">{{ node.label }}</button>
+    </li>
+  }
+</ul>

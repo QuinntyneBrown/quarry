@@ -1,0 +1,10 @@
+<cs-card
+  ><h3>{{ assignment().title }}</h3>
+  <p>{{ assignment().summary }}</p>
+  @if (assignment().dueState) {
+    <cs-badge>{{ assignment().dueState }}</cs-badge>
+  }
+  <button csButton (click)="action.emit({ assignmentId: assignment().id, action: 'open' })">
+    Open
+  </button></cs-card
+>

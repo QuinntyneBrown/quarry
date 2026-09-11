@@ -1,0 +1,159 @@
+{
+  "kind": "class",
+  "name": "PersonRowComponent",
+  "sourcePath": "src/cornerstone/person-row/person-row.component.ts",
+  "category": "workflows",
+  "description": "Person Row public API.",
+  "members": [
+    {
+      "name": "person",
+      "bindingName": "person",
+      "role": "input",
+      "type": "PersonRowView",
+      "required": true,
+      "description": "Person public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "variant",
+      "bindingName": "variant",
+      "role": "input",
+      "type": "PersonRowVariant",
+      "required": false,
+      "defaultValue": "'list'",
+      "description": "Variant public API.",
+      "structured": false,
+      "options": ["table", "list"]
+    },
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "output",
+      "type": "CsPersonOpen",
+      "required": false,
+      "description": "Opened public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "PersonRowAction",
+      "required": false,
+      "description": "Action public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selectionChanged",
+      "bindingName": "selectionChanged",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Selection Changed public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-person-row",
+  "slug": "person-row",
+  "label": "Person Row",
+  "tokens": [],
+  "relatedSymbols": [
+    "CsPersonOpen",
+    "PersonRowAction",
+    "PersonRowVariant",
+    "PersonRowView",
+    "PersonStatus"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsPersonOpen",
+      "sourcePath": "src/cornerstone/core/workflows/cs-person-open.interface.ts",
+      "category": "workflows",
+      "description": "Cs Person Open public API.",
+      "members": [
+        {
+          "name": "personId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Person Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "PersonRowAction",
+      "sourcePath": "src/cornerstone/person-row/person-row-action.interface.ts",
+      "category": "workflows",
+      "description": "Person Row Action public API.",
+      "members": [
+        {
+          "name": "personId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Person Id public API."
+        },
+        {
+          "name": "action",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Action public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "PersonRowVariant",
+      "sourcePath": "src/cornerstone/person-row/person-row-variant.type.ts",
+      "category": "workflows",
+      "description": "Person Row Variant public API.",
+      "declaration": "'table' | 'list'"
+    },
+    {
+      "kind": "interface",
+      "name": "PersonRowView",
+      "sourcePath": "src/cornerstone/person-row/person-row-view.interface.ts",
+      "category": "workflows",
+      "description": "Person Row View public API.",
+      "members": [
+        {
+          "name": "status",
+          "role": "property",
+          "type": "PersonStatus",
+          "required": true,
+          "description": "Status public API."
+        },
+        {
+          "name": "role",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Role public API."
+        },
+        {
+          "name": "selected",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Selected public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "PersonStatus",
+      "sourcePath": "src/cornerstone/person-row/person-status.type.ts",
+      "category": "workflows",
+      "description": "Person Status public API.",
+      "declaration": "'active' | 'inactive' | 'invited' | 'suspended'"
+    }
+  ]
+}

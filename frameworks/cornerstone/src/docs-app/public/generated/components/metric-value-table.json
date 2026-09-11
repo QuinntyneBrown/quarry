@@ -1,0 +1,57 @@
+{
+  "kind": "class",
+  "name": "MetricValueTableComponent",
+  "sourcePath": "src/cornerstone/metric-value-table/metric-value-table.component.ts",
+  "category": "data-display",
+  "description": "Metric Value Table public API.",
+  "members": [
+    {
+      "name": "series",
+      "bindingName": "series",
+      "role": "input",
+      "type": "readonly CsMetricSeries[]",
+      "required": true,
+      "description": "Series public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-metric-value-table",
+  "slug": "metric-value-table",
+  "label": "Metric Value Table",
+  "tokens": [],
+  "relatedSymbols": ["CsMetricSeries"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsMetricSeries",
+      "sourcePath": "src/cornerstone/core/data-display/cs-metric-series.interface.ts",
+      "category": "data-display",
+      "description": "Cs Metric Series public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "values",
+          "role": "property",
+          "type": "readonly number[]",
+          "required": true,
+          "description": "Values public API."
+        },
+        {
+          "name": "tone",
+          "role": "property",
+          "type": "CsMetricTone",
+          "required": false,
+          "description": "Tone public API."
+        }
+      ]
+    }
+  ]
+}

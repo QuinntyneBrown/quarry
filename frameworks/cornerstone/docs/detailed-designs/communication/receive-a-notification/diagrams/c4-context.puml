@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Receive a notification
+
+Person(dev, "Application developer", "Composes the Word Up notification panel and announcement screen")
+Person(youth, "Youth", "Reads notifications and follows their deep links")
+Person(admin, "Administrator", "Targets and schedules announcements")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the notification list, notification item, and announcement composer")
+System_Ext(app, "Consuming application", "Word Up Angular application owning notification storage, read state, routing, and delivery")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for overlay, focus trapping, and layout observation")
+System_Ext(browser, "Browser platform", "Renders the panel and voices live regions")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes notification screens from")
+Rel(dev, app, "Binds the notification view model in")
+Rel(app, cornerstone, "Supplies notification and audience view models to")
+Rel(cornerstone, app, "Emits mark-read, navigate, preview, and submit intents to")
+Rel(cornerstone, cdk, "Builds overlay and focus behaviour on")
+Rel(cornerstone, browser, "Announces counts and validation through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(youth, browser, "Opens the notification panel in")
+Rel(admin, browser, "Composes an announcement in")
+@enduml

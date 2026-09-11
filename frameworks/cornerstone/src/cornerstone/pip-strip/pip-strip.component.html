@@ -1,0 +1,5 @@
+<div [attr.aria-label]="label()">
+  @for (item of items(); track item.id) {
+    <span [attr.data-state]="item.state"></span>
+  }
+</div>

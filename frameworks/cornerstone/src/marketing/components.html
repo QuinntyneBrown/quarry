@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Component catalog — Cornerstone</title>
+    <meta
+      name="description"
+      content="All 144 standalone components in @quinntyne/cornerstone, grouped by domain, plus the browser and runtime support matrix."
+    />
+    <meta name="theme-color" content="#0d0d07" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="masthead">
+      <div class="masthead__inner">
+        <a class="wordmark" href="index.html" aria-label="Cornerstone home">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" stroke="currentColor" />
+            <path d="M1 1h6v6H1z" fill="currentColor" />
+          </svg>
+          Cornerstone
+        </a>
+        <nav class="masthead__nav" aria-label="Primary">
+          <a class="navlink" href="components.html" aria-current="page">Components</a>
+          <a class="navlink" href="migration.html">Migration</a>
+          <a class="navlink navlink--long" href="https://github.com/QuinntyneBrown/Cornerstone"
+            >GitHub</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero band band--open">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Catalog</p>
+        </div>
+        <div class="band__body hero__body">
+          <p class="eyebrow lift lift-1">144 components &nbsp;·&nbsp; 55 directives</p>
+          <h1 class="display page-title lift lift-2">Everything in the box.</h1>
+          <p class="lede lift lift-3">
+            Each name below is a standalone Angular import. Bring in one, or three, or none — an
+            unused component never reaches the browser.
+          </p>
+          <nav class="jump lift lift-4" aria-label="Jump to a domain">
+            <a class="chip chip--jump" href="#foundations">Foundations</a>
+            <a class="chip chip--jump" href="#forms">Forms</a>
+            <a class="chip chip--jump" href="#navigation">Navigation</a>
+            <a class="chip chip--jump" href="#data-display">Data display</a>
+            <a class="chip chip--jump" href="#overlays">Overlays</a>
+            <a class="chip chip--jump" href="#communication">Communication</a>
+            <a class="chip chip--jump" href="#process">Process</a>
+            <a class="chip chip--jump" href="#workflows">Workflows</a>
+            <a class="chip chip--jump" href="#marketing">Marketing</a>
+            <a class="chip chip--jump" href="#platform">Platform</a>
+          </nav>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------- foundations -->
+      <section class="band" id="foundations" aria-labelledby="foundations-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Foundations</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="foundations-title">Foundations</h2>
+              <p class="domain__count">20 components</p>
+            </div>
+            <p class="prose">
+              The pieces every other screen is assembled from: page and section framing, cards,
+              containers, icons, status badges, progress, and loading placeholders.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-action-bar</li>
+              <li class="chip">cs-alert</li>
+              <li class="chip">cs-avatar</li>
+              <li class="chip">cs-avatar-stack</li>
+              <li class="chip">cs-badge</li>
+              <li class="chip">cs-button-group</li>
+              <li class="chip">cs-card</li>
+              <li class="chip">cs-container</li>
+              <li class="chip">cs-divider</li>
+              <li class="chip">cs-icon</li>
+              <li class="chip">cs-page</li>
+              <li class="chip">cs-pill</li>
+              <li class="chip">cs-progress-bar</li>
+              <li class="chip">cs-progress-ring</li>
+              <li class="chip">cs-section</li>
+              <li class="chip">cs-section-header</li>
+              <li class="chip">cs-skeleton</li>
+              <li class="chip">cs-skeleton-group</li>
+              <li class="chip">cs-spinner</li>
+              <li class="chip">cs-toolbar</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------------- forms -->
+      <section class="band" id="forms" aria-labelledby="forms-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Forms</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="forms-title">Forms</h2>
+              <p class="domain__count">18 components</p>
+            </div>
+            <p class="prose">
+              Controls that work with reactive forms out of the box, with label, hint, and error
+              relationships wired for you rather than left to the template author.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-checkbox</li>
+              <li class="chip">cs-choice-card</li>
+              <li class="chip">cs-choice-group</li>
+              <li class="chip">cs-combobox</li>
+              <li class="chip">cs-date-field</li>
+              <li class="chip">cs-date-time-field</li>
+              <li class="chip">cs-dropzone</li>
+              <li class="chip">cs-field</li>
+              <li class="chip">cs-file-picker</li>
+              <li class="chip">cs-file-summary</li>
+              <li class="chip">cs-form-actions</li>
+              <li class="chip">cs-input-group</li>
+              <li class="chip">cs-radio</li>
+              <li class="chip">cs-radio-group</li>
+              <li class="chip">cs-search-field</li>
+              <li class="chip">cs-switch</li>
+              <li class="chip">cs-validation-summary</li>
+              <li class="chip">cs-wizard</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------ navigation -->
+      <section class="band" id="navigation" aria-labelledby="navigation-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Navigation</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="navigation-title">Navigation</h2>
+              <p class="domain__count">16 components</p>
+            </div>
+            <p class="prose">
+              The application shell and everything that moves a person through it, including the
+              public-facing header and footer this site's own layout is modelled on.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-accordion</li>
+              <li class="chip">cs-accordion-item</li>
+              <li class="chip">cs-account-menu</li>
+              <li class="chip">cs-bottom-nav</li>
+              <li class="chip">cs-breadcrumbs</li>
+              <li class="chip">cs-marketing-footer</li>
+              <li class="chip">cs-marketing-header</li>
+              <li class="chip">cs-nav-group</li>
+              <li class="chip">cs-paginator</li>
+              <li class="chip">cs-popover</li>
+              <li class="chip">cs-segmented-control</li>
+              <li class="chip">cs-shell</li>
+              <li class="chip">cs-sidenav</li>
+              <li class="chip">cs-tab</li>
+              <li class="chip">cs-tab-group</li>
+              <li class="chip">cs-topbar</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------------------------------------------- data display -->
+      <section class="band" id="data-display" aria-labelledby="data-display-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Data display</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="data-display-title">Data display</h2>
+              <p class="domain__count">21 components</p>
+            </div>
+            <p class="prose">
+              Tables, lists, and metrics, plus the states most libraries leave to the application:
+              empty, loading, offline, and failed.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-chip-list</li>
+              <li class="chip">cs-comparison-chart</li>
+              <li class="chip">cs-data-state-outlet</li>
+              <li class="chip">cs-data-toolbar</li>
+              <li class="chip">cs-definition-list</li>
+              <li class="chip">cs-empty-state</li>
+              <li class="chip">cs-kpi</li>
+              <li class="chip">cs-list</li>
+              <li class="chip">cs-list-item</li>
+              <li class="chip">cs-metric-bars</li>
+              <li class="chip">cs-metric-legend</li>
+              <li class="chip">cs-metric-value-table</li>
+              <li class="chip">cs-offline-banner</li>
+              <li class="chip">cs-person</li>
+              <li class="chip">cs-progress-matrix</li>
+              <li class="chip">cs-scripture-quote</li>
+              <li class="chip">cs-stat-card</li>
+              <li class="chip">cs-state-page</li>
+              <li class="chip">cs-table-container</li>
+              <li class="chip">cs-timeline</li>
+              <li class="chip">cs-toast-outlet</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------- overlays -->
+      <section class="band" id="overlays" aria-labelledby="overlays-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Overlays</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="overlays-title">Overlays</h2>
+              <p class="domain__count">5 components</p>
+            </div>
+            <p class="prose">
+              Dialogs and drawers built on the CDK overlay, so focus is trapped on open, returned on
+              close, and <code>Escape</code> always means what you expect. Opened through a service
+              rather than a template flag.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-confirm-dialog</li>
+              <li class="chip">cs-dialog-shell</li>
+              <li class="chip">cs-drawer</li>
+              <li class="chip">cs-drawer-container</li>
+              <li class="chip">cs-unsaved-changes-dialog</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------- communication -->
+      <section class="band" id="communication" aria-labelledby="communication-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Communication</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="communication-title">Communication</h2>
+              <p class="domain__count">16 components</p>
+            </div>
+            <p class="prose">
+              Scheduling, messaging, and content review — the surfaces a ministry team lives in when
+              they are coordinating people rather than editing records.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-announcement-composer</li>
+              <li class="chip">cs-attachment-list</li>
+              <li class="chip">cs-calendar</li>
+              <li class="chip">cs-code-block</li>
+              <li class="chip">cs-code-editor</li>
+              <li class="chip">cs-conversation-item</li>
+              <li class="chip">cs-conversation-list</li>
+              <li class="chip">cs-event-card</li>
+              <li class="chip">cs-evidence-preview</li>
+              <li class="chip">cs-media-viewer</li>
+              <li class="chip">cs-message-composer</li>
+              <li class="chip">cs-message-thread</li>
+              <li class="chip">cs-notification-item</li>
+              <li class="chip">cs-notification-list</li>
+              <li class="chip">cs-preview-pane</li>
+              <li class="chip">cs-schedule-list</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------------- process -->
+      <section class="band" id="process" aria-labelledby="process-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Process</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="process-title">Process</h2>
+              <p class="domain__count">14 components</p>
+            </div>
+            <p class="prose">
+              Work that moves through stages: boards, lanes, gates, and the journey and rail
+              components Liturgy uses to show where a project actually stands.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-gate</li>
+              <li class="chip">cs-gratitude-note</li>
+              <li class="chip">cs-gratitude-wall</li>
+              <li class="chip">cs-kanban-board</li>
+              <li class="chip">cs-kanban-column</li>
+              <li class="chip">cs-movement-dial</li>
+              <li class="chip">cs-movement-list</li>
+              <li class="chip">cs-phase-lane</li>
+              <li class="chip">cs-pip-strip</li>
+              <li class="chip">cs-process-journey</li>
+              <li class="chip">cs-process-rail</li>
+              <li class="chip">cs-project-card</li>
+              <li class="chip">cs-requirement-checklist</li>
+              <li class="chip">cs-work-item-card</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------- workflows -->
+      <section class="band" id="workflows" aria-labelledby="workflows-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Workflows</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="workflows-title">Workflows</h2>
+              <p class="domain__count">26 components</p>
+            </div>
+            <p class="prose">
+              The largest domain, because it carries the work Word Up does every week: teaching
+              people, tracking what they learned, and reporting on it honestly.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-achievement-card</li>
+              <li class="chip">cs-assessment-editor</li>
+              <li class="chip">cs-assignment-card</li>
+              <li class="chip">cs-attendance-choice</li>
+              <li class="chip">cs-attendance-roster</li>
+              <li class="chip">cs-audit-log</li>
+              <li class="chip">cs-badge-collection</li>
+              <li class="chip">cs-competency-grid</li>
+              <li class="chip">cs-consent-panel</li>
+              <li class="chip">cs-csv-import-wizard</li>
+              <li class="chip">cs-curriculum-editor</li>
+              <li class="chip">cs-curriculum-tree</li>
+              <li class="chip">cs-learning-journey</li>
+              <li class="chip">cs-lesson-step-list</li>
+              <li class="chip">cs-people-directory</li>
+              <li class="chip">cs-person-row</li>
+              <li class="chip">cs-person-summary</li>
+              <li class="chip">cs-progression-builder</li>
+              <li class="chip">cs-quiz</li>
+              <li class="chip">cs-quiz-question</li>
+              <li class="chip">cs-quiz-result</li>
+              <li class="chip">cs-record-tabs</li>
+              <li class="chip">cs-report-dashboard</li>
+              <li class="chip">cs-report-filters</li>
+              <li class="chip">cs-rubric</li>
+              <li class="chip">cs-submission-status</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------- marketing -->
+      <section class="band" id="marketing" aria-labelledby="marketing-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Marketing</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="marketing-title">Marketing and auth</h2>
+              <p class="domain__count">7 components</p>
+            </div>
+            <p class="prose">
+              Public pages and the sign-in screens that sit between them and the application. Both
+              consuming applications share this vocabulary so their front doors match.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-auth-card</li>
+              <li class="chip">cs-auth-layout</li>
+              <li class="chip">cs-brand-lockup</li>
+              <li class="chip">cs-content-section</li>
+              <li class="chip">cs-cta-section</li>
+              <li class="chip">cs-hero</li>
+              <li class="chip">cs-logo-mark</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------- platform -->
+      <section class="band" id="platform" aria-labelledby="platform-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Platform</p>
+        </div>
+        <div class="band__body">
+          <div class="domain reveal">
+            <div class="domain__head">
+              <h2 class="headline domain__title" id="platform-title">Platform</h2>
+              <p class="domain__count">1 component</p>
+            </div>
+            <p class="prose">
+              One component, and it earns its place. Every service in the library announces through
+              a single polite live region, so a screen reader hears one voice instead of six
+              competing ones.
+            </p>
+            <ul class="chips">
+              <li class="chip">cs-status-region</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- --------------------------------------------------------- support -->
+      <section class="band" id="support" aria-labelledby="support-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Support</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="support-title">What is supported, in writing.</h2>
+            <p class="lede">
+              These are not aspirations. They are the values in
+              <code>support-matrix.json</code>, and the build checks them.
+            </p>
+          </div>
+
+          <div
+            class="tablewrap reveal"
+            role="region"
+            aria-label="Runtime, engine, and deprecation commitments"
+            tabindex="0"
+          >
+            <table>
+              <caption class="visually-hidden">
+                The runtime, engine, and deprecation commitments
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Commitment</th>
+                  <th scope="col">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Angular</th>
+                  <td><code>&gt;=21.0.0 &lt;22.0.0</code></td>
+                </tr>
+                <tr>
+                  <th scope="row">Node</th>
+                  <td><code>&gt;=22.0.0 &lt;23.0.0</code></td>
+                </tr>
+                <tr>
+                  <th scope="row">Browsers</th>
+                  <td>Chromium, Firefox, and WebKit — the current release and the two before it</td>
+                </tr>
+                <tr>
+                  <th scope="row">Deprecation</th>
+                  <td>Announced two minor releases before removal</td>
+                </tr>
+                <tr>
+                  <th scope="row">Bundle</th>
+                  <td>400 KiB gzip ceiling; the theme stylesheet has its own 30 KiB ceiling</td>
+                </tr>
+                <tr>
+                  <th scope="row">Peer dependency</th>
+                  <td><code>@angular/cdk</code>, on a version your application chooses</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="prose spaced reveal">
+            Alongside the components, the package publishes 55 directives, typed interfaces for
+            every input and output, and a small testing harness — 491 public exports in total, each
+            one recorded in the generated API surface document so a diff has to be reviewed before
+            it can ship.
+          </p>
+        </div>
+      </section>
+
+      <section class="band" aria-labelledby="catalog-cta-title">
+        <div class="band__rail" aria-hidden="true"></div>
+        <div class="band__body">
+          <div class="cta reveal">
+            <h2 class="headline cta__title" id="catalog-cta-title">
+              Found what you need? It installs in one line.
+            </h2>
+            <p class="lede">
+              And if you did not find it, the catalog document records the gap along with which
+              application is waiting on it.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="migration.html">
+                Read the migration guide
+                <svg
+                  class="btn__arrow"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 7h9M7.5 3.5 11 7l-3.5 3.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+              <a class="btn btn--ghost" href="https://github.com/QuinntyneBrown/Cornerstone"
+                >View the source</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__group">
+          <a class="wordmark" href="index.html">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" stroke="currentColor" />
+              <path d="M1 1h6v6H1z" fill="currentColor" />
+            </svg>
+            Cornerstone
+          </a>
+          <p class="footer__note">
+            The shared UI foundation for FaithTech's software. Built and maintained in the open.
+          </p>
+        </div>
+        <nav class="footer__group" aria-labelledby="footer-library">
+          <h2 id="footer-library">Library</h2>
+          <ul>
+            <li><a href="components.html">Component catalog</a></li>
+            <li><a href="migration.html">Migration guide</a></li>
+            <li><a href="components.html#support">Support matrix</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__group" aria-labelledby="footer-source">
+          <h2 id="footer-source">Source</h2>
+          <ul>
+            <li><a href="https://github.com/QuinntyneBrown/Cornerstone">Cornerstone</a></li>
+            <li><a href="https://github.com/QuinntyneBrown/Liturgy">Liturgy</a></li>
+            <li><a href="https://github.com/QuinntyneBrown/word-up">Word Up</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="colophon">
+        <div class="colophon__inner">
+          <p>MIT licensed</p>
+          <p>Angular 21 · Node 22</p>
+          <p>Built by FaithTech</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

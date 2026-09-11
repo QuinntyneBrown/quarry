@@ -1,0 +1,111 @@
+{
+  "kind": "class",
+  "name": "ToastOutletComponent",
+  "sourcePath": "src/cornerstone/toast-outlet/toast-outlet.component.ts",
+  "category": "data-display",
+  "description": "Toast Outlet public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-toast-outlet",
+  "slug": "toast-outlet",
+  "label": "Toast Outlet",
+  "tokens": ["--cs-ink", "--cs-paper", "--cs-space-2", "--cs-space-5"],
+  "relatedSymbols": ["ToastConfig", "ToastRef", "ToastResult", "ToastService"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ToastConfig",
+      "sourcePath": "src/cornerstone/toast-outlet/toast-config.interface.ts",
+      "category": "data-display",
+      "description": "Toast Config public API.",
+      "members": [
+        {
+          "name": "tone",
+          "role": "property",
+          "type": "CsMessageTone",
+          "required": false,
+          "description": "Tone public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Title public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "duration",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Duration public API."
+        },
+        {
+          "name": "actionLabel",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Action Label public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "ToastRef",
+      "sourcePath": "src/cornerstone/toast-outlet/toast-ref.class.ts",
+      "category": "data-display",
+      "description": "Toast Ref public API.",
+      "members": []
+    },
+    {
+      "kind": "type",
+      "name": "ToastResult",
+      "sourcePath": "src/cornerstone/toast-outlet/toast-result.type.ts",
+      "category": "data-display",
+      "description": "Toast Result public API.",
+      "declaration": "'dismissed' | 'action'"
+    },
+    {
+      "kind": "class",
+      "name": "ToastService",
+      "sourcePath": "src/cornerstone/toast-outlet/toast.service.ts",
+      "category": "data-display",
+      "description": "Toast Service public API.",
+      "members": [
+        {
+          "name": "open",
+          "role": "method",
+          "type": "ToastRef",
+          "parameters": [
+            {
+              "name": "config",
+              "type": "ToastConfig",
+              "optional": false
+            }
+          ],
+          "description": "Open public API."
+        },
+        {
+          "name": "dismiss",
+          "role": "method",
+          "type": "void",
+          "parameters": [
+            {
+              "name": "id",
+              "type": "number",
+              "optional": false
+            }
+          ],
+          "description": "Dismiss public API."
+        }
+      ]
+    }
+  ]
+}

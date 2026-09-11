@@ -1,0 +1,57 @@
+{
+  "kind": "class",
+  "name": "PreviewPaneComponent",
+  "sourcePath": "src/cornerstone/preview-pane/preview-pane.component.ts",
+  "category": "communication",
+  "description": "Preview Pane public API.",
+  "members": [
+    {
+      "name": "output",
+      "bindingName": "output",
+      "role": "input",
+      "type": "PreviewOutput",
+      "required": true,
+      "description": "Output public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-preview-pane",
+  "slug": "preview-pane",
+  "label": "Preview Pane",
+  "tokens": [],
+  "relatedSymbols": ["PreviewOutput"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "PreviewOutput",
+      "sourcePath": "src/cornerstone/preview-pane/preview-output.interface.ts",
+      "category": "communication",
+      "description": "Preview Output public API.",
+      "members": [
+        {
+          "name": "stdout",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Stdout public API."
+        },
+        {
+          "name": "stderr",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Stderr public API."
+        },
+        {
+          "name": "html",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Html public API."
+        }
+      ]
+    }
+  ]
+}

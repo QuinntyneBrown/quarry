@@ -1,0 +1,26 @@
+section {
+  position: fixed;
+  z-index: 70;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: min(24rem, 100vw);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--cs-paper);
+  box-shadow: var(--cs-shadow-lg);
+}
+.content {
+  overflow: auto;
+  padding: var(--cs-space-5);
+}
+header,
+footer {
+  padding: var(--cs-space-4);
+}
+.backdrop {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  border: 0;
+  background: #0008;
+}

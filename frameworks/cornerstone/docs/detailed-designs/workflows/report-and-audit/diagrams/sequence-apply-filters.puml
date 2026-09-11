@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Apply report filters and refresh the dashboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Reporting page component" as page
+  participant "Audit page component" as auditpage
+  participant "Query service" as query
+end box
+box "Frontend — Cornerstone reporting composite" #D1FADF
+  participant "ReportFiltersComponent" as filters
+  participant "ReportDashboardComponent" as dashboard
+  participant "AuditLogComponent" as audit
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and input" as browser
+end box
+
+user -> browser : Choose a cohort and a date range
+browser -> filters : Two control changes
+filters -> filters : Debounce by the documented interval per L2-130
+filters -> page : Emit one ReportFilterState carrying every selection per L2-130
+
+page -> dashboard : Bind the panel state 'loading'
+dashboard -> browser : Render skeletons with aria-busy=true and reserved heights per L2-130
+browser --> user : Layout holds its height while the query runs
+
+page -> query : Aggregate for the applied filters
+query --> page : Figures and the record count
+page -> dashboard : Bind ReportViewModel and the panel state 'ready'
+dashboard -> browser : Render the KPI, ring, and bar panels
+dashboard -> browser : Attach the data alternative to each chart panel per L2-097
+dashboard -> announcer : Announce the filter summary and record count politely per L2-130
+announcer --> browser : Polite live region update
+browser --> user : Overview figures for the narrowed population
+
+filters -> auditpage : Emit the same filter state per L2-130
+auditpage -> query : Page the audit events for the applied filters
+query --> auditpage : No matching events
+auditpage -> audit : Bind an empty event list with the panel state 'empty'
+
+alt Audit result is empty
+  audit -> browser : State the active filters in the empty state per L2-131
+  audit -> browser : Offer the clear-filters action per L2-131
+  user -> audit : Activate clear filters
+  audit -> auditpage : Emit filtersCleared per L2-131
+else Audit result has events
+  audit -> browser : Render the paged table per L2-093 and the paginator per L2-074
+  audit -> browser : Render each timestamp with a machine-readable value and its timezone per L2-131
+end
+@enduml

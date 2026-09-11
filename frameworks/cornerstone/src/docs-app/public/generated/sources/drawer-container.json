@@ -1,0 +1,5 @@
+{
+  "ts": "import { CdkTrapFocus } from '@angular/cdk/a11y';\nimport { Dialog, DialogConfig, DialogRef } from '@angular/cdk/dialog';\nimport { ComponentPortal, ComponentType } from '@angular/cdk/portal';\nimport { Overlay, OverlayRef } from '@angular/cdk/overlay';\nimport {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  Injectable,\n  booleanAttribute,\n  inject,\n  input,\n  model,\n  output,\n} from '@angular/core';\nimport { CsButtonDirective } from '../core/foundations/cs-button.directive';\nimport { CsBreakpointService } from '../core/platform/cs-breakpoint.service';\nimport { CsLocalizationService } from '../core/platform/cs-localization.service';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-drawer-container',\n  templateUrl: './drawer-container.component.html',\n  host: { class: 'cs-drawer-container' },\n  styleUrl: './drawer-container.component.scss',\n})\nexport class DrawerContainerComponent {}\n",
+  "html": "<ng-content />\n",
+  "scss": ":host {\n  display: grid;\n  grid-template-columns: auto 1fr;\n}\n"
+}

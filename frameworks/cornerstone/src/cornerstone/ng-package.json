@@ -1,0 +1,34 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/cornerstone",
+  "assets": [
+    {
+      "glob": "**/*.scss",
+      "input": "styles",
+      "output": "styles"
+    },
+    {
+      "glob": "README.md",
+      "input": ".",
+      "output": "."
+    },
+    {
+      "glob": "LICENSE",
+      "input": ".",
+      "output": "."
+    },
+    {
+      "glob": "**/*",
+      "input": "schematics",
+      "output": "schematics"
+    },
+    {
+      "glob": "**/*",
+      "input": "migrations",
+      "output": "migrations"
+    }
+  ],
+  "lib": {
+    "entryFile": "public-api.ts"
+  }
+}

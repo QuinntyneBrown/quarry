@@ -1,0 +1,123 @@
+{
+  "kind": "class",
+  "name": "QuizQuestionComponent",
+  "sourcePath": "src/cornerstone/quiz-question/quiz-question.component.ts",
+  "category": "workflows",
+  "description": "Quiz Question public API.",
+  "members": [
+    {
+      "name": "question",
+      "bindingName": "question",
+      "role": "input",
+      "type": "QuizQuestionView",
+      "required": true,
+      "description": "Question public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "QuizAnswerValue",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "answerChanged",
+      "bindingName": "answerChanged",
+      "role": "output",
+      "type": "QuizAnswerChange",
+      "required": false,
+      "description": "Answer Changed public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-quiz-question",
+  "slug": "quiz-question",
+  "label": "Quiz Question",
+  "tokens": [],
+  "relatedSymbols": ["QuizAnswerChange", "QuizAnswerValue", "QuizQuestionView"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "QuizAnswerChange",
+      "sourcePath": "src/cornerstone/quiz/quiz-answer-change.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Answer Change public API.",
+      "members": [
+        {
+          "name": "questionId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Question Id public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "QuizAnswerValue",
+          "required": true,
+          "description": "Value public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "QuizAnswerValue",
+      "sourcePath": "src/cornerstone/quiz/quiz-answer-value.type.ts",
+      "category": "workflows",
+      "description": "Quiz Answer Value public API.",
+      "declaration": "string | readonly string[]"
+    },
+    {
+      "kind": "interface",
+      "name": "QuizQuestionView",
+      "sourcePath": "src/cornerstone/quiz-question/quiz-question-view.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Question View public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "prompt",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Prompt public API."
+        },
+        {
+          "name": "type",
+          "role": "property",
+          "type": "QuizAnswerType",
+          "required": true,
+          "description": "Type public API."
+        },
+        {
+          "name": "options",
+          "role": "property",
+          "type": "readonly { id: string; label: string }[]",
+          "required": false,
+          "description": "Options public API."
+        },
+        {
+          "name": "required",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Required public API."
+        }
+      ]
+    }
+  ]
+}

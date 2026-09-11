@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Compose and render a landing page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as visitor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Public-site route" as page
+  participant "Application services" as appsvc
+end box
+box "Frontend — Cornerstone marketing components" #D1FADF
+  participant "HeroComponent" as hero
+  participant "ContentSectionComponent" as section
+  participant "CtaSectionComponent" as cta
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Section tone and rhythm styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and cascade" as browser
+end box
+
+visitor -> browser : Request the public route
+browser -> page : Render the routed component
+page -> hero : Render with tone 'brand' and the media position per L2-145
+hero -> styles : Resolve the brand surface and the container bound
+styles --> hero : Computed tone and measure
+hero -> browser : Render the eyebrow, h1 title, lede, actions, and media per L2-145
+
+page -> section : Render the prose-media variant with reverse false per L2-146
+section -> browser : Render the two-column prose and media band
+page -> section : Render the card-grid variant from SectionCard items per L2-146
+page -> section : Render the stats variant from SectionStat items per L2-146
+page -> section : Render the scripture variant through the accent face per L2-010
+section -> styles : Resolve the vertical rhythm between bands
+styles --> section : Computed padding
+
+page -> cta : Render with tone 'lime' and width 'full' per L2-147
+cta -> browser : Render the primary and secondary actions per L2-147
+browser --> visitor : Landing page
+
+visitor -> cta : Select the primary action
+cta -> page : Emit CtaAction with the action id
+page -> appsvc : Resolve the route for the intent
+appsvc -> browser : Navigate to the sign-up screen
+browser --> visitor : Sign-up screen
+@enduml

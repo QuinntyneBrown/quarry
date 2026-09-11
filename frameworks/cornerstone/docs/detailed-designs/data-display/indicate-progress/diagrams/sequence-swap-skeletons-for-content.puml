@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Swap skeletons for real content
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Directory page" as page
+  participant "Application services" as svc
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "SkeletonGroupComponent" as group
+  participant "SkeletonComponent" as skeleton
+  participant "SpinnerComponent" as spinner
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Indicator styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Layout engine and assistive technology" as dom
+end box
+
+user -> page : Open the directory
+page -> group : Set loading true with a region label
+group -> dom : Write aria-busy true on the region per L2-085
+group -> skeleton : Project tableRow and text presets
+skeleton -> styles : Resolve preset dimensions from tokens per L2-085
+styles --> skeleton : Box reserving the space of the replaced content per L2-085
+skeleton -> dom : Render each shape as aria-hidden true per L2-085
+group -> spinner : Render decoratively inside the labelled busy region
+spinner -> dom : Write aria-hidden true and announce nothing further per L2-084
+dom --> user : Placeholder layout at the final size
+
+page -> svc : Request the directory records
+svc --> page : Record set
+page -> group : Set loading false
+group -> skeleton : Remove the projected shapes
+group -> dom : Render the real rows into the same outer box
+dom -> dom : Measure no layout shift beyond the documented threshold per L2-085
+group -> dom : Clear aria-busy on the region per L2-085
+dom --> user : Directory rows in the position the placeholders held
+@enduml

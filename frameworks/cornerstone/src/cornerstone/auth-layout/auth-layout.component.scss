@@ -1,0 +1,39 @@
+main {
+  min-block-size: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--cs-space-5);
+  background: var(--cs-surface);
+}
+main.split {
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+}
+aside {
+  display: none;
+}
+.split aside {
+  display: grid;
+  align-items: end;
+  align-self: stretch;
+  padding: var(--cs-space-8);
+  background: var(--cs-ink);
+  color: var(--cs-paper);
+}
+section {
+  inline-size: min(100%, 30rem);
+  padding: var(--cs-space-6);
+}
+footer {
+  position: absolute;
+  inset-block-end: var(--cs-space-4);
+}
+@media (max-width: 767.98px) {
+  main.split {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .split aside {
+    display: none;
+  }
+}

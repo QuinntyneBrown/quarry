@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Honour the component contract
+
+Container_Boundary(contract, "Cornerstone contract layer") {
+  Component(base, "CsControlBase<T>", "Abstract class", "Implements ControlValueAccessor, disabled mirroring, and touched propagation")
+  Component(field, "FieldComponent", "Angular component", "Generates identifiers and composes label, hint, error, and described-by wiring")
+  Component(iface, "CsFieldControl", "TypeScript interface", "The surface a field wires: id, describedBy, invalid, disabled, required, focus()")
+  Component(ids, "CsIdService", "Injectable service", "Generates document-unique cs- prefixed identifiers")
+  Component(coerce, "Input transforms", "csBooleanAttribute, csNumberAttribute, csEnumAttribute", "Coerce attribute forms and diagnose invalid enum values")
+  Component(slotbase, "CsSlotDirective", "Abstract directive", "Registers projected content with its owning component")
+  Component(slots, "Slot directives", "csCardHeader, csPageActions, csEmptyStateActions, and six more", "Mark named projection targets and name their required parent")
+  Component(intent, "CsIntent<TKind, TPayload>", "Discriminated union type", "The shape every composite intent output follows")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(input, "CsInputDirective / CsSelectDirective / CheckboxComponent", "Value-bearing controls", "Extend CsControlBase and realize CsFieldControl")
+  Component(card, "CardComponent / PageComponent", "Multi-slot components", "Render header, footer, and action chrome only when a slot has content")
+  Component(composite, "AttendanceRosterComponent", "Composite component", "Takes a typed view model and emits typed intents")
+}
+
+Container_Boundary(gate, "Surface report") {
+  Component(surface, "api-surface.md generator", "Build step", "Regenerates the checked-in signature list from the package root")
+  Component(lint, "contract lint rules", "ESLint rule set", "Fails on decorator inputs, default change detection, and injected HttpClient")
+}
+
+System_Ext(forms, "Angular forms", "FormControl, NgControl, and validation status")
+
+Rel(input, base, "Extends")
+Rel(base, iface, "Realizes")
+Rel(base, forms, "Implements ControlValueAccessor against")
+Rel(field, iface, "Wires the control through")
+Rel(field, ids, "Generates label, hint, and error identifiers from")
+Rel(input, coerce, "Transforms attribute inputs with")
+Rel(card, slotbase, "Reads slot presence from")
+Rel(slots, slotbase, "Extend")
+Rel(composite, intent, "Emits")
+Rel(composite, coerce, "Transforms attribute inputs with")
+Rel(surface, intent, "Records the signature of")
+Rel(surface, base, "Records the signature of")
+Rel(lint, composite, "Rejects an injected HttpClient or Router in")
+Rel(lint, input, "Rejects a decorator input or default change detection in")
+@enduml

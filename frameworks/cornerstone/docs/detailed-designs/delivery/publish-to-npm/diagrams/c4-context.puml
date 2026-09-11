@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Publish to npm
+
+Person(maintainer, "Library maintainer", "Merges conventional commits to main and reads release outcomes")
+Person(dev, "Application developer", "Installs the released version into Liturgy or Word Up")
+
+System(cornerstone, "Cornerstone", "Angular UI library released as @quinntyne/cornerstone by a versioned, tagged, attested publish")
+System_Ext(github, "GitHub repository", "Holds main, the release tags, the changelog, and the GitHub releases")
+System_Ext(actions, "GitHub Actions", "Derives the version, publishes, tags, and verifies")
+System_Ext(npm, "npm registry", "Serves the published versions under the latest and next distribution tags")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+
+Rel(maintainer, github, "Merges a conventional commit to main of")
+Rel(github, actions, "Triggers the release workflow in")
+Rel(actions, cornerstone, "Builds, verifies, and packs")
+Rel(actions, npm, "Publishes the derived version to", "npm publish --provenance")
+Rel(actions, github, "Writes the tag, changelog, and release back to")
+Rel(actions, maintainer, "Reports the derived version and the outcome to")
+Rel(dev, npm, "Installs @quinntyne/cornerstone from")
+Rel(dev, github, "Reads the release notes in")
+Rel(app, cornerstone, "Composes screens from the released version of")
+@enduml

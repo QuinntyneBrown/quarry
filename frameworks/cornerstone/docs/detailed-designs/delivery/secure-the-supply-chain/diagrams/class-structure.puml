@@ -1,0 +1,105 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Secure the supply chain
+
+enum CsUrlScheme {
+  https
+  http
+  mailto
+  tel
+  relative
+}
+
+enum CsUrlVerdict {
+  accepted
+  rejectedScheme
+  rejectedMalformed
+}
+
+enum CsSeverity {
+  low
+  moderate
+  high
+  critical
+}
+
+class CsUrlPolicy {
+  +allowed: CsUrlScheme[]
+  +denied: string[]
+  +validate(value: string): CsUrlVerdict
+  +safeUrl(value: string): string | null
+  +encodeAddress(value: string): string
+}
+
+class CsLinkTargetPolicy {
+  +opensInNewTab: boolean
+  +rel: 'noopener noreferrer'
+  +externalAccessibleSuffix: string
+}
+
+class CsFramePolicy {
+  +sandbox: string
+  +title: string
+  +referrerPolicy: string
+  +allowsSameOriginWithScripts(): false
+}
+
+class CsSanitizationRule {
+  +bindingKind: string
+  +bypassCallsPermitted: false
+  +rawHtmlAssignmentPermitted: false
+  +markupAllowlist: string[]
+  +stylePattern: RegExp
+}
+
+class CsAuditFinding {
+  +advisoryId: string
+  +packageName: string
+  +severity: CsSeverity
+  +isProductionDependency: boolean
+  +blocksRelease(): boolean
+}
+
+class CsDependencyChange {
+  +packageName: string
+  +version: string
+  +transitiveAdditions: number
+  +license: string
+}
+
+class CsProvenanceAttestation {
+  +attestationId: string
+  +repository: string
+  +workflow: string
+  +commitSha: string
+  +publishedVersion: string
+}
+
+class CsTarballManifest {
+  +files: string[]
+  +containsCredentials(): false
+  +containsInternalOnlyFiles(): false
+  +byteIdenticalTo(other: CsTarballManifest): boolean
+}
+
+CsUrlPolicy --> CsUrlScheme : allows
+CsUrlPolicy ..> CsUrlVerdict : returns
+CsLinkTargetPolicy ..> CsUrlPolicy : validates through
+CsFramePolicy ..> CsUrlPolicy : validates the frame source through
+CsSanitizationRule ..> CsUrlPolicy : defers URL bindings to
+CsAuditFinding --> CsSeverity
+CsDependencyChange ..> CsAuditFinding : may introduce
+CsProvenanceAttestation --> CsTarballManifest : attests to
+CsTarballManifest ..> CsAuditFinding : blocked by
+@enduml

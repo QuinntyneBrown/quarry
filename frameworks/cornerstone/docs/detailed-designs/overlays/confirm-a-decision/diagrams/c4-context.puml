@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Confirm a decision
+
+Person(dev, "Application developer", "Wires confirmations into feature actions and route guards")
+Person(user, "Application user", "Settles the decision the dialog presents")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the confirm and unsaved-changes dialogs")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(router, "Angular router", "Runs deactivation guards before leaving a route")
+System_Ext(cdk, "Angular CDK", "Dialog, overlay, and focus trap primitives")
+System_Ext(browser, "Browser platform", "Owns focus, keyboard events, and rendering")
+
+Rel(dev, app, "Registers confirmLeave() and confirm calls in")
+Rel(app, cornerstone, "Opens confirm and unsaved-changes dialogs through")
+Rel(router, app, "Calls the deactivation guard of")
+Rel(app, router, "Returns the navigation answer to")
+Rel(cornerstone, cdk, "Builds the overlay and focus trap on")
+Rel(cornerstone, browser, "Renders the dialog and moves focus in")
+Rel(browser, user, "Presents the decision to")
+Rel(user, browser, "Chooses confirm, cancel, save, leave, or stay in")
+@enduml

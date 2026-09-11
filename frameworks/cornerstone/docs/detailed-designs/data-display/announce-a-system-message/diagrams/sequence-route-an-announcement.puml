@@ -1,0 +1,82 @@
+@startuml
+title UML sequence behaviour — Route an announcement to the polite or assertive live region
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as svc
+end box
+box "Frontend — Cornerstone message runtime" #D1FADF
+  participant "AlertComponent" as alert
+  participant "ToastService" as toasts
+  participant "ToastOutletComponent" as outlet
+  participant "csAnnouncementPolitenessFor()" as policy
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "Polite live region" as polite
+  participant "Assertive live region" as assertive
+  participant "Assistive technology" as at
+end box
+
+== Alert present at first render ==
+page -> alert : Render an info alert with live 'auto'
+alert -> policy : Request politeness for tone info, insertedAfterFirstRender false
+policy --> alert : polite
+alert -> polite : Take role status per L2-081
+alert -> at : Present without interrupting per L2-081
+
+== Save fails after first render ==
+user -> page : Submit the form
+page -> svc : Persist the record
+svc --> page : Save rejected
+page -> alert : Insert an error alert with live 'auto'
+alert -> policy : Request politeness for tone error, insertedAfterFirstRender true
+policy --> alert : assertive
+alert -> assertive : Take role alert and write the text once per L2-081
+assertive -> at : Interrupt the current utterance
+at --> user : Error announced assertively once
+
+== Error toast raised for a background failure ==
+svc -> toasts : open({ tone: 'error', title, action })
+toasts -> toasts : Enforce the maximum-visible policy per L2-083
+toasts -> outlet : Release the message
+outlet -> policy : Request politeness for tone error
+policy --> outlet : assertive
+outlet -> assertive : Write the message text per L2-083
+assertive -> at : Interrupt the current utterance
+outlet -> outlet : Hold at least the minimum actionable timeout per L2-083
+
+== Confirmation toast raised after a successful save ==
+svc -> toasts : open({ tone: 'success', title })
+toasts -> outlet : Release the message
+outlet -> policy : Request politeness for tone success
+policy --> outlet : polite
+outlet -> announcer : Announce politely
+announcer -> polite : Write the message text per L2-083
+polite -> at : Queue behind the current utterance
+at --> user : Confirmation announced at the next pause
+
+alt Message tone is error
+  outlet -> assertive : Route to the assertive region per L2-083
+else Message tone is success, info, warning, or lime
+  outlet -> polite : Route to the polite region per L2-083
+end
+
+outlet -> outlet : Retire the message without moving focus per L2-083
+@enduml

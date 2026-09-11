@@ -1,0 +1,6 @@
+@for (person of people().slice(0, max()); track person.id) {
+  <cs-avatar [name]="person.name" [src]="person.src ?? null" />
+}
+@if (people().length > max()) {
+  <span>+{{ people().length - max() }}</span>
+}

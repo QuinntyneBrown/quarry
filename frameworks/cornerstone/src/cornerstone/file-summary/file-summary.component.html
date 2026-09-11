@@ -1,0 +1,7 @@
+@for (entry of files(); track entry.id) {
+  <div>
+    <span>{{ entry.file.name }}</span
+    ><progress [value]="entry.progress ?? 0" max="100"></progress
+    ><button type="button" (click)="removed.emit(entry.id)">Remove</button>
+  </div>
+}

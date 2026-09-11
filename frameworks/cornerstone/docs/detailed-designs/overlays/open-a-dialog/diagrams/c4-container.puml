@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Open a dialog
+
+Person(dev, "Application developer", "Calls open() and reads the typed result")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and services", "Supplies DialogService, DialogShellComponent, and DialogRef")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the panel, backdrop, and size tokens the shell reads")
+  Container(docs, "Documentation site", "Angular application", "Publishes the dialog API reference and accessibility notes")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Injects DialogService and supplies the dialog component")
+  Container(services, "Application services", "Angular injectables", "Persists the result the dialog returns")
+}
+
+System_Ext(cdk, "Angular CDK", "Dialog, overlay container, focus trap, and block-scroll strategy")
+System_Ext(browser, "Browser platform", "Focus, keyboard, stacking, and document scrolling")
+
+Rel(dev, page, "Writes the open call in")
+Rel(page, lib, "Opens a dialog through", "DialogService.open()")
+Rel(lib, cdk, "Attaches a component portal through", "Dialog / Overlay")
+Rel(lib, theme, "Resolves panel and backdrop appearance from")
+Rel(cdk, browser, "Renders the overlay container in")
+Rel(lib, browser, "Traps and restores focus in")
+Rel(page, services, "Passes the typed result to")
+Rel(docs, lib, "Documents the public API of")
+@enduml

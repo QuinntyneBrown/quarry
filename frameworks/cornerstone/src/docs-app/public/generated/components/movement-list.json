@@ -1,0 +1,117 @@
+{
+  "kind": "class",
+  "name": "MovementListComponent",
+  "sourcePath": "src/cornerstone/movement-list/movement-list.component.ts",
+  "category": "process",
+  "description": "Movement List public API.",
+  "members": [
+    {
+      "name": "movements",
+      "bindingName": "movements",
+      "role": "input",
+      "type": "readonly Movement[]",
+      "required": true,
+      "description": "Movements public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "variant",
+      "bindingName": "variant",
+      "role": "input",
+      "type": "MovementListVariant",
+      "required": false,
+      "defaultValue": "'rows'",
+      "description": "Variant public API.",
+      "structured": false,
+      "options": ["cards", "rows"]
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "MovementActivation",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-movement-list",
+  "slug": "movement-list",
+  "label": "Movement List",
+  "tokens": [],
+  "relatedSymbols": ["Movement", "MovementActivation", "MovementListVariant", "MovementState"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "Movement",
+      "sourcePath": "src/cornerstone/movement-list/movement.interface.ts",
+      "category": "process",
+      "description": "Movement public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "MovementState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Progress public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "MovementActivation",
+      "sourcePath": "src/cornerstone/movement-list/movement-activation.interface.ts",
+      "category": "process",
+      "description": "Movement Activation public API.",
+      "members": [
+        {
+          "name": "movementId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Movement Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "MovementListVariant",
+      "sourcePath": "src/cornerstone/movement-list/movement-list-variant.type.ts",
+      "category": "process",
+      "description": "Movement List Variant public API.",
+      "declaration": "'cards' | 'rows'"
+    },
+    {
+      "kind": "type",
+      "name": "MovementState",
+      "sourcePath": "src/cornerstone/movement-list/movement-state.type.ts",
+      "category": "process",
+      "description": "Movement State public API.",
+      "declaration": "'complete' | 'current' | 'available' | 'locked'"
+    }
+  ]
+}

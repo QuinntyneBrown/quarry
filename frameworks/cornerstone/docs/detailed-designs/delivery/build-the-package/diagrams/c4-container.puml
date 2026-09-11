@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Build the package
+
+Person(maintainer, "Library maintainer", "Runs npm run build:library")
+
+System_Boundary(cornerstone, "Cornerstone workspace") {
+  Container(lib, "cornerstone library", "Angular library, @angular/build:ng-packagr", "Source of @quinntyne/cornerstone; entry file src/public-api.ts")
+  Container(theme, "Theme stylesheet", "Sass assets under src/styles", "Exported through the styles subpaths of the package")
+  Container(docs, "design-system docs app", "Angular application", "Consumes the library from the workspace and documents its surface")
+  Container(site, "marketing site", "Angular application", "Consumes the library from the workspace")
+  Container(artifact, "dist/cornerstone", "Angular Package Format output", "FESM2022 bundles, .d.ts declarations, .js.map source maps, built manifest, style assets")
+}
+
+System_Boundary(ci, "GitHub Actions") {
+  Container(verify, "CI workflow", ".github/workflows/ci.yml", "Runs npm ci, npm test, npm run build, and npm run format:check")
+}
+
+System_Ext(npm, "npm registry", "Distributes the published tarball")
+System_Ext(app, "Consuming application", "Liturgy or Word Up")
+
+Rel(maintainer, lib, "Runs the build target of")
+Rel(lib, artifact, "Emits", "ng-packagr")
+Rel(theme, artifact, "Is copied into", "asset globs")
+Rel(docs, lib, "Imports the public surface of")
+Rel(site, lib, "Imports the public surface of")
+Rel(verify, artifact, "Builds and inspects")
+Rel(verify, npm, "Publishes the packed tarball to")
+Rel(app, npm, "Installs @quinntyne/cornerstone from")
+Rel(app, artifact, "Resolves entry points and style subpaths from")
+@enduml

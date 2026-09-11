@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Render the trail for a routed page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Angular Router" as router
+  participant "Crumb resolver" as resolver
+  participant "Application shell" as shell
+end box
+box "Frontend — Cornerstone breadcrumbs" #D1FADF
+  participant "BreadcrumbsComponent" as crumbs
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and history" as dom
+end box
+
+user -> dom : Open a deep application URL
+dom -> router : Resolve the route tree
+router -> resolver : Publish the activated route data
+resolver -> resolver : Map each ancestor to a Crumb
+resolver --> shell : Crumb list, current page last
+shell -> crumbs : Bind crumbs and maxVisible
+
+crumbs -> crumbs : Count crumbs against maxVisible per L2-068
+crumbs -> dom : Render the nav landmark and the ordered list
+crumbs -> dom : Render each ancestor as an anchor carrying the supplied routerLink per L2-076
+crumbs -> dom : Render the final crumb as text with aria-current="page" per L2-068
+dom --> user : Trail showing the path to the current page
+
+user -> dom : Activate an ancestor anchor
+dom -> router : Resolve the routerLink binding per L2-076
+crumbs -> shell : Emit the activation output
+router -> resolver : Publish the new activated route data
+resolver --> shell : Shorter crumb list
+shell -> crumbs : Rebind crumbs
+crumbs -> dom : Re-render the trail
+dom --> user : Ancestor page with its own trail
+@enduml

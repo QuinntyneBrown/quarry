@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Open an anchored surface
+
+Person(dev, "Application developer", "Hangs secondary actions off a trigger control")
+Person(user, "Application user", "Opens the surface and selects an action")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying anchored menus, popovers, and the account menu")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning session and action handling")
+System_Ext(cdk, "Angular CDK", "Overlay, connected position strategy, focus trap, and focus key manager")
+System_Ext(browser, "Browser platform", "Reports the viewport bounds, pointer events, and the focused element")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Applies the menu directive to a trigger in")
+Rel(dev, app, "Declares the action set and its handlers in")
+Rel(app, cornerstone, "Supplies the account view model and action list to")
+Rel(cornerstone, app, "Emits action and sign-out intents to")
+Rel(cornerstone, cdk, "Positions, traps focus, and manages keys with")
+Rel(cornerstone, browser, "Attaches the overlay and moves focus in")
+Rel(browser, user, "Presents the anchored surface to")
+Rel(user, browser, "Activates the trigger and selects an action in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

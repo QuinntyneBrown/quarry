@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Open an anchored surface
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "CsMenuDirective" as menu
+  participant "PopoverComponent" as panel
+end box
+box "Frontend — Cornerstone CDK adapter layer" #ECFDF3
+  participant "CsOverlayService" as overlay
+  participant "CsFocusTrapDirective" as trap
+  participant "CsListKeyManager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "Angular CDK and DOM" as cdk
+end box
+
+user -> page : Activate the menu trigger
+page -> menu : Trigger click or Enter
+menu -> overlay : open(PopoverComponent, config) per L2-011
+overlay -> overlay : Resolve the belowStart position preset
+overlay -> cdk : Create a flexible connected position strategy
+overlay -> cdk : Attach the reposition scroll strategy per L2-011
+cdk -> cdk : Measure the trigger and the viewport
+alt Preferred position fits
+  cdk --> overlay : Apply belowStart
+else Preferred position collides with the viewport edge
+  cdk --> overlay : Apply the first fitting fallback position
+end
+overlay -> panel : Attach the portal
+overlay --> menu : CsOverlayRef
+menu -> trap : Activate the focus trap per L2-012
+trap -> cdk : Build a ConfigurableFocusTrap
+trap -> cdk : Move initial focus to the first menu item
+menu -> keys : Attach the item list per L2-012
+user -> keys : Press ArrowDown
+keys -> cdk : Delegate to FocusKeyManager
+cdk --> panel : Focus the next item
+panel --> user : Highlighted item
+user -> menu : Press Escape
+menu -> overlay : close()
+overlay -> cdk : Dispose the overlay and detach the portal
+trap -> cdk : Restore focus to the trigger per L2-012
+cdk --> user : Focus returns to the trigger
+@enduml

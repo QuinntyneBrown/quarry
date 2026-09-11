@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Open a lesson step
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth participant" as youth
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Progression service" as progression
+  participant "Routing service" as router
+end box
+box "Frontend — Cornerstone journey composites" #D1FADF
+  participant "LearningJourneyComponent" as journey
+  participant "LessonStepListComponent" as steplist
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "List key manager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and rendering" as browser
+end box
+
+progression -> page : Supply journey records
+page -> journey : Bind LearningJourneyView per L2-117
+journey -> journey : Render progress summary per L2-117
+journey -> browser : Query viewport width
+browser --> journey : Narrow or wide breakpoint
+journey -> journey : Select timeline or list presentation per L2-117
+journey -> steplist : Pass module steps and activeStepId
+steplist -> steplist : Render completed, current, available, and locked states per L2-117
+steplist --> browser : Rendered step rows
+
+youth -> browser : Press ArrowDown then Enter on a step
+browser -> keys : Key events
+keys -> steplist : Move active descendant, then activate
+steplist -> page : Emit LessonStepSelect with state 'available'
+page -> progression : Record the visit and re-evaluate prerequisites
+progression --> page : Updated journey records
+page -> router : Navigate to the lesson step route
+router --> page : Route activated
+page -> journey : Bind the updated LearningJourneyView
+journey -> steplist : Pass the new step states
+steplist --> browser : Repaint with the new current step
+browser --> youth : Lesson step opened
+@enduml

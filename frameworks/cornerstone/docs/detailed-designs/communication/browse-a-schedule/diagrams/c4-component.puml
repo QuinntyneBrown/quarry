@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Browse a schedule
+
+Person(mentor, "Mentor", "Navigates days and responds to events")
+
+Container_Boundary(appsvc, "Consuming application services") {
+  Component(schedsvc, "ScheduleViewModelService", "Angular injectable", "Builds ScheduleGroup and CsCalendarDayEvents from application data")
+  Component(intentsvc, "ScheduleIntentHandler", "Angular injectable", "Receives selection, range, and RSVP intents and performs persistence and routing")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(calendar, "CalendarComponent", "Standalone component", "Month and week grid with selected day, today, and overflow indication")
+  Component(grid, "CalendarKeyboardGrid", "Directive", "Holds the roving tabindex and the arrow-key map")
+  Component(dates, "CalendarDate utilities", "TypeScript functions", "Perform calendar-date arithmetic with no instant conversion")
+  Component(card, "EventCardComponent", "Standalone component", "Date, time, location, status, attendance, and actions")
+  Component(list, "ScheduleListComponent", "Standalone component", "Day-grouped agenda with empty and loading states")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus management and breakpoint observation")
+System_Ext(browser, "Browser platform", "Timezone, locale, and live regions")
+
+Rel(schedsvc, calendar, "Supplies the calendar view model to")
+Rel(schedsvc, list, "Supplies the grouped agenda view model to")
+Rel(list, card, "Renders one per event")
+Rel(calendar, intentsvc, "Emits dateSelected and rangeChange to")
+Rel(card, intentsvc, "Emits rsvpChanged and actionInvoked to")
+Rel(calendar, grid, "Delegates key handling to")
+Rel(grid, dates, "Computes the target date with")
+Rel(calendar, dates, "Builds day cells with")
+Rel(grid, cdk, "Moves focus using")
+Rel(calendar, cdk, "Observes the XS breakpoint with")
+Rel(calendar, browser, "Announces the period change through", "aria-live polite")
+Rel(card, browser, "Formats date and time for", "locale-aware pipes")
+@enduml

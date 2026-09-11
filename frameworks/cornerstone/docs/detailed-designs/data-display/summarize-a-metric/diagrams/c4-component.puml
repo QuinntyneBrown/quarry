@@ -1,0 +1,50 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Summarize a metric
+
+Person(dev, "Application developer", "Supplies the computed figures")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(stat, "StatCardComponent", "Angular component", "Framed statistic with label, value, unit, delta, and tone")
+  Component(kpi, "KpiComponent", "Angular component", "Unframed statistic for headers and summary rows")
+  Component(matrix, "ProgressMatrixComponent", "Angular component", "Labelled grid of done, in-progress, none, and not-applicable cells")
+  Component(bars, "MetricBarsComponent", "Angular component", "Horizontal bars and 100-percent distributions")
+  Component(compare, "ComparisonChartComponent", "Angular component", "Paired bars with an explicit delta column")
+  Component(valuetable, "MetricValueTableComponent", "Angular component", "Tabular restatement of every series and point")
+  Component(legend, "MetricLegendComponent", "Angular component", "Colour, label, and pattern for each series")
+  Component(types, "MetricDelta and CsMetricSeries", "TypeScript types", "Delta direction and sentiment; series and point view model")
+  Component(state, "CsDataState contract", "TypeScript types", "Idle, loading, empty, error, and ready conditions")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tonetokens, "Tone and fill tokens", "CSS custom properties", "Surface, border, text, and series fill values")
+  Component(printcss, "Print resolution", "Media query block", "Patterned fills and expanded value tables")
+}
+
+System_Ext(page, "Feature page", "Angular component computing the figures")
+System_Ext(cdk, "Angular CDK", "BreakpointObserver")
+
+Rel(dev, page, "Computes deltas and series in")
+Rel(page, stat, "Passes label, value, unit, and delta to")
+Rel(page, kpi, "Passes the same metric inputs to")
+Rel(page, matrix, "Passes rows, columns, and cell states to")
+Rel(page, bars, "Passes CsMetricSeries to")
+Rel(page, compare, "Passes CsMetricSeries and a baseline key to")
+Rel(stat, types, "Reads")
+Rel(kpi, types, "Reads")
+Rel(bars, types, "Reads")
+Rel(compare, types, "Reads")
+Rel(bars, valuetable, "Renders")
+Rel(compare, valuetable, "Renders")
+Rel(bars, legend, "Renders")
+Rel(compare, legend, "Renders")
+Rel(stat, state, "Renders loading and error conditions from")
+Rel(matrix, state, "Renders loading and error conditions from")
+Rel(bars, state, "Renders loading and error conditions from")
+Rel(matrix, cdk, "Collapses sticky headers using")
+Rel(stat, tonetokens, "Resolves tone values from")
+Rel(bars, tonetokens, "Resolves series fills from")
+Rel(valuetable, printcss, "Is expanded by")
+Rel(legend, printcss, "Swaps fills for patterns under")
+@enduml

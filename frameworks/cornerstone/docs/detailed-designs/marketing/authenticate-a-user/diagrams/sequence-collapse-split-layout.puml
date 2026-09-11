@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Collapse the split authentication layout
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Cornerstone marketing components" #D1FADF
+  participant "AuthLayoutComponent" as layout
+  participant "AuthCardComponent" as card
+  participant "AuthBrandDirective" as brand
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Auth layout styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and cascade" as browser
+end box
+
+user -> browser : Open the screen on a handset or narrow the window
+browser -> styles : Re-evaluate the layout media query
+
+alt Viewport below the layout breakpoint
+  styles -> layout : Apply the single-column rules per L2-144
+  layout -> browser : Remove the artwork panel from the flow
+  brand -> browser : Place the brand lockup above the card
+  card -> browser : Widen to the container bound with page padding
+else Viewport at or above the layout breakpoint
+  styles -> layout : Apply the two-column split rules per L2-144
+  layout -> browser : Place the artwork panel on the configured side
+  brand -> browser : Place the brand lockup inside the form column
+  card -> browser : Hold the card measure within the form column
+end
+
+layout -> layout : Keep the DOM order of brand, card, and footer unchanged
+browser --> user : Screen at the arrangement the viewport supports
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Switch drawer mode on a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone drawer runtime" #D1FADF
+  participant "DrawerContainerComponent" as container
+  participant "DrawerComponent" as drawer
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+  participant "FocusTrap and BlockScroll" as trap
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and focus" as browser
+end box
+
+page -> drawer : Render opened with mode 'non-modal' and responsiveFullScreen
+drawer -> container : Reserve the side region
+container -> browser : Inset the page content beside the panel
+drawer -> drawer : Set role complementary with no aria-modal per L2-104
+
+user -> browser : Narrow the window below the responsive breakpoint
+browser -> bp : Report the breakpoint change
+bp -> drawer : Emit the narrow state
+
+alt Viewport below the breakpoint
+  drawer -> drawer : Resolve the effective mode to 'modal' per L2-104
+  drawer -> trap : Engage the focus trap and block page scrolling
+  trap -> browser : Constrain sequential navigation to the panel
+  drawer -> browser : Occupy the viewport as a full-screen panel per L2-104
+  drawer -> drawer : Set role dialog and aria-modal true
+  container -> browser : Release the content inset
+else Viewport at or above the breakpoint
+  drawer -> drawer : Resolve the effective mode to 'non-modal' per L2-104
+  drawer -> trap : Release the focus trap and the scroll block
+  trap -> browser : Allow focus to leave the panel
+  drawer -> drawer : Set role complementary and remove aria-modal
+  container -> browser : Reapply the content inset beside the panel
+end
+
+drawer -> browser : Keep the focused element focused across the mode change
+browser --> user : Drawer at the mode the viewport supports
+@enduml

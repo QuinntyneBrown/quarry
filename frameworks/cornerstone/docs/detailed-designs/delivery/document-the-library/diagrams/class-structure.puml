@@ -1,0 +1,147 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Document the library
+
+enum CsDocsSymbolKind {
+  component
+  directive
+  service
+  token
+  type
+}
+
+enum CsDocsMemberRole {
+  input
+  output
+  method
+  injectionToken
+}
+
+enum CsDocsGuideId {
+  gettingStarted
+  themingAndTokens
+  accessibility
+  serverSideRendering
+  formsIntegration
+  migration
+  contribution
+}
+
+class CsDocsApiEntry {
+  +name: string
+  +kind: CsDocsSymbolKind
+  +selector: string | null
+  +sourcePath: string
+  +members: readonly CsDocsApiMember[]
+}
+
+class CsDocsApiMember {
+  +name: string
+  +role: CsDocsMemberRole
+  +type: string
+  +defaultValue: string | null
+  +description: string
+}
+
+class CsDocsVariant {
+  +label: string
+  +inputs: Record<string, unknown>
+  +state: string
+}
+
+class CsDocsExample {
+  +id: string
+  +title: string
+  +component: Type<unknown>
+  +source: string
+  +language: 'ts' | 'html' | 'scss'
+}
+
+class CsDocsApiService {
+  -entries: Signal<readonly CsDocsApiEntry[]>
+  +entryFor(symbol: string): Signal<CsDocsApiEntry | undefined>
+  +load(): Promise<void>
+}
+
+class CsDocsExampleRegistry {
+  -examples: Map<string, CsDocsExample>
+  +get(id: string): CsDocsExample | undefined
+  +register(example: CsDocsExample): void
+}
+
+class CsDocsPageComponent {
+  +symbol: InputSignal<string>
+  +entry: Signal<CsDocsApiEntry | undefined>
+}
+
+class CsDocsExampleComponent {
+  +exampleId: InputSignal<string>
+  +initialView: InputSignal<'preview' | 'source'>
+  +view: ModelSignal<'preview' | 'source'>
+  +copied: OutputEmitterRef<string>
+}
+
+class CsDocsSourceViewerComponent {
+  +source: InputSignal<string>
+  +language: InputSignal<'ts' | 'html' | 'scss'>
+  +copy(): Promise<boolean>
+}
+
+class CsDocsVariantGalleryComponent {
+  +variants: InputSignal<readonly CsDocsVariant[]>
+  +themes: InputSignal<readonly CsThemeName[]>
+}
+
+class CsDocsApiTableComponent {
+  +entry: InputSignal<CsDocsApiEntry>
+  +grouped: Signal<Map<CsDocsMemberRole, readonly CsDocsApiMember[]>>
+}
+
+class CsDocsAccessibilityNotesComponent {
+  +pattern: InputSignal<string>
+  +keyBindings: InputSignal<readonly CsDocsKeyBinding[]>
+}
+
+class CsDocsThemingNotesComponent {
+  +tokens: InputSignal<readonly string[]>
+}
+
+class CsDocsKeyBinding {
+  +keys: string
+  +effect: string
+}
+
+class CsDocsApiExtractor <<build step>> {
+  +extract(entryFile: string): readonly CsDocsApiEntry[]
+  +write(target: string): void
+}
+
+CsDocsApiEntry *-- "0..*" CsDocsApiMember : declares
+CsDocsApiEntry --> CsDocsSymbolKind : has
+CsDocsApiMember --> CsDocsMemberRole : has
+CsDocsApiExtractor ..> CsDocsApiEntry : emits
+CsDocsApiService --> "0..*" CsDocsApiEntry : holds
+CsDocsPageComponent ..> CsDocsApiService : reads
+CsDocsPageComponent *-- "1" CsDocsExampleComponent : projects
+CsDocsPageComponent *-- "1" CsDocsVariantGalleryComponent : projects
+CsDocsPageComponent *-- "1" CsDocsApiTableComponent : projects
+CsDocsPageComponent *-- "1" CsDocsAccessibilityNotesComponent : projects
+CsDocsPageComponent *-- "1" CsDocsThemingNotesComponent : projects
+CsDocsExampleComponent ..> CsDocsExampleRegistry : resolves through
+CsDocsExampleComponent o-- "1" CsDocsSourceViewerComponent : shows source in
+CsDocsExampleRegistry --> "0..*" CsDocsExample : indexes
+CsDocsVariantGalleryComponent --> "1..*" CsDocsVariant : renders
+CsDocsApiTableComponent ..> CsDocsApiEntry : reads
+CsDocsAccessibilityNotesComponent --> "0..*" CsDocsKeyBinding : tabulates
+@enduml

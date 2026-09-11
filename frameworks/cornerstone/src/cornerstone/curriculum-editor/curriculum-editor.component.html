@@ -1,0 +1,9 @@
+<form>
+  <cs-field label="Title"><input csInput [value]="node().label" /></cs-field><ng-content /><button
+    csButton
+    type="button"
+    (click)="saved.emit(node())"
+  >
+    Save
+  </button>
+</form>

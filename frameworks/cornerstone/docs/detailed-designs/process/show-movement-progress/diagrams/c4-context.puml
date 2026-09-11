@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Show movement progress
+
+Person(dev, "Application developer", "Places a dial, list, or pip strip on a stage page or card")
+Person(user, "Application user", "Reads how far a set of movements has progressed")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the domain-neutral movement dial, list, and pip strip")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning movement state and routes")
+System_Ext(browser, "Browser platform", "Renders SVG and list semantics and reports colour and zoom preferences")
+System_Ext(cdk, "Angular CDK", "Focus and layout behaviour primitives")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes progress displays from")
+Rel(dev, app, "Writes the movement view model and adapter in")
+Rel(app, cornerstone, "Supplies movement counts, states, and a typed adapter to", "signal inputs")
+Rel(cornerstone, app, "Emits movement activation intents to", "output()")
+Rel(cornerstone, browser, "Renders progress semantics to", "SVG and ARIA")
+Rel(cornerstone, cdk, "Builds focus behaviour on")
+Rel(browser, user, "Presents completion and current position to")
+Rel(user, browser, "Activates a movement in")
+Rel(app, npm, "Installs Cornerstone from")
+@enduml

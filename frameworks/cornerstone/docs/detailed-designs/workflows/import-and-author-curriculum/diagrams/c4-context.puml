@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Import and author curriculum
+
+Person(admin, "Administrator", "Imports curriculum rows and authors tracks, modules, lessons, and questions")
+Person(mentor, "Mentor", "Reads the competency grid for a cohort")
+Person(dev, "Application developer", "Builds the Word Up curriculum screens from Cornerstone components")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the import wizard, curriculum tree and editor, progression builder, and competency grid")
+System_Ext(app, "Consuming application", "Word Up portal; owns curriculum data, parsing, authorization, and publishing rules")
+System_Ext(cdk, "Angular CDK", "Drag-and-drop, focus, live announcement, and layout observation primitives")
+System_Ext(browser, "Browser platform", "Selects the file, renders the surfaces, and reports pointer and keyboard input")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(admin, browser, "Selects a CSV export and authors curriculum in")
+Rel(mentor, browser, "Reads the competency grid in")
+Rel(dev, cornerstone, "Composes the curriculum screens from")
+Rel(dev, app, "Implements the curriculum rules in")
+Rel(app, cornerstone, "Supplies the import, curriculum, and progression view models to")
+Rel(cornerstone, app, "Emits typed import, edit, reorder, and transition intents to")
+Rel(cornerstone, cdk, "Builds behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders every CSV cell as literal text in")
+@enduml

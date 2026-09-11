@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Dismiss a dialog without a result
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone dialog runtime" #D1FADF
+  participant "DialogShellComponent" as shell
+  participant "DialogRef" as ref
+  participant "DialogService" as service
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and Dialog" as cdk
+  participant "FocusTrap" as trap
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and focus" as browser
+end box
+
+user -> browser : Press Escape or click the backdrop
+browser -> cdk : Keydown or backdrop click event
+cdk -> ref : Report the dismissal attempt
+
+alt disableClose is false
+  ref -> shell : Begin close with an undefined result
+  shell -> trap : Destroy the focus trap
+  ref -> cdk : Detach the overlay
+  service -> browser : Release the scroll block per L2-102
+  shell -> browser : Return focus to the recorded trigger element per L2-102
+  ref --> page : Emit undefined on closed
+  page --> user : Screen unchanged, no result recorded
+else disableClose is true
+  ref -> ref : Ignore the dismissal
+  ref -> shell : Emit the dismissal attempt to the dialog component
+  shell -> browser : Keep focus inside the trap per L2-102
+  shell --> user : Panel remains open with the pending action running
+end
+@enduml

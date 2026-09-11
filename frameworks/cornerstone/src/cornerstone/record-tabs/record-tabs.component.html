@@ -1,0 +1,13 @@
+<div role="tablist">
+  @for (section of sections(); track section.id) {
+    <button
+      role="tab"
+      [attr.aria-selected]="active() === section.id"
+      [disabled]="section.disabled"
+      (click)="select(section.id)"
+    >
+      {{ section.label }}
+    </button>
+  }
+</div>
+<ng-content />

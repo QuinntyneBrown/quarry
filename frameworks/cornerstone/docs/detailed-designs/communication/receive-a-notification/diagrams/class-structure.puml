@@ -1,0 +1,139 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Receive a notification
+
+enum CsNotificationCategory {
+  message
+  assignment
+  event
+  system
+  achievement
+}
+
+enum CsDataState {
+  idle
+  loading
+  ready
+  empty
+  error
+}
+
+enum CsSubmitState {
+  idle
+  pending
+  succeeded
+  failed
+}
+
+enum CsDeliveryMode {
+  now
+  scheduled
+}
+
+enum CsAudienceKind {
+  cohort
+  role
+  individual
+}
+
+class CsNotificationViewModel {
+  +id: string
+  +category: CsNotificationCategory
+  +title: string
+  +body: string
+  +occurredAt: string
+  +read: boolean
+  +link: CsDeepLinkTarget | null
+}
+
+class CsDeepLinkTarget {
+  +route: string
+  +params: Readonly<Record<string, string>>
+}
+
+class CsNotificationNavigateIntent {
+  +notificationId: string
+  +target: CsDeepLinkTarget
+}
+
+class NotificationListComponent {
+  +notifications: InputSignal<readonly CsNotificationViewModel[]>
+  +state: InputSignal<CsDataState>
+  +unreadCount: InputSignal<number>
+  +markRead: OutputEmitterRef<string>
+  +markAllRead: OutputEmitterRef<void>
+  +navigate: OutputEmitterRef<CsNotificationNavigateIntent>
+  +canMarkAll: Signal<boolean>
+}
+
+class NotificationItemComponent {
+  +notification: InputSignal<CsNotificationViewModel>
+  +readToggled: OutputEmitterRef<string>
+  +activated: OutputEmitterRef<CsNotificationNavigateIntent>
+  +accessibleName: Signal<string>
+}
+
+class AudienceOption {
+  +id: string
+  +label: string
+  +kind: CsAudienceKind
+  +recipientCount: number
+}
+
+class AnnouncementDraft {
+  +audienceIds: readonly string[]
+  +delivery: CsDeliveryMode
+  +scheduledAt: string | null
+  +subject: string
+  +body: string
+}
+
+class AnnouncementComposerComponent {
+  +audiences: InputSignal<readonly AudienceOption[]>
+  +value: ModelSignal<AnnouncementDraft>
+  +submitState: InputSignal<CsSubmitState>
+  +previewHtml: InputSignal<string | null>
+  +submitted: OutputEmitterRef<AnnouncementDraft>
+  +previewRequested: OutputEmitterRef<AnnouncementDraft>
+  +scheduleRequired: Signal<boolean>
+  -validateFutureInstant(value: string): CsValidationError | null
+}
+
+class CsValidationError {
+  +controlName: string
+  +message: string
+}
+
+class ValidationSummaryComponent {
+  +errors: InputSignal<readonly CsValidationError[]>
+  +focusFirstInvalid(): void
+}
+
+NotificationListComponent "1" o-- "0..*" CsNotificationViewModel
+NotificationListComponent ..> NotificationItemComponent : renders
+NotificationListComponent --> CsDataState : has
+NotificationListComponent --> CsNotificationNavigateIntent : emits
+NotificationItemComponent ..> CsNotificationViewModel : renders
+NotificationItemComponent --> CsNotificationNavigateIntent : emits
+CsNotificationViewModel --> CsNotificationCategory : has
+CsNotificationViewModel "1" o-- "0..1" CsDeepLinkTarget
+CsNotificationNavigateIntent --> CsDeepLinkTarget : carries
+AnnouncementComposerComponent "1" o-- "0..*" AudienceOption
+AnnouncementComposerComponent --> AnnouncementDraft : holds
+AnnouncementComposerComponent --> CsSubmitState : has
+AnnouncementComposerComponent *-- ValidationSummaryComponent
+AnnouncementDraft --> CsDeliveryMode : has
+AudienceOption --> CsAudienceKind : has
+ValidationSummaryComponent "1" o-- "0..*" CsValidationError
+@enduml

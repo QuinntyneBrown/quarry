@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Adopt CDK behaviour
+
+Person(dev, "Application developer", "Builds Liturgy and Word Up screens from Cornerstone components")
+Person(user, "Application user", "Operates menus, dialogs, lists, and boards by pointer or keyboard")
+
+System(cornerstone, "Cornerstone", "Angular UI library whose interaction mechanics come from Angular CDK")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Overlay, a11y, layout, text-field, scrolling, and drag-drop primitives")
+System_Ext(browser, "Browser platform", "Delivers pointer, keyboard, and layout events")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes overlay, list, and board components from")
+Rel(app, cornerstone, "Depends on the adapter layer of")
+Rel(cornerstone, cdk, "Delegates every interaction mechanic to")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cdk, browser, "Positions, traps, observes, and drags through")
+Rel(user, browser, "Sends pointer and keyboard input to")
+Rel(browser, user, "Presents the positioned surface to")
+@enduml

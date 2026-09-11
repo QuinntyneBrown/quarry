@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Recover from a media load failure
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "MediaViewModelService" as vm
+  participant "AttachmentTransferHandler" as transfer
+end box
+box "Frontend — Cornerstone media" #D1FADF
+  participant "MediaViewerComponent" as viewer
+  participant "AttachmentListComponent" as attach
+end box
+box "Browser — platform" #FFF4E5
+  participant "Media loader and live region" as browser
+end box
+
+vm --> viewer : Supply the media view model
+viewer -> browser : Attach the media element
+browser --> viewer : Report a load error
+
+viewer -> viewer : Remove the failed element so no broken media remains per L2-113
+viewer -> viewer : Render the documented error state inside the reserved box
+viewer -> browser : State the failure in text
+browser --> user : Stated error with a retry control
+
+user -> viewer : Activate retry
+viewer -> transfer : Emit retryRequested with the media key per L2-113
+transfer -> vm : Resolve a fresh source URL
+
+alt A new source is available
+  vm --> viewer : Supply the refreshed media view model
+  viewer -> browser : Attach the media element again
+  browser --> viewer : Load complete
+  viewer --> user : Media in place of the error state
+else No source is available
+  vm --> viewer : Supply the error data state per L2-101
+  viewer --> user : Error state retained
+end
+
+alt An attachment transfer failed
+  vm --> attach : Supply the attachment with the failed status
+  attach -> attach : State the failure reason in text and expose retry per L2-114
+  user -> attach : Activate retry on that attachment
+  attach -> transfer : Emit retryRequested with the attachment id per L2-114
+  transfer --> attach : Refreshed attachment status
+end
+@enduml

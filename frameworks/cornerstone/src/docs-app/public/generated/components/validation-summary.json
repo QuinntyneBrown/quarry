@@ -1,0 +1,62 @@
+{
+  "kind": "class",
+  "name": "ValidationSummaryComponent",
+  "sourcePath": "src/cornerstone/validation-summary/validation-summary.component.ts",
+  "category": "forms",
+  "description": "Validation Summary public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Please correct the following'",
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "errors",
+      "bindingName": "errors",
+      "role": "input",
+      "type": "readonly ValidationEntry[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Errors public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-validation-summary",
+  "slug": "validation-summary",
+  "label": "Validation Summary",
+  "tokens": [],
+  "relatedSymbols": ["ValidationEntry"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ValidationEntry",
+      "sourcePath": "src/cornerstone/validation-summary/validation-entry.interface.ts",
+      "category": "forms",
+      "description": "Validation Entry public API.",
+      "members": [
+        {
+          "name": "controlId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Control Id public API."
+        },
+        {
+          "name": "message",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Message public API."
+        }
+      ]
+    }
+  ]
+}

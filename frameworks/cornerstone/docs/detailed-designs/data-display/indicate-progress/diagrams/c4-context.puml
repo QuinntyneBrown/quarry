@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Indicate progress
+
+Person(dev, "Application developer", "Signals loading and completion from page and service state")
+Person(user, "Application user", "Waits for content and follows the progress of long operations")
+Person(admin, "Administrator", "Runs roster imports and watches the import progress in Word Up")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the spinner, skeletons, progress bar, and progress ring")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns the work and its state")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for focus containment in busy regions")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Reports motion and forced-colour preferences and exposes progress semantics")
+
+Rel(dev, app, "Binds loading flags and progress values in")
+Rel(app, cornerstone, "Renders progress indicators from")
+Rel(cornerstone, cdk, "Contains focus inside busy regions through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Writes progressbar roles, values, and busy state to")
+Rel(browser, cornerstone, "Reports prefers-reduced-motion and forced-colors to")
+Rel(browser, user, "Presents and announces progress to")
+Rel(admin, browser, "Watches an import complete in")
+@enduml

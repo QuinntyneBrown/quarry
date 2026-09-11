@@ -1,0 +1,67 @@
+{
+  "kind": "class",
+  "name": "MarketingFooterComponent",
+  "sourcePath": "src/cornerstone/marketing-footer/marketing-footer.component.ts",
+  "category": "navigation",
+  "description": "Marketing Footer public API.",
+  "members": [
+    {
+      "name": "groups",
+      "bindingName": "groups",
+      "role": "input",
+      "type": "readonly MarketingLinkGroup[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Groups public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-marketing-footer",
+  "slug": "marketing-footer",
+  "label": "Marketing Footer",
+  "tokens": ["--cs-ink", "--cs-paper", "--cs-space-2", "--cs-space-6", "--cs-space-8"],
+  "relatedSymbols": ["MarketingLinkGroup", "SocialLink"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "MarketingLinkGroup",
+      "sourcePath": "src/cornerstone/marketing-footer/marketing-link-group.interface.ts",
+      "category": "navigation",
+      "description": "Marketing Link Group public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "links",
+          "role": "property",
+          "type": "readonly CsMarketingLink[]",
+          "required": true,
+          "description": "Links public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "SocialLink",
+      "sourcePath": "src/cornerstone/marketing-footer/social-link.interface.ts",
+      "category": "navigation",
+      "description": "Social Link public API.",
+      "members": [
+        {
+          "name": "platform",
+          "role": "property",
+          "type": "'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'x' | 'github' | 'tiktok'",
+          "required": true,
+          "description": "Platform public API."
+        }
+      ]
+    }
+  ]
+}

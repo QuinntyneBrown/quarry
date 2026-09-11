@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Export and print a report
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Reporting page component" as page
+  participant "Export service" as exporter
+end box
+box "Frontend — Cornerstone reporting composite" #D1FADF
+  participant "ReportDashboardComponent" as dashboard
+  participant "ReportFiltersComponent" as filters
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Report print rules" as printcss
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and print pipeline" as browser
+end box
+
+user -> dashboard : Switch to the cohort view
+dashboard -> page : Emit viewChanged per L2-130
+page -> dashboard : Bind the cohort view model
+
+user -> dashboard : Activate the export action
+dashboard -> filters : Read the complete filter state
+filters --> dashboard : ReportFilterState
+dashboard -> page : Emit ReportExportIntent carrying the filter state and the view per L2-130
+dashboard -> dashboard : Generate no file per L2-130
+page -> exporter : Produce the export file
+exporter --> page : File offered to the reader
+page --> user : Download offered by the application
+
+user -> browser : Print the page
+browser -> printcss : Apply the print media rules
+printcss -> browser : Render charts, KPI figures, and the active filter summary legibly per L2-130
+printcss -> browser : Omit the filter controls, the paginator, and the export action per L2-130
+printcss -> browser : Keep each chart's data alternative in the printed output per L2-097
+browser --> user : Printed report carrying the applied filter summary
+@enduml

@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Walk a process rail
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone process components" #D1FADF
+  participant "ProcessRailComponent" as rail
+  participant "ProcessJourneyComponent" as journey
+  participant "GateComponent" as gate
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Component styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+services -> page : Stage states and enforcement results
+page -> rail : Bind stages and the process adapter
+rail -> rail : Read every label from the adapter per L2-143
+rail -> dom : Render ordered list semantics per L2-132
+rail -> dom : Mark the current stage aria-current="step"
+rail -> dom : State done, current, and locked in text
+rail -> gate : Render the inter-step gate between two stages
+gate -> dom : Announce the gate in reading order per L2-132
+rail -> dom : Project nested current-stage content after the stage label
+rail -> styles : Resolve the stage token named by the adapter
+styles --> dom : Computed stage colour
+
+page -> journey : Bind the same stages for the full-content timeline
+journey -> dom : Render each stage as a labelled region per L2-133
+journey -> gate : Render the gate panel before the locked stage
+gate -> dom : State the outstanding requirement count
+
+user -> dom : Activate an unlocked stage
+dom -> rail : Click or Enter on the stage link
+rail -> page : Emit CsStageActivation
+page -> services : Resolve the intent into a route change
+services --> page : Updated stage states
+page -> rail : Rebind stages
+rail --> dom : Re-render with the new current stage
+dom --> user : Updated process state
+@enduml

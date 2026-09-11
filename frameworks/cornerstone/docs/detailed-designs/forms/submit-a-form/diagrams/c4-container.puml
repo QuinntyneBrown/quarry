@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Submit a form
+
+Person(dev, "Application developer", "Owns the form model and the handler")
+Person(user, "Application user", "Submits the form")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies FormActionsComponent, ValidationSummaryComponent, and WizardComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares action placement, sticky offset, safe-area inset, and error tokens")
+  Container(docs, "Documentation site", "Angular application", "Publishes the participation statement of every value-bearing control")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Declares the native form, the FormGroup, and the submission handler")
+  Container(services, "Application services", "Angular injectables", "Persists the submitted value and reports the outcome")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and focus utilities")
+System_Ext(browser, "Browser platform", "Native form submission and FormData")
+
+Rel(dev, page, "Writes the submission handler in")
+Rel(page, lib, "Binds the submitting state, the error list, and the step set to")
+Rel(lib, page, "Emits the step and finish intents to")
+Rel(page, services, "Persists the submitted value through")
+Rel(services, page, "Reports the submission outcome to")
+Rel(lib, theme, "Resolves placement, sticky offset, and error colours from")
+Rel(lib, cdk, "Announces failure and restores focus through", "LiveAnnouncer")
+Rel(page, browser, "Submits the native form to")
+Rel(browser, page, "Assembles FormData from the participating controls for")
+Rel(user, browser, "Activates the submit control in")
+Rel(docs, lib, "Documents the participation of every control alongside")
+@enduml

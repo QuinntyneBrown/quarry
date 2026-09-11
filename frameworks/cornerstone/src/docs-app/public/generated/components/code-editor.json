@@ -1,0 +1,99 @@
+{
+  "kind": "class",
+  "name": "CodeEditorComponent",
+  "sourcePath": "src/cornerstone/code-editor/code-editor.component.ts",
+  "category": "communication",
+  "description": "Code Editor public API.",
+  "members": [
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "model",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "language",
+      "bindingName": "language",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'text'",
+      "description": "Language public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "RunState",
+      "required": false,
+      "defaultValue": "'idle'",
+      "description": "State public API.",
+      "structured": false,
+      "options": ["idle", "running", "success", "error"]
+    },
+    {
+      "name": "run",
+      "bindingName": "run",
+      "role": "output",
+      "type": "RunIntent",
+      "required": false,
+      "description": "Run public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-code-editor",
+  "slug": "code-editor",
+  "label": "Code Editor",
+  "tokens": [],
+  "relatedSymbols": ["CaretPositionDirective", "RunIntent", "RunState"],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "CaretPositionDirective",
+      "sourcePath": "src/cornerstone/code-editor/caret-position.directive.ts",
+      "category": "communication",
+      "description": "Caret Position public API.",
+      "members": []
+    },
+    {
+      "kind": "interface",
+      "name": "RunIntent",
+      "sourcePath": "src/cornerstone/code-editor/run-intent.interface.ts",
+      "category": "communication",
+      "description": "Run Intent public API.",
+      "members": [
+        {
+          "name": "source",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Source public API."
+        },
+        {
+          "name": "language",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Language public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "RunState",
+      "sourcePath": "src/cornerstone/code-editor/run-state.type.ts",
+      "category": "communication",
+      "description": "Run State public API.",
+      "declaration": "'idle' | 'running' | 'success' | 'error'"
+    }
+  ]
+}

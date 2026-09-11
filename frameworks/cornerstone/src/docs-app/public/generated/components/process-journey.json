@@ -1,0 +1,149 @@
+{
+  "kind": "class",
+  "name": "ProcessJourneyComponent",
+  "sourcePath": "src/cornerstone/process-journey/process-journey.component.ts",
+  "category": "process",
+  "description": "Process Journey public API.",
+  "members": [
+    {
+      "name": "stages",
+      "bindingName": "stages",
+      "role": "input",
+      "type": "readonly CsProcessStage[]",
+      "required": true,
+      "description": "Stages public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "orientation",
+      "bindingName": "orientation",
+      "role": "input",
+      "type": "RailOrientation",
+      "required": false,
+      "defaultValue": "'auto'",
+      "description": "Orientation public API.",
+      "structured": false,
+      "options": ["horizontal", "vertical", "auto"]
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "CsStageActivation",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "StageActionIntent",
+      "required": false,
+      "description": "Action public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-process-journey",
+  "slug": "process-journey",
+  "label": "Process Journey",
+  "tokens": [],
+  "relatedSymbols": ["CsProcessStage", "CsStageActivation", "RailOrientation", "StageActionIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsProcessStage",
+      "sourcePath": "src/cornerstone/core/process/cs-process-stage.interface.ts",
+      "category": "process",
+      "description": "Cs Process Stage public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "CsProcessStageState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "actionLabel",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Action Label public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsStageActivation",
+      "sourcePath": "src/cornerstone/core/process/cs-stage-activation.interface.ts",
+      "category": "process",
+      "description": "Cs Stage Activation public API.",
+      "members": [
+        {
+          "name": "stageId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Stage Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "RailOrientation",
+      "sourcePath": "src/cornerstone/process-rail/rail-orientation.type.ts",
+      "category": "process",
+      "description": "Rail Orientation public API.",
+      "declaration": "'horizontal' | 'vertical' | 'auto'"
+    },
+    {
+      "kind": "interface",
+      "name": "StageActionIntent",
+      "sourcePath": "src/cornerstone/process-journey/stage-action-intent.interface.ts",
+      "category": "process",
+      "description": "Stage Action Intent public API.",
+      "members": [
+        {
+          "name": "stageId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Stage Id public API."
+        },
+        {
+          "name": "action",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Action public API."
+        }
+      ]
+    }
+  ]
+}

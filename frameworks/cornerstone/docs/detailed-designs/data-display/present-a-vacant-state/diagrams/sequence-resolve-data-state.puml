@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Resolve a data state
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone data-state runtime" #D1FADF
+  participant "DataStateOutletComponent" as outlet
+  participant "CsStateAnnouncer" as announcer
+  participant "EmptyStateComponent" as empty
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as live
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+user -> page : Open the directory route
+page -> outlet : Bind state { kind: 'idle' } per L2-101
+outlet -> outlet : Narrow the union on kind
+outlet -> dom : Project the [csIdle] slot
+
+page -> services : Request the directory records
+page -> outlet : Bind state { kind: 'loading' }
+outlet -> announcer : Report transition to loading per L2-101
+announcer -> live : Announce the loading label politely
+outlet -> dom : Set aria-busy="true" and project [csLoading]
+
+services --> page : Zero records returned
+page -> outlet : Bind state { kind: 'empty' }
+outlet -> announcer : Report transition to empty per L2-101
+announcer -> live : Announce the result summary politely
+outlet -> dom : Clear aria-busy
+outlet -> empty : Project into the [csEmpty] slot
+empty -> empty : Apply the card variant per L2-086
+empty -> dom : Render icon, eyebrow, title, description, and actions
+dom --> user : Vacant state with a recovery action
+
+alt Query fails instead
+  services --> page : Error returned
+  page -> outlet : Bind state { kind: 'error', error }
+  outlet -> announcer : Report transition to error per L2-101
+  announcer -> live : Announce the message assertively
+  outlet -> dom : Project the [csError] slot
+  user -> outlet : Activate retry
+  outlet -> page : Emit retry
+  page -> services : Re-run the query
+else Records returned
+  services --> page : One or more records
+  page -> outlet : Bind state { kind: 'ready', value }
+  outlet -> dom : Project the [csReady] slot
+end
+@enduml

@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Choose from options
+
+Person(dev, "Application developer", "Binds the group value and the option set")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(select, "CsSelectDirective", "Angular attribute directive", "Styles a native select, preserves option groups, and carries the loading, empty, and error states")
+  Component(checkbox, "CheckboxComponent", "Angular standalone component", "Checked, unchecked, and indeterminate states with description and checklist-row presentation")
+  Component(radiogroup, "RadioGroupComponent", "Angular standalone component", "Owns the group value, the radiogroup role, and the group-level error")
+  Component(radio, "RadioComponent", "Angular standalone component", "Renders one option with a label and description")
+  Component(switchc, "SwitchComponent", "Angular standalone component", "role=switch control toggled by Space and Enter")
+  Component(choicegroup, "ChoiceGroupComponent", "Angular standalone component", "Single or multiple selection over large choice presentations")
+  Component(choicecard, "ChoiceCardComponent", "Angular standalone component", "Large card target with a non-colour selection mark")
+  Component(keymgr, "Roving focus manager", "CDK FocusKeyManager wrapper", "Moves focus and selection with arrow keys and skips disabled members")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Selection tokens", "CSS custom properties", "Declares control size, selected tone, focus ring, and motion duration")
+}
+
+System_Ext(cdk, "Angular CDK", "FocusKeyManager")
+System_Ext(browser, "Browser platform", "Native controls and reduced-motion preference")
+
+Rel(dev, choicegroup, "Binds the group form control to")
+Rel(dev, select, "Applies to a native select in")
+Rel(radiogroup, radio, "Owns the value of and projects")
+Rel(radiogroup, keymgr, "Delegates arrow-key navigation to")
+Rel(choicegroup, choicecard, "Owns the value of and projects")
+Rel(choicegroup, keymgr, "Delegates arrow-key navigation to")
+Rel(choicecard, radio, "Reuses the option semantics of in single mode")
+Rel(choicecard, checkbox, "Reuses the option semantics of in multiple mode")
+Rel(keymgr, cdk, "Wraps")
+Rel(checkbox, browser, "Renders a native checkbox host to")
+Rel(select, browser, "Delegates option list behaviour to")
+Rel(switchc, browser, "Reads prefers-reduced-motion from")
+Rel(checkbox, tokens, "Resolves selection tone and focus ring from")
+Rel(choicecard, tokens, "Resolves card tone and target size from")
+@enduml

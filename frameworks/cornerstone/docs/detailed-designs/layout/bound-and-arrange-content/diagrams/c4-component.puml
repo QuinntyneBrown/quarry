@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Bound and arrange content
+
+Person(dev, "Application developer", "Chooses a width, a gap, and a reflow pattern")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(container, "ContainerComponent", "Standalone component", "Applies narrow, default, or wide bounds with responsive gutters")
+  Component(stack, "CsStackDirective", "Attribute directive", "Arranges children in a single column")
+  Component(cluster, "CsClusterDirective", "Attribute directive", "Arranges children in a wrapping row")
+  Component(grid, "CsGridDirective", "Attribute directive", "Arranges children in a 2, 3, 4, or auto-fit grid that collapses")
+  Component(region, "CsResponsiveRegionDirective", "Attribute directive", "Applies a documented collapse pattern from observed container width")
+  Component(styles, "Layout styles", "Component-scoped CSS", "Declare the grid and flex rules and read spacing tokens")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Spacing and container tokens", "CSS custom properties", "Declare the spacing steps, gutters, and maximum content widths")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver")
+System_Ext(browser, "Browser platform", "Layout engine")
+
+Rel(dev, container, "Sets the width and gutter on")
+Rel(dev, grid, "Sets the column configuration on")
+Rel(dev, region, "Names the reflow pattern on")
+Rel(container, styles, "Applies bounds through")
+Rel(stack, styles, "Applies column layout through")
+Rel(cluster, styles, "Applies wrapping row layout through")
+Rel(grid, styles, "Applies grid tracks through")
+Rel(region, cdk, "Subscribes to container width from")
+Rel(region, styles, "Selects the collapsed or expanded rules in")
+Rel(styles, tokens, "Resolve gap, gutter, and bound values from")
+Rel(styles, browser, "Is resolved by", "CSS cascade")
+Rel(cdk, browser, "Observes element size in", "ResizeObserver")
+@enduml

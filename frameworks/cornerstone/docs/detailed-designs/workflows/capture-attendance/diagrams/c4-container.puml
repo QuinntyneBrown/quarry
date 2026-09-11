@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Capture attendance
+
+Person(volunteer, "Volunteer", "Records attendance for one session")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies the attendance roster and choice composites; holds no domain rule")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the FaithTech token set the roster resolves its values from")
+  Container(docs, "Documentation site", "Angular application", "Publishes the roster view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing, the theme class, and the unsaved-navigation guard")
+  Container(page, "Session attendance page", "Angular feature page", "Builds the roster view model and handles the emitted intents")
+  Container(services, "Application services", "Angular services", "Owns attendance rules, authorization, offline queueing, and persistence")
+}
+
+System_Ext(cdk, "Angular CDK", "Live announcement and layout observation")
+System_Ext(browser, "Browser platform", "Rendering, input, and connectivity reporting")
+
+Rel(volunteer, browser, "Marks attendance in")
+Rel(browser, lib, "Delivers pointer and keyboard events to")
+Rel(page, lib, "Supplies AttendanceRosterViewModel to")
+Rel(lib, page, "Emits change, bulk, note, and conflict intents to")
+Rel(page, services, "Delegates every write and rule decision to")
+Rel(services, page, "Returns the next roster view model to")
+Rel(shell, page, "Routes to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Announces status through", "LiveAnnouncer")
+Rel(docs, lib, "Documents the public surface of")
+@enduml

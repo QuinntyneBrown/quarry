@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Locate the current page
+
+Person(dev, "Application developer", "Maps route data into a crumb list")
+Person(user, "Application user", "Reads the trail and returns to an ancestor page")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying breadcrumbs and the router integration contract")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning the route table")
+System_Ext(cdk, "Angular CDK", "Overlay positioning for the overflow menu")
+System_Ext(browser, "Browser platform", "Resolves anchor activation and reports the viewport width")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Declares routes and crumb data in")
+Rel(dev, cornerstone, "Binds the crumb list to the breadcrumbs of")
+Rel(app, cornerstone, "Supplies crumbs and routerLink values to")
+Rel(cornerstone, app, "Renders anchors resolved by the router of")
+Rel(cornerstone, cdk, "Positions the overflow menu with")
+Rel(cornerstone, browser, "Renders the navigation landmark in")
+Rel(browser, user, "Presents the trail to")
+Rel(user, browser, "Activates an ancestor link in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

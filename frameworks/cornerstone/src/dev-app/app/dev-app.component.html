@@ -1,0 +1,13 @@
+<main>
+  <h1>Cornerstone development harness</h1>
+  <p>Use this page to work on component compositions by hand.</p>
+  <cs-card>
+    <h2>Task review</h2>
+    <cs-badge [tone]="completed() ? 'success' : 'neutral'">
+      {{ completed() ? 'Completed' : 'Ready for review' }}
+    </cs-badge>
+    <button csButton (click)="completed.set(!completed())">
+      {{ completed() ? 'Reopen task' : 'Complete task' }}
+    </button>
+  </cs-card>
+</main>

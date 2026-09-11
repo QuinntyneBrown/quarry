@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Dismiss an anchored surface and restore focus
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application trigger" as trigger
+  participant "Action handler" as handler
+end box
+box "Frontend — Cornerstone anchored surfaces" #D1FADF
+  participant "CsMenuDirective" as menu
+  participant "CsMenuItemDirective" as item
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and focus" as dom
+end box
+
+trigger -> menu : Surface already open with a stored restore target
+
+alt Outside click
+  user -> dom : Press the pointer outside the panel
+  dom -> overlay : Backdrop or outside pointer event
+  overlay -> menu : Report the outside interaction
+  menu -> menu : Resolve reason 'outside-click' per L2-072
+else Escape key
+  user -> dom : Press Escape
+  dom -> menu : Keydown event
+  menu -> menu : Resolve reason 'escape' for the topmost surface per L2-072
+else Checkable item toggled
+  user -> item : Activate a checkable entry
+  item -> item : Toggle the checked model per L2-072
+  item -> handler : Emit the triggered item
+  item -> dom : Update aria-checked and keep focus in the panel
+  menu -> menu : Keep the surface open
+else Trigger leaves the DOM
+  trigger -> menu : Destroy the host element
+  menu -> menu : Resolve reason 'detach' and clear the restore target
+end
+
+opt Reason is not 'detach' and the surface closes
+  menu -> overlay : Detach the panel
+  menu -> dom : Set aria-expanded="false" on the trigger
+  menu -> dom : Return focus to the stored restore target per L2-072
+  menu -> handler : Emit closed with the resolved reason
+  dom --> user : Focus back on the trigger with the page unchanged
+end
+@enduml

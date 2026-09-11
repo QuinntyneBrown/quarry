@@ -1,0 +1,117 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Attach a file
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+enum CsFileState {
+  selected
+  uploading
+  uploaded
+  failed
+  rejected
+}
+
+class FilePickerComponent {
+  +accept: InputSignal<readonly string[]>
+  +maxSizeBytes: InputSignal<number>
+  +multiple: InputSignal<boolean>
+  +files: ModelSignal<readonly FileEntry[]>
+  +uploads: InputSignal<readonly CsUploadStatus[]>
+  +uploadRequested: OutputEmitterRef<CsUploadIntent>
+  +retryRequested: OutputEmitterRef<CsUploadIntent>
+  +rejected: OutputEmitterRef<FileRejection>
+  +writeValue(value: readonly FileEntry[]): void
+  +registerOnChange(fn: (value: readonly FileEntry[]) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+  #accept(files: FileList): void
+  #remove(id: string): void
+}
+
+class DropzoneComponent {
+  +label: InputSignal<string>
+  +disabled: InputSignal<boolean>
+  +isDropTarget: Signal<boolean>
+  +filesDropped: OutputEmitterRef<FileList>
+  #onKeydown(event: KeyboardEvent): void
+  #openFileBrowser(): void
+}
+
+class FileSummaryComponent {
+  +entry: InputSignal<FileEntry>
+  +removeRequested: OutputEmitterRef<string>
+  +retryRequested: OutputEmitterRef<string>
+}
+
+class FileEntry {
+  +id: string
+  +file: File
+  +state: CsFileState
+  +progress: number
+  +error: string | null
+  +previewUrl: string | null
+}
+
+class FileRejection {
+  +fileName: string
+  +reason: 'size' | 'type'
+  +message: string
+}
+
+class CsUploadIntent {
+  +id: string
+  +file: File
+}
+
+class CsUploadStatus {
+  +id: string
+  +progress: number
+  +failed: boolean
+  +message: string | null
+}
+
+class CsFileValidator <<function>> {
+  +validate(file: File, accept: readonly string[], maxSizeBytes: number): FileRejection | null
+}
+
+class CsObjectUrlRegistry {
+  -urls: Map<string, string>
+  +create(id: string, file: File): string
+  +revoke(id: string): void
+  +revokeAll(): void
+}
+
+class CsProgressPresenter {
+  +valueNow: Signal<number>
+  +announceAtInterval(percent: number): void
+}
+
+FilePickerComponent ..|> ControlValueAccessor
+FilePickerComponent *-- DropzoneComponent : renders
+FilePickerComponent *-- CsObjectUrlRegistry : owns the lifetime of
+FilePickerComponent o-- "0..*" FileEntry : holds
+FilePickerComponent o-- "0..*" FileSummaryComponent : renders one per entry
+FilePickerComponent ..> CsFileValidator : screens selections through
+FilePickerComponent --> CsUploadIntent : emits
+FilePickerComponent --> FileRejection : emits
+FilePickerComponent --> CsUploadStatus : reads
+FileEntry --> CsFileState : has
+FileSummaryComponent *-- CsProgressPresenter : displays
+@enduml

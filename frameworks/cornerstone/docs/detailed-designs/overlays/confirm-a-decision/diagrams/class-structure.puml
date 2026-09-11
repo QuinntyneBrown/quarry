@@ -1,0 +1,108 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Confirm a decision
+
+enum ConfirmTone {
+  danger
+  warning
+  success
+}
+
+enum ConfirmResult {
+  confirmed
+  cancelled
+}
+
+enum UnsavedChangesChoice {
+  save
+  leave
+  stay
+}
+
+class ConfirmDialogData {
+  +title: string
+  +message: string
+  +tone: ConfirmTone
+  +confirmLabel: string
+  +cancelLabel: string
+  +destructiveCopy: string
+  +confirmAction: () => Promise<void>
+}
+
+class ConfirmDialogComponent {
+  +title: InputSignal<string>
+  +message: InputSignal<string>
+  +tone: InputSignal<ConfirmTone>
+  +confirmLabel: InputSignal<string>
+  +cancelLabel: InputSignal<string>
+  +pending: InputSignal<boolean>
+  +confirmed: OutputEmitterRef<void>
+  +cancelled: OutputEmitterRef<void>
+  -error: WritableSignal<string | null>
+  +runConfirm(): Promise<void>
+}
+
+class UnsavedChangesDialogComponent {
+  +title: InputSignal<string>
+  +message: InputSignal<string>
+  +saveLabel: InputSignal<string>
+  +leaveLabel: InputSignal<string>
+  +stayLabel: InputSignal<string>
+  +saving: InputSignal<boolean>
+  +chosen: OutputEmitterRef<UnsavedChangesChoice>
+  +focusStayAction(): void
+}
+
+class DialogRef<R, C> {
+  +disableClose: boolean
+  +closed: Observable<R | undefined>
+  +close(result?: R): void
+}
+
+class DialogShellComponent {
+  +size: InputSignal<DialogSize>
+  +captureFocus(): void
+  +restoreFocus(): void
+}
+
+class DialogService {
+  +open<R, D, C>(component: ComponentType<C>, config?: DialogConfig<D>): DialogRef<R, C>
+  +confirm(data: ConfirmDialogData): Promise<ConfirmResult>
+}
+
+class CsConfirmLeave <<function>> {
+  +confirmLeave(options: CsConfirmLeaveOptions): CanDeactivateFn<unknown>
+}
+
+class CsConfirmLeaveOptions {
+  +isDirty: () => boolean
+  +save: () => Promise<boolean>
+  +message: string
+}
+
+ConfirmDialogComponent ..> ConfirmDialogData : reads
+ConfirmDialogComponent --> ConfirmTone : has
+ConfirmDialogComponent ..> ConfirmResult : resolves to
+ConfirmDialogComponent --> DialogRef : closes through
+UnsavedChangesDialogComponent ..> UnsavedChangesChoice : resolves to
+UnsavedChangesDialogComponent --> DialogRef : closes through
+DialogShellComponent o-- "1" ConfirmDialogComponent : projects
+DialogShellComponent o-- "1" UnsavedChangesDialogComponent : projects
+DialogService ..> ConfirmDialogComponent : opens
+DialogService --> DialogRef : returns
+CsConfirmLeave ..> UnsavedChangesDialogComponent : opens
+CsConfirmLeave ..> CsConfirmLeaveOptions : reads
+CsConfirmLeave ..> UnsavedChangesChoice : maps to a navigation answer
+ConfirmDialogData --> ConfirmTone : has
+@enduml

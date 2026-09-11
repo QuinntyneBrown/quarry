@@ -1,0 +1,8 @@
+<div>
+  <cs-logo-mark [brand]="brand()" [size]="size()" /><span
+    ><strong>{{ wordmark() }}</strong>
+    @if (variant() === 'full') {
+      <small>{{ descriptors[brand()] }}</small>
+    }
+  </span>
+</div>

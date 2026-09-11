@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Choose from options
+
+Person(dev, "Application developer", "Declares the option set")
+Person(user, "Application user", "Picks an option")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Supplies CsSelectDirective, CheckboxComponent, RadioGroupComponent, RadioComponent, SwitchComponent, ChoiceGroupComponent, and ChoiceCardComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares control, selection, card tone, focus, and motion tokens")
+  Container(docs, "Documentation site", "Angular application", "Publishes the selection semantics and the form participation of each control")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Supplies option view models and binds one form control per group")
+  Container(services, "Application services", "Angular injectables", "Owns option data, validators, and persistence")
+}
+
+System_Ext(cdk, "Angular CDK", "Roving focus management")
+System_Ext(browser, "Browser platform", "Native controls and preference media queries")
+
+Rel(dev, page, "Declares choice groups in")
+Rel(page, services, "Loads option data from")
+Rel(page, lib, "Binds group form controls to")
+Rel(lib, theme, "Resolves selection tone and focus values from")
+Rel(lib, cdk, "Moves the roving tab stop through", "FocusKeyManager")
+Rel(lib, browser, "Renders native select and checkbox hosts in")
+Rel(user, browser, "Selects an option in")
+Rel(browser, lib, "Reports key and change events to")
+Rel(lib, page, "Reports the group value and touched state to", "ControlValueAccessor")
+Rel(docs, lib, "Documents the selection modes of")
+@enduml

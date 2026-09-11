@@ -1,0 +1,26 @@
+{
+  "kind": "class",
+  "name": "ListItemComponent",
+  "sourcePath": "src/cornerstone/list-item/list-item.component.ts",
+  "category": "data-display",
+  "description": "List Item public API.",
+  "members": [
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-list-item",
+  "slug": "list-item",
+  "label": "List Item",
+  "tokens": ["--cs-border", "--cs-space-3"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Document the library
+
+Person(dev, "Application developer", "Reads the documentation to build Liturgy and Word Up screens")
+Person(maintainer, "Library maintainer", "Authors component pages, examples, and guides")
+
+System(cornerstone, "Cornerstone", "Angular UI library and the documentation site that describes its public surface")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives the documented components build on")
+System_Ext(actions, "GitHub Actions", "Runs the documentation build and deployment workflow")
+System_Ext(swa, "Azure Static Web Apps", "Hosts the built documentation site")
+System_Ext(npm, "npm registry", "Distributes the published package the examples import")
+System_Ext(browser, "Browser platform", "Renders the site and serves the clipboard")
+
+Rel(maintainer, cornerstone, "Authors pages, examples, and guides in")
+Rel(dev, cornerstone, "Reads the API reference and guides of")
+Rel(dev, app, "Builds screens in")
+Rel(app, npm, "Installs the documented package from")
+Rel(cornerstone, cdk, "Documents behaviour built on")
+Rel(cornerstone, npm, "Is published to")
+Rel(cornerstone, actions, "Is built and deployed by")
+Rel(actions, swa, "Uploads the built site to")
+Rel(swa, browser, "Serves the documentation site to")
+Rel(browser, dev, "Presents pages, live examples, and copyable source to")
+@enduml

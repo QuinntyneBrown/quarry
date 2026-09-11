@@ -1,0 +1,37 @@
+{
+  "kind": "class",
+  "name": "AvatarComponent",
+  "sourcePath": "src/cornerstone/avatar/avatar.component.ts",
+  "category": "foundations",
+  "description": "Avatar public API.",
+  "members": [
+    {
+      "name": "name",
+      "bindingName": "name",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Name public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "src",
+      "bindingName": "src",
+      "role": "input",
+      "type": "string | null",
+      "required": false,
+      "defaultValue": "null",
+      "description": "Src public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-avatar",
+  "slug": "avatar",
+  "label": "Avatar",
+  "tokens": ["--cs-avatar-size", "--cs-lime"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

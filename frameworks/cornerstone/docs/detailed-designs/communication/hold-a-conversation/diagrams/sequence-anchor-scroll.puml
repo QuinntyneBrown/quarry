@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Anchor the scroll position
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "MessagingViewModelService" as vm
+  participant "MessageDeliveryHandler" as delivery
+end box
+box "Frontend — Cornerstone messaging" #D1FADF
+  participant "MessageThreadComponent" as thread
+  participant "ThreadScrollAnchor" as anchor
+end box
+box "Browser — platform" #FFF4E5
+  participant "Scroll container" as browser
+end box
+
+user -> browser : Scroll up to read earlier messages
+browser -> anchor : Report the scroll offset
+anchor -> anchor : Record pinnedToBottom as false
+
+alt A new message is appended at the bottom
+  vm --> thread : Supply the message list with one appended item per L2-108
+  thread -> anchor : Capture the snapshot before rendering
+  anchor --> thread : Anchor message id and offset
+  thread -> browser : Render the appended message
+  thread -> anchor : Restore the captured offset
+  anchor -> browser : Hold the previously visible message in place
+  thread -> thread : Show the keyboard-activatable new-messages affordance per L2-108
+  browser --> user : Unchanged reading position
+
+  opt New-messages affordance activated
+    user -> thread : Activate the affordance by keyboard
+    thread -> browser : Scroll to the newest message
+    thread -> anchor : Record pinnedToBottom as true
+    thread -> delivery : Emit newMessagesActivated
+  end
+else Older history is prepended at the top
+  user -> browser : Reach the top of the log
+  thread -> delivery : Emit historyRequested with the oldest loaded instant per L2-108
+  delivery -> vm : Load the earlier page
+  thread -> anchor : Capture the snapshot before rendering
+  anchor --> thread : Anchor message id and offset
+  vm --> thread : Supply the prepended messages
+  thread -> browser : Render the prepended messages above the anchor
+  thread -> anchor : Restore the anchor to its prior visual position per L2-108
+  anchor -> browser : Adjust the scroll offset by the inserted height
+  browser --> user : Same message under the same pixel row
+end
+
+opt Reduced motion is set
+  thread -> browser : Jump without a smooth scroll
+end
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Adapt to viewport
+
+Person(user, "Application user", "Reads the same screens on a phone, a tablet, and a desktop at 400% zoom")
+Person(dev, "Application developer", "Writes application styles against the published breakpoint mixins")
+
+System(cornerstone, "Cornerstone", "Angular UI library publishing one breakpoint set in three forms")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "BreakpointObserver over the browser media query engine")
+System_Ext(browser, "Browser platform", "Evaluates media queries and reports the viewport width")
+System_Ext(npm, "npm registry", "Distributes the published package and its styles subpath")
+
+Rel(dev, cornerstone, "Imports the breakpoint constant and mixins from")
+Rel(dev, app, "Writes responsive application styles in")
+Rel(app, cornerstone, "Renders responsive components from")
+Rel(cornerstone, cdk, "Observes viewport class changes through")
+Rel(cdk, browser, "Evaluates the published media queries in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(browser, user, "Presents the reflowed layout to")
+Rel(user, browser, "Resizes, rotates, and zooms in")
+@enduml

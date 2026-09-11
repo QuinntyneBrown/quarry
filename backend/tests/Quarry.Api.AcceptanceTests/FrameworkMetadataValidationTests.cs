@@ -52,4 +52,35 @@ public sealed class FrameworkMetadataValidationTests
         Assert.Equal(technology, framework.Metadata.Technology);
         Assert.Equal(text, framework.Metadata.Description);
     }
+
+    // The following DesignSystemUri cases extend L2-003's metadata-validation coverage for a
+    // framework's optional whole-app design-system iframe URL; no dedicated L2 ID exists yet.
+    [Theory]
+    [InlineData("design-systems/cornerstone/")]
+    [InlineData("ftp://example.test/design-systems/cornerstone/")]
+    [InlineData("http://example.test/design-systems/cornerstone/")]
+    [InlineData("https://operator:secret@example.test/design-systems/cornerstone/")]
+    public void InvalidDesignSystemUriIsRejected(string designSystemUri)
+    {
+        var error = Assert.Throws<FrameworkValidationException>(
+            () => Framework.CreateDraft(Guid.NewGuid(), ValidMetadata() with { DesignSystemUri = designSystemUri }));
+        Assert.Contains("designSystemUri", error.Errors.Keys);
+    }
+
+    [Theory]
+    [InlineData("https://example.test/design-systems/cornerstone/")]
+    [InlineData("http://localhost:4180/design-systems/cornerstone/")]
+    [InlineData("http://127.0.0.1:4180/design-systems/cornerstone/")]
+    public void ValidDesignSystemUriIsPreserved(string designSystemUri)
+    {
+        var framework = Framework.CreateDraft(Guid.NewGuid(), ValidMetadata() with { DesignSystemUri = designSystemUri });
+        Assert.Equal(designSystemUri, framework.Metadata.DesignSystemUri);
+    }
+
+    [Fact]
+    public void AbsentDesignSystemUriIsValid()
+    {
+        var framework = Framework.CreateDraft(Guid.NewGuid(), ValidMetadata());
+        Assert.Null(framework.Metadata.DesignSystemUri);
+    }
 }

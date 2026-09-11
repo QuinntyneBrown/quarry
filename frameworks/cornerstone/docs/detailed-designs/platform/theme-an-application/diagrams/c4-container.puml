@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Theme an application
+
+Person(dev, "Application developer", "Configures theming at application bootstrap")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the FaithTech token set on :root, .cs-theme-light, and .cs-theme-dark")
+  Container(lib, "Component library", "Angular standalone components", "Reads tokens; declares no literal visual value")
+  Container(docs, "Documentation site", "Angular application", "Publishes the token table and theming guide")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(config, "Application config", "Angular providers", "Calls provideCsTheme() at bootstrap")
+  Container(shell, "Application shell", "Angular components", "Hosts the theme class on an ancestor element")
+}
+
+System_Ext(browser, "Browser platform", "Cascade and media query engine")
+
+Rel(dev, config, "Adds the theme provider to")
+Rel(dev, theme, "Adds the stylesheet to the build of")
+Rel(config, lib, "Registers CsThemeService from")
+Rel(shell, theme, "Carries the theme class declared by")
+Rel(lib, theme, "Resolves visual values from")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(lib, browser, "Queries colour scheme and motion preference from", "matchMedia")
+Rel(docs, theme, "Documents every token in")
+@enduml

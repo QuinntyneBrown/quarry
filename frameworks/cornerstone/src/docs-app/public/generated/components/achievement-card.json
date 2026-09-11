@@ -1,0 +1,113 @@
+{
+  "kind": "class",
+  "name": "AchievementCardComponent",
+  "sourcePath": "src/cornerstone/achievement-card/achievement-card.component.ts",
+  "category": "workflows",
+  "description": "Achievement Card public API.",
+  "members": [
+    {
+      "name": "achievement",
+      "bindingName": "achievement",
+      "role": "input",
+      "type": "AchievementView",
+      "required": true,
+      "description": "Achievement public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "output",
+      "type": "AchievementSelect",
+      "required": false,
+      "description": "Selected public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-achievement-card",
+  "slug": "achievement-card",
+  "label": "Achievement Card",
+  "tokens": [],
+  "relatedSymbols": ["AchievementProgress", "AchievementSelect", "AchievementView"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AchievementProgress",
+      "sourcePath": "src/cornerstone/achievement-card/achievement-progress.interface.ts",
+      "category": "workflows",
+      "description": "Achievement Progress public API.",
+      "members": [
+        {
+          "name": "value",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Value public API."
+        },
+        {
+          "name": "max",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Max public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AchievementSelect",
+      "sourcePath": "src/cornerstone/achievement-card/achievement-select.interface.ts",
+      "category": "workflows",
+      "description": "Achievement Select public API.",
+      "members": [
+        {
+          "name": "achievementId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Achievement Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AchievementView",
+      "sourcePath": "src/cornerstone/achievement-card/achievement-view.interface.ts",
+      "category": "workflows",
+      "description": "Achievement View public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        },
+        {
+          "name": "earned",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Earned public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "AchievementProgress",
+          "required": false,
+          "description": "Progress public API."
+        }
+      ]
+    }
+  ]
+}

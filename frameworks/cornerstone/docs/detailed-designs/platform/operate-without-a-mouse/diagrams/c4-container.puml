@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Operate without a mouse
+
+Person(user, "Application user", "Operates the screen by keyboard and assistive technology")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Every catalog component, each naming the ARIA pattern it implements")
+  Container(a11y, "Accessibility layer", "Angular directives and services", "Key bindings, roving focus, focus visibility, status announcement, and skip links")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares --cs-focus and the contrast-compliant palettes")
+  Container(adapters, "CDK adapter layer", "Angular services and directives", "Wraps focus trap, focus monitor, key managers, and live announcer")
+  Container(gate, "Verification gate", "Accessibility scan and coverage checks", "Fails the build on a violation or an untested component")
+  Container(docs, "Documentation site", "Angular application", "Publishes the ARIA pattern, key bindings, and politeness of every component")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts the skip link and the main landmark")
+  Container(page, "Feature page", "Angular components", "Composes accessible components and supplies labels")
+}
+
+System_Ext(browser, "Browser platform", "Accessibility tree and keyboard event dispatch")
+
+Rel(user, browser, "Operates by keyboard through")
+Rel(browser, lib, "Dispatches keyboard events to")
+Rel(shell, a11y, "Renders the skip link from")
+Rel(page, lib, "Composes components from")
+Rel(lib, a11y, "Reads key bindings, focus behaviour, and announcement policy from")
+Rel(a11y, adapters, "Delegates trapping, key management, and announcement to")
+Rel(a11y, theme, "Draws the focus indicator from", "--cs-focus")
+Rel(lib, browser, "Publishes roles, names, states, and live regions to")
+Rel(gate, lib, "Scans every documented variant of")
+Rel(gate, a11y, "Exercises every documented key binding of")
+Rel(docs, a11y, "Documents the pattern table of")
+@enduml

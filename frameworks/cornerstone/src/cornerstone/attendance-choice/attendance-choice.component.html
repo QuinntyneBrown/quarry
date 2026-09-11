@@ -1,0 +1,12 @@
+<div role="radiogroup">
+  @for (option of states; track option) {
+    <button
+      type="button"
+      role="radio"
+      [attr.aria-checked]="value() === option"
+      (click)="changed.emit(option)"
+    >
+      {{ option }}
+    </button>
+  }
+</div>

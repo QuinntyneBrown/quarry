@@ -1,0 +1,171 @@
+{
+  "kind": "class",
+  "name": "RubricComponent",
+  "sourcePath": "src/cornerstone/rubric/rubric.component.ts",
+  "category": "workflows",
+  "description": "Rubric public API.",
+  "members": [
+    {
+      "name": "rubric",
+      "bindingName": "rubric",
+      "role": "input",
+      "type": "RubricView",
+      "required": true,
+      "description": "Rubric public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "output",
+      "type": "RubricLevelSelect",
+      "required": false,
+      "description": "Selected public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-rubric",
+  "slug": "rubric",
+  "label": "Rubric",
+  "tokens": [],
+  "relatedSymbols": [
+    "RubricCriterion",
+    "RubricLevel",
+    "RubricLevelSelect",
+    "RubricSelection",
+    "RubricView"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "RubricCriterion",
+      "sourcePath": "src/cornerstone/rubric/rubric-criterion.interface.ts",
+      "category": "workflows",
+      "description": "Rubric Criterion public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "levels",
+          "role": "property",
+          "type": "readonly RubricLevel[]",
+          "required": true,
+          "description": "Levels public API."
+        },
+        {
+          "name": "selectedLevelId",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Selected Level Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "RubricLevel",
+      "sourcePath": "src/cornerstone/rubric/rubric-level.interface.ts",
+      "category": "workflows",
+      "description": "Rubric Level public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        },
+        {
+          "name": "score",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Score public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "RubricLevelSelect",
+      "sourcePath": "src/cornerstone/rubric/rubric-level-select.interface.ts",
+      "category": "workflows",
+      "description": "Rubric Level Select public API.",
+      "members": []
+    },
+    {
+      "kind": "interface",
+      "name": "RubricSelection",
+      "sourcePath": "src/cornerstone/rubric/rubric-selection.interface.ts",
+      "category": "workflows",
+      "description": "Rubric Selection public API.",
+      "members": [
+        {
+          "name": "criterionId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Criterion Id public API."
+        },
+        {
+          "name": "levelId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Level Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "RubricView",
+      "sourcePath": "src/cornerstone/rubric/rubric-view.interface.ts",
+      "category": "workflows",
+      "description": "Rubric View public API.",
+      "members": [
+        {
+          "name": "criteria",
+          "role": "property",
+          "type": "readonly RubricCriterion[]",
+          "required": true,
+          "description": "Criteria public API."
+        },
+        {
+          "name": "readonly",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Readonly public API."
+        }
+      ]
+    }
+  ]
+}

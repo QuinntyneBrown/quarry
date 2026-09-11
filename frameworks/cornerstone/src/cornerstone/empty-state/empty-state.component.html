@@ -1,0 +1,6 @@
+<ng-content select="[csEmptyStateIcon]" />
+<h2>{{ title() }}</h2>
+@if (message()) {
+  <p>{{ message() }}</p>
+}
+<ng-content select="[csEmptyStateActions]" />

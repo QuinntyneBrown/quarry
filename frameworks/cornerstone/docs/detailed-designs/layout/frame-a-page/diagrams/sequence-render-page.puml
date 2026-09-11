@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Render a framed page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Router outlet" as router
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone page frame" #D1FADF
+  participant "PageComponent" as frame
+  participant "SectionComponent" as section
+  participant "ToolbarComponent" as toolbar
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as browser
+end box
+
+user -> router : Navigate to the route
+router -> page : Activate the feature page
+page -> frame : Bind title, eyebrow, subtitle, state='loading'
+frame -> browser : Render the single h1 from the title per L2-037
+frame -> browser : Project the breadcrumb slot above the heading
+frame -> toolbar : Project the actions slot
+toolbar -> cdk : Subscribe to the toolbar inline size per L2-041
+frame -> browser : Mark the body aria-busy='true' and render the skeleton per L2-037
+
+page -> services : Request the page data
+services --> page : Resolved view model
+
+alt Data resolved
+  page -> frame : Set state='ready'
+  frame -> browser : Project the content slot in place of the skeleton
+  frame -> section : Render each section at heading level 2 per L2-038
+  section -> browser : Render a section landmark labelled by its heading per L2-038
+else Request failed
+  page -> frame : Set state='error' with errorMessage
+  frame -> browser : Announce the message in a live region per L2-037
+end
+
+frame -> frame : Keep the header mounted across the state change
+browser --> user : Framed screen with a correct heading outline
+@enduml

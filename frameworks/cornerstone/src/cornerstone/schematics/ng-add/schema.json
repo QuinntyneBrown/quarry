@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "CornerstoneNgAdd",
+  "title": "Cornerstone setup options",
+  "type": "object",
+  "properties": {
+    "project": { "type": "string", "description": "Angular project to configure." },
+    "compatibilityStyles": {
+      "type": "boolean",
+      "default": false,
+      "description": "Include the opt-in legacy compatibility bridge."
+    },
+    "skipInstall": {
+      "type": "boolean",
+      "default": false,
+      "description": "Skip installing package changes."
+    }
+  }
+}

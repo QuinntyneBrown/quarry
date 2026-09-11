@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Audit dependencies and publish with provenance
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Commit on main" as commit
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI workflow (ci.yml)" as ci
+  participant "Release workflow (release.yml)" as release
+  participant "Repository secret store" as secrets
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "npm ci and lockfile" as install
+  participant "Dependency audit" as audit
+  participant "Packed tarball" as tarball
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "npm registry" as npm
+end box
+
+maintainer -> commit : Push a dependency or component change
+commit -> ci : Trigger verification
+ci -> install : Install from the committed lockfile per L2-165
+install --> ci : Resolved tree with no floating version
+ci -> audit : Run npm audit --omit=dev --audit-level=high
+
+alt High or critical advisory in a production dependency
+  audit --> ci : Blocking finding per L2-165
+  ci --> maintainer : Fail the run naming the advisory and the package
+else No blocking advisory
+  audit --> ci : Clean report and the added dependency licences per L2-165
+  ci -> release : Hand over the verified commit
+  release -> secrets : Read the npm token as a repository secret per L2-166
+  secrets --> release : Masked token value
+  release -> tarball : Pack the artifact built from the released commit SHA
+  tarball -> tarball : Rebuild and compare byte for byte per L2-166
+
+  alt Tarball holds a credential or an internal-only file
+    tarball --> release : Blocking file list per L2-166
+    release --> maintainer : Fail before publishing
+  else Tarball contents conform
+    release -> npm : npm publish --provenance --access public per L2-166
+    npm -> npm : Record repository, workflow, and commit SHA in the attestation
+    npm --> release : Attestation identifier
+    release -> release : Write the attestation identifier to the job summary
+    release --> maintainer : Report the published version and its provenance
+  end
+end
+@enduml

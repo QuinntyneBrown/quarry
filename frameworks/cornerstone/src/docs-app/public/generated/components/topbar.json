@@ -1,0 +1,15 @@
+{
+  "kind": "class",
+  "name": "TopbarComponent",
+  "sourcePath": "src/cornerstone/topbar/topbar.component.ts",
+  "category": "navigation",
+  "description": "Topbar public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-topbar",
+  "slug": "topbar",
+  "label": "Topbar",
+  "tokens": ["--cs-border", "--cs-paper", "--cs-space-4"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,99 @@
+{
+  "kind": "class",
+  "name": "StatCardComponent",
+  "sourcePath": "src/cornerstone/stat-card/stat-card.component.ts",
+  "category": "data-display",
+  "description": "Stat Card public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "number",
+      "required": true,
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "formattedValue",
+      "bindingName": "formattedValue",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Formatted Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "delta",
+      "bindingName": "delta",
+      "role": "input",
+      "type": "MetricDelta | null",
+      "required": false,
+      "defaultValue": "null",
+      "description": "Delta public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-stat-card",
+  "slug": "stat-card",
+  "label": "Stat Card",
+  "tokens": ["--cs-font-display", "--cs-text-xl"],
+  "relatedSymbols": ["MetricDelta"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "MetricDelta",
+      "sourcePath": "src/cornerstone/stat-card/metric-delta.interface.ts",
+      "category": "data-display",
+      "description": "Metric Delta public API.",
+      "members": [
+        {
+          "name": "value",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Value public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "direction",
+          "role": "property",
+          "type": "'up' | 'down' | 'flat'",
+          "required": true,
+          "description": "Direction public API."
+        }
+      ]
+    }
+  ]
+}

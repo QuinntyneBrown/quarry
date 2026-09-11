@@ -1,0 +1,9 @@
+<div class="clock" role="timer" [attr.aria-label]="ariaLabel()" aria-live="off">
+  @for (unit of units(); track unit.label) {
+    <div class="unit">
+      <span class="value">{{ pad(unit.value) }}</span
+      ><span class="label">{{ unit.label }}</span>
+    </div>
+  }
+</div>
+<p class="caption">{{ remaining() > 0 ? pendingCaption() : expiredCaption() }}</p>

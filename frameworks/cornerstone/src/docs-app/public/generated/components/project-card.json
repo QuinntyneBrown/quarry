@@ -1,0 +1,97 @@
+{
+  "kind": "class",
+  "name": "ProjectCardComponent",
+  "sourcePath": "src/cornerstone/project-card/project-card.component.ts",
+  "category": "process",
+  "description": "Project Card public API.",
+  "members": [
+    {
+      "name": "project",
+      "bindingName": "project",
+      "role": "input",
+      "type": "Project",
+      "required": true,
+      "description": "Project public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "output",
+      "type": "ProjectOpenIntent",
+      "required": false,
+      "description": "Opened public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-project-card",
+  "slug": "project-card",
+  "label": "Project Card",
+  "tokens": [],
+  "relatedSymbols": ["Project", "ProjectOpenIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "Project",
+      "sourcePath": "src/cornerstone/project-card/project.interface.ts",
+      "category": "process",
+      "description": "Project public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "phaseId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Phase Id public API."
+        },
+        {
+          "name": "summary",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Summary public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Progress public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ProjectOpenIntent",
+      "sourcePath": "src/cornerstone/project-card/project-open-intent.interface.ts",
+      "category": "process",
+      "description": "Project Open Intent public API.",
+      "members": [
+        {
+          "name": "projectId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Project Id public API."
+        }
+      ]
+    }
+  ]
+}

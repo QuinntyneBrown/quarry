@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Adopt CDK behaviour
+
+Person(dev, "Application developer", "Composes components and reads the adapter documentation")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Menus, dialogs, drawers, tooltips, lists, and boards")
+  Container(adapters, "CDK adapter layer", "Angular services and directives", "The only code in the library that imports a CDK entry point")
+  Container(gate, "Verification gate", "ESLint rules and architecture tests", "Fails the build on a hand-written CDK mechanic")
+  Container(docs, "Documentation site", "Angular application", "Publishes the adapter surface and the scroll strategy per component")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Opens menus, dialogs, and boards")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay, a11y, layout, text-field, scrolling, and drag-drop")
+System_Ext(browser, "Browser platform", "Pointer, keyboard, and layout event source")
+
+Rel(dev, page, "Builds screens in")
+Rel(page, lib, "Instantiates components from")
+Rel(lib, adapters, "Requests overlays, focus, announcements, and moves from")
+Rel(adapters, cdk, "Configures and calls", "TypeScript imports")
+Rel(cdk, browser, "Reads geometry and input from", "DOM APIs")
+Rel(gate, lib, "Scans for hand-written mechanics in")
+Rel(gate, adapters, "Permits CDK imports only within")
+Rel(docs, adapters, "Documents the configuration surface of")
+@enduml

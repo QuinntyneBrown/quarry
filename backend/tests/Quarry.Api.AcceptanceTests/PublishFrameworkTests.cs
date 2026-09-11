@@ -56,6 +56,23 @@ public sealed class PublishFrameworkTests
     }
 
     [SqlServerFact]
+    public async Task PublicationExposesDesignSystemUriInDetailsWhenSupplied()
+    {
+        // Extends L2-003's metadata-validation coverage for a framework's optional whole-app
+        // design-system iframe URL; no dedicated L2 ID exists yet.
+        await using var fixture = await SqlMaintenanceFixture.CreateAsync();
+        using var client = fixture.CreateClient();
+        var id = Guid.NewGuid();
+        var body = SqlMaintenanceFixture.DraftBody(id);
+        body["designSystemUri"] = "https://example.test/design-systems/cornerstone/";
+        Assert.Equal(HttpStatusCode.Created, (await client.PostAsJsonAsync("/api/maintenance/frameworks", body)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await client.PostAsJsonAsync($"/api/maintenance/frameworks/{id:D}/publish", PublishBody("1"))).StatusCode);
+        using var anonymous = fixture.CreateClient(authenticated: false);
+        using var details = JsonDocument.Parse(await anonymous.GetStringAsync($"/api/frameworks/{id:D}"));
+        Assert.Equal("https://example.test/design-systems/cornerstone/", details.RootElement.GetProperty("designSystemUri").GetString());
+    }
+
+    [SqlServerFact]
     public async Task EditingAndRepublishingKeepsTheOriginalPublishedSnapshot()
     {
         await using var fixture = await SqlMaintenanceFixture.CreateAsync();

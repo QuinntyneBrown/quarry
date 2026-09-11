@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Place an icon
+
+Person(dev, "Application developer", "Seeds the registry at bootstrap and names icons in templates")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides IconComponent, IconRegistry, and provideCsIcons()")
+  Container(sets, "Icon sets", "Exported TypeScript constants", "Hold the SVG definitions; unused sets are dropped by the bundler")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the spacing tokens the icon size steps resolve against")
+  Container(docs, "Documentation site", "Angular application", "Publishes the icon gallery and registration guide")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(config, "Application config", "Angular providers", "Calls provideCsIcons() with the sets the application imports")
+  Container(page, "Feature page", "Angular components", "Places cs-icon elements by name")
+}
+
+System_Ext(browser, "Browser platform", "SVG renderer and accessibility tree")
+
+Rel(dev, config, "Adds the icon provider to")
+Rel(dev, page, "Names icons in")
+Rel(config, lib, "Registers IconRegistry from")
+Rel(config, sets, "Imports only the sets it uses from")
+Rel(page, lib, "Places cs-icon elements from")
+Rel(lib, sets, "Resolves definitions registered from")
+Rel(lib, theme, "Resolves size and colour from")
+Rel(lib, browser, "Inlines SVG markup into", "DOM")
+Rel(docs, sets, "Publishes the name gallery of")
+@enduml

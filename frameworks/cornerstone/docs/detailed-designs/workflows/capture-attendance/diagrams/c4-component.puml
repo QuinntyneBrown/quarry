@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Capture attendance
+
+Person(volunteer, "Volunteer", "Marks rows and leaves the page")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(roster, "AttendanceRosterComponent", "Standalone component, OnPush", "Renders the roster, mark-all, clear, and unsaved summary; emits typed intents only")
+  Component(choice, "AttendanceChoiceComponent", "Standalone component, ControlValueAccessor", "Radio group of present, late, absent, and excused named after the person")
+  Component(note, "CsAttendanceNoteField", "Composed Cornerstone field", "Captures the per-row note")
+  Component(unsaved, "UnsavedChangesDialogComponent", "Standalone component (L2-105)", "Presented when the user leaves a roster with unsaved rows")
+  Component(models, "Attendance view model and intent types", "TypeScript types", "AttendanceRosterViewModel, AttendanceChange, AttendanceBulkChange")
+}
+
+Container_Boundary(app, "Consuming application — session attendance page") {
+  Component(pagecmp, "Attendance page component", "Angular feature page", "Maps application state into the roster view model")
+  Component(rules, "Attendance policy service", "Angular service", "Holds the domain rules, authorization, and conflict resolution")
+  Component(store, "Attendance store", "Angular service", "Persists changes and queues them while offline")
+  Component(router, "Application router", "Angular router", "Owns navigation and the leave guard")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and BreakpointObserver")
+
+Rel(volunteer, roster, "Marks rows in")
+Rel(roster, choice, "Renders one per row")
+Rel(roster, note, "Renders one per row")
+Rel(choice, models, "Carries CsAttendanceState defined in")
+Rel(roster, models, "Reads the view model and emits the intents defined in")
+Rel(pagecmp, roster, "Binds the roster view model to")
+Rel(roster, pagecmp, "Emits stateChanged, bulkChanged, noteChanged, conflictResolveRequested to")
+Rel(pagecmp, rules, "Asks whether a change is permitted")
+Rel(pagecmp, store, "Writes accepted changes through")
+Rel(store, pagecmp, "Reports queued and conflict status to")
+Rel(router, unsaved, "Opens on an attempted leave")
+Rel(roster, unsaved, "Reports the unsaved summary to")
+Rel(roster, cdk, "Announces the changed row count through", "LiveAnnouncer")
+@enduml

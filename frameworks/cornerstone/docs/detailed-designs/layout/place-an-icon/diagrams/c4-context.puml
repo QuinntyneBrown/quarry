@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Place an icon
+
+Person(dev, "Application developer", "Registers icon sets and names icons in Liturgy and Word Up templates")
+Person(user, "Application user", "Reads rendered glyphs, or hears accessible names through assistive technology")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the icon component and registry")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives the surrounding components build on")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Renders inline SVG and exposes the accessibility tree")
+
+Rel(dev, cornerstone, "Names icons from")
+Rel(dev, app, "Registers icon sets in")
+Rel(app, cornerstone, "Resolves icon markup from")
+Rel(cornerstone, cdk, "Builds surrounding behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders inline SVG into")
+Rel(browser, user, "Presents glyphs and accessible names to")
+@enduml

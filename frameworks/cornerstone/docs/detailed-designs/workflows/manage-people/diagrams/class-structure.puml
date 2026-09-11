@@ -1,0 +1,183 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Manage people
+
+class PeopleDirectoryComponent {
+  +people: InputSignal<readonly PersonRowView[]>
+  +query: ModelSignal<PeopleQuery>
+  +facets: InputSignal<readonly PeopleFacet[]>
+  +selection: ModelSignal<ReadonlySet<string>>
+  +layout: InputSignal<DirectoryLayout>
+  +loading: InputSignal<boolean>
+  +queryChanged: OutputEmitterRef<PeopleQuery>
+  +selectionChanged: OutputEmitterRef<PeopleSelectionChange>
+  +rowAction: OutputEmitterRef<PersonRowAction>
+  -resolvedVariant: Signal<PersonRowVariant>
+  -allSelectedState: Signal<boolean | 'indeterminate'>
+}
+
+class PersonRowComponent {
+  +person: InputSignal<PersonRowView>
+  +selected: ModelSignal<boolean>
+  +selectable: InputSignal<boolean>
+  +variant: InputSignal<PersonRowVariant>
+  +actionSelected: OutputEmitterRef<PersonRowAction>
+  +opened: OutputEmitterRef<CsPersonOpen>
+  -avatarFailed: WritableSignal<boolean>
+}
+
+class PersonSummaryComponent {
+  +person: InputSignal<PersonSummaryView>
+  +actions: InputSignal<readonly PersonAction[]>
+  +actionSelected: OutputEmitterRef<PersonAction>
+}
+
+class RecordTabsComponent {
+  +sections: InputSignal<readonly RecordSection[]>
+  +activeSectionId: ModelSignal<string>
+  +orientation: InputSignal<RecordTabsOrientation>
+  +sectionChanged: OutputEmitterRef<RecordSectionChange>
+}
+
+class PersonRowView {
+  +personId: string
+  +displayName: string
+  +avatarUrl: string | null
+  +initials: string
+  +roleLabel: string
+  +cohortLabel: string | null
+  +status: PersonStatus
+  +statusLabel: string
+  +actions: readonly PersonRowAction[]
+}
+
+class PersonSummaryView {
+  +personId: string
+  +displayName: string
+  +pronouns: string | null
+  +avatarUrl: string | null
+  +initials: string
+  +roleLabel: string
+  +cohortLabel: string | null
+  +status: PersonStatus
+  +statusLabel: string
+  +contacts: readonly ContactEntry[]
+}
+
+class ContactEntry {
+  +kind: string
+  +label: string
+  +value: string
+  +href: string | null
+}
+
+enum PersonStatus {
+  active
+  inactive
+  pending
+  archived
+}
+
+class PeopleQuery {
+  +text: string
+  +filters: Record<string, readonly string[]>
+  +sortKey: string
+  +sortDirection: string
+}
+
+class PeopleFacet {
+  +facetId: string
+  +label: string
+  +options: readonly CsFacetOption[]
+  +multiple: boolean
+}
+
+class CsFacetOption {
+  +optionId: string
+  +label: string
+  +count: number | null
+}
+
+enum DirectoryLayout {
+  auto
+  table
+  list
+}
+
+enum PersonRowVariant {
+  table
+  list
+}
+
+class PeopleSelectionChange {
+  +selectedIds: readonly string[]
+  +lastChangedId: string
+}
+
+class PersonRowAction {
+  +personId: string
+  +actionId: string
+  +kind: string
+}
+
+class CsPersonOpen {
+  +personId: string
+}
+
+class PersonAction {
+  +personId: string
+  +actionId: string
+  +label: string
+  +kind: string
+}
+
+class RecordSection {
+  +sectionId: string
+  +label: string
+  +badgeCount: number | null
+  +disabled: boolean
+  +loading: boolean
+}
+
+class RecordSectionChange {
+  +personId: string
+  +fromSectionId: string
+  +toSectionId: string
+}
+
+enum RecordTabsOrientation {
+  horizontal
+  vertical
+}
+
+PeopleDirectoryComponent *-- "0..*" PersonRowComponent : renders one per person
+PeopleDirectoryComponent --> "0..*" PersonRowView : reads
+PeopleDirectoryComponent o-- "1" PeopleQuery : holds
+PeopleDirectoryComponent --> "0..*" PeopleFacet : offers
+PeopleDirectoryComponent --> DirectoryLayout : has
+PeopleDirectoryComponent ..> PeopleSelectionChange : emits
+PeopleFacet *-- "1..*" CsFacetOption : offers
+PersonRowComponent --> "1" PersonRowView : reads
+PersonRowComponent --> PersonRowVariant : has
+PersonRowComponent ..> PersonRowAction : emits
+PersonRowComponent ..> CsPersonOpen : emits
+PersonRowView --> PersonStatus : has
+PersonSummaryComponent --> "1" PersonSummaryView : reads
+PersonSummaryComponent ..> PersonAction : emits
+PersonSummaryView *-- "0..*" ContactEntry : carries
+PersonSummaryView --> PersonStatus : has
+RecordTabsComponent --> "1..*" RecordSection : reads
+RecordTabsComponent --> RecordTabsOrientation : has
+RecordTabsComponent ..> RecordSectionChange : emits
+@enduml

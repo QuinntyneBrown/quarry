@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Report determinate progress
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Import panel" as panel
+  participant "Application services" as svc
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "ProgressBarComponent" as bar
+  participant "ProgressRingComponent" as ring
+  participant "Value helpers" as helpers
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Indicator styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and assistive technology" as dom
+end box
+
+admin -> panel : Start the roster import
+panel -> bar : Bind label, min 0, max 100, mode 'determinate'
+bar -> dom : Write role progressbar with valuemin, valuemax, and the accessible name per L2-088
+panel -> ring : Bind the same label and value contract
+ring -> dom : Write the SVG role progressbar and value attributes per L2-089
+ring -> ring : Draw no arc at the minimum boundary per L2-089
+
+loop Import reports a rising count
+  svc -> panel : Completion count
+  panel -> bar : Set value
+  bar -> helpers : Clamp the value into the range
+  helpers --> bar : Clamped value
+  bar -> styles : Resolve the track height and tone from tokens
+  bar -> dom : Update aria-valuenow and the track width
+  bar -> helpers : Offer the value text for announcement
+  helpers -> helpers : Suppress until the documented interval elapses per L2-088
+  helpers -> dom : Announce at the documented interval only per L2-088
+end
+
+alt Value falls outside min and max
+  panel -> bar : Set a value above the maximum
+  bar -> helpers : Clamp the value
+  helpers --> bar : Maximum value
+  helpers -> helpers : Log a development-mode warning naming the value per L2-088
+  bar -> dom : Render the clamped value per L2-088
+end
+
+svc -> panel : Import complete
+panel -> ring : Set the value to the maximum
+ring -> ring : Close the arc without a hairline gap per L2-089
+ring -> styles : Resolve a distinguishable track and arc under forced colours per L2-089
+ring -> dom : Update aria-valuenow to the maximum
+dom --> admin : Import reported as complete
+@enduml

@@ -1,0 +1,128 @@
+{
+  "kind": "class",
+  "name": "NotificationItemComponent",
+  "sourcePath": "src/cornerstone/notification-item/notification-item.component.ts",
+  "category": "communication",
+  "description": "Notification Item public API.",
+  "members": [
+    {
+      "name": "notification",
+      "bindingName": "notification",
+      "role": "input",
+      "type": "CsNotificationViewModel",
+      "required": true,
+      "description": "Notification public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "readToggled",
+      "bindingName": "readToggled",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Read Toggled public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "CsNotificationNavigateIntent",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-notification-item",
+  "slug": "notification-item",
+  "label": "Notification Item",
+  "tokens": [],
+  "relatedSymbols": ["CsNotificationNavigateIntent", "CsNotificationViewModel"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsNotificationNavigateIntent",
+      "sourcePath": "src/cornerstone/core/communication/cs-notification-navigate-intent.interface.ts",
+      "category": "communication",
+      "description": "Cs Notification Navigate Intent public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "target",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Target public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsNotificationViewModel",
+      "sourcePath": "src/cornerstone/core/communication/cs-notification-view-model.interface.ts",
+      "category": "communication",
+      "description": "Cs Notification View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "category",
+          "role": "property",
+          "type": "CsNotificationCategory",
+          "required": true,
+          "description": "Category public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Instant public API."
+        },
+        {
+          "name": "read",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Read public API."
+        },
+        {
+          "name": "target",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Target public API."
+        }
+      ]
+    }
+  ]
+}

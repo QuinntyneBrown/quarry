@@ -1,0 +1,10 @@
+<h2>{{ view().title }}</h2>
+<div class="cs-grid">
+  @for (panel of view().panels; track panel.id) {
+    <cs-stat-card
+      [label]="panel.title"
+      [value]="panel.value"
+      [formattedValue]="panel.formatted ?? ''"
+    />
+  }
+</div>

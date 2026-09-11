@@ -1,0 +1,120 @@
+{
+  "kind": "class",
+  "name": "PersonSummaryComponent",
+  "sourcePath": "src/cornerstone/person-summary/person-summary.component.ts",
+  "category": "workflows",
+  "description": "Person Summary public API.",
+  "members": [
+    {
+      "name": "view",
+      "bindingName": "view",
+      "role": "input",
+      "type": "PersonSummaryView",
+      "required": true,
+      "description": "View public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "PersonAction",
+      "required": false,
+      "description": "Action public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-person-summary",
+  "slug": "person-summary",
+  "label": "Person Summary",
+  "tokens": [],
+  "relatedSymbols": ["ContactEntry", "PersonAction", "PersonSummaryView"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ContactEntry",
+      "sourcePath": "src/cornerstone/person-summary/contact-entry.interface.ts",
+      "category": "workflows",
+      "description": "Contact Entry public API.",
+      "members": [
+        {
+          "name": "type",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Type public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Value public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "PersonAction",
+      "sourcePath": "src/cornerstone/person-summary/person-action.interface.ts",
+      "category": "workflows",
+      "description": "Person Action public API.",
+      "members": [
+        {
+          "name": "personId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Person Id public API."
+        },
+        {
+          "name": "action",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Action public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "PersonSummaryView",
+      "sourcePath": "src/cornerstone/person-summary/person-summary-view.interface.ts",
+      "category": "workflows",
+      "description": "Person Summary View public API.",
+      "members": [
+        {
+          "name": "person",
+          "role": "property",
+          "type": "PersonSummary",
+          "required": true,
+          "description": "Person public API."
+        },
+        {
+          "name": "contacts",
+          "role": "property",
+          "type": "readonly ContactEntry[]",
+          "required": true,
+          "description": "Contacts public API."
+        },
+        {
+          "name": "metadata",
+          "role": "property",
+          "type": "readonly CsMetadataItem[]",
+          "required": true,
+          "description": "Metadata public API."
+        }
+      ]
+    }
+  ]
+}

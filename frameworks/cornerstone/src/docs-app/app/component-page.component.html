@@ -1,0 +1,179 @@
+@if (component(); as component) {
+  <article class="component-page">
+    <header class="component-header">
+      <p class="eyebrow">{{ categoryLabel(component.category) }}</p>
+      <h1>{{ component.label }}</h1>
+      <p>{{ description(component) }}</p>
+      <div class="component-identity">
+        <code>{{ component.selector }}</code
+        ><code>{{ component.name }}</code>
+      </div>
+    </header>
+    <nav class="section-tabs" aria-label="Documentation sections">
+      @for (tab of tabs; track tab) {
+        <a
+          [routerLink]="['/components', component.slug, tab]"
+          [class.active]="section() === tab"
+          [attr.aria-current]="section() === tab ? 'page' : null"
+          >{{ tab }}</a
+        >
+      }
+    </nav>
+    @switch (section()) {
+      @case ('api') {
+        <section class="documentation-section api-page">
+          <h2>API reference for {{ component.label }}</h2>
+          <div class="import-block">
+            <code>import &#123; {{ component.name }} &#125; from '@quinntyne/cornerstone';</code>
+            <button type="button" (click)="copyImport(component)">Copy</button>
+          </div>
+          <h3>{{ component.name }}</h3>
+          <p>{{ component.description }}</p>
+          <p>
+            <strong>Selector:</strong> <code>{{ component.selector }}</code>
+          </p>
+          @for (group of memberGroups(component); track group.role) {
+            <h3>{{ group.label }}</h3>
+            <div class="api-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type and default</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (member of group.members; track member.name) {
+                    <tr>
+                      <td>
+                        <code>{{ member.bindingName ?? member.name }}</code>
+                        @if (member.required) {
+                          <span class="required">required</span>
+                        }
+                      </td>
+                      <td>
+                        <code>{{ signature(member) }}</code>
+                        @if (member.defaultValue !== undefined) {
+                          <small
+                            >Default: <code>{{ member.defaultValue }}</code></small
+                          >
+                        }
+                      </td>
+                      <td>{{ member.description }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          @if (related(component).length) {
+            <h3>Related public APIs</h3>
+            @for (entry of related(component); track entry.name) {
+              <section class="related-api" [id]="entry.name">
+                <h4>
+                  <code>{{ entry.name }}</code> <small>{{ entry.kind }}</small>
+                </h4>
+                <p>{{ entry.description }}</p>
+                @if (entry.declaration) {
+                  <pre><code>{{ entry.kind }} {{ entry.name }} = {{ entry.declaration }}</code></pre>
+                }
+                @if (entry.members?.length) {
+                  <ul>
+                    @for (member of entry.members; track member.name) {
+                      <li>
+                        <code>{{ member.name }}: {{ member.type }}</code> — {{ member.description }}
+                      </li>
+                    }
+                  </ul>
+                }
+              </section>
+            }
+          }
+          <a class="source-path" [href]="sourceUrl(component)" target="_blank" rel="noreferrer"
+            >View source: {{ component.sourcePath }}</a
+          >
+        </section>
+      }
+      @case ('styling') {
+        <section class="documentation-section">
+          <h2>Styling {{ component.label }}</h2>
+          <p>
+            Cornerstone components inherit the active theme and can be placed beneath a light or
+            dark theme boundary. Prefer the public custom properties below over internal selectors.
+          </p>
+          <h3>Consumed design tokens</h3>
+          <ul class="token-grid">
+            @for (token of tokens(component); track token) {
+              <li>
+                <code>{{ token }}</code>
+              </li>
+            } @empty {
+              <li>This component inherits typography and color from its surrounding theme.</li>
+            }
+          </ul>
+          <h3>Theme previews</h3>
+          <div class="theme-previews">
+            <div class="cs-theme-light">
+              <span>Light</span><cs-docs-live-playground [entry]="component" />
+            </div>
+            <div class="cs-theme-dark">
+              <span>Dark</span><cs-docs-live-playground [entry]="component" />
+            </div>
+          </div>
+        </section>
+      }
+      @case ('examples') {
+        <section class="documentation-section">
+          <h2>Examples for {{ component.label }}</h2>
+          <p>
+            Change the component’s public inputs, interact with the rendered result, inspect emitted
+            events, and copy its real source files.
+          </p>
+          <cs-docs-live-playground [entry]="component" />
+          <section class="usage-notes">
+            <h3>Responsive behavior</h3>
+            <p>
+              The preview uses the component’s intrinsic responsive rules. Resize the browser or use
+              its device tools to validate narrow layouts.
+            </p>
+            <h3>Accessibility</h3>
+            <p>
+              Use the component with its visible label or required accessible-name inputs. All
+              native keyboard behavior remains available inside the live preview.
+            </p>
+          </section>
+        </section>
+      }
+      @default {
+        <section class="documentation-section overview-grid">
+          <div>
+            <h2>Overview for {{ component.label }}</h2>
+            <p>{{ description(component) }}</p>
+            <h3>Start using {{ component.label }}</h3>
+            <pre><code>import &#123; {{ component.name }} &#125; from '@quinntyne/cornerstone';</code></pre>
+            <pre><code>&lt;{{ component.selector }}&gt;{{ component.label }} content&lt;/{{ component.selector }}&gt;</code></pre>
+            <h3>Accessibility</h3>
+            <p>
+              Supply meaningful visible text or the documented accessible-label input. Test keyboard
+              focus and announcements in the context where the component is used.
+            </p>
+          </div>
+          <aside class="page-toc">
+            <strong>On this page</strong><a href="#live-example">Live example</a
+            ><a [routerLink]="['/components', component.slug, 'api']">API reference</a
+            ><a [routerLink]="['/components', component.slug, 'styling']">Styling</a>
+          </aside>
+          <div id="live-example" class="overview-example">
+            <cs-docs-live-playground [entry]="component" />
+          </div>
+        </section>
+      }
+    }
+  </article>
+} @else {
+  <section class="not-found">
+    <h1>Component not found</h1>
+    <a routerLink="/components/categories">Return to the component catalog</a>
+  </section>
+}

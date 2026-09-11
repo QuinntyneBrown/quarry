@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Announce a system message
+
+Person(dev, "Application developer", "Raises alerts, banners, and toasts instead of writing per-page live regions")
+Person(user, "Application user", "Reads or hears system messages while working")
+Person(volunteer, "Volunteer", "Records attendance on an unreliable network and relies on the connectivity banner")
+
+System(cornerstone, "Cornerstone", "Angular UI library owning the alert, banner, toast queue, and announcement policy")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that raises the messages")
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and overlay behind the toast outlet")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Hosts the live regions and drives assistive technology")
+
+Rel(dev, app, "Raises typed messages in")
+Rel(app, cornerstone, "Opens toasts and renders alerts and banners through")
+Rel(cornerstone, cdk, "Announces and positions through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Writes the polite and assertive live regions to")
+Rel(browser, user, "Announces and presents the message to")
+Rel(browser, volunteer, "Announces the offline and restored states to")
+Rel(user, browser, "Dismisses or acts on the message in")
+@enduml

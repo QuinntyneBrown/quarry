@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Announce an asynchronous change
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Screen reader user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up people directory page" as page
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "DataToolbarComponent" as toolbar
+  participant "PaginatorComponent" as paginator
+end box
+box "Frontend — Cornerstone accessibility layer" #ECFDF3
+  participant "CsBusyDirective" as busy
+  participant "CsStatusService" as status
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region and assistive technology" as at
+end box
+
+user -> toolbar : Change the cohort filter
+toolbar -> page : Emit the filter intent
+page -> busy : Mark the results region busy
+busy -> at : Set aria-busy="true" on the labelled region per L2-027
+busy -> status : Announce the loading status politely after the documented delay
+status -> at : Polite announcement
+at --> user : "Loading results"
+
+page --> paginator : New result set and count
+busy -> at : Clear aria-busy
+paginator -> status : announceOnce('result-count', '24 results', polite) per L2-027
+status -> status : Record the message under its key
+status -> at : Polite announcement
+at --> user : "24 results"
+
+alt Same count announced again
+  paginator -> status : announceOnce('result-count', '24 results', polite)
+  status -> status : Match the recorded message and suppress per L2-027
+  status --> paginator : No announcement produced
+else Load fails
+  page -> status : announce(error message, assertive)
+  status -> at : Assertive announcement exactly once per L2-027
+  at --> user : "Results could not be loaded"
+  page -> paginator : Render the error tone with an icon and text per L2-028
+end
+@enduml

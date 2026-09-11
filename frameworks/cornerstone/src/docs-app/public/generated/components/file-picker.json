@@ -1,0 +1,93 @@
+{
+  "kind": "class",
+  "name": "FilePickerComponent",
+  "sourcePath": "src/cornerstone/file-picker/file-picker.component.ts",
+  "category": "forms",
+  "description": "File Picker public API.",
+  "members": [
+    {
+      "name": "multiple",
+      "bindingName": "multiple",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Multiple public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "accept",
+      "bindingName": "accept",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Accept public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "maxBytes",
+      "bindingName": "maxBytes",
+      "role": "input",
+      "type": "unknown",
+      "required": false,
+      "defaultValue": "Number.MAX_SAFE_INTEGER",
+      "description": "Max Bytes public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "filesSelected",
+      "bindingName": "filesSelected",
+      "role": "output",
+      "type": "readonly File[]",
+      "required": false,
+      "description": "Files Selected public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "rejected",
+      "bindingName": "rejected",
+      "role": "output",
+      "type": "readonly FileRejection[]",
+      "required": false,
+      "description": "Rejected public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-file-picker",
+  "slug": "file-picker",
+  "label": "File Picker",
+  "tokens": [],
+  "relatedSymbols": ["FileRejection"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "FileRejection",
+      "sourcePath": "src/cornerstone/file-picker/file-rejection.interface.ts",
+      "category": "forms",
+      "description": "File Rejection public API.",
+      "members": [
+        {
+          "name": "file",
+          "role": "property",
+          "type": "File",
+          "required": true,
+          "description": "File public API."
+        },
+        {
+          "name": "reason",
+          "role": "property",
+          "type": "'type' | 'size'",
+          "required": true,
+          "description": "Reason public API."
+        }
+      ]
+    }
+  ]
+}

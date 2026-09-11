@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Collapse an overflowing trail
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell" as shell
+  participant "Angular Router" as router
+end box
+box "Frontend — Cornerstone breadcrumbs" #D1FADF
+  participant "BreadcrumbsComponent" as crumbs
+  participant "CsMenuDirective" as menu
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and DOM" as dom
+end box
+
+shell -> crumbs : Bind a crumb list longer than maxVisible
+crumbs -> crumbs : Derive the overflow view model per L2-068
+
+alt Wide viewport
+  crumbs -> dom : Render the first crumb, an overflow trigger, and the last two crumbs
+  user -> crumbs : Activate the overflow trigger
+  crumbs -> menu : Open the hidden crumb panel
+  menu -> overlay : Attach the panel with a collision-aware position
+  overlay -> dom : Render the hidden crumbs as anchors
+  dom --> user : Hidden ancestors, keyboard navigable
+  user -> dom : Activate a hidden ancestor anchor
+  dom -> router : Resolve the supplied routerLink per L2-076
+  menu -> dom : Close the panel and return focus to the overflow trigger
+else Narrow viewport
+  dom -> crumbs : Report a viewport below the shell breakpoint
+  crumbs -> dom : Render the parent as a back link and the current page only per L2-068
+  crumbs -> dom : Keep the full path in the landmark accessible name
+  dom --> user : Truncated trail with the complete path announced
+end
+@enduml

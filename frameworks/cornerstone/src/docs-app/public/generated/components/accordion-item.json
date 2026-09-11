@@ -1,0 +1,48 @@
+{
+  "kind": "class",
+  "name": "AccordionItemComponent",
+  "sourcePath": "src/cornerstone/accordion-item/accordion-item.component.ts",
+  "category": "navigation",
+  "description": "Accordion Item public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "expanded",
+      "bindingName": "expanded",
+      "role": "model",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Expanded public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "bindingName": "disabled",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Disabled public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-accordion-item",
+  "slug": "accordion-item",
+  "label": "Accordion Item",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

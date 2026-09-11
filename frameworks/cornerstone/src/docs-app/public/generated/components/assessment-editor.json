@@ -1,0 +1,116 @@
+{
+  "kind": "class",
+  "name": "AssessmentEditorComponent",
+  "sourcePath": "src/cornerstone/assessment-editor/assessment-editor.component.ts",
+  "category": "workflows",
+  "description": "Assessment Editor public API.",
+  "members": [
+    {
+      "name": "assessment",
+      "bindingName": "assessment",
+      "role": "input",
+      "type": "AssessmentView",
+      "required": true,
+      "description": "Assessment public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "changed",
+      "bindingName": "changed",
+      "role": "output",
+      "type": "AssessmentChange",
+      "required": false,
+      "description": "Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "decided",
+      "bindingName": "decided",
+      "role": "output",
+      "type": "AssessmentDecision",
+      "required": false,
+      "description": "Decided public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-assessment-editor",
+  "slug": "assessment-editor",
+  "label": "Assessment Editor",
+  "tokens": [],
+  "relatedSymbols": ["AssessmentChange", "AssessmentDecision", "AssessmentView"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AssessmentChange",
+      "sourcePath": "src/cornerstone/assessment-editor/assessment-change.interface.ts",
+      "category": "workflows",
+      "description": "Assessment Change public API.",
+      "members": [
+        {
+          "name": "comment",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Comment public API."
+        },
+        {
+          "name": "selection",
+          "role": "property",
+          "type": "RubricSelection",
+          "required": false,
+          "description": "Selection public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AssessmentDecision",
+      "sourcePath": "src/cornerstone/assessment-editor/assessment-decision.interface.ts",
+      "category": "workflows",
+      "description": "Assessment Decision public API.",
+      "members": [
+        {
+          "name": "decision",
+          "role": "property",
+          "type": "'approve' | 'return'",
+          "required": true,
+          "description": "Decision public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AssessmentView",
+      "sourcePath": "src/cornerstone/assessment-editor/assessment-view.interface.ts",
+      "category": "workflows",
+      "description": "Assessment View public API.",
+      "members": [
+        {
+          "name": "rubric",
+          "role": "property",
+          "type": "RubricView",
+          "required": true,
+          "description": "Rubric public API."
+        },
+        {
+          "name": "comment",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Comment public API."
+        },
+        {
+          "name": "decision",
+          "role": "property",
+          "type": "'approve' | 'return'",
+          "required": false,
+          "description": "Decision public API."
+        }
+      ]
+    }
+  ]
+}

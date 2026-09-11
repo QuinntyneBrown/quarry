@@ -4,4 +4,5 @@ public sealed record FrameworkDetails(
     FrameworkSummary Summary,
     IReadOnlyList<FrameworkCapability> Capabilities,
     IReadOnlyList<string> UseCases,
-    IReadOnlyList<FrameworkComponentDescriptor> Components, PreviewManifest? PreviewManifest = null);
+    IReadOnlyList<FrameworkComponentDescriptor> Components, PreviewManifest? PreviewManifest = null,
+    string? DesignSystemUri = null);

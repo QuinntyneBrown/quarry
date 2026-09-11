@@ -1,0 +1,10 @@
+<table class="cs-table">
+  @for (series of series(); track series.label) {
+    <tr>
+      <th>{{ series.label }}</th>
+      @for (value of series.values; track $index) {
+        <td>{{ value }}</td>
+      }
+    </tr>
+  }
+</table>

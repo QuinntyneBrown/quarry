@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "CheckboxComponent",
+  "sourcePath": "src/cornerstone/checkbox/checkbox.component.ts",
+  "category": "forms",
+  "description": "Checkbox public API.",
+  "members": [
+    {
+      "name": "indeterminate",
+      "bindingName": "indeterminate",
+      "role": "model",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Indeterminate public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-checkbox",
+  "slug": "checkbox",
+  "label": "Checkbox",
+  "tokens": ["--cs-lime-strong", "--cs-space-2"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

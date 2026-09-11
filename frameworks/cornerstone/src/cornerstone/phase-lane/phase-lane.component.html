@@ -1,0 +1,6 @@
+<section>
+  <h2>{{ phase().label }}</h2>
+  @for (project of projects(); track project.id) {
+    <cs-project-card [project]="project" (opened)="opened.emit($event)" />
+  }
+</section>

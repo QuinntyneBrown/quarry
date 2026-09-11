@@ -1,0 +1,47 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Verify every change
+
+Person(maintainer, "Library maintainer", "Reads the failing check")
+
+Container_Boundary(job, "CI verify job") {
+  Component(install, "Dependency install", "npm ci on Node 22", "Restores the locked dependency tree")
+  Component(format, "Format check", "prettier --check", "Fails on unformatted sources")
+  Component(unitstep, "Unit suite step", "ng test cornerstone --watch=false", "Executes every spec file")
+  Component(coverage, "Coverage threshold check", "Vitest coverage reporter", "Fails when a measure falls below CsCoverageThresholds")
+  Component(surface, "Public-API coverage check", "Node script", "Fails when an export in public-api.ts has no suite")
+  Component(visualstep, "Visual comparison step", "Headless browser runner", "Compares each variant render against its approved baseline")
+  Component(crossstep, "Cross-browser step", "Browser automation", "Runs behaviour suites in each engine named in the matrix")
+  Component(srcheck, "Screen-reader record check", "Node script", "Fails when an ARIA pattern has no current record")
+  Component(parser, "Traces header parser", "Node script", "Reads the first comment line of every acceptance test")
+  Component(comparer, "Coverage comparer", "Node script", "Diffs the covered set against the declared identifier set")
+  Component(report, "Verification report", "Job summary", "Names the offending identifier, variant, or export")
+}
+
+ContainerDb_Ext(baselines, "Approved baselines", "PNG files", "verification/baselines")
+ContainerDb_Ext(srlog, "Screen-reader log", "Markdown", "verification/screen-reader-log.md")
+Container_Ext(specs, "Requirement specification", "Markdown", "docs/specs/L2.md")
+Container_Ext(matrix, "Support matrix", "Declared support data", "Angular, Node, and browser versions")
+Container_Ext(lib, "Component library", "Angular standalone components", "The public surface under verification")
+
+Rel(install, unitstep, "Precedes")
+Rel(unitstep, lib, "Exercises")
+Rel(unitstep, coverage, "Emits coverage to")
+Rel(surface, lib, "Reads the public entry point of")
+Rel(visualstep, lib, "Renders documented variants of")
+Rel(visualstep, baselines, "Compares against")
+Rel(crossstep, matrix, "Reads the browser list from")
+Rel(crossstep, lib, "Runs behaviour suites against")
+Rel(srcheck, srlog, "Reads records from")
+Rel(parser, comparer, "Supplies the covered identifier set to")
+Rel(comparer, specs, "Reads the declared identifier set from")
+Rel(coverage, report, "Reports to")
+Rel(surface, report, "Reports to")
+Rel(visualstep, report, "Reports to")
+Rel(crossstep, report, "Reports to")
+Rel(srcheck, report, "Reports to")
+Rel(comparer, report, "Reports to")
+Rel(format, report, "Reports to")
+Rel(report, maintainer, "Names the failing requirement to")
+@enduml

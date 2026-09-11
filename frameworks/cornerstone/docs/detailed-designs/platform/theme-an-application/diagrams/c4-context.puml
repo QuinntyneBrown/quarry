@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Theme an application
+
+Person(dev, "Application developer", "Builds Liturgy and Word Up screens from Cornerstone components")
+Person(user, "Application user", "Views screens in a browser with an operating system colour and motion preference")
+
+System(cornerstone, "Cornerstone", "Angular UI library carrying the FaithTech design tokens and components")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for focus, overlay, and layout observation")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Resolves the cascade and reports colour scheme and motion preferences")
+
+Rel(dev, cornerstone, "Composes screens from")
+Rel(dev, app, "Configures the theme in")
+Rel(app, cornerstone, "Loads tokens and components from")
+Rel(cornerstone, cdk, "Builds behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Declares custom properties to")
+Rel(browser, user, "Presents the resolved theme to")
+Rel(user, browser, "Sets colour scheme and motion preference in")
+@enduml

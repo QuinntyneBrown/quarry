@@ -1,0 +1,14 @@
+<div aria-live="polite">
+  @for (toast of service.items(); track toast.id) {
+    <article [class]="'cs-alert cs-tone--' + (toast.config.tone ?? 'info')">
+      @if (toast.config.title) {
+        <strong>{{ toast.config.title }}</strong>
+      }
+      <p>{{ toast.config.body }}</p>
+      @if (toast.config.actionLabel) {
+        <button type="button" (click)="act(toast)">{{ toast.config.actionLabel }}</button>
+      }
+      <button type="button" aria-label="Close" (click)="service.dismiss(toast.id)">×</button>
+    </article>
+  }
+</div>

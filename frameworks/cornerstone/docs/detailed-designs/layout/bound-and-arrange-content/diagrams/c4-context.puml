@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Bound and arrange content
+
+Person(dev, "Application developer", "Bounds and arranges Liturgy and Word Up screen content")
+Person(user, "Application user", "Views screens at viewport widths from handset to wide desktop")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the container, layout primitives, and responsive region directive")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "BreakpointObserver and layout observation primitives")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Resolves grid and flex layout and reports element size")
+
+Rel(dev, cornerstone, "Applies the container and layout directives from")
+Rel(dev, app, "Composes feature pages in")
+Rel(app, cornerstone, "Bounds and arranges content with")
+Rel(cornerstone, cdk, "Observes container width through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Declares grid and flex layout to")
+Rel(browser, cornerstone, "Reports element size changes to")
+Rel(browser, user, "Presents the arranged layout to")
+@enduml

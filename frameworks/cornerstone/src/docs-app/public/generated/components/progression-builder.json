@@ -1,0 +1,118 @@
+{
+  "kind": "class",
+  "name": "ProgressionBuilderComponent",
+  "sourcePath": "src/cornerstone/progression-builder/progression-builder.component.ts",
+  "category": "workflows",
+  "description": "Progression Builder public API.",
+  "members": [
+    {
+      "name": "nodes",
+      "bindingName": "nodes",
+      "role": "input",
+      "type": "readonly CsCurriculumNode[]",
+      "required": true,
+      "description": "Nodes public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "reordered",
+      "bindingName": "reordered",
+      "role": "output",
+      "type": "CsCurriculumReorderIntent",
+      "required": false,
+      "description": "Reordered public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-progression-builder",
+  "slug": "progression-builder",
+  "label": "Progression Builder",
+  "tokens": [],
+  "relatedSymbols": ["CsCurriculumNode", "CsCurriculumReorderIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsCurriculumNode",
+      "sourcePath": "src/cornerstone/core/workflows/cs-curriculum-node.interface.ts",
+      "category": "workflows",
+      "description": "Cs Curriculum Node public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "parentId",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Parent Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "kind",
+          "role": "property",
+          "type": "CsCurriculumNodeKind",
+          "required": true,
+          "description": "Kind public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "CsCurriculumNodeState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "children",
+          "role": "property",
+          "type": "readonly CsCurriculumNode[]",
+          "required": false,
+          "description": "Children public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsCurriculumReorderIntent",
+      "sourcePath": "src/cornerstone/core/workflows/cs-curriculum-reorder-intent.interface.ts",
+      "category": "workflows",
+      "description": "Cs Curriculum Reorder Intent public API.",
+      "members": [
+        {
+          "name": "nodeId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Node Id public API."
+        },
+        {
+          "name": "parentId",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Parent Id public API."
+        },
+        {
+          "name": "index",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Index public API."
+        }
+      ]
+    }
+  ]
+}

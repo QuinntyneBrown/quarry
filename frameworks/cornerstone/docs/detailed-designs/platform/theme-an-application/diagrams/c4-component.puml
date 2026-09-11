@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Theme an application
+
+Person(dev, "Application developer", "Sets a theme preference")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(provider, "provideCsTheme()", "Angular provider function", "Registers the theme runtime in the application injector")
+  Component(service, "CsThemeService", "Injectable service", "Holds the preference signal and derives the resolved theme")
+  Component(typo, "Typography directives", "Angular directives", "Apply the typographic scale from tokens")
+  Component(styles, "Component styles", "Component-scoped CSS", "Read --cs- custom properties only")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "_tokens.scss", "CSS custom properties", "Declares the light and dark token resolutions")
+  Component(prefs, "Preference blocks", "Media query blocks", "Adapt tokens for forced-colors and prefers-reduced-motion")
+}
+
+System_Ext(browser, "Browser platform", "Cascade and media query engine")
+
+Rel(dev, provider, "Calls in the application config")
+Rel(provider, service, "Registers")
+Rel(service, browser, "Queries prefers-color-scheme via", "matchMedia")
+Rel(service, styles, "Selects the active token resolution for", "theme class on an ancestor")
+Rel(styles, tokens, "Resolve values from")
+Rel(typo, tokens, "Resolve family, size, and weight from")
+Rel(prefs, tokens, "Override for operating system preferences")
+Rel(tokens, browser, "Is resolved by", "CSS cascade")
+@enduml

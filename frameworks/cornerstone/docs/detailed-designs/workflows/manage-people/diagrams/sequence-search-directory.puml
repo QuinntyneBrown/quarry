@@ -1,0 +1,76 @@
+@startuml
+title UML sequence behaviour — Search and filter the directory
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Directory service" as directorysvc
+  participant "Authorization service" as authz
+end box
+box "Frontend — Cornerstone people composites" #D1FADF
+  participant "PeopleDirectoryComponent" as directory
+  participant "PersonRowComponent" as row
+  participant "PersonSummaryComponent" as summary
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendering and input" as browser
+end box
+
+authz -> directorysvc : Scope the result set to the viewer
+directorysvc -> page : Supply the scoped and ordered people
+page -> directory : Bind the row list, facets, and query per L2-123
+directory -> row : Pass one person and the resolved variant
+row -> row : Render avatar, identity, role, cohort, and status per L2-123
+row -> browser : Convey status in text as well as colour
+browser --> admin : Directory presented
+
+admin -> browser : Type a search term
+browser -> directory : Input events
+directory -> directory : Debounce, then update the query model
+directory -> page : Emit PeopleQuery per L2-123
+directory -> directory : Apply no filter and no sort of its own
+page -> directorysvc : Re-query with the search term
+directorysvc --> page : Matching people, ordered
+
+alt Matches returned
+  page -> directory : Bind the new row list
+  directory -> row : Pass each matching person
+  row --> browser : Repaint the rows
+else No match
+  page -> directory : Bind an empty row list
+  directory -> directory : Render the no-match state per L2-123
+  directory --> browser : Empty state presented
+end
+
+admin -> browser : Pick a cohort facet and select two rows
+browser -> directory : Activation events
+directory -> directory : Update the selection set and the header indeterminate state per L2-123
+directory -> page : Emit PeopleSelectionChange with identifiers only
+directory -> directory : Log nothing and persist nothing
+page -> directorysvc : Re-query with the facet applied
+directorysvc --> page : Filtered people
+
+opt Administrator opens a matching row
+  row -> page : Emit CsPersonOpen with the person identifier only
+  page -> directorysvc : Load the record within the viewer scope
+  directorysvc --> page : Person record
+  page -> summary : Bind PersonSummaryView
+  summary -> summary : Render the profile header with contact, status, and actions per L2-124
+  summary --> browser : Profile header presented
+end
+
+browser --> admin : Filtered directory presented
+@enduml

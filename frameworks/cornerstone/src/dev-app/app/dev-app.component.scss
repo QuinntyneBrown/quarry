@@ -1,0 +1,10 @@
+main {
+  max-width: 48rem;
+  margin: var(--cs-space-4) auto;
+  padding: var(--cs-space-4);
+}
+
+cs-card {
+  display: grid;
+  gap: var(--cs-space-4);
+}

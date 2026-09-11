@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Walk a process rail
+
+Person(user, "Application user", "Activates a stage")
+
+Container_Boundary(page, "Consuming application feature page") {
+  Component(vm, "Stage view model", "CsProcessStage[]", "Ordered stages with done, current, and locked states")
+  Component(adapter, "Process adapter", "CsProcessAdapter", "Consumer-supplied labels, palette, ordering, and enforcement results per L2-143")
+  Component(handler, "Intent handler", "Component method", "Resolves activation and action intents into routing and persistence")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(rail, "ProcessRailComponent", "Standalone component", "Ordered rail with step links, inter-step gates, and nested current-stage content per L2-132")
+  Component(journey, "ProcessJourneyComponent", "Standalone component", "Full-content timeline of stage cards and gate panels per L2-133")
+  Component(gate, "GateComponent", "Standalone component", "Renders the inter-step gate panel")
+  Component(orientation, "Orientation resolver", "Computed signal", "Selects the horizontal or vertical presentation from the observed breakpoint")
+  Component(styles, "Component styles", "Component-scoped CSS", "Read --cs- custom properties only")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver")
+System_Ext(browser, "Browser platform", "Layout, cascade, and accessibility tree")
+
+Rel(vm, rail, "Supplies ordered stages to", "input()")
+Rel(vm, journey, "Supplies ordered stages to", "input()")
+Rel(adapter, rail, "Supplies every visible label and colour to", "input()")
+Rel(adapter, journey, "Supplies every visible label and colour to", "input()")
+Rel(rail, handler, "Emits CsStageActivation to", "output()")
+Rel(journey, handler, "Emits StageActionIntent to", "output()")
+Rel(rail, gate, "Renders between two stages")
+Rel(journey, gate, "Renders as a gate panel between stages")
+Rel(rail, orientation, "Reads the resolved presentation from")
+Rel(orientation, cdk, "Subscribes to breakpoint changes from")
+Rel(rail, styles, "Renders through")
+Rel(journey, styles, "Renders through")
+Rel(styles, browser, "Is resolved by")
+Rel(user, browser, "Activates a stage in")
+@enduml

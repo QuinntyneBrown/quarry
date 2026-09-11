@@ -1,0 +1,83 @@
+{
+  "kind": "class",
+  "name": "MessageComposerComponent",
+  "sourcePath": "src/cornerstone/message-composer/message-composer.component.ts",
+  "category": "communication",
+  "description": "Message Composer public API.",
+  "members": [
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "model",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "placeholder",
+      "bindingName": "placeholder",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Write a message'",
+      "description": "Placeholder public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "pending",
+      "bindingName": "pending",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Pending public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "sent",
+      "bindingName": "sent",
+      "role": "output",
+      "type": "SendIntent",
+      "required": false,
+      "description": "Sent public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-message-composer",
+  "slug": "message-composer",
+  "label": "Message Composer",
+  "tokens": ["--cs-space-3"],
+  "relatedSymbols": ["SendIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "SendIntent",
+      "sourcePath": "src/cornerstone/message-composer/send-intent.interface.ts",
+      "category": "communication",
+      "description": "Send Intent public API.",
+      "members": [
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "attachments",
+          "role": "property",
+          "type": "readonly string[]",
+          "required": false,
+          "description": "Attachments public API."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Operate without a mouse
+
+Container_Boundary(a11y, "Cornerstone accessibility layer") {
+  Component(bindings, "CsKeyBindings", "Checked-in pattern table", "Maps each ARIA pattern to its documented key bindings")
+  Component(roving, "CsRovingFocusDirective", "Angular directive", "Applies roving tabindex or active descendant to a composite")
+  Component(visible, "CsFocusVisibleDirective", "Angular directive", "Stamps the focus origin on the host for styling")
+  Component(status, "CsStatusService", "Injectable service", "Announces at a documented politeness and suppresses a repeat")
+  Component(region, "StatusRegionComponent", "Angular component", "Component-owned live region for local announcements")
+  Component(busy, "CsBusyDirective", "Angular directive", "Sets aria-busy and announces a delayed loading status")
+  Component(skip, "CsSkipLinkDirective", "Angular directive", "Reveals a skip link on keyboard focus and moves focus to main")
+  Component(hidden, "CsVisuallyHiddenDirective", "Angular directive", "Keeps content in the accessibility tree and out of the layout")
+}
+
+Container_Boundary(styles, "Cornerstone theme stylesheet") {
+  Component(focuscss, "_focus.scss", "CSS rules", "Renders a 2 CSS pixel perimeter indicator from --cs-focus, unclipped")
+  Component(statecss, "State indication styles", "CSS rules", "Pairs every tone with a text label, icon, or shape")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(menu, "CsMenuDirective / CsMenuItemDirective", "Angular directives", "Implements the menu button pattern")
+  Component(alert, "AlertComponent / ToastOutletComponent", "Angular components", "Announce status and alert content")
+  Component(table, "TableDirective / PaginatorComponent", "Angular directive and component", "Announce result counts on filter and page change")
+}
+
+Container_Boundary(gate, "Verification gate") {
+  Component(scan, "csExpectNoViolations()", "Test helper", "Scans a rendered variant and fails on any violation")
+  Component(coverage, "a11y-coverage gate", "Build step", "Fails on an untested component or an unexercised key binding")
+}
+
+System_Ext(adapters, "CDK adapter layer", "CsListKeyManager, CsFocusTrapDirective, CsFocusMonitorDirective, CsAnnouncerService")
+System_Ext(browser, "Browser platform", "Accessibility tree and keyboard events")
+
+Rel(menu, bindings, "Reads its key bindings from")
+Rel(menu, roving, "Moves the active item with")
+Rel(menu, visible, "Distinguishes keyboard focus with")
+Rel(roving, adapters, "Delegates arrow-key movement to")
+Rel(visible, adapters, "Reads the focus origin from")
+Rel(status, adapters, "Delegates the announcement to")
+Rel(alert, status, "Announces assertively through")
+Rel(table, status, "Announces the new result count politely through")
+Rel(table, busy, "Marks the region busy with")
+Rel(alert, region, "Hosts a local live region through")
+Rel(visible, focuscss, "Selects the indicator rule in")
+Rel(alert, statecss, "Signals tone by icon and text through")
+Rel(scan, menu, "Asserts zero violations for every variant of")
+Rel(scan, alert, "Asserts zero violations for every variant of")
+Rel(coverage, bindings, "Requires an exercising test for every entry in")
+Rel(menu, browser, "Publishes role, name, and expanded state to")
+Rel(skip, browser, "Moves focus to the main landmark in")
+Rel(hidden, browser, "Contributes hidden text to the accessibility tree of")
+@enduml

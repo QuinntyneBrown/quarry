@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Announce a new message
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth using a screen reader" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "MessagingViewModelService" as vm
+end box
+box "Frontend — Cornerstone messaging" #D1FADF
+  participant "MessageThreadComponent" as thread
+  participant "ThreadAnnouncerService" as announcer
+  participant "ThreadScrollAnchor" as anchor
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region" as browser
+end box
+
+thread -> browser : Render the log with role log and aria-live polite per L2-108
+vm --> thread : Supply a changed message list
+thread -> anchor : Read pinnedToBottom
+anchor --> thread : Current pin state
+thread -> announcer : Classify the change as append or prepend
+
+alt Appended message and the log is pinned to the bottom
+  announcer -> announcer : Record the message id as announced
+  announcer -> browser : Announce author, time, and body as one unit per L2-108
+  thread -> browser : Scroll to the new message
+  browser --> user : One polite announcement
+else Appended message and the user is reading history
+  announcer -> announcer : Record the message id as announced
+  announcer -> browser : Announce the new-messages affordance politely
+  browser --> user : Affordance available without a position change
+else Prepended history
+  announcer -> announcer : Suppress every prepended id per L2-108
+  announcer -> browser : Emit no announcement
+  browser --> user : Silence for historical messages
+end
+
+opt The same message arrives again in a later view model
+  thread -> announcer : Classify the change
+  announcer -> announcer : Find the id already announced and emit nothing per L2-108
+end
+
+alt The thread is empty
+  vm --> thread : Supply an empty message list
+  thread -> browser : Render the documented empty state and keep the log region present per L2-108
+  browser --> user : Empty state, region ready for future announcements
+end
+@enduml

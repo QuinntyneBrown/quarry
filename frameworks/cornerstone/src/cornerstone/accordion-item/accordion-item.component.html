@@ -1,0 +1,11 @@
+<button
+  type="button"
+  [attr.aria-expanded]="expanded()"
+  [disabled]="disabled()"
+  (click)="expanded.update((v) => !v)"
+>
+  {{ label() }}
+</button>
+@if (expanded()) {
+  <div><ng-content /></div>
+}

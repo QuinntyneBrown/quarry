@@ -1,0 +1,7 @@
+<cs-card interactive (activated)="selected.emit({ achievementId: achievement().id })"
+  ><h3>{{ achievement().title }}</h3>
+  <p>{{ achievement().description }}</p>
+  @if (achievement().progress) {
+    <cs-progress-bar [value]="achievement().progress!.value" [max]="achievement().progress!.max" />
+  }
+</cs-card>

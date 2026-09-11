@@ -1,0 +1,10 @@
+<input
+  class="cs-input"
+  type="date"
+  [value]="value() ?? ''"
+  [min]="bounds().min ?? ''"
+  [max]="bounds().max ?? ''"
+  [disabled]="disabled()"
+  (input)="change($event)"
+  (blur)="markTouched()"
+/>

@@ -1,0 +1,73 @@
+@startuml
+title UML sequence behaviour — Import a curriculum CSV
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Curriculum import page component" as page
+  participant "Curriculum policy service" as rules
+  participant "Curriculum store" as store
+end box
+box "Frontend — Cornerstone import composite" #D1FADF
+  participant "CsvImportWizardComponent" as wizard
+  participant "Row preview renderer" as preview
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "File input and DOM" as browser
+end box
+
+user -> browser : Choose a curriculum export file
+browser -> wizard : File selection
+wizard -> page : Emit fileSelected per L2-127
+page -> rules : Parse the file into rows and columns
+rules --> page : Source columns and parsed rows
+page -> wizard : Bind the target columns and the parsed rows
+
+wizard -> browser : Render a labelled select for every required target column per L2-127
+user -> wizard : Map the source columns
+wizard -> page : Emit mappingChanged per L2-127
+
+alt A required target column is unmapped
+  wizard -> wizard : Block advancement at the mapping gate per L2-062
+  wizard -> announcer : Announce the unmapped column error per L2-127
+  announcer --> browser : Polite live region update
+else Every required target column is mapped
+  page -> rules : Validate the mapped rows
+  rules --> page : Valid, invalid, and duplicate counts with per-row reasons
+  page -> wizard : Bind CsImportValidation
+  wizard -> browser : State the valid, invalid, and duplicate counts in text per L2-127
+  wizard -> browser : List each invalid row with its number and reason per L2-127
+  wizard -> preview : Render each preview cell
+  preview -> preview : Treat a cell beginning with =, +, -, or @ as literal text per L2-127
+  preview -> browser : Write the cell characters unchanged, evaluating nothing, per L2-127
+  browser --> user : Preview showing =SUM(A1:A9) as the same characters
+
+  user -> wizard : Confirm the import
+  wizard -> page : Emit one CsImportIntent carrying the mapping and the parsed rows per L2-127
+  page -> store : Write the curriculum nodes the rows describe per L2-128
+  store --> page : Progress updates
+  page -> wizard : Bind CsImportProgress
+  wizard -> announcer : Announce progress at the documented interval only per L2-127
+  store --> page : Import complete
+  page -> wizard : Bind CsImportResult
+  wizard -> announcer : Announce the result summary politely per L2-127
+  announcer --> browser : Polite live region update
+  wizard --> user : Result summary with imported and skipped counts
+  page -> store : Publish the new nodes into the curriculum tree per L2-128
+end
+@enduml

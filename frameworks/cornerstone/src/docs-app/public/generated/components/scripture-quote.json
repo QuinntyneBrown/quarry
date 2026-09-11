@@ -1,0 +1,26 @@
+{
+  "kind": "class",
+  "name": "ScriptureQuoteComponent",
+  "sourcePath": "src/cornerstone/scripture-quote/scripture-quote.component.ts",
+  "category": "data-display",
+  "description": "Scripture Quote public API.",
+  "members": [
+    {
+      "name": "reference",
+      "bindingName": "reference",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Reference public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-scripture-quote",
+  "slug": "scripture-quote",
+  "label": "Scripture Quote",
+  "tokens": ["--cs-lime-strong", "--cs-space-5", "--cs-surface", "--cs-text-lg"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

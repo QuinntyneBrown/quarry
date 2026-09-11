@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Capture text
+
+Person(dev, "Application developer", "Declares the form and its fields")
+Person(user, "Application user", "Enters a value")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Supplies FieldComponent, CsInputDirective, CsTextareaDirective, InputGroupComponent, and InputAddonDirective")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares field, control, addon, focus, and validation tokens")
+  Container(docs, "Documentation site", "Angular application", "Publishes the field anatomy and the value contract of each control")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Binds a FormGroup and supplies label, hint, and error text")
+  Container(services, "Application services", "Angular injectables", "Owns validators, persistence, and submission")
+}
+
+System_Ext(cdk, "Angular CDK", "Text-field autosize")
+System_Ext(browser, "Browser platform", "Native controls and validation")
+
+Rel(dev, page, "Declares fields in")
+Rel(page, lib, "Projects native controls into")
+Rel(page, services, "Reads validators and persists values through")
+Rel(lib, theme, "Resolves control and state values from")
+Rel(lib, cdk, "Recalculates textarea height through", "cdkTextareaAutosize")
+Rel(lib, browser, "Renders and reads native input elements in")
+Rel(user, browser, "Types into the control in")
+Rel(browser, lib, "Reports input and blur to")
+Rel(lib, page, "Reports value and touched state to", "ControlValueAccessor")
+Rel(docs, lib, "Documents the ARIA relationships of")
+@enduml

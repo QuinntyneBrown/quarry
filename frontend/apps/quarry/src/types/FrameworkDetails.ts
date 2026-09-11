@@ -9,4 +9,5 @@ export type FrameworkDetails = {
   useCases: string[];
   components: FrameworkComponentDescriptor[];
   previewManifest?: PreviewManifest | null;
+  designSystemUri?: string | null;
 };

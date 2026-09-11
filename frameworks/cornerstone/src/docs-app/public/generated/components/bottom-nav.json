@@ -1,0 +1,79 @@
+{
+  "kind": "class",
+  "name": "BottomNavComponent",
+  "sourcePath": "src/cornerstone/bottom-nav/bottom-nav.component.ts",
+  "category": "navigation",
+  "description": "Bottom Nav public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Primary navigation'",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "items",
+      "bindingName": "items",
+      "role": "input",
+      "type": "readonly BottomNavItem[]",
+      "required": true,
+      "description": "Items public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "CsNavItemActivation",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-bottom-nav",
+  "slug": "bottom-nav",
+  "label": "Bottom Nav",
+  "tokens": ["--cs-border", "--cs-ink", "--cs-paper"],
+  "relatedSymbols": ["BottomNavItem", "CsNavItemActivation"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "BottomNavItem",
+      "sourcePath": "src/cornerstone/bottom-nav/bottom-nav-item.interface.ts",
+      "category": "navigation",
+      "description": "Bottom Nav Item public API.",
+      "members": []
+    },
+    {
+      "kind": "interface",
+      "name": "CsNavItemActivation",
+      "sourcePath": "src/cornerstone/core/navigation/cs-nav-item-activation.interface.ts",
+      "category": "navigation",
+      "description": "Cs Nav Item Activation public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "source",
+          "role": "property",
+          "type": "'pointer' | 'keyboard'",
+          "required": true,
+          "description": "Source public API."
+        }
+      ]
+    }
+  ]
+}

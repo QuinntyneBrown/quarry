@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Submit a form
+
+Person(dev, "Application developer", "Binds the submitting state and the error list")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(actions, "FormActionsComponent", "Angular standalone component", "role=group action bar with primary placement, submitting state, and the sticky treatment")
+  Component(summary, "ValidationSummaryComponent", "Angular standalone component", "Lists invalid controls in DOM order and links each entry to its control")
+  Component(wizard, "WizardComponent", "Angular standalone component", "Step state, back, next, skip, and finish actions with per-step validation gates")
+  Component(header, "CsStepper", "Angular standalone component", "Step header primitive retained or deprecated per the migration guide")
+  Component(gate, "Validation gate", "Pure predicate", "Blocks advancement while the current step reports invalid")
+  Component(guard, "Duplicate submission guard", "Component state", "Suppresses a second activation while a submission is pending")
+  Component(focus, "Focus router", "Injectable helper", "Moves focus to the summary heading and to a named invalid control")
+  Component(announcer, "Announcement adapter", "CDK LiveAnnouncer wrapper", "Announces a failed submission assertively exactly once")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Action and error tokens", "CSS custom properties", "Declares action placement, sticky offset, safe-area inset, and error colours")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and focus utilities")
+System_Ext(browser, "Browser platform", "Native form submission and FormData")
+
+Rel(dev, actions, "Binds the submitting state to")
+Rel(dev, wizard, "Supplies the step set to")
+Rel(actions, guard, "Suppresses repeat activation through")
+Rel(summary, focus, "Moves focus through")
+Rel(summary, announcer, "Announces the failure through")
+Rel(wizard, gate, "Blocks advancement through")
+Rel(wizard, summary, "Announces the current step's errors through")
+Rel(wizard, header, "Renders the step header as")
+Rel(wizard, actions, "Renders back, next, skip, and finish through")
+Rel(announcer, cdk, "Wraps")
+Rel(focus, cdk, "Uses")
+Rel(actions, browser, "Submits through the native default submit control of")
+Rel(actions, tokens, "Resolves placement and sticky offset from")
+Rel(summary, tokens, "Resolves error colours from")
+@enduml

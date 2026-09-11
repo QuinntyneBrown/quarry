@@ -1,0 +1,69 @@
+{
+  "kind": "class",
+  "name": "RadioComponent",
+  "sourcePath": "src/cornerstone/radio/radio.component.ts",
+  "category": "forms",
+  "description": "Radio public API.",
+  "members": [
+    {
+      "name": "name",
+      "bindingName": "name",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Name public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "T",
+      "required": true,
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Selected public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "bindingName": "disabled",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Disabled public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "selectedValue",
+      "bindingName": "selectedValue",
+      "role": "output",
+      "type": "T",
+      "required": false,
+      "description": "Selected Value public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-radio",
+  "slug": "radio",
+  "label": "Radio",
+  "tokens": ["--cs-lime-strong", "--cs-space-2"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

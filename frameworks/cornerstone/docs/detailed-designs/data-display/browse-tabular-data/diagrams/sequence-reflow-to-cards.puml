@@ -1,0 +1,72 @@
+@startuml
+title UML sequence behaviour — Reflow the table to labelled cards
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Volunteer" as vol
+box "Frontend — Consuming application" #E0F2FE
+  participant "Roster page" as page
+end box
+box "Frontend — Cornerstone table components" #D1FADF
+  participant "ResponsiveTableDirective" as reflow
+  participant "TableDirective" as table
+  participant "DataToolbarComponent" as toolbar
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Reflow resolution" as reflowcss
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+page -> reflow : Apply csResponsiveTable with a breakpoint and a primary column
+reflow -> table : Read the text of each column header
+table --> reflow : Ordered column header text
+reflow -> bp : Observe the reflow breakpoint
+bp --> reflow : Wide viewport
+reflow -> dom : Leave the native table presentation in place
+
+vol -> dom : Rotate the device below the breakpoint
+dom -> bp : Report the viewport change
+bp --> reflow : Narrow viewport
+reflow -> reflowcss : Apply the card layout per L2-094
+reflowcss -> dom : Change the display of the table, rows, and cells
+
+note over reflow, dom
+  Changing the display drops the native table
+  semantics, so the directive restores them.
+end note
+
+reflow -> dom : Re-apply role="table", "rowgroup", "row", "columnheader", "rowheader", and "cell"
+reflow -> dom : Insert a visible per-cell label carrying the column header text
+reflow -> dom : Mark each inserted label aria-hidden="true"
+reflow -> dom : Style the primary column in place, moving no element
+reflow -> reflow : Preserve DOM order, so keyboard order is unchanged per L2-094
+
+vol -> dom : Move focus through the reflowed cards
+dom --> vol : Same focus order as the wide presentation
+dom --> vol : Each field read with its column header once
+
+toolbar -> dom : Collapse the filter and view groups behind one disclosure per L2-095
+toolbar -> dom : Report the active filter count in the disclosure name
+
+opt Viewport widens again
+  bp --> reflow : Wide viewport
+  reflow -> dom : Remove the inserted labels and the applied roles
+  reflow -> dom : Restore the native table presentation
+end
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Render the shell on a wide viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell route" as route
+  participant "Angular Router" as router
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone shell" #D1FADF
+  participant "ShellComponent" as shell
+  participant "TopbarComponent" as topbar
+  participant "SidenavComponent" as sidenav
+  participant "CsNavItemDirective" as navitem
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and DOM" as dom
+end box
+
+user -> router : Request an authenticated route
+router -> route : Activate the shell route
+route -> shell : Bind sidenavMode 'auto' and compact false
+shell -> bp : Observe the shell breakpoint
+bp --> shell : Wide viewport
+shell -> shell : Resolve mode to 'side' per L2-064
+shell -> dom : Render the main landmark and the persistent column
+
+route -> topbar : Bind brand, heading, pills, and notification count per L2-065
+topbar -> dom : Render the sticky bar and hide the menu trigger
+
+route -> sidenav : Bind navigation groups and the active role set
+sidenav -> sidenav : Filter groups and items by role per L2-066
+sidenav -> navitem : Render each visible destination anchor
+navitem -> dom : Apply icon, badge, and disabled semantics per L2-066
+
+router -> page : Render the routed page
+page -> shell : Project into the main landmark per L2-064
+router -> navitem : Set the active link state
+navitem -> dom : Set aria-current="page" per L2-066
+dom --> user : Framed screen with the current area marked
+@enduml

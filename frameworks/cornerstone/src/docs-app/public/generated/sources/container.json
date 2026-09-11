@@ -1,0 +1,5 @@
+{
+  "ts": "import { NgTemplateOutlet } from '@angular/common';\nimport {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  ElementRef,\n  EnvironmentProviders,\n  InjectionToken,\n  Injectable,\n  booleanAttribute,\n  computed,\n  inject,\n  input,\n  makeEnvironmentProviders,\n  output,\n} from '@angular/core';\nimport { CsIdService } from '../core/platform/cs-id.service';\nimport { CsMessageTone } from '../core/platform/cs-message-tone.type';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-container',\n  templateUrl: './container.component.html',\n  host: { '[class]': \"'cs-container cs-container--' + width()\" },\n  styleUrl: './container.component.scss',\n})\nexport class ContainerComponent {\n  readonly width = input<'default' | 'wide' | 'narrow'>('default');\n}\n",
+  "html": "<ng-content />\n",
+  "scss": ":host {\n  display: block;\n  inline-size: min(100% - 2rem, var(--cs-container));\n  margin-inline: auto;\n}\n:host(.cs-container--wide) {\n  max-inline-size: var(--cs-container-wide);\n}\n:host(.cs-container--narrow) {\n  max-inline-size: var(--cs-container-narrow);\n}\n"
+}

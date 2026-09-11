@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Work with code
+
+Person(youth, "Youth", "Works through a coding lesson")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides the code block, code editor, preview pane, and the copy directive")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the monospace and surface tokens the code surfaces resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes wrap, scroll, and preview examples")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular route component", "Places the code block, editor, and preview pane on the lesson screen")
+  Container(services, "Application services", "Angular injectables", "Supplies the starting source, evaluates the submitted source, and returns the output")
+}
+
+System_Ext(cdk, "Angular CDK", "Clipboard, text autosizing, and focus")
+System_Ext(browser, "Browser platform", "Text rendering, iframe sandbox, and clipboard")
+
+Rel(youth, shell, "Opens a coding lesson in")
+Rel(shell, page, "Routes to")
+Rel(page, lib, "Binds source, run state, and output into")
+Rel(lib, services, "Emits run and reset intents to")
+Rel(services, page, "Supplies the evaluated output and run state to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Uses for clipboard writes and focus management")
+Rel(lib, browser, "Renders source as text and attaches the sandboxed frame in")
+Rel(docs, lib, "Documents variants of")
+@enduml

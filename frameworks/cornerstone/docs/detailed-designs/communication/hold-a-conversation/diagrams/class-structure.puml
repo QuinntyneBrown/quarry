@@ -1,0 +1,173 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Hold a conversation
+
+enum CsMessageKind {
+  sent
+  received
+  system
+}
+
+enum CsDeliveryState {
+  queued
+  sending
+  delivered
+  read
+  failed
+}
+
+enum CsSendState {
+  idle
+  sending
+  queued
+  error
+}
+
+enum CsDataState {
+  idle
+  loading
+  ready
+  empty
+  error
+}
+
+class MessageViewModel {
+  +id: string
+  +conversationId: string
+  +authorName: string
+  +authorAvatarUrl: string | null
+  +sentAt: string
+  +body: string
+  +kind: CsMessageKind
+  +delivery: CsDeliveryState
+  +readAt: string | null
+}
+
+class CsThreadAssignment {
+  +assigned: boolean
+  +participantName: string | null
+}
+
+class MessageThreadComponent {
+  +messages: InputSignal<readonly MessageViewModel[]>
+  +state: InputSignal<CsDataState>
+  +assignment: InputSignal<CsThreadAssignment>
+  +historyRequested: OutputEmitterRef<CsHistoryRequest>
+  +retryRequested: OutputEmitterRef<CsMessageRetryIntent>
+  +newMessagesActivated: OutputEmitterRef<void>
+  +hasUnseenBelow: Signal<boolean>
+}
+
+class ThreadScrollAnchor {
+  +pinnedToBottom: Signal<boolean>
+  +capture(): CsScrollSnapshot
+  +restore(snapshot: CsScrollSnapshot): void
+  -isNearBottom(threshold: number): boolean
+}
+
+class CsScrollSnapshot {
+  +anchorMessageId: string | null
+  +anchorOffset: number
+  +wasPinned: boolean
+}
+
+class ThreadAnnouncerService {
+  +announceAppended(message: MessageViewModel): void
+  +suppressPrepended(ids: readonly string[]): void
+  -announcedIds: Set<string>
+}
+
+class CsHistoryRequest {
+  +conversationId: string
+  +before: string
+}
+
+class CsMessageRetryIntent {
+  +conversationId: string
+  +messageId: string
+}
+
+class SendIntent {
+  +conversationId: string
+  +body: string
+  +attachmentIds: readonly string[]
+}
+
+class CsComposerAttachment {
+  +id: string
+  +name: string
+  +sizeBytes: number
+}
+
+class MessageComposerComponent {
+  +value: ModelSignal<string>
+  +maxLength: InputSignal<number>
+  +attachments: InputSignal<readonly CsComposerAttachment[]>
+  +sendState: InputSignal<CsSendState>
+  +offline: InputSignal<boolean>
+  +send: OutputEmitterRef<SendIntent>
+  +retry: OutputEmitterRef<SendIntent>
+  +attachmentRemoved: OutputEmitterRef<string>
+  +canSend: Signal<boolean>
+  +writeValue(value: string): void
+}
+
+class CsConversationViewModel {
+  +id: string
+  +title: string
+  +avatarUrl: string | null
+  +preview: string
+  +lastMessageAt: string
+  +unreadCount: number
+}
+
+class ConversationListComponent {
+  +conversations: InputSignal<readonly CsConversationViewModel[]>
+  +selectedId: ModelSignal<string | null>
+  +state: InputSignal<CsDataState>
+  +conversationSelected: OutputEmitterRef<string>
+  +detailOnly: Signal<boolean>
+}
+
+class ConversationItemComponent {
+  +conversation: InputSignal<CsConversationViewModel>
+  +selected: InputSignal<boolean>
+  +activated: OutputEmitterRef<string>
+}
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+MessageComposerComponent ..|> ControlValueAccessor
+MessageThreadComponent *-- ThreadScrollAnchor
+MessageThreadComponent *-- ThreadAnnouncerService
+MessageThreadComponent "1" o-- "0..*" MessageViewModel
+MessageThreadComponent --> CsThreadAssignment : has
+MessageThreadComponent --> CsDataState : has
+MessageThreadComponent --> CsHistoryRequest : emits
+MessageThreadComponent --> CsMessageRetryIntent : emits
+ThreadScrollAnchor ..> CsScrollSnapshot : captures
+ThreadAnnouncerService ..> MessageViewModel : reads
+MessageViewModel --> CsMessageKind : has
+MessageViewModel --> CsDeliveryState : has
+MessageComposerComponent --> CsSendState : has
+MessageComposerComponent --> SendIntent : emits
+MessageComposerComponent "1" o-- "0..*" CsComposerAttachment
+ConversationListComponent ..> ConversationItemComponent : renders
+ConversationListComponent "1" o-- "0..*" CsConversationViewModel
+ConversationItemComponent ..> CsConversationViewModel : renders
+@enduml

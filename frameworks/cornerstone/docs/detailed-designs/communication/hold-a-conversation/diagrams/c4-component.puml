@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Hold a conversation
+
+Person(mentor, "Mentor", "Reads a thread and replies")
+
+Container_Boundary(appsvc, "Consuming application services") {
+  Component(msgvm, "MessagingViewModelService", "Angular injectable", "Builds MessageViewModel and CsConversationViewModel from application data")
+  Component(delivery, "MessageDeliveryHandler", "Angular injectable", "Receives send, retry, and history intents and owns delivery and the offline queue")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(list, "ConversationListComponent", "Standalone component", "Selectable list with responsive master-detail behaviour")
+  Component(item, "ConversationItemComponent", "Standalone component", "Avatar, preview, timestamp, unread badge, and selected state")
+  Component(thread, "MessageThreadComponent", "Standalone component", "Accessible log with sent, received, and system presentations")
+  Component(anchor, "ThreadScrollAnchor", "Directive", "Holds the scroll anchoring policy for append and prepend")
+  Component(announcer, "ThreadAnnouncerService", "Injectable service", "Holds the new-message announcement policy")
+  Component(composer, "MessageComposerComponent", "Standalone component", "Auto-growing input with send, queued, and error states")
+}
+
+System_Ext(cdk, "Angular CDK", "Autosize, scrolling, focus, and breakpoint observation")
+System_Ext(browser, "Browser platform", "Scroll position, focus, and live regions")
+
+Rel(msgvm, list, "Supplies the conversation view model to")
+Rel(msgvm, thread, "Supplies the message view model to")
+Rel(msgvm, composer, "Supplies the send state and attachment set to")
+Rel(list, item, "Renders one per conversation")
+Rel(list, delivery, "Emits conversationSelected to")
+Rel(thread, delivery, "Emits historyRequested and retryRequested to")
+Rel(composer, delivery, "Emits send and retry intents to")
+Rel(thread, anchor, "Delegates scroll restoration to")
+Rel(thread, announcer, "Delegates announcement decisions to")
+Rel(anchor, browser, "Reads and restores scroll offsets in")
+Rel(announcer, browser, "Announces through", "aria-live polite")
+Rel(composer, cdk, "Grows the input with", "cdkTextareaAutosize")
+Rel(list, cdk, "Observes the LG and XS breakpoints with")
+Rel(list, browser, "Moves focus to the thread heading in")
+Rel(mentor, item, "Selects a conversation in")
+@enduml

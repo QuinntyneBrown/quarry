@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "SidenavComponent",
+  "sourcePath": "src/cornerstone/sidenav/sidenav.component.ts",
+  "category": "navigation",
+  "description": "Sidenav public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Primary navigation'",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-sidenav",
+  "slug": "sidenav",
+  "label": "Sidenav",
+  "tokens": ["--cs-space-3", "--cs-space-4"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

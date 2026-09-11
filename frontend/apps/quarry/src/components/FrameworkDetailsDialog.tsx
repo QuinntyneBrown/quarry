@@ -3,16 +3,22 @@ import type { FrameworkDetailsDialogProperties } from "../types/FrameworkDetails
 import type { FrameworkDetailsTab } from "../types/FrameworkDetailsTab";
 import { RetryButton } from "./RetryButton";
 import { ComponentPreviewPanel } from "./ComponentPreviewPanel";
+import { DesignSystemPreviewPanel } from "./DesignSystemPreviewPanel";
 import { getPreviewManifest } from "../previews/getPreviewManifest";
+import { getDesignSystemUri } from "../previews/getDesignSystemUri";
 
 export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isSelected, isUnavailable, isUpdated, explanation, onClose, onRetry, onSelect }: FrameworkDetailsDialogProperties): React.JSX.Element {
   const dialog = useRef<HTMLDialogElement>(null);
   const closeButton = useRef<HTMLButtonElement>(null);
   const overviewTab = useRef<HTMLButtonElement>(null);
   const componentsTab = useRef<HTMLButtonElement>(null);
+  const designSystemTab = useRef<HTMLButtonElement>(null);
   const selectionButton = useRef<HTMLButtonElement>(null);
   const [activeTab, setActiveTab] = useState<FrameworkDetailsTab>("overview");
   const previewManifest = details ? getPreviewManifest(details) : undefined;
+  const designSystemUri = details ? getDesignSystemUri(details) : undefined;
+  const tabOrder: FrameworkDetailsTab[] = designSystemUri ? ["overview", "components", "design-system"] : ["overview", "components"];
+  const tabRefs = { overview: overviewTab, components: componentsTab, "design-system": designSystemTab };
 
   useEffect(() => {
     const element = dialog.current!;
@@ -34,14 +40,17 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
 
   function selectTab(tab: FrameworkDetailsTab): void {
     setActiveTab(tab);
-    (tab === "overview" ? overviewTab : componentsTab).current?.focus();
+    tabRefs[tab].current?.focus();
   }
 
   function moveTab(event: React.KeyboardEvent<HTMLButtonElement>): void {
-    if (["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) {
-      event.preventDefault();
-      selectTab(event.key === "Home" ? "overview" : event.key === "End" ? "components" : activeTab === "overview" ? "components" : "overview");
-    }
+    if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    if (event.key === "Home") { selectTab(tabOrder[0]); return; }
+    if (event.key === "End") { selectTab(tabOrder[tabOrder.length - 1]); return; }
+    const currentIndex = tabOrder.indexOf(activeTab);
+    const step = event.key === "ArrowRight" ? 1 : -1;
+    selectTab(tabOrder[(currentIndex + step + tabOrder.length) % tabOrder.length]);
   }
 
   function trapFocus(event: React.KeyboardEvent<HTMLDialogElement>): void {
@@ -68,20 +77,25 @@ export function FrameworkDetailsDialog({ details, error, retryAt, isLoading, isS
       <div role="tablist" aria-label="Framework details">
         <button ref={overviewTab} type="button" role="tab" id="overview-tab" aria-controls="overview-panel" aria-selected={activeTab === "overview"} tabIndex={activeTab === "overview" ? 0 : -1} onClick={() => selectTab("overview")} onKeyDown={moveTab}>Overview</button>
         <button ref={componentsTab} type="button" role="tab" id="components-tab" aria-controls="components-panel" aria-selected={activeTab === "components"} tabIndex={activeTab === "components" ? 0 : -1} onClick={() => selectTab("components")} onKeyDown={moveTab}>Components</button>
+        {designSystemUri && <button ref={designSystemTab} type="button" role="tab" id="design-system-tab" aria-controls="design-system-panel" aria-selected={activeTab === "design-system"} tabIndex={activeTab === "design-system" ? 0 : -1} onClick={() => selectTab("design-system")} onKeyDown={moveTab}>Design System</button>}
       </div>
-      {activeTab === "overview" ? <section role="tabpanel" id="overview-panel" aria-labelledby="overview-tab">
+      {activeTab === "overview" && <section role="tabpanel" id="overview-panel" aria-labelledby="overview-tab">
         <p>{details.summary.description}</p><p>{details.summary.technology} · {details.summary.componentCount} components</p>
         <ul className="tags" aria-label="Framework tags">{details.summary.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>
         {explanation && <section className="recommendation-reason" aria-label="Why this framework"><h3>Why this framework</h3><p>{explanation}</p></section>}
         <h3>Capabilities</h3><ul>{(details.capabilities ?? []).map((capability) => <li key={capability.id}>{capability.description}</li>)}</ul>
         <h3>Suitable use cases</h3><ul>{(details.useCases ?? []).map((useCase) => <li key={useCase}>{useCase}</li>)}</ul>
         <p>Every framework supports custom themes and skins during implementation.</p>
-      </section> : <section role="tabpanel" id="components-panel" aria-labelledby="components-tab">
+      </section>}
+      {activeTab === "components" && <section role="tabpanel" id="components-panel" aria-labelledby="components-tab">
         <ul>{(details.components ?? []).map((component) => <li key={component.id}><strong>{component.name}</strong><p>{component.description}</p></li>)}</ul>
         {previewManifest ? <ComponentPreviewPanel key={`${details.summary.id}:${details.summary.revision}:${previewManifest.buildId}`}
           manifest={previewManifest} frameworkName={details.summary.name} onDismiss={onClose}
-          onFocusExit={direction => (direction === "forward" ? selectionButton : componentsTab).current?.focus()} />
+          onFocusExit={direction => (direction === "forward" ? (designSystemUri ? designSystemTab : selectionButton) : componentsTab).current?.focus()} />
           : <p>Component previews are unavailable for this framework revision.</p>}
+      </section>}
+      {activeTab === "design-system" && designSystemUri && <section role="tabpanel" id="design-system-panel" aria-labelledby="design-system-tab">
+        <DesignSystemPreviewPanel key={`${details.summary.id}:${details.summary.revision}`} frameworkName={details.summary.name} designSystemUri={designSystemUri} />
       </section>}
       <button className="primary-button" ref={selectionButton} type="button" onClick={onSelect}>{isSelected ? "Selected" : `Select ${details.summary.name}`}</button>
       {isSelected && <p role="status">{details.summary.name} selected</p>}

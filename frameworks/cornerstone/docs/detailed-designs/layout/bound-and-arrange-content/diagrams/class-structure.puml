@@ -1,0 +1,124 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Bound and arrange content
+
+enum CsContainerWidth {
+  narrow
+  default
+  wide
+}
+
+enum CsGutter {
+  none
+  compact
+  default
+}
+
+enum CsSpacingStep {
+  none
+  xs
+  sm
+  md
+  lg
+  xl
+}
+
+enum CsAlign {
+  start
+  center
+  end
+  stretch
+}
+
+enum CsDistribute {
+  start
+  center
+  end
+  between
+}
+
+enum CsGridColumns {
+  two
+  three
+  four
+  auto
+}
+
+enum CsRegionPattern {
+  table
+  panel
+  filters
+  actions
+}
+
+enum CsRegionState {
+  expanded
+  collapsed
+}
+
+class ContainerComponent {
+  +width: InputSignal<CsContainerWidth>
+  +gutter: InputSignal<CsGutter>
+  -maxInlineSize: Signal<string>
+}
+
+abstract class CsLayoutPrimitiveBase {
+  +gap: InputSignal<CsSpacingStep>
+  +align: InputSignal<CsAlign>
+  +distribute: InputSignal<CsDistribute>
+}
+
+class CsStackDirective {
+  -axis: 'block'
+}
+
+class CsClusterDirective {
+  -axis: 'inline'
+  -wraps: boolean
+}
+
+class CsGridDirective {
+  +columns: InputSignal<CsGridColumns>
+  -trackTemplate: Signal<string>
+}
+
+class CsResponsiveRegionDirective {
+  +pattern: InputSignal<CsRegionPattern>
+  +breakpoint: InputSignal<string | undefined>
+  +state: Signal<CsRegionState>
+  +stateChange: OutputEmitterRef<CsRegionState>
+  -observer: BreakpointObserver
+  -evaluate(width: number): CsRegionState
+}
+
+class CsTokenSet {
+  +spacing: SpacingTokens
+  +layout: LayoutTokens
+}
+
+CsLayoutPrimitiveBase <|-- CsStackDirective
+CsLayoutPrimitiveBase <|-- CsClusterDirective
+CsLayoutPrimitiveBase <|-- CsGridDirective
+CsLayoutPrimitiveBase --> CsSpacingStep : has
+CsLayoutPrimitiveBase --> CsAlign : has
+CsLayoutPrimitiveBase --> CsDistribute : has
+CsGridDirective --> CsGridColumns : has
+ContainerComponent --> CsContainerWidth : has
+ContainerComponent --> CsGutter : has
+CsResponsiveRegionDirective --> CsRegionPattern : has
+CsResponsiveRegionDirective --> CsRegionState : reports
+ContainerComponent ..> CsTokenSet : reads
+CsLayoutPrimitiveBase ..> CsTokenSet : reads
+ContainerComponent "1" o-- "0..*" CsLayoutPrimitiveBase : bounds
+@enduml

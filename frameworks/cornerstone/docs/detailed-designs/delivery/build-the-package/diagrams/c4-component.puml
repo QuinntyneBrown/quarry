@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Build the package
+
+Person(maintainer, "Library maintainer", "Runs the library build target")
+
+Container_Boundary(lib, "cornerstone library project") {
+  Component(ngpkg, "ng-package.json", "ng-packagr configuration", "Names the entry file and the style asset globs, and sets dest to dist/cornerstone")
+  Component(manifest, "package.json", "Source manifest", "Declares name, licence, repository, homepage, bugs, keywords, sideEffects, exports, peers, and tslib")
+  Component(api, "public-api.ts", "TypeScript entry file", "Re-exports primitives, forms, disclosure, navigation, and overlays")
+  Component(tsconfig, "tsconfig.lib.prod.json", "TypeScript configuration", "Compiles the library under strict mode for publication")
+  Component(styles, "src/styles", "Sass sources", "theme.scss, compat.scss, and the token forwarding entry point")
+}
+
+Container_Boundary(artifact, "dist/cornerstone artifact") {
+  Component(fesm, "FESM2022 bundles", "JavaScript", "Flat ECMAScript modules keeping Angular imports external")
+  Component(dts, "Declaration files", "TypeScript .d.ts", "Strict-mode-clean types for every public symbol")
+  Component(maps, "Source maps", ".js.map", "Resolve each bundle to its original sources")
+  Component(built, "Built manifest", "package.json", "Rewritten manifest carrying the exports map and the peer contract")
+  Component(assets, "Style assets", "Copied .scss and .css", "Targets of the styles export subpaths")
+}
+
+System_Ext(npm, "npm registry", "Receives the packed tarball")
+
+Rel(maintainer, ngpkg, "Invokes the build described by")
+Rel(ngpkg, api, "Compiles the entry file")
+Rel(ngpkg, tsconfig, "Reads the compilation options from")
+Rel(ngpkg, manifest, "Rewrites into the built manifest")
+Rel(ngpkg, styles, "Copies the asset globs from")
+Rel(api, fesm, "Is bundled into")
+Rel(api, dts, "Is declared in")
+Rel(fesm, maps, "Is mapped by")
+Rel(manifest, built, "Is the source of")
+Rel(styles, assets, "Is copied to")
+Rel(built, assets, "Declares the export subpaths resolving to")
+Rel(built, npm, "Is packed and uploaded to", "npm publish")
+@enduml

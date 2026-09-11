@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Open a dialog
+
+Person(dev, "Application developer", "Opens a dialog and subscribes to its result")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(service, "DialogService", "Injectable service", "Opens dialogs, applies FaithTech classes, and blocks page scrolling")
+  Component(ref, "DialogRef<R, C>", "Handle object", "Carries close(result), the closed observable, and disableClose")
+  Component(shell, "DialogShellComponent", "Standalone component", "Renders the panel, hosts the focus trap, and applies the size variant")
+  Component(titled, "DialogTitleDirective", "Attribute directive", "Registers the heading id as aria-labelledby")
+  Component(descd, "DialogDescriptionDirective", "Attribute directive", "Registers the description id as aria-describedby")
+  Component(actd, "DialogActionsDirective", "Attribute directive", "Lays out the action bar and stacks it on narrow viewports")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(panel, "Panel and backdrop styles", "Component-scoped CSS", "Declare surface, radius, shadow, and inset from --cs- tokens")
+}
+
+System_Ext(cdkdialog, "Angular CDK Dialog", "Component portal attachment and close plumbing")
+System_Ext(cdka11y, "Angular CDK a11y", "cdkTrapFocus and FocusMonitor")
+System_Ext(cdkscroll, "Angular CDK scrolling", "Block-scroll strategy and scrollbar compensation")
+System_Ext(browser, "Browser platform", "Focus, keyboard, and document scrolling")
+
+Rel(dev, service, "Calls open()")
+Rel(service, cdkdialog, "Attaches the dialog component through")
+Rel(service, ref, "Returns")
+Rel(service, cdkscroll, "Blocks page scrolling through")
+Rel(cdkdialog, shell, "Renders the projected content inside")
+Rel(shell, cdka11y, "Traps and captures focus through")
+Rel(shell, panel, "Resolves size and surface from")
+Rel(titled, shell, "Supplies the accessible name to")
+Rel(descd, shell, "Supplies the accessible description to")
+Rel(actd, shell, "Fills the action region of")
+Rel(ref, dev, "Emits the typed result to")
+Rel(cdka11y, browser, "Moves and restores focus in")
+Rel(cdkscroll, browser, "Locks the document scroll of")
+@enduml

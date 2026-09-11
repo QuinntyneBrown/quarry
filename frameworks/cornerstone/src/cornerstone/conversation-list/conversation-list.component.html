@@ -1,0 +1,3 @@
+@for (conversation of conversations(); track conversation.id) {
+  <cs-conversation-item [conversation]="conversation" (activated)="activated.emit($event)" />
+}

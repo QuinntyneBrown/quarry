@@ -1,0 +1,100 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Open a dialog
+
+enum DialogSize {
+  small
+  default
+  large
+}
+
+class DialogConfig<D> {
+  +data: D
+  +size: DialogSize
+  +fullScreenOnMobile: boolean
+  +disableClose: boolean
+  +restoreFocus: boolean
+  +autoFocus: string
+  +ariaLabelledBy: string
+  +ariaDescribedBy: string
+}
+
+class DialogService {
+  -dialog: Dialog
+  -scrollStrategy: BlockScrollStrategy
+  -openCount: number
+  +open<R, D, C>(component: ComponentType<C>, config?: DialogConfig<D>): DialogRef<R, C>
+  +openTemplate<R>(template: TemplateRef<unknown>, config?: DialogConfig<unknown>): DialogRef<R, unknown>
+  +closeAll(): void
+  -blockPageScroll(): void
+  -releasePageScroll(): void
+}
+
+class DialogRef<R, C> {
+  +componentInstance: C
+  +disableClose: boolean
+  +closed: Observable<R | undefined>
+  +backdropClick: Observable<MouseEvent>
+  +keydownEvents: Observable<KeyboardEvent>
+  +close(result?: R): void
+}
+
+class DialogShellComponent {
+  +size: InputSignal<DialogSize>
+  +fullScreenOnMobile: InputSignal<boolean>
+  +dismissible: InputSignal<boolean>
+  +dismissed: OutputEmitterRef<void>
+  -labelledBy: Signal<string>
+  -describedBy: Signal<string>
+  -trap: FocusTrap
+  -previouslyFocused: HTMLElement
+  +captureFocus(): void
+  +restoreFocus(): void
+}
+
+class DialogTitleDirective {
+  +id: InputSignal<string>
+}
+
+class DialogDescriptionDirective {
+  +id: InputSignal<string>
+}
+
+class DialogActionsDirective {
+  +align: InputSignal<CsDialogActionAlign>
+}
+
+enum CsDialogActionAlign {
+  start
+  end
+  between
+}
+
+class FocusTrap <<CDK>> {
+  +focusInitialElement(): boolean
+  +destroy(): void
+}
+
+DialogService ..> DialogConfig : reads
+DialogService --> "0..*" DialogRef : returns
+DialogService ..> DialogShellComponent : attaches
+DialogConfig --> DialogSize : has
+DialogShellComponent --> DialogSize : has
+DialogShellComponent *-- FocusTrap : owns
+DialogShellComponent o-- "0..1" DialogTitleDirective : is labelled by
+DialogShellComponent o-- "0..1" DialogDescriptionDirective : is described by
+DialogShellComponent o-- "0..1" DialogActionsDirective : projects
+DialogActionsDirective --> CsDialogActionAlign : has
+DialogRef ..> DialogShellComponent : closes
+@enduml

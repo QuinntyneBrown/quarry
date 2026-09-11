@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Identify a person
+
+Person(mentor, "Mentor", "Activates a person row in a directory")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(avatar, "AvatarComponent", "Standalone component", "Renders image, initials, or loading state across five sizes")
+  Component(palette, "csAvatarPalette()", "Pure function", "Maps a person identifier to one token palette entry")
+  Component(stack, "AvatarStackComponent", "Standalone component", "Overlaps avatars and states the hidden participant count")
+  Component(person, "PersonComponent", "Standalone component", "Pairs an avatar with a name block, meta slot, and action slot")
+  Component(types, "Identity types", "TypeScript types", "PersonSummary, CsAvatarSize, CsAvatarState, CsPersonActivated")
+  Component(styles, "Avatar and person styles", "Component-scoped CSS", "Resolves palette, size, overlap, and reflow from --cs- tokens")
+}
+
+Container_Boundary(page, "Consuming feature page") {
+  Component(dir, "Directory list", "Angular component", "Renders one person row per record")
+  Component(card, "Cohort card", "Angular component", "Renders the participant group as a stack")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver")
+System_Ext(browser, "Browser platform", "Image loader and accessibility tree")
+
+Rel(mentor, dir, "Activates a row in")
+Rel(dir, person, "Renders each record with")
+Rel(card, stack, "Renders the participant group with")
+Rel(person, avatar, "Composes the identity mark from")
+Rel(stack, avatar, "Composes each drawn participant from")
+Rel(avatar, palette, "Selects the initials colour through")
+Rel(palette, styles, "Indexes the palette entries declared in")
+Rel(avatar, browser, "Requests the profile image from")
+Rel(browser, avatar, "Reports the load error to")
+Rel(person, cdk, "Reads the XS breakpoint state from")
+Rel(person, types, "Reads the summary and intent shapes from")
+Rel(stack, types, "Reads the summary shape from")
+Rel(person, dir, "Emits CsPersonActivated to")
+Rel(stack, browser, "Writes the full participant name list to")
+@enduml

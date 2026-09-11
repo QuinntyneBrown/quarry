@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Read a record
+
+Person(dev, "Application developer", "Binds a record view model to the reading presentations")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Holds CsList, CsListItem, CsDefinitionList, CsTimeline, CsScriptureQuote, and CsTooltip")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares divider, marker, accent-face, and light and dark surface resolutions")
+  Container(docs, "Documentation site", "Angular application", "Publishes the item shapes, the layout variants, and the tooltip contract")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the record detail layout and the copy")
+  Container(services, "Application services", "Angular injectables", "Loads the record, its related items, and its history")
+  Container(shell, "Application shell", "Angular components", "Supplies the overlay container the tooltip attaches into")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay and ListKeyManager")
+System_Ext(browser, "Browser platform", "Rendering, pointer and touch input, and accessibility tree")
+
+Rel(dev, page, "Binds the record view model in")
+Rel(services, page, "Publishes the record, its items, and its history to")
+Rel(page, lib, "Passes items, entries, and quotations to")
+Rel(lib, page, "Emits activation and selection intents to")
+Rel(lib, theme, "Resolves divider, marker, and surface values from")
+Rel(lib, cdk, "Positions the tooltip and manages roving focus through")
+Rel(shell, cdk, "Hosts the overlay container of")
+Rel(lib, browser, "Renders native list, figure, and description structures to")
+Rel(docs, lib, "Documents the reading contract of")
+@enduml

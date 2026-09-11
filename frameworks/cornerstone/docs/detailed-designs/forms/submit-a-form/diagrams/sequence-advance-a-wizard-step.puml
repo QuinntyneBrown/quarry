@@ -1,0 +1,76 @@
+@startuml
+title UML sequence behaviour — Advance a wizard step
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Volunteer" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormGroup" as form
+end box
+box "Frontend — Cornerstone submission components" #D1FADF
+  participant "WizardComponent" as wizard
+  participant "Validation gate" as gate
+  participant "ValidationSummaryComponent" as summary
+  participant "CsStepper" as header
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer and focus" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendered wizard" as dom
+end box
+
+page -> wizard : Supply the step set and resumeState
+wizard -> wizard : Restore the recorded step and per-step values per L2-062
+wizard --> page : No change intent emitted during restore per L2-062
+wizard -> header : Render the step header with aria-current=step
+
+opt Viewport XS
+  wizard -> header : Collapse to the compact position and total indicator per L2-062
+end
+
+user -> dom : Activate Next on an invalid step
+dom -> wizard : next()
+wizard -> gate : canAdvance(currentStep)
+gate --> wizard : false
+wizard -> summary : Announce the step's validation summary per L2-062
+summary -> cdk : Assertive announcement
+wizard -> cdk : Move focus to the first invalid control per L2-062
+wizard --> page : Advancement blocked
+
+user -> dom : Correct the step and activate Next
+dom -> wizard : next()
+wizard -> form : Read the step status
+form --> wizard : status VALID
+wizard -> gate : canAdvance(currentStep)
+gate --> wizard : true
+wizard -> header : Mark the step complete and set the new current step per L2-062
+wizard -> page : stepChanged(nextStepId)
+
+alt Optional step skipped
+  user -> dom : Activate Skip
+  wizard -> header : Mark the step skipped and advance per L2-062
+else Completed step reselected
+  user -> header : Select a completed step
+  header -> wizard : Navigate to that step
+  wizard -> dom : Set aria-current=step on the new position per L2-062
+end
+
+user -> dom : Activate Finish on the final step
+wizard -> page : finished(accumulatedValue) once per L2-062
+user -> dom : Activate Finish again while pending
+wizard --> page : Nothing further emitted per L2-062
+wizard --> user : Wizard state reflected in the step header
+@enduml

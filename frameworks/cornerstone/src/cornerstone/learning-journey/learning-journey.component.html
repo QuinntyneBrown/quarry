@@ -1,0 +1,15 @@
+<h2>{{ view().title }}</h2>
+<cs-progress-bar [value]="view().progress.complete" [max]="view().progress.total" />
+@for (module of view().modules; track module.id) {
+  <section>
+    <button
+      type="button"
+      (click)="moduleToggled.emit({ moduleId: module.id, expanded: !module.expanded })"
+    >
+      <h3>{{ module.title }}</h3>
+    </button>
+    @if (module.expanded !== false) {
+      <cs-lesson-step-list [steps]="module.steps" (selected)="stepSelected.emit($event)" />
+    }
+  </section>
+}

@@ -1,0 +1,49 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Bridge legacy markup
+
+Person(dev, "Application developer", "Opts in and reads the mapping")
+
+Container_Boundary(compat, "Compatibility stylesheet") {
+  Component(entry, "compat.scss", "Sass entry point", "Uses tokens, word-up-compat, and liturgy-compat")
+  Component(wu, "_word-up-compat.scss", "2,193 lines across 21 sections", "wu- vocabulary, --wu- token block, seven breakpoints")
+  Component(lit, "_liturgy-compat.scss", "1,611 lines across 13 sections", "Unprefixed vocabulary and unprefixed token block")
+}
+
+Container_Boundary(themeb, "Theme stylesheet") {
+  Component(tokens, "_tokens.scss", "CSS custom properties", "The --cs- token layer both bridges resolve against")
+  Component(base, "_components.scss", "Base component styles", "Loaded by every consumer; references no compatibility partial")
+}
+
+Container_Boundary(gov, "Bridge governance") {
+  Component(map, "Mapping table", "Markdown rows", "Application, legacy family, replacement, status, notes")
+  Component(selectors, "Selector inventory", "Node script", "Extracts every class family declared by the two partials")
+  Component(complete, "Mapping completeness check", "Node script", "Fails when a declared family has neither a replacement nor a gap row")
+  Component(isolation, "Bundle isolation check", "Build comparison", "Builds with and without the subpath and compares stylesheet bytes")
+  Component(usage, "Legacy usage report", "Node script", "Counts remaining occurrences per family in the application templates")
+  Component(removal, "Removal criteria evaluator", "Node script", "Reports each criterion as satisfied or outstanding")
+}
+
+Container_Ext(lib, "Component library", "Angular standalone components", "The cs- replacements named in the mapping")
+Container_Ext(appbuild, "Application build configuration", "angular.json styles array", "The opt-in point")
+
+Rel(dev, appbuild, "Adds the compatibility subpath to")
+Rel(appbuild, entry, "Compiles only when named in")
+Rel(entry, wu, "Uses")
+Rel(entry, lit, "Uses")
+Rel(entry, tokens, "Uses")
+Rel(base, tokens, "Uses")
+Rel(isolation, base, "Confirms the baseline build reaches only")
+Rel(isolation, entry, "Measures the cost of omitting")
+Rel(selectors, wu, "Extracts declared families from")
+Rel(selectors, lit, "Extracts declared families from")
+Rel(selectors, complete, "Supplies the expected row set to")
+Rel(complete, map, "Compares against")
+Rel(map, lib, "Names replacements in")
+Rel(usage, map, "Counts occurrences of each family listed in")
+Rel(removal, usage, "Reads remaining counts from")
+Rel(removal, complete, "Reads open gaps from")
+Rel(removal, dev, "Reports outstanding criteria to")
+Rel(dev, map, "Chooses the next screen from")
+@enduml

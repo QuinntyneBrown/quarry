@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Indicate progress
+
+Person(admin, "Administrator", "Runs a roster import and watches its progress")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies SpinnerComponent, SkeletonComponent, SkeletonGroupComponent, ProgressBarComponent, and ProgressRingComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the indicator sizes, tones, and motion durations")
+  Container(docs, "Documentation site", "Angular application", "Publishes the preset table, size table, and announcement cadence")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Holds the loading flag and binds the progress value")
+  Container(svc, "Application services", "Angular services", "Runs the import and reports completion counts")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus containment")
+System_Ext(browser, "Browser platform", "Media queries, cascade, and accessibility tree")
+
+Rel(admin, page, "Starts the import in")
+Rel(svc, page, "Reports the completion count to")
+Rel(page, lib, "Binds loading flags and progress values to")
+Rel(lib, theme, "Resolves sizes, tones, and durations from")
+Rel(lib, cdk, "Removes busy-region contents from the tab order through")
+Rel(lib, browser, "Writes role, value, and aria-busy attributes to")
+Rel(browser, lib, "Reports prefers-reduced-motion and forced-colors to")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the presets and cadence of")
+@enduml

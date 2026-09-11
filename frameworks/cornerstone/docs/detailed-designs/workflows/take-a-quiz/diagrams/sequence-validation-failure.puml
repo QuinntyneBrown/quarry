@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Block a submission that fails validation
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth participant" as youth
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Attempt service" as attempts
+end box
+box "Frontend — Cornerstone quiz composites" #D1FADF
+  participant "QuizComponent" as quiz
+  participant "QuizQuestionComponent" as question
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and focus trap" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "Assistive technology and rendering" as browser
+end box
+
+page -> quiz : Bind QuizView with a required question
+youth -> browser : Activate submit with that question unanswered
+browser -> quiz : Activation event
+quiz -> quiz : Collect unanswered required question identifiers per L2-118
+
+alt One or more required questions hold no value
+  quiz -> overlay : Open no confirm dialog
+  quiz -> question : Mark the first offending question invalid
+  question -> question : Render the supplied validationMessage per L2-118
+  question -> browser : Set aria-invalid and the error description
+  browser --> youth : Announce the unanswered question
+  quiz -> question : Move focus to the offending answer control
+  quiz -> page : Emit no QuizSubmit
+else Every required question holds a value
+  quiz -> overlay : Open the confirm dialog
+  overlay --> youth : Confirm prompt
+  youth -> overlay : Confirm
+  overlay -> quiz : Confirmed
+  quiz -> page : Emit QuizSubmit
+  page -> attempts : Persist the submission
+  attempts --> page : Attempt recorded
+end
+
+youth -> browser : Answer the offending question
+browser -> question : Input event
+question -> quiz : Emit QuizAnswerChange
+quiz -> quiz : Clear the invalid state and re-enable submit
+quiz --> browser : Submit control available
+@enduml

@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Present an awarded badge
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth participant" as youth
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Achievement service" as awards
+  participant "Assessment service" as grading
+end box
+box "Frontend — Cornerstone work composites" #D1FADF
+  participant "BadgeCollectionComponent" as collection
+  participant "AchievementCardComponent" as badge
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendering and media queries" as browser
+end box
+
+awards -> page : Supply the achievement list
+page -> collection : Bind AchievementView list and layout 'grid' per L2-122
+collection -> badge : Pass one achievement per card
+badge -> badge : Render locked art, criteria, and progress per L2-122
+badge -> browser : Mark the locked state in text as well as treatment
+browser --> youth : Locked badge presented
+
+grading -> awards : Report an approved submission
+awards -> awards : Apply the award criteria the application owns
+awards -> page : Publish the achievement as earned with an award date
+page -> collection : Bind the revised achievement list
+collection -> badge : Pass the earned achievement
+badge -> badge : Render art, criteria, and award date per L2-122
+badge -> browser : Query prefers-reduced-motion
+
+alt Reduced motion requested
+  browser --> badge : reduce
+  badge -> badge : Apply the award treatment without animation
+else Motion allowed
+  browser --> badge : no-preference
+  badge -> badge : Apply the award treatment with its transition
+end
+
+youth -> browser : Open the badge
+browser -> badge : Activation event
+badge -> collection : Emit AchievementSelect
+collection -> page : Forward the achievement intent
+page -> awards : Load the badge detail
+awards --> page : Badge detail record
+browser --> youth : Earned badge presented
+@enduml

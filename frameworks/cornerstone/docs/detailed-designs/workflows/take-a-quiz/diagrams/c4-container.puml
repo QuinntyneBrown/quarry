@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Take a quiz
+
+Person(youth, "Youth participant", "Takes the quiz")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Renders QuizComponent, QuizQuestionComponent, and QuizResultComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the quiz styles resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the quiz view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular components", "Binds the quiz view model and handles emitted intents")
+  Container(services, "Application services", "Angular injectables", "Own the answer key, marking, pass threshold, persistence, and authorization")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay, focus trap, and key manager")
+System_Ext(browser, "Browser platform", "Rendering and input engine")
+
+Rel(youth, shell, "Opens the quiz screen in")
+Rel(shell, page, "Routes to")
+Rel(services, page, "Computes QuizView and QuizResultView for")
+Rel(page, lib, "Binds the quiz and result view models to")
+Rel(lib, page, "Emits QuizAnswerChange, QuizNavigate, and QuizSubmit to")
+Rel(page, services, "Forwards the submit intent to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Opens the confirm dialog with")
+Rel(lib, browser, "Renders into")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the public API of")
+@enduml

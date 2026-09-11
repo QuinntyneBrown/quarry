@@ -1,0 +1,42 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Announce a system message
+
+Person(user, "Application user", "Receives the announcement and may act on it")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(policy, "csAnnouncementPolitenessFor()", "Pure function", "Maps tone and origin to polite, assertive, or off")
+  Component(alert, "AlertComponent", "Standalone component", "Renders an inline message with heading, icon, in-region actions, and dismiss")
+  Component(banner, "OfflineBannerComponent", "Standalone component", "Renders offline, reconnecting, queued, and restored states and reports its height")
+  Component(service, "ToastService", "Injectable service", "Holds the queue, enforces the maximum-visible policy, and returns ToastRef")
+  Component(outlet, "ToastOutletComponent", "Standalone component", "Renders visible toasts and owns the polite and assertive live regions")
+  Component(types, "Message types", "TypeScript types", "CsMessageTone, CsLivePoliteness, ConnectivityState, ToastConfig, ToastResult")
+  Component(styles, "Message styles", "Component-scoped CSS", "Resolves tone, elevation, and motion from --cs- tokens")
+}
+
+Container_Boundary(app, "Consuming application") {
+  Component(svc, "Application services", "Angular services", "Raises messages and reports connectivity state")
+  Component(shell, "Application shell", "Angular component", "Mounts the outlet and offsets content by the banner height")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and overlay")
+System_Ext(browser, "Browser platform", "Live regions and assistive technology bridge")
+
+Rel(svc, service, "Opens messages through")
+Rel(service, outlet, "Releases visible messages to")
+Rel(service, svc, "Returns ToastRef and ToastResult to")
+Rel(shell, outlet, "Mounts")
+Rel(svc, banner, "Reports connectivity state to")
+Rel(banner, shell, "Emits the banner height to")
+Rel(alert, policy, "Requests a politeness from")
+Rel(banner, policy, "Requests a politeness from")
+Rel(outlet, policy, "Requests a politeness from")
+Rel(outlet, cdk, "Announces through and positions with")
+Rel(banner, cdk, "Announces through")
+Rel(outlet, browser, "Writes the polite and assertive regions to")
+Rel(alert, browser, "Writes role status or role alert to")
+Rel(alert, styles, "Resolves tone values from")
+Rel(outlet, types, "Reads the config and result shapes from")
+Rel(browser, user, "Announces the message to")
+@enduml

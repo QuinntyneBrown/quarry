@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Work a kanban board
+
+Person(user, "Application user", "Moves work items between columns")
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the column view model, the accepted kinds, and the process adapter")
+  Container(services, "Application services", "Angular injectables", "Decide move legality, persist moves, and own routes")
+  Container(shell, "Application shell", "Angular components", "Hosts the page and the theme class")
+}
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "KanbanBoardComponent, KanbanColumnComponent, and WorkItemCardComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Resolves column, drop feedback, and card state colour")
+  Container(docs, "Documentation site", "Angular application", "Publishes the board example and the documented keyboard move sequence")
+}
+
+System_Ext(cdk, "Angular CDK", "DragDropModule, LiveAnnouncer, and BreakpointObserver")
+System_Ext(browser, "Browser platform", "Pointer and keyboard events, layout, and accessibility tree")
+
+Rel(user, shell, "Drags cards and uses the keyboard move sequence in")
+Rel(shell, page, "Renders")
+Rel(services, page, "Supply columns, item state, and move legality to")
+Rel(page, lib, "Binds columns and the adapter to", "signal inputs")
+Rel(lib, page, "Emits WorkItemMoveIntent, WorkItemOpenIntent, and WorkItemActionIntent to", "output()")
+Rel(page, services, "Applies or rejects the move through")
+Rel(lib, cdk, "Registers drop lists and announces moves through")
+Rel(lib, theme, "Resolves drop feedback and state colour from")
+Rel(lib, browser, "Renders column regions and card semantics to")
+Rel(docs, lib, "Documents the keyboard move sequence of")
+@enduml

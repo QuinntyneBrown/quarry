@@ -20,6 +20,8 @@ public sealed class FrameworkRevisionEntity
 
     public string? PreviewJson { get; set; }
 
+    public string? DesignSystemUri { get; set; }
+
     public int ComponentCount { get; set; }
 
     public string Revision { get; set; } = "0";

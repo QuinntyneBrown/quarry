@@ -1,0 +1,11 @@
+<div>
+  <cs-checkbox
+    [value]="person().selected ?? false"
+    (click)="selectionChanged.emit(person().id)"
+  /><cs-person [person]="person()" /><button
+    type="button"
+    (click)="opened.emit({ personId: person().id })"
+  >
+    Open
+  </button>
+</div>

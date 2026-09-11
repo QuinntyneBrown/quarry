@@ -1,0 +1,5 @@
+{
+  "ts": "import { NgTemplateOutlet } from '@angular/common';\nimport {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  ElementRef,\n  EnvironmentProviders,\n  InjectionToken,\n  Injectable,\n  booleanAttribute,\n  computed,\n  inject,\n  input,\n  makeEnvironmentProviders,\n  output,\n} from '@angular/core';\nimport { CsIdService } from '../core/platform/cs-id.service';\nimport { CsMessageTone } from '../core/platform/cs-message-tone.type';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-spinner',\n  templateUrl: './spinner.component.html',\n  host: { role: 'status', '[attr.aria-label]': 'label()' },\n  styleUrl: './spinner.component.scss',\n})\nexport class SpinnerComponent {\n  readonly label = input('Loading');\n}\n",
+  "html": "",
+  "scss": ":host {\n  display: inline-block;\n  inline-size: 1.5rem;\n  block-size: 1.5rem;\n  border: 3px solid var(--cs-border);\n  border-block-start-color: var(--cs-ink);\n  border-radius: 50%;\n  animation: spin 0.8s linear infinite;\n}\n@keyframes spin {\n  to {\n    transform: rotate(1turn);\n  }\n}\n"
+}

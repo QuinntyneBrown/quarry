@@ -1,0 +1,9 @@
+<cs-dialog-shell
+  ><h2 csDialogTitle>{{ title() }}</h2>
+  <ng-content />
+  <div csDialogActions>
+    <button csButton="secondary" (click)="choice.emit('cancel')">Cancel</button
+    ><button csButton="danger" (click)="choice.emit('discard')">Discard</button
+    ><button csButton (click)="choice.emit('save')">Save</button>
+  </div></cs-dialog-shell
+>

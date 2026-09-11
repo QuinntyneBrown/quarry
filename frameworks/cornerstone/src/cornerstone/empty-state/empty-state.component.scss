@@ -1,0 +1,10 @@
+:host {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--cs-space-8);
+}
+h2,
+p {
+  margin: 0;
+}

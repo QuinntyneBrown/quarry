@@ -1,0 +1,15 @@
+:host {
+  display: inline-grid;
+  inline-size: var(--cs-icon-size, 1.25rem);
+  block-size: var(--cs-icon-size, 1.25rem);
+}
+svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+:host(.cs-icon--small) {
+  --cs-icon-size: 1rem;
+}
+:host(.cs-icon--large) {
+  --cs-icon-size: 1.75rem;
+}

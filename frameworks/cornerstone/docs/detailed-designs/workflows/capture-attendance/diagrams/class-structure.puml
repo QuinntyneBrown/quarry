@@ -1,0 +1,122 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Capture attendance
+
+enum CsAttendanceState {
+  present
+  late
+  absent
+  excused
+}
+
+enum CsAttendanceRowStatus {
+  clean
+  dirty
+  queued
+  conflict
+}
+
+interface AttendanceRosterViewModel {
+  +sessionId: string
+  +sessionLabel: string
+  +rows: AttendanceRowViewModel[]
+  +conflictCount: number
+  +queued: boolean
+}
+
+interface AttendanceRowViewModel {
+  +personId: string
+  +personName: string
+  +state: CsAttendanceState | null
+  +note: string | null
+  +status: CsAttendanceRowStatus
+  +conflictReason: string | null
+}
+
+interface AttendanceChange {
+  +personId: string
+  +state: CsAttendanceState
+}
+
+interface AttendanceBulkChange {
+  +state: CsAttendanceState | null
+  +personIds: string[]
+  +changedCount: number
+}
+
+interface AttendanceNoteChange {
+  +personId: string
+  +note: string
+}
+
+interface AttendanceConflictIntent {
+  +personId: string
+  +reason: string
+}
+
+interface CsAttendanceUnsavedSummary {
+  +changedCount: number
+  +personIds: string[]
+}
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+class AttendanceRosterComponent {
+  +roster: InputSignal<AttendanceRosterViewModel>
+  +busy: InputSignal<boolean>
+  +unsaved: Signal<CsAttendanceUnsavedSummary>
+  +stateChanged: OutputEmitterRef<AttendanceChange>
+  +bulkChanged: OutputEmitterRef<AttendanceBulkChange>
+  +noteChanged: OutputEmitterRef<AttendanceNoteChange>
+  +conflictResolveRequested: OutputEmitterRef<AttendanceConflictIntent>
+  +markAll(state: CsAttendanceState): void
+  +clearAll(): void
+  -announceChangedCount(count: number): void
+}
+
+class AttendanceChoiceComponent {
+  +personName: InputSignal<string>
+  +value: ModelSignal<CsAttendanceState | null>
+  +status: InputSignal<CsAttendanceRowStatus>
+  +disabled: InputSignal<boolean>
+  +writeValue(value: CsAttendanceState | null): void
+  +registerOnChange(fn: (value: CsAttendanceState | null) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+class UnsavedChangesDialogComponent {
+  +summary: InputSignal<CsAttendanceUnsavedSummary>
+  +decided: OutputEmitterRef<'stay' | 'discard'>
+}
+
+AttendanceChoiceComponent ..|> ControlValueAccessor
+AttendanceRosterComponent *-- "0..*" AttendanceChoiceComponent : renders one per row
+AttendanceRosterComponent --> "1" AttendanceRosterViewModel : reads
+AttendanceRosterViewModel o-- "0..*" AttendanceRowViewModel : lists
+AttendanceRowViewModel --> "0..1" CsAttendanceState : holds
+AttendanceRowViewModel --> "1" CsAttendanceRowStatus : reports
+AttendanceChoiceComponent --> "0..1" CsAttendanceState : binds
+AttendanceRosterComponent ..> AttendanceChange : emits
+AttendanceRosterComponent ..> AttendanceBulkChange : emits
+AttendanceRosterComponent ..> AttendanceNoteChange : emits
+AttendanceRosterComponent ..> AttendanceConflictIntent : emits
+AttendanceRosterComponent --> "1" CsAttendanceUnsavedSummary : derives
+UnsavedChangesDialogComponent ..> CsAttendanceUnsavedSummary : reads
+@enduml

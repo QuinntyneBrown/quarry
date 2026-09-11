@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Build the publishable artifact
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "npm run build:library" as script
+  participant "Library source" as source
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI workflow (ci.yml)" as ci
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "ng-packagr" as ngpkg
+  participant "Angular compiler" as tsc
+  participant "dist/cornerstone" as dist
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Published tarball" as tarball
+end box
+
+maintainer -> script : Run the library build target
+script -> ngpkg : Invoke @angular/build:ng-packagr
+ngpkg -> source : Read ng-package.json and src/public-api.ts
+source --> ngpkg : Entry file and asset globs
+ngpkg -> tsc : Compile under tsconfig.lib.prod.json
+tsc -> dist : Emit FESM2022 bundles with Angular imports external per L2-002
+tsc -> dist : Emit .d.ts declarations and .js.map source maps per L2-004
+ngpkg -> dist : Copy src/styles assets to styles/
+ngpkg -> dist : Rewrite the manifest as @quinntyne/cornerstone per L2-001
+ngpkg -> dist : Carry the exports subpaths into the built manifest per L2-003
+dist --> ngpkg : Artifact file list
+ngpkg --> script : Build result
+
+script -> ci : Push the commit that triggers verification
+ci -> dist : Run npm pack --dry-run
+
+alt Tarball contains .ts source or .spec files
+  ci --> maintainer : Fail the build naming the excluded files per L2-001
+else Tarball contents conform
+  ci -> tarball : Upload the packed artifact
+  tarball --> ci : Registry acknowledgement
+  ci --> maintainer : Report the published file list
+end
+@enduml

@@ -1,0 +1,7 @@
+<cs-person [person]="view().person" />
+@for (contact of view().contacts; track contact.type) {
+  <p>
+    <strong>{{ contact.label }}</strong> {{ contact.value }}
+  </p>
+}
+<ng-content />

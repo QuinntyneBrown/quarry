@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Open the mobile menu on a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Angular Router" as router
+end box
+box "Frontend — Cornerstone public chrome" #D1FADF
+  participant "MarketingHeaderComponent" as header
+  participant "Mobile menu toggle" as toggle
+  participant "MarketingFooterComponent" as footer
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Motion tokens" as motion
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport, DOM, and focus" as dom
+end box
+
+dom -> header : Report a viewport below the public breakpoint
+header -> header : Set the narrow signal
+header -> toggle : Show the menu toggle per L2-075
+header -> dom : Hide the inline link list
+footer -> dom : Collapse each link group to a disclosure per L2-075
+
+visitor -> toggle : Activate the menu toggle
+toggle -> header : Set menuOpen to true
+header -> dom : Expand the link list in flow beneath the header
+header -> dom : Set aria-expanded="true" on the toggle
+motion -> dom : Apply the expansion duration, collapsed under reduced motion per L2-008
+header -> dom : Move focus to the first link
+dom --> visitor : Expanded link list with focus on the first entry
+
+alt Link activated
+  visitor -> dom : Activate a link
+  dom -> router : Resolve the supplied routerLink per L2-076
+  header -> header : Set menuOpen to false
+else Escape pressed
+  visitor -> dom : Press Escape
+  dom -> header : Keydown event
+  header -> header : Set menuOpen to false per L2-075
+end
+
+header -> dom : Collapse the link list and set aria-expanded="false"
+header -> dom : Return focus to the menu toggle per L2-075
+dom --> visitor : Collapsed header with focus on the toggle
+@enduml

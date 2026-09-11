@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Resolve timezone-safe dates
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "ScheduleViewModelService" as vm
+end box
+box "Frontend — Cornerstone calendar" #D1FADF
+  participant "CalendarComponent" as calendar
+  participant "CalendarDate utilities" as dates
+  participant "EventCardComponent" as card
+end box
+box "Browser — platform" #FFF4E5
+  participant "Intl and timezone database" as browser
+end box
+
+user -> calendar : Open a month containing a daylight-saving transition
+calendar -> browser : Read the resolved timezone
+browser --> calendar : IANA timezone identifier
+calendar -> dates : Build the range from year, month, and day values per L2-106
+dates -> dates : Add days on the calendar-date triple, never on an instant
+dates --> calendar : 42 distinct calendar dates with no duplicate and no gap
+
+calendar -> vm : Request events for the range
+vm --> calendar : Events carrying instants and a display timezone per L2-107
+
+loop For each day cell
+  calendar -> dates : Assign each event to a cell by its date in the display timezone
+  dates --> calendar : Cell assignment
+end
+
+calendar -> browser : Format each cell name with the locale date formatter
+browser --> calendar : Display strings
+calendar --> user : Grid showing every calendar date once
+
+user -> card : Read one event in the cell
+card -> browser : Format start and end for the display timezone per L2-107
+browser --> card : Locale-aware time strings
+card -> card : Place the instant on a time datetime attribute
+card --> user : Event time with a machine-readable value
+
+opt Browser offset is a fractional hour
+  calendar -> dates : Recompute cell assignment for the fractional offset per L2-106
+  dates --> calendar : Unchanged calendar dates
+end
+@enduml

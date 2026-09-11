@@ -1,0 +1,108 @@
+{
+  "kind": "class",
+  "name": "ChipListComponent",
+  "sourcePath": "src/cornerstone/chip-list/chip-list.component.ts",
+  "category": "data-display",
+  "description": "Chip List public API.",
+  "members": [
+    {
+      "name": "chips",
+      "bindingName": "chips",
+      "role": "input",
+      "type": "readonly { id: string; label: string; selected?: boolean }[]",
+      "required": true,
+      "description": "Chips public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "removable",
+      "bindingName": "removable",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Removable public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "selectable",
+      "bindingName": "selectable",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Selectable public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "removed",
+      "bindingName": "removed",
+      "role": "output",
+      "type": "ChipRemoveEvent",
+      "required": false,
+      "description": "Removed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selectionChange",
+      "bindingName": "selectionChange",
+      "role": "output",
+      "type": "ChipSelectionChange",
+      "required": false,
+      "description": "Selection Change public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-chip-list",
+  "slug": "chip-list",
+  "label": "Chip List",
+  "tokens": [],
+  "relatedSymbols": ["ChipRemoveEvent", "ChipSelectionChange"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ChipRemoveEvent",
+      "sourcePath": "src/cornerstone/chip-list/chip-remove-event.interface.ts",
+      "category": "data-display",
+      "description": "Chip Remove Event public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ChipSelectionChange",
+      "sourcePath": "src/cornerstone/chip-list/chip-selection-change.interface.ts",
+      "category": "data-display",
+      "description": "Chip Selection Change public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "selected",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Selected public API."
+        }
+      ]
+    }
+  ]
+}

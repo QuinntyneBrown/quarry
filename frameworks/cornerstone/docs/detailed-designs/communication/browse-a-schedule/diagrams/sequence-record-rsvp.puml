@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Record an RSVP
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "ScheduleIntentHandler" as intent
+  participant "ScheduleViewModelService" as vm
+end box
+box "Frontend — Cornerstone schedule" #D1FADF
+  participant "ScheduleListComponent" as list
+  participant "EventCardComponent" as card
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region" as browser
+end box
+
+user -> card : Activate the RSVP control
+card -> card : Enter the pending state without writing to the input view model
+card -> intent : Emit rsvpChanged with the event id and value per L2-107
+intent -> vm : Persist the response through application services
+
+alt Application reports success
+  vm --> list : Supply the refreshed group with the new RSVP value
+  list -> card : Rebind the event view model
+  card -> card : Leave the pending state
+  card --> user : Updated RSVP and attendance count
+else Application reports failure
+  vm --> list : Supply the unchanged group and an error state per L2-101
+  list -> card : Rebind the event view model
+  card -> browser : Announce the failure and offer a retry
+  browser --> user : Stated failure reason
+end
+
+opt The range now holds no events
+  vm --> list : Supply an empty group set
+  list -> browser : Announce the empty state and the range politely per L2-107
+  browser --> user : Empty schedule message
+end
+@enduml

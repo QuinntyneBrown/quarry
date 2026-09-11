@@ -1,0 +1,7 @@
+<button type="button" (click)="activated.emit(conversation().id)">
+  <strong>{{ conversation().title }}</strong
+  ><span>{{ conversation().preview }}</span>
+  @if (conversation().unread) {
+    <cs-badge>{{ conversation().unread }}</cs-badge>
+  }
+</button>

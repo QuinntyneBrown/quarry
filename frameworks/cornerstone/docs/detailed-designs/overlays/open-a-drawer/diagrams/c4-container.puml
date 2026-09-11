@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Open a drawer
+
+Person(user, "Application user", "Opens a filter panel or the navigation drawer")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and services", "Supplies DrawerComponent, DrawerContainerComponent, and DrawerService")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the panel surface, elevation, extent, and motion duration")
+  Container(docs, "Documentation site", "Angular application", "Publishes the drawer variants and mode guidance")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts the navigation drawer on narrow viewports")
+  Container(page, "Feature page", "Angular components", "Hosts filter and editor drawers beside the content")
+  Container(services, "Application services", "Angular injectables", "Applies the filter selection the drawer returns")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay, focus trap, directionality, and BreakpointObserver")
+System_Ext(browser, "Browser platform", "Viewport, writing direction, focus, and scrolling")
+
+Rel(user, shell, "Opens the navigation drawer of")
+Rel(user, page, "Opens the filter drawer of")
+Rel(shell, lib, "Renders the navigation panel from")
+Rel(page, lib, "Renders the filter and editor panels from")
+Rel(lib, cdk, "Attaches the overlay and observes breakpoints through")
+Rel(lib, theme, "Resolves surface, extent, and motion from")
+Rel(cdk, browser, "Reads the viewport and writing direction of")
+Rel(page, services, "Passes the returned selection to")
+Rel(docs, lib, "Documents the public API of")
+@enduml

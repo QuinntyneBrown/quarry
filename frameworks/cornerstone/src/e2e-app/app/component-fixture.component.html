@@ -1,0 +1,7 @@
+<h1 data-testid="fixture-heading">{{ label() }}</h1>
+<section aria-label="Component fixture" [attr.data-ready]="ready()" [attr.data-slug]="slug()">
+  <ng-template csFixtureHost />
+</section>
+@if (error()) {
+  <p role="alert" data-testid="fixture-error">{{ error() }}</p>
+}

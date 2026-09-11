@@ -1,0 +1,127 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Find and pick a value
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+enum SearchMode {
+  live
+  submit
+}
+
+enum ComboboxMode {
+  single
+  multiple
+}
+
+enum CsQueryState {
+  idle
+  loading
+  resolved
+  empty
+}
+
+class SearchFieldComponent {
+  +placeholder: InputSignal<string>
+  +debounceMs: InputSignal<number>
+  +mode: InputSignal<SearchMode>
+  +resultCount: InputSignal<number | null>
+  +search: OutputEmitterRef<string>
+  +cleared: OutputEmitterRef<void>
+  +hasValue: Signal<boolean>
+  +writeValue(value: string | null): void
+  +registerOnChange(fn: (value: string) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+  #clear(): void
+}
+
+class ComboboxComponent {
+  +options: InputSignal<readonly CsComboboxOption[]>
+  +displayWith: InputSignal<(option: unknown) => string>
+  +mode: InputSignal<ComboboxMode>
+  +loading: InputSignal<boolean>
+  +emptyText: InputSignal<string>
+  +queryChanged: OutputEmitterRef<string>
+  +expanded: Signal<boolean>
+  +activeOptionId: Signal<string | null>
+  +queryState: Signal<CsQueryState>
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+  #onKeydown(event: KeyboardEvent): void
+}
+
+class CsComboboxOption {
+  +value: unknown
+  +label: string
+  +disabled: boolean
+  +id: string
+}
+
+class DateFieldComponent {
+  +min: InputSignal<string | null>
+  +max: InputSignal<string | null>
+  +disabled: InputSignal<boolean>
+  +writeValue(value: string | null): void
+  +registerOnChange(fn: (value: string | null) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+  #parse(raw: string): string | null
+}
+
+class DateTimeFieldComponent {
+  +timeZone: InputSignal<string>
+  +writeValue(value: string | null): void
+  +registerOnChange(fn: (value: string | null) => void): void
+  +registerOnTouched(fn: () => void): void
+  #toContractValue(local: string): string
+}
+
+class DateBounds {
+  +min: string
+  +max: string
+}
+
+class CsOverlayListbox {
+  +open(origin: ElementRef): void
+  +close(): void
+  +setActive(index: number): void
+  +busy: Signal<boolean>
+}
+
+class CsLiveStatusRegion {
+  +announcePolite(message: string): void
+}
+
+SearchFieldComponent ..|> ControlValueAccessor
+ComboboxComponent ..|> ControlValueAccessor
+DateFieldComponent ..|> ControlValueAccessor
+DateTimeFieldComponent ..|> ControlValueAccessor
+DateFieldComponent <|-- DateTimeFieldComponent
+SearchFieldComponent --> SearchMode : has
+SearchFieldComponent o-- CsLiveStatusRegion : announces through
+ComboboxComponent --> ComboboxMode : has
+ComboboxComponent --> CsQueryState : reports
+ComboboxComponent *-- CsOverlayListbox : owns
+ComboboxComponent o-- "0..*" CsComboboxOption : renders
+ComboboxComponent o-- CsLiveStatusRegion : announces through
+DateFieldComponent --> DateBounds : validates against
+@enduml

@@ -1,0 +1,132 @@
+{
+  "kind": "class",
+  "name": "TableContainerComponent",
+  "sourcePath": "src/cornerstone/table-container/table-container.component.ts",
+  "category": "data-display",
+  "description": "Table Container public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-table-container",
+  "slug": "table-container",
+  "label": "Table Container",
+  "tokens": [],
+  "relatedSymbols": [
+    "ResponsiveTableDirective",
+    "SortChange",
+    "TableDensity",
+    "TableDirective",
+    "TableRowDirective",
+    "TableSortHeaderDirective"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "ResponsiveTableDirective",
+      "sourcePath": "src/cornerstone/table-container/responsive-table.directive.ts",
+      "category": "data-display",
+      "description": "Responsive Table public API.",
+      "members": []
+    },
+    {
+      "kind": "interface",
+      "name": "SortChange",
+      "sourcePath": "src/cornerstone/table-container/sort-change.interface.ts",
+      "category": "data-display",
+      "description": "Sort Change public API.",
+      "members": [
+        {
+          "name": "active",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Active public API."
+        },
+        {
+          "name": "direction",
+          "role": "property",
+          "type": "'asc' | 'desc' | ''",
+          "required": true,
+          "description": "Direction public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "TableDensity",
+      "sourcePath": "src/cornerstone/table-container/table-density.type.ts",
+      "category": "data-display",
+      "description": "Table Density public API.",
+      "declaration": "'compact' | 'comfortable'"
+    },
+    {
+      "kind": "class",
+      "name": "TableDirective",
+      "sourcePath": "src/cornerstone/table-container/table.directive.ts",
+      "category": "data-display",
+      "description": "Table public API.",
+      "members": [
+        {
+          "name": "density",
+          "bindingName": "density",
+          "role": "input",
+          "type": "TableDensity",
+          "required": false,
+          "defaultValue": "'comfortable'",
+          "description": "Density public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "TableRowDirective",
+      "sourcePath": "src/cornerstone/table-container/table-row.directive.ts",
+      "category": "data-display",
+      "description": "Table Row public API.",
+      "members": [
+        {
+          "name": "selected",
+          "bindingName": "selected",
+          "role": "input",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": "false",
+          "description": "Selected public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "TableSortHeaderDirective",
+      "sourcePath": "src/cornerstone/table-container/table-sort-header.directive.ts",
+      "category": "data-display",
+      "description": "Table Sort Header public API.",
+      "members": [
+        {
+          "name": "id",
+          "bindingName": "csTableSortHeader",
+          "role": "input",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "direction",
+          "bindingName": "direction",
+          "role": "input",
+          "type": "'asc' | 'desc' | ''",
+          "required": false,
+          "defaultValue": "''",
+          "description": "Direction public API."
+        },
+        {
+          "name": "sortChange",
+          "bindingName": "sortChange",
+          "role": "output",
+          "type": "SortChange",
+          "required": false,
+          "description": "Sort Change public API."
+        }
+      ]
+    }
+  ]
+}

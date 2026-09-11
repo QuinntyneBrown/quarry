@@ -1,0 +1,99 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Trigger an action
+
+enum CsButtonAppearance {
+  primary
+  secondary
+  ghost
+  subtle
+  danger
+  on-dark
+  link
+}
+
+enum CsButtonSize {
+  small
+  medium
+  large
+}
+
+enum CsButtonGroupMode {
+  related
+  split
+}
+
+class CsButtonDirective {
+  +appearance: InputSignal<CsButtonAppearance>
+  +size: InputSignal<CsButtonSize>
+  +block: InputSignal<boolean>
+  +loading: InputSignal<boolean>
+  +disabled: InputSignal<boolean>
+  +lockedReason: InputSignal<string | null>
+  #host: HTMLButtonElement | HTMLAnchorElement
+  #isSuppressed: Signal<boolean>
+  #onClick(event: MouseEvent): void
+  #applyDisabledSemantics(): void
+}
+
+class CsIconButtonDirective {
+  +label: InputSignal<string>
+  +size: InputSignal<CsButtonSize>
+  +badge: InputSignal<CsIconButtonBadge>
+  +loading: InputSignal<boolean>
+  #accessibleName(): string
+}
+
+class CsIconButtonBadge {
+  +kind: 'count' | 'dot' | 'none'
+  +count: number
+  +max: number
+}
+
+class ButtonGroupComponent {
+  +label: InputSignal<string>
+  +mode: InputSignal<CsButtonGroupMode>
+  +members: Signal<readonly CsButtonDirective[]>
+  #role: 'group'
+}
+
+class CsTooltipDirective {
+  +csTooltip: InputSignal<string>
+  +suppressDuplicateName: InputSignal<boolean>
+}
+
+class IconComponent {
+  +name: InputSignal<string>
+  +decorative: InputSignal<boolean>
+}
+
+class CsTokenSet {
+  +color: ColorTokens
+  +spacing: SpacingTokens
+  +radius: RadiusTokens
+  +focus: FocusTokens
+  +motion: MotionTokens
+}
+
+CsButtonDirective <|-- CsIconButtonDirective
+CsButtonDirective --> CsButtonAppearance : has
+CsButtonDirective --> CsButtonSize : has
+CsButtonDirective ..> CsTokenSet : reads
+CsIconButtonDirective --> CsIconButtonBadge : has
+CsIconButtonDirective o-- CsTooltipDirective : is described by
+CsIconButtonDirective *-- IconComponent : renders
+ButtonGroupComponent --> CsButtonGroupMode : has
+ButtonGroupComponent o-- "1..*" CsButtonDirective : projects
+ButtonGroupComponent ..> CsTokenSet : reads
+@enduml

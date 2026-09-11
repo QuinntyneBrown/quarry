@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Frame a page
+
+Person(dev, "Application developer", "Places the frame and its slots in routed templates")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Provides PageComponent, SectionComponent, ToolbarComponent, ActionBarComponent, and the accessibility directives")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the spacing, typography, and elevation tokens the frame resolves")
+  Container(docs, "Documentation site", "Angular application", "Publishes the slot map, heading rules, and overflow strategy")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts the skip link, the navigation, and the routed outlet")
+  Container(page, "Feature page", "Angular components", "Fills the eyebrow, title, breadcrumb, actions, and content slots")
+  Container(services, "Application services", "Angular services", "Resolve page data and report loading and error states")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus management, overlay, and layout observation")
+System_Ext(browser, "Browser platform", "DOM, focus, and accessibility tree")
+
+Rel(dev, page, "Fills the frame slots in")
+Rel(shell, lib, "Applies csSkipLink from")
+Rel(page, lib, "Renders cs-page, cs-section, and cs-toolbar from")
+Rel(services, page, "Supply the page state and content to")
+Rel(lib, theme, "Resolves spacing, type, and elevation from")
+Rel(lib, cdk, "Moves focus and measures overflow through")
+Rel(lib, browser, "Renders landmarks, headings, and live regions into")
+Rel(cdk, browser, "Reads and sets focus in")
+Rel(docs, lib, "Documents the slots and states of")
+@enduml

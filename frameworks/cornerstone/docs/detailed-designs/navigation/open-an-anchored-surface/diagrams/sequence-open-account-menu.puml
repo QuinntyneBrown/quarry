@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Open the account menu and select an action
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell" as shell
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone anchored surfaces" #D1FADF
+  participant "AccountMenuComponent" as account
+  participant "CsMenuDirective" as menu
+  participant "CsMenuItemDirective" as item
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and position strategy" as overlay
+  participant "FocusKeyManager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport, DOM, and focus" as dom
+end box
+
+shell -> account : Bind the account view model and the action list per L2-069
+account -> dom : Render the avatar and name trigger with aria-haspopup="menu"
+
+user -> dom : Activate the trigger
+dom -> menu : Click or Enter event
+menu -> dom : Read the currently focused element
+dom --> menu : Trigger element
+menu -> menu : Store the focus restore target
+menu -> overlay : Attach the panel at the preferred position
+overlay -> dom : Measure the viewport bounds
+dom --> overlay : Available space below the trigger
+overlay -> overlay : Fall back to an alternate position per L2-072
+overlay -> dom : Render the panel
+
+account -> item : Render profile, settings, support, a separator, and sign-out per L2-069
+item -> dom : Apply menuitem semantics and the danger tone on sign-out per L2-072
+menu -> keys : Set the active item to the first enabled entry
+keys -> dom : Move focus into the panel
+menu -> dom : Set aria-expanded="true" on the trigger
+dom --> user : Account menu open with focus on the first action
+
+user -> dom : Press ArrowDown, then Enter on sign-out
+dom -> keys : Keydown events
+keys -> item : Activate the focused item
+item -> account : Emit the triggered action
+account -> services : Emit signOut for the application to handle per L2-069
+menu -> menu : Close with reason 'select'
+menu -> overlay : Detach the panel
+menu -> dom : Return focus to the trigger per L2-072
+dom --> user : Focus back on the avatar trigger
+@enduml

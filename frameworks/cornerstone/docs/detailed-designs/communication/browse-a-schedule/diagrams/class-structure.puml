@@ -1,0 +1,155 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Browse a schedule
+
+enum CsCalendarView {
+  month
+  week
+}
+
+class CalendarDate {
+  +year: number
+  +month: number
+  +day: number
+}
+
+class CalendarRange {
+  +start: CalendarDate
+  +end: CalendarDate
+}
+
+class CalendarComponent {
+  +view: InputSignal<CsCalendarView>
+  +focusedDate: ModelSignal<CalendarDate>
+  +selectedDate: ModelSignal<CalendarDate | null>
+  +events: InputSignal<readonly CsCalendarDayEvents[]>
+  +maxEventsPerDay: InputSignal<number>
+  +rangeChange: OutputEmitterRef<CalendarRange>
+  +dateSelected: OutputEmitterRef<CalendarDate>
+  +overflowOpened: OutputEmitterRef<CalendarDate>
+  +compact: Signal<boolean>
+  -buildCells(range: CalendarRange): readonly CsCalendarCell[]
+}
+
+class CalendarKeyboardGrid {
+  +columns: InputSignal<number>
+  +onKeydown(event: KeyboardEvent): void
+  -move(from: CalendarDate, days: number): CalendarDate
+  -moveMonth(from: CalendarDate, months: number): CalendarDate
+}
+
+class CsCalendarCell {
+  +date: CalendarDate
+  +outsideMonth: boolean
+  +today: boolean
+  +selected: boolean
+  +hiddenEventCount: number
+}
+
+class CsCalendarDayEvents {
+  +date: CalendarDate
+  +events: readonly CsEventViewModel[]
+}
+
+class CsEventViewModel {
+  +id: string
+  +title: string
+  +start: string
+  +end: string | null
+  +timeZone: string
+  +location: string | null
+  +status: CsEventStatus
+  +attendingCount: number
+  +rsvp: CsRsvpValue | null
+}
+
+enum CsEventStatus {
+  scheduled
+  cancelled
+  completed
+  rescheduled
+}
+
+enum CsRsvpValue {
+  yes
+  no
+  maybe
+}
+
+class EventCardComponent {
+  +event: InputSignal<CsEventViewModel>
+  +actions: InputSignal<readonly CsEventAction[]>
+  +pending: InputSignal<boolean>
+  +rsvpChanged: OutputEmitterRef<RsvpIntent>
+  +actionInvoked: OutputEmitterRef<CsEventActionIntent>
+}
+
+class RsvpIntent {
+  +eventId: string
+  +value: CsRsvpValue
+}
+
+class CsEventActionIntent {
+  +eventId: string
+  +actionKey: string
+}
+
+class CsEventAction {
+  +key: string
+  +label: string
+  +disabled: boolean
+}
+
+class ScheduleGroup {
+  +date: CalendarDate
+  +heading: string
+  +events: readonly CsEventViewModel[]
+}
+
+class ScheduleListComponent {
+  +groups: InputSignal<readonly ScheduleGroup[]>
+  +range: InputSignal<CalendarRange>
+  +state: InputSignal<CsDataState>
+  +actionInvoked: OutputEmitterRef<CsEventActionIntent>
+}
+
+enum CsDataState {
+  idle
+  loading
+  ready
+  empty
+  error
+}
+
+CalendarComponent *-- CalendarKeyboardGrid
+CalendarComponent --> CsCalendarView : has
+CalendarComponent "1" o-- "28..42" CsCalendarCell
+CalendarComponent --> CalendarRange : emits
+CalendarComponent ..> CsCalendarDayEvents : reads
+CalendarKeyboardGrid ..> CalendarDate : computes
+CsCalendarCell --> CalendarDate : has
+CalendarRange *-- CalendarDate
+CsCalendarDayEvents "1" o-- "0..*" CsEventViewModel
+ScheduleListComponent "1" o-- "0..*" ScheduleGroup
+ScheduleListComponent ..> EventCardComponent : renders
+ScheduleListComponent --> CsDataState : has
+ScheduleGroup "1" o-- "1..*" CsEventViewModel
+EventCardComponent ..> CsEventViewModel : renders
+EventCardComponent --> RsvpIntent : emits
+EventCardComponent --> CsEventActionIntent : emits
+EventCardComponent "1" o-- "0..*" CsEventAction
+CsEventViewModel --> CsEventStatus : has
+CsEventViewModel --> CsRsvpValue : has
+RsvpIntent --> CsRsvpValue : carries
+@enduml

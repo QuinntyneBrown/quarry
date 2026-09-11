@@ -1,0 +1,9 @@
+<header>
+  <ng-content select="[csBrand]" />
+  <nav aria-label="Main navigation">
+    @for (link of links(); track link.href) {
+      <a [href]="link.href">{{ link.label }}</a>
+    }
+  </nav>
+  <ng-content />
+</header>

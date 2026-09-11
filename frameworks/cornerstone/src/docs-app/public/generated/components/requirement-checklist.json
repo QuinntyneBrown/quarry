@@ -1,0 +1,104 @@
+{
+  "kind": "class",
+  "name": "RequirementChecklistComponent",
+  "sourcePath": "src/cornerstone/requirement-checklist/requirement-checklist.component.ts",
+  "category": "process",
+  "description": "Requirement Checklist public API.",
+  "members": [
+    {
+      "name": "requirements",
+      "bindingName": "requirements",
+      "role": "input",
+      "type": "readonly CsRequirement[]",
+      "required": true,
+      "description": "Requirements public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "toggled",
+      "bindingName": "toggled",
+      "role": "output",
+      "type": "CsRequirementToggleIntent",
+      "required": false,
+      "description": "Toggled public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-requirement-checklist",
+  "slug": "requirement-checklist",
+  "label": "Requirement Checklist",
+  "tokens": [],
+  "relatedSymbols": ["CsRequirement", "CsRequirementToggleIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsRequirement",
+      "sourcePath": "src/cornerstone/core/process/cs-requirement.interface.ts",
+      "category": "process",
+      "description": "Cs Requirement public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "complete",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Complete public API."
+        },
+        {
+          "name": "required",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Required public API."
+        },
+        {
+          "name": "disabled",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Disabled public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsRequirementToggleIntent",
+      "sourcePath": "src/cornerstone/core/process/cs-requirement-toggle-intent.interface.ts",
+      "category": "process",
+      "description": "Cs Requirement Toggle Intent public API.",
+      "members": [
+        {
+          "name": "requirementId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Requirement Id public API."
+        },
+        {
+          "name": "complete",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Complete public API."
+        }
+      ]
+    }
+  ]
+}

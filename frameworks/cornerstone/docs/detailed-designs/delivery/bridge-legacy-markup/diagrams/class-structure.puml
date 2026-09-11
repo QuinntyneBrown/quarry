@@ -1,0 +1,107 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Bridge legacy markup
+
+enum CsSourceApplication {
+  liturgy
+  wordUp
+}
+
+enum CsMappingStatus {
+  available
+  partial
+  bridge
+  missing
+}
+
+enum CsCriterionState {
+  satisfied
+  outstanding
+}
+
+class CsLegacyFamily {
+  +application: CsSourceApplication
+  +name: string
+  +selectors: readonly string[]
+  +partialPath: string
+  +declaredLines: number
+}
+
+class CsBridgeMapping {
+  +application: CsSourceApplication
+  +legacyFamily: string
+  +replacement: string | null
+  +status: CsMappingStatus
+  +notes: string
+  +isOpenGap(): boolean
+}
+
+class CsMigrationGuide {
+  +rows: readonly CsBridgeMapping[]
+  +openGaps(): readonly CsBridgeMapping[]
+  +rowFor(family: string): CsBridgeMapping | undefined
+}
+
+class CsSelectorInventory {
+  +partials: readonly string[]
+  +families(): readonly CsLegacyFamily[]
+}
+
+class CsMappingCompletenessCheck {
+  +inventory: CsSelectorInventory
+  +guide: CsMigrationGuide
+  +unmappedFamilies(): readonly CsLegacyFamily[]
+  +run(): CsCriterionState
+}
+
+class CsLegacyUsageReport {
+  +application: CsSourceApplication
+  +countsByFamily: Map<string, number>
+  +total(): number
+}
+
+class CsBundleIsolationCheck {
+  +baselineStylesheetBytes: number
+  +optedInStylesheetBytes: number
+  +run(): CsCriterionState
+}
+
+class CsBridgeRemovalCriterion {
+  +name: string
+  +measurement: string
+  +currentValue: string
+  +state: CsCriterionState
+}
+
+class CsBridgeRemovalDecision {
+  +criteria: readonly CsBridgeRemovalCriterion[]
+  +announcedIn: string | null
+  +removedIn: string | null
+  +permitted(): boolean
+}
+
+CsSelectorInventory --> "0..*" CsLegacyFamily : extracts
+CsLegacyFamily --> CsSourceApplication : belongs to
+CsBridgeMapping --> CsSourceApplication : belongs to
+CsBridgeMapping --> CsMappingStatus : has
+CsMigrationGuide *-- "1..*" CsBridgeMapping : holds
+CsMappingCompletenessCheck ..> CsSelectorInventory : reads
+CsMappingCompletenessCheck ..> CsMigrationGuide : compares against
+CsLegacyUsageReport ..> CsLegacyFamily : counts occurrences of
+CsBridgeRemovalCriterion --> CsCriterionState : reports
+CsBridgeRemovalDecision *-- "1..*" CsBridgeRemovalCriterion : aggregates
+CsBridgeRemovalDecision ..> CsLegacyUsageReport : reads
+CsBridgeRemovalDecision ..> CsMappingCompletenessCheck : reads
+CsBridgeRemovalDecision ..> CsBundleIsolationCheck : reads
+@enduml

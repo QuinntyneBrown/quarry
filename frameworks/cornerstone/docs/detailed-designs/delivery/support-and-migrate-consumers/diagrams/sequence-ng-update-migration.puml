@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Migrate an application with ng update
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+actor "Application developer" as dev
+box "Developer workstation" #E0F2FE
+  participant "Angular CLI" as cli
+  participant "Application sources" as sources
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "Release workflow" as release
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Deprecation policy check" as policy
+  participant "Migration collection" as collection
+  participant "Migration transform" as rule
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Published versions" as npm
+end box
+
+maintainer -> policy : Mark the symbol @deprecated with a replacement and a removing version
+policy -> policy : Reject a tag missing either field per L2-183
+policy --> release : Deprecation recorded for the notice period
+release -> npm : Publish the minor release carrying the deprecation notice
+
+maintainer -> collection : Add a rule keyed to the major release that removes the symbol per L2-184
+release -> npm : Publish the major release with the migration collection
+
+dev -> cli : Run ng update @quinntyne/cornerstone
+cli -> npm : Resolve the installed and target versions
+npm --> cli : Version pair and ng-update.migrations path
+cli -> collection : Request the rules between the two versions
+collection --> cli : Ordered CsMigrationRule list per L2-184
+
+loop For each rule in version order
+  cli -> rule : Apply against the workspace tree
+  rule -> sources : Rewrite imports, symbol names, and template references
+  alt Every usage rewritten
+    sources --> rule : Edits recorded
+    rule --> cli : applied
+  else A usage cannot be rewritten
+    rule -> rule : Record file, line, and intended change
+    rule --> cli : unresolved
+  end
+end
+
+cli -> sources : Write the recorded edits
+sources --> cli : Files updated
+cli --> dev : Report of applied edits and remaining locations per L2-184
+dev -> dev : Resolve the remaining locations against the deprecation notice per L2-183
+@enduml

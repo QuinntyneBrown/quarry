@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Submit a form
+
+Person(dev, "Application developer", "Writes the submission handler and the validators")
+Person(user, "Application user", "Completes and submits a form")
+Person(volunteer, "Volunteer", "Completes Word Up onboarding as a multi-step flow")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying form actions, the validation summary, and the wizard")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning the form model, validators, and persistence")
+System_Ext(cdk, "Angular CDK", "Live announcer and focus management for the summary and the wizard")
+System_Ext(browser, "Browser platform", "Native form submission, FormData assembly, and default submit behaviour")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the submission surface from")
+Rel(dev, app, "Writes the submission handler in")
+Rel(app, cornerstone, "Binds the form state and the error list to")
+Rel(cornerstone, app, "Emits the finish and step intents to")
+Rel(cornerstone, cdk, "Announces failures and restores focus through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Preserves native form participation in")
+Rel(user, browser, "Activates the submit action in")
+Rel(volunteer, browser, "Advances through the wizard in")
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Render on the server and localize
+
+Person(dev, "Application developer", "Registers the locale and the translated token set at bootstrap")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Renders identically in the server pass and the client pass")
+  Container(platform, "Platform guard layer", "TypeScript helpers and defaults", "csIsBrowser, csOnBrowser, and CsServerDefaults")
+  Container(i18n, "Localization layer", "Injection token, provider, and service", "CS_LOCALIZATION, provideCsLocalization, CsLocalizationService, CsDirectionService, CsFormatService")
+  Container(styles, "Theme stylesheet", "Sass / CSS", "Logical properties, icon mirroring, and text expansion rules")
+  Container(gates, "Verification gates", "SSR and i18n test suites", "CsSsrHarness, ssr-coverage, and i18n-coverage")
+  Container(docs, "Documentation site", "Angular application", "Publishes every localization key with its English default and context")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(config, "Application config", "Angular providers", "Calls provideCsLocalization() and registers the locale")
+  Container(shell, "Application shell", "Angular components", "Sets dir on the document element")
+}
+
+System_Ext(server, "Node server renderer", "Angular SSR without browser globals")
+System_Ext(browser, "Browser platform", "Hydration and locale formatting")
+
+Rel(dev, config, "Registers the locale and token set in")
+Rel(config, i18n, "Provides the partial override to")
+Rel(shell, i18n, "Publishes the ambient direction to")
+Rel(lib, platform, "Guards every browser read through")
+Rel(lib, i18n, "Resolves strings, direction, and formats from")
+Rel(lib, styles, "Mirrors and wraps through")
+Rel(server, lib, "Executes the server pass of")
+Rel(platform, server, "Emits documented defaults under")
+Rel(lib, browser, "Hydrates against the server HTML in")
+Rel(gates, lib, "Server-renders, hydrates, and scans every component of")
+Rel(gates, i18n, "Asserts that every literal resolves from")
+Rel(docs, i18n, "Documents every key of")
+@enduml

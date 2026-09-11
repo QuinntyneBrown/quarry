@@ -1,0 +1,1189 @@
+{
+  "symbolCount": 504,
+  "components": [
+    {
+      "name": "AccordionComponent",
+      "label": "Accordion",
+      "slug": "accordion",
+      "selector": "cs-accordion",
+      "category": "navigation",
+      "description": "Accordion public API."
+    },
+    {
+      "name": "AccordionItemComponent",
+      "label": "Accordion Item",
+      "slug": "accordion-item",
+      "selector": "cs-accordion-item",
+      "category": "navigation",
+      "description": "Accordion Item public API."
+    },
+    {
+      "name": "AccountMenuComponent",
+      "label": "Account Menu",
+      "slug": "account-menu",
+      "selector": "cs-account-menu",
+      "category": "navigation",
+      "description": "Account Menu public API."
+    },
+    {
+      "name": "AchievementCardComponent",
+      "label": "Achievement Card",
+      "slug": "achievement-card",
+      "selector": "cs-achievement-card",
+      "category": "workflows",
+      "description": "Achievement Card public API."
+    },
+    {
+      "name": "ActionBarComponent",
+      "label": "Action Bar",
+      "slug": "action-bar",
+      "selector": "cs-action-bar",
+      "category": "foundations",
+      "description": "Action Bar public API."
+    },
+    {
+      "name": "AlertComponent",
+      "label": "Alert",
+      "slug": "alert",
+      "selector": "cs-alert",
+      "category": "foundations",
+      "description": "Alert public API."
+    },
+    {
+      "name": "AnnouncementComposerComponent",
+      "label": "Announcement Composer",
+      "slug": "announcement-composer",
+      "selector": "cs-announcement-composer",
+      "category": "communication",
+      "description": "Announcement Composer public API."
+    },
+    {
+      "name": "AssessmentEditorComponent",
+      "label": "Assessment Editor",
+      "slug": "assessment-editor",
+      "selector": "cs-assessment-editor",
+      "category": "workflows",
+      "description": "Assessment Editor public API."
+    },
+    {
+      "name": "AssignmentCardComponent",
+      "label": "Assignment Card",
+      "slug": "assignment-card",
+      "selector": "cs-assignment-card",
+      "category": "workflows",
+      "description": "Assignment Card public API."
+    },
+    {
+      "name": "AttachmentListComponent",
+      "label": "Attachment List",
+      "slug": "attachment-list",
+      "selector": "cs-attachment-list",
+      "category": "communication",
+      "description": "Attachment List public API."
+    },
+    {
+      "name": "AttendanceChoiceComponent",
+      "label": "Attendance Choice",
+      "slug": "attendance-choice",
+      "selector": "cs-attendance-choice",
+      "category": "workflows",
+      "description": "Attendance Choice public API."
+    },
+    {
+      "name": "AttendanceRosterComponent",
+      "label": "Attendance Roster",
+      "slug": "attendance-roster",
+      "selector": "cs-attendance-roster",
+      "category": "workflows",
+      "description": "Attendance Roster public API."
+    },
+    {
+      "name": "AuditLogComponent",
+      "label": "Audit Log",
+      "slug": "audit-log",
+      "selector": "cs-audit-log",
+      "category": "workflows",
+      "description": "Audit Log public API."
+    },
+    {
+      "name": "AuthCardComponent",
+      "label": "Auth Card",
+      "slug": "auth-card",
+      "selector": "cs-auth-card",
+      "category": "marketing",
+      "description": "Auth Card public API."
+    },
+    {
+      "name": "AuthLayoutComponent",
+      "label": "Auth Layout",
+      "slug": "auth-layout",
+      "selector": "cs-auth-layout",
+      "category": "marketing",
+      "description": "Auth Layout public API."
+    },
+    {
+      "name": "AvatarComponent",
+      "label": "Avatar",
+      "slug": "avatar",
+      "selector": "cs-avatar",
+      "category": "foundations",
+      "description": "Avatar public API."
+    },
+    {
+      "name": "AvatarStackComponent",
+      "label": "Avatar Stack",
+      "slug": "avatar-stack",
+      "selector": "cs-avatar-stack",
+      "category": "foundations",
+      "description": "Avatar Stack public API."
+    },
+    {
+      "name": "BadgeCollectionComponent",
+      "label": "Badge Collection",
+      "slug": "badge-collection",
+      "selector": "cs-badge-collection",
+      "category": "workflows",
+      "description": "Badge Collection public API."
+    },
+    {
+      "name": "BadgeComponent",
+      "label": "Badge",
+      "slug": "badge",
+      "selector": "cs-badge",
+      "category": "foundations",
+      "description": "Badge public API."
+    },
+    {
+      "name": "BottomNavComponent",
+      "label": "Bottom Nav",
+      "slug": "bottom-nav",
+      "selector": "cs-bottom-nav",
+      "category": "navigation",
+      "description": "Bottom Nav public API."
+    },
+    {
+      "name": "BrandLockupComponent",
+      "label": "Brand Lockup",
+      "slug": "brand-lockup",
+      "selector": "cs-brand-lockup",
+      "category": "marketing",
+      "description": "Brand Lockup public API."
+    },
+    {
+      "name": "BreadcrumbsComponent",
+      "label": "Breadcrumbs",
+      "slug": "breadcrumbs",
+      "selector": "cs-breadcrumbs",
+      "category": "navigation",
+      "description": "Breadcrumbs public API."
+    },
+    {
+      "name": "ButtonGroupComponent",
+      "label": "Button Group",
+      "slug": "button-group",
+      "selector": "cs-button-group",
+      "category": "foundations",
+      "description": "Button Group public API."
+    },
+    {
+      "name": "CalendarComponent",
+      "label": "Calendar",
+      "slug": "calendar",
+      "selector": "cs-calendar",
+      "category": "communication",
+      "description": "Calendar public API."
+    },
+    {
+      "name": "CardComponent",
+      "label": "Card",
+      "slug": "card",
+      "selector": "cs-card",
+      "category": "foundations",
+      "description": "Card public API."
+    },
+    {
+      "name": "CheckboxComponent",
+      "label": "Checkbox",
+      "slug": "checkbox",
+      "selector": "cs-checkbox",
+      "category": "forms",
+      "description": "Checkbox public API."
+    },
+    {
+      "name": "ChipListComponent",
+      "label": "Chip List",
+      "slug": "chip-list",
+      "selector": "cs-chip-list",
+      "category": "data-display",
+      "description": "Chip List public API."
+    },
+    {
+      "name": "ChoiceCardComponent",
+      "label": "Choice Card",
+      "slug": "choice-card",
+      "selector": "cs-choice-card",
+      "category": "forms",
+      "description": "Choice Card public API."
+    },
+    {
+      "name": "ChoiceGroupComponent",
+      "label": "Choice Group",
+      "slug": "choice-group",
+      "selector": "cs-choice-group",
+      "category": "forms",
+      "description": "Choice Group public API."
+    },
+    {
+      "name": "CodeBlockComponent",
+      "label": "Code Block",
+      "slug": "code-block",
+      "selector": "cs-code-block",
+      "category": "communication",
+      "description": "Code Block public API."
+    },
+    {
+      "name": "CodeEditorComponent",
+      "label": "Code Editor",
+      "slug": "code-editor",
+      "selector": "cs-code-editor",
+      "category": "communication",
+      "description": "Code Editor public API."
+    },
+    {
+      "name": "ComboboxComponent",
+      "label": "Combobox",
+      "slug": "combobox",
+      "selector": "cs-combobox",
+      "category": "forms",
+      "description": "Combobox public API."
+    },
+    {
+      "name": "ComparisonChartComponent",
+      "label": "Comparison Chart",
+      "slug": "comparison-chart",
+      "selector": "cs-comparison-chart",
+      "category": "data-display",
+      "description": "Comparison Chart public API."
+    },
+    {
+      "name": "CompetencyGridComponent",
+      "label": "Competency Grid",
+      "slug": "competency-grid",
+      "selector": "cs-competency-grid",
+      "category": "workflows",
+      "description": "Competency Grid public API."
+    },
+    {
+      "name": "ConfirmDialogComponent",
+      "label": "Confirm Dialog",
+      "slug": "confirm-dialog",
+      "selector": "cs-confirm-dialog",
+      "category": "overlays",
+      "description": "Confirm Dialog public API."
+    },
+    {
+      "name": "ConsentPanelComponent",
+      "label": "Consent Panel",
+      "slug": "consent-panel",
+      "selector": "cs-consent-panel",
+      "category": "workflows",
+      "description": "Consent Panel public API."
+    },
+    {
+      "name": "ContainerComponent",
+      "label": "Container",
+      "slug": "container",
+      "selector": "cs-container",
+      "category": "foundations",
+      "description": "Container public API."
+    },
+    {
+      "name": "ContentSectionComponent",
+      "label": "Content Section",
+      "slug": "content-section",
+      "selector": "cs-content-section",
+      "category": "marketing",
+      "description": "Content Section public API."
+    },
+    {
+      "name": "ConversationItemComponent",
+      "label": "Conversation Item",
+      "slug": "conversation-item",
+      "selector": "cs-conversation-item",
+      "category": "communication",
+      "description": "Conversation Item public API."
+    },
+    {
+      "name": "ConversationListComponent",
+      "label": "Conversation List",
+      "slug": "conversation-list",
+      "selector": "cs-conversation-list",
+      "category": "communication",
+      "description": "Conversation List public API."
+    },
+    {
+      "name": "CountdownComponent",
+      "label": "Countdown",
+      "slug": "countdown",
+      "selector": "cs-countdown",
+      "category": "communication",
+      "description": "A countdown driven by the consumer's clock, with no background timer."
+    },
+    {
+      "name": "CsvImportWizardComponent",
+      "label": "Csv Import Wizard",
+      "slug": "csv-import-wizard",
+      "selector": "cs-csv-import-wizard",
+      "category": "workflows",
+      "description": "Csv Import Wizard public API."
+    },
+    {
+      "name": "CtaSectionComponent",
+      "label": "Cta Section",
+      "slug": "cta-section",
+      "selector": "cs-cta-section",
+      "category": "marketing",
+      "description": "Cta Section public API."
+    },
+    {
+      "name": "CurriculumEditorComponent",
+      "label": "Curriculum Editor",
+      "slug": "curriculum-editor",
+      "selector": "cs-curriculum-editor",
+      "category": "workflows",
+      "description": "Curriculum Editor public API."
+    },
+    {
+      "name": "CurriculumTreeComponent",
+      "label": "Curriculum Tree",
+      "slug": "curriculum-tree",
+      "selector": "cs-curriculum-tree",
+      "category": "workflows",
+      "description": "Curriculum Tree public API."
+    },
+    {
+      "name": "DataStateOutletComponent",
+      "label": "Data State Outlet",
+      "slug": "data-state-outlet",
+      "selector": "cs-data-state-outlet",
+      "category": "data-display",
+      "description": "Data State Outlet public API."
+    },
+    {
+      "name": "DataToolbarComponent",
+      "label": "Data Toolbar",
+      "slug": "data-toolbar",
+      "selector": "cs-data-toolbar",
+      "category": "data-display",
+      "description": "Data Toolbar public API."
+    },
+    {
+      "name": "DateFieldComponent",
+      "label": "Date Field",
+      "slug": "date-field",
+      "selector": "cs-date-field",
+      "category": "forms",
+      "description": "Date Field public API."
+    },
+    {
+      "name": "DateTimeFieldComponent",
+      "label": "Date Time Field",
+      "slug": "date-time-field",
+      "selector": "cs-date-time-field",
+      "category": "forms",
+      "description": "Date Time Field public API."
+    },
+    {
+      "name": "DefinitionListComponent",
+      "label": "Definition List",
+      "slug": "definition-list",
+      "selector": "cs-definition-list",
+      "category": "data-display",
+      "description": "Definition List public API."
+    },
+    {
+      "name": "DialogShellComponent",
+      "label": "Dialog Shell",
+      "slug": "dialog-shell",
+      "selector": "cs-dialog-shell",
+      "category": "overlays",
+      "description": "Dialog Shell public API."
+    },
+    {
+      "name": "DividerComponent",
+      "label": "Divider",
+      "slug": "divider",
+      "selector": "cs-divider",
+      "category": "foundations",
+      "description": "Divider public API."
+    },
+    {
+      "name": "DrawerComponent",
+      "label": "Drawer",
+      "slug": "drawer",
+      "selector": "cs-drawer",
+      "category": "overlays",
+      "description": "Drawer public API."
+    },
+    {
+      "name": "DrawerContainerComponent",
+      "label": "Drawer Container",
+      "slug": "drawer-container",
+      "selector": "cs-drawer-container",
+      "category": "overlays",
+      "description": "Drawer Container public API."
+    },
+    {
+      "name": "DropzoneComponent",
+      "label": "Dropzone",
+      "slug": "dropzone",
+      "selector": "cs-dropzone",
+      "category": "forms",
+      "description": "Dropzone public API."
+    },
+    {
+      "name": "EmptyStateComponent",
+      "label": "Empty State",
+      "slug": "empty-state",
+      "selector": "cs-empty-state",
+      "category": "data-display",
+      "description": "Empty State public API."
+    },
+    {
+      "name": "EventCardComponent",
+      "label": "Event Card",
+      "slug": "event-card",
+      "selector": "cs-event-card",
+      "category": "communication",
+      "description": "Event Card public API."
+    },
+    {
+      "name": "EvidencePreviewComponent",
+      "label": "Evidence Preview",
+      "slug": "evidence-preview",
+      "selector": "cs-evidence-preview",
+      "category": "communication",
+      "description": "Evidence Preview public API."
+    },
+    {
+      "name": "FieldComponent",
+      "label": "Field",
+      "slug": "field",
+      "selector": "cs-field",
+      "category": "forms",
+      "description": "Field public API."
+    },
+    {
+      "name": "FilePickerComponent",
+      "label": "File Picker",
+      "slug": "file-picker",
+      "selector": "cs-file-picker",
+      "category": "forms",
+      "description": "File Picker public API."
+    },
+    {
+      "name": "FileSummaryComponent",
+      "label": "File Summary",
+      "slug": "file-summary",
+      "selector": "cs-file-summary",
+      "category": "forms",
+      "description": "File Summary public API."
+    },
+    {
+      "name": "FormActionsComponent",
+      "label": "Form Actions",
+      "slug": "form-actions",
+      "selector": "cs-form-actions",
+      "category": "forms",
+      "description": "Form Actions public API."
+    },
+    {
+      "name": "GateComponent",
+      "label": "Gate",
+      "slug": "gate",
+      "selector": "cs-gate",
+      "category": "process",
+      "description": "Gate public API."
+    },
+    {
+      "name": "GratitudeNoteComponent",
+      "label": "Gratitude Note",
+      "slug": "gratitude-note",
+      "selector": "cs-gratitude-note",
+      "category": "process",
+      "description": "Gratitude Note public API."
+    },
+    {
+      "name": "GratitudeWallComponent",
+      "label": "Gratitude Wall",
+      "slug": "gratitude-wall",
+      "selector": "cs-gratitude-wall",
+      "category": "process",
+      "description": "Gratitude Wall public API."
+    },
+    {
+      "name": "HeroComponent",
+      "label": "Hero",
+      "slug": "hero",
+      "selector": "cs-hero",
+      "category": "marketing",
+      "description": "Hero public API."
+    },
+    {
+      "name": "IconComponent",
+      "label": "Icon",
+      "slug": "icon",
+      "selector": "cs-icon",
+      "category": "foundations",
+      "description": "Icon public API."
+    },
+    {
+      "name": "InputGroupComponent",
+      "label": "Input Group",
+      "slug": "input-group",
+      "selector": "cs-input-group",
+      "category": "forms",
+      "description": "Input Group public API."
+    },
+    {
+      "name": "KanbanBoardComponent",
+      "label": "Kanban Board",
+      "slug": "kanban-board",
+      "selector": "cs-kanban-board",
+      "category": "process",
+      "description": "Kanban Board public API."
+    },
+    {
+      "name": "KanbanColumnComponent",
+      "label": "Kanban Column",
+      "slug": "kanban-column",
+      "selector": "cs-kanban-column",
+      "category": "process",
+      "description": "Kanban Column public API."
+    },
+    {
+      "name": "KpiComponent",
+      "label": "Kpi",
+      "slug": "kpi",
+      "selector": "cs-kpi",
+      "category": "data-display",
+      "description": "Kpi public API."
+    },
+    {
+      "name": "LearningJourneyComponent",
+      "label": "Learning Journey",
+      "slug": "learning-journey",
+      "selector": "cs-learning-journey",
+      "category": "workflows",
+      "description": "Learning Journey public API."
+    },
+    {
+      "name": "LessonStepListComponent",
+      "label": "Lesson Step List",
+      "slug": "lesson-step-list",
+      "selector": "cs-lesson-step-list",
+      "category": "workflows",
+      "description": "Lesson Step List public API."
+    },
+    {
+      "name": "ListComponent",
+      "label": "List",
+      "slug": "list",
+      "selector": "cs-list",
+      "category": "data-display",
+      "description": "List public API."
+    },
+    {
+      "name": "ListItemComponent",
+      "label": "List Item",
+      "slug": "list-item",
+      "selector": "cs-list-item",
+      "category": "data-display",
+      "description": "List Item public API."
+    },
+    {
+      "name": "LogoMarkComponent",
+      "label": "Logo Mark",
+      "slug": "logo-mark",
+      "selector": "cs-logo-mark",
+      "category": "marketing",
+      "description": "Logo Mark public API."
+    },
+    {
+      "name": "MarketingFooterComponent",
+      "label": "Marketing Footer",
+      "slug": "marketing-footer",
+      "selector": "cs-marketing-footer",
+      "category": "navigation",
+      "description": "Marketing Footer public API."
+    },
+    {
+      "name": "MarketingHeaderComponent",
+      "label": "Marketing Header",
+      "slug": "marketing-header",
+      "selector": "cs-marketing-header",
+      "category": "navigation",
+      "description": "Marketing Header public API."
+    },
+    {
+      "name": "MediaViewerComponent",
+      "label": "Media Viewer",
+      "slug": "media-viewer",
+      "selector": "cs-media-viewer",
+      "category": "communication",
+      "description": "Media Viewer public API."
+    },
+    {
+      "name": "MessageComposerComponent",
+      "label": "Message Composer",
+      "slug": "message-composer",
+      "selector": "cs-message-composer",
+      "category": "communication",
+      "description": "Message Composer public API."
+    },
+    {
+      "name": "MessageThreadComponent",
+      "label": "Message Thread",
+      "slug": "message-thread",
+      "selector": "cs-message-thread",
+      "category": "communication",
+      "description": "Message Thread public API."
+    },
+    {
+      "name": "MetricBarsComponent",
+      "label": "Metric Bars",
+      "slug": "metric-bars",
+      "selector": "cs-metric-bars",
+      "category": "data-display",
+      "description": "Metric Bars public API."
+    },
+    {
+      "name": "MetricLegendComponent",
+      "label": "Metric Legend",
+      "slug": "metric-legend",
+      "selector": "cs-metric-legend",
+      "category": "data-display",
+      "description": "Metric Legend public API."
+    },
+    {
+      "name": "MetricValueTableComponent",
+      "label": "Metric Value Table",
+      "slug": "metric-value-table",
+      "selector": "cs-metric-value-table",
+      "category": "data-display",
+      "description": "Metric Value Table public API."
+    },
+    {
+      "name": "MovementDialComponent",
+      "label": "Movement Dial",
+      "slug": "movement-dial",
+      "selector": "cs-movement-dial",
+      "category": "process",
+      "description": "Movement Dial public API."
+    },
+    {
+      "name": "MovementListComponent",
+      "label": "Movement List",
+      "slug": "movement-list",
+      "selector": "cs-movement-list",
+      "category": "process",
+      "description": "Movement List public API."
+    },
+    {
+      "name": "NavGroupComponent",
+      "label": "Nav Group",
+      "slug": "nav-group",
+      "selector": "cs-nav-group",
+      "category": "navigation",
+      "description": "Nav Group public API."
+    },
+    {
+      "name": "NotificationItemComponent",
+      "label": "Notification Item",
+      "slug": "notification-item",
+      "selector": "cs-notification-item",
+      "category": "communication",
+      "description": "Notification Item public API."
+    },
+    {
+      "name": "NotificationListComponent",
+      "label": "Notification List",
+      "slug": "notification-list",
+      "selector": "cs-notification-list",
+      "category": "communication",
+      "description": "Notification List public API."
+    },
+    {
+      "name": "OfflineBannerComponent",
+      "label": "Offline Banner",
+      "slug": "offline-banner",
+      "selector": "cs-offline-banner",
+      "category": "data-display",
+      "description": "Offline Banner public API."
+    },
+    {
+      "name": "PageComponent",
+      "label": "Page",
+      "slug": "page",
+      "selector": "cs-page",
+      "category": "foundations",
+      "description": "Page public API."
+    },
+    {
+      "name": "PaginatorComponent",
+      "label": "Paginator",
+      "slug": "paginator",
+      "selector": "cs-paginator",
+      "category": "navigation",
+      "description": "Paginator public API."
+    },
+    {
+      "name": "PeopleDirectoryComponent",
+      "label": "People Directory",
+      "slug": "people-directory",
+      "selector": "cs-people-directory",
+      "category": "workflows",
+      "description": "People Directory public API."
+    },
+    {
+      "name": "PersonComponent",
+      "label": "Person",
+      "slug": "person",
+      "selector": "cs-person",
+      "category": "data-display",
+      "description": "Person public API."
+    },
+    {
+      "name": "PersonRowComponent",
+      "label": "Person Row",
+      "slug": "person-row",
+      "selector": "cs-person-row",
+      "category": "workflows",
+      "description": "Person Row public API."
+    },
+    {
+      "name": "PersonSummaryComponent",
+      "label": "Person Summary",
+      "slug": "person-summary",
+      "selector": "cs-person-summary",
+      "category": "workflows",
+      "description": "Person Summary public API."
+    },
+    {
+      "name": "PhaseLaneComponent",
+      "label": "Phase Lane",
+      "slug": "phase-lane",
+      "selector": "cs-phase-lane",
+      "category": "process",
+      "description": "Phase Lane public API."
+    },
+    {
+      "name": "PillComponent",
+      "label": "Pill",
+      "slug": "pill",
+      "selector": "cs-pill",
+      "category": "foundations",
+      "description": "Pill public API."
+    },
+    {
+      "name": "PipStripComponent",
+      "label": "Pip Strip",
+      "slug": "pip-strip",
+      "selector": "cs-pip-strip",
+      "category": "process",
+      "description": "Pip Strip public API."
+    },
+    {
+      "name": "PopoverComponent",
+      "label": "Popover",
+      "slug": "popover",
+      "selector": "cs-popover",
+      "category": "navigation",
+      "description": "Popover public API."
+    },
+    {
+      "name": "PreviewPaneComponent",
+      "label": "Preview Pane",
+      "slug": "preview-pane",
+      "selector": "cs-preview-pane",
+      "category": "communication",
+      "description": "Preview Pane public API."
+    },
+    {
+      "name": "ProcessJourneyComponent",
+      "label": "Process Journey",
+      "slug": "process-journey",
+      "selector": "cs-process-journey",
+      "category": "process",
+      "description": "Process Journey public API."
+    },
+    {
+      "name": "ProcessRailComponent",
+      "label": "Process Rail",
+      "slug": "process-rail",
+      "selector": "cs-process-rail",
+      "category": "process",
+      "description": "Process Rail public API."
+    },
+    {
+      "name": "ProgressBarComponent",
+      "label": "Progress Bar",
+      "slug": "progress-bar",
+      "selector": "cs-progress-bar",
+      "category": "foundations",
+      "description": "Progress Bar public API."
+    },
+    {
+      "name": "ProgressionBuilderComponent",
+      "label": "Progression Builder",
+      "slug": "progression-builder",
+      "selector": "cs-progression-builder",
+      "category": "workflows",
+      "description": "Progression Builder public API."
+    },
+    {
+      "name": "ProgressMatrixComponent",
+      "label": "Progress Matrix",
+      "slug": "progress-matrix",
+      "selector": "cs-progress-matrix",
+      "category": "data-display",
+      "description": "Progress Matrix public API."
+    },
+    {
+      "name": "ProgressRingComponent",
+      "label": "Progress Ring",
+      "slug": "progress-ring",
+      "selector": "cs-progress-ring",
+      "category": "foundations",
+      "description": "Progress Ring public API."
+    },
+    {
+      "name": "ProjectCardComponent",
+      "label": "Project Card",
+      "slug": "project-card",
+      "selector": "cs-project-card",
+      "category": "process",
+      "description": "Project Card public API."
+    },
+    {
+      "name": "QuizComponent",
+      "label": "Quiz",
+      "slug": "quiz",
+      "selector": "cs-quiz",
+      "category": "workflows",
+      "description": "Quiz public API."
+    },
+    {
+      "name": "QuizQuestionComponent",
+      "label": "Quiz Question",
+      "slug": "quiz-question",
+      "selector": "cs-quiz-question",
+      "category": "workflows",
+      "description": "Quiz Question public API."
+    },
+    {
+      "name": "QuizResultComponent",
+      "label": "Quiz Result",
+      "slug": "quiz-result",
+      "selector": "cs-quiz-result",
+      "category": "workflows",
+      "description": "Quiz Result public API."
+    },
+    {
+      "name": "RadioComponent",
+      "label": "Radio",
+      "slug": "radio",
+      "selector": "cs-radio",
+      "category": "forms",
+      "description": "Radio public API."
+    },
+    {
+      "name": "RadioGroupComponent",
+      "label": "Radio Group",
+      "slug": "radio-group",
+      "selector": "cs-radio-group",
+      "category": "forms",
+      "description": "Radio Group public API."
+    },
+    {
+      "name": "RaffleStageComponent",
+      "label": "Raffle Stage",
+      "slug": "raffle-stage",
+      "selector": "cs-raffle-stage",
+      "category": "communication",
+      "description": "Presents a consumer-supplied draw; never generates a winner or stores participant data."
+    },
+    {
+      "name": "RecordTabsComponent",
+      "label": "Record Tabs",
+      "slug": "record-tabs",
+      "selector": "cs-record-tabs",
+      "category": "workflows",
+      "description": "Record Tabs public API."
+    },
+    {
+      "name": "ReportDashboardComponent",
+      "label": "Report Dashboard",
+      "slug": "report-dashboard",
+      "selector": "cs-report-dashboard",
+      "category": "workflows",
+      "description": "Report Dashboard public API."
+    },
+    {
+      "name": "ReportFiltersComponent",
+      "label": "Report Filters",
+      "slug": "report-filters",
+      "selector": "cs-report-filters",
+      "category": "workflows",
+      "description": "Report Filters public API."
+    },
+    {
+      "name": "RequirementChecklistComponent",
+      "label": "Requirement Checklist",
+      "slug": "requirement-checklist",
+      "selector": "cs-requirement-checklist",
+      "category": "process",
+      "description": "Requirement Checklist public API."
+    },
+    {
+      "name": "ReviewDialogComponent",
+      "label": "Review Dialog",
+      "slug": "review-dialog",
+      "selector": "cs-review-dialog",
+      "category": "overlays",
+      "description": "A controlled native modal dialog. Consumers set open=false after a dismissal request."
+    },
+    {
+      "name": "RubricComponent",
+      "label": "Rubric",
+      "slug": "rubric",
+      "selector": "cs-rubric",
+      "category": "workflows",
+      "description": "Rubric public API."
+    },
+    {
+      "name": "ScheduleListComponent",
+      "label": "Schedule List",
+      "slug": "schedule-list",
+      "selector": "cs-schedule-list",
+      "category": "communication",
+      "description": "Schedule List public API."
+    },
+    {
+      "name": "ScriptureQuoteComponent",
+      "label": "Scripture Quote",
+      "slug": "scripture-quote",
+      "selector": "cs-scripture-quote",
+      "category": "data-display",
+      "description": "Scripture Quote public API."
+    },
+    {
+      "name": "SearchFieldComponent",
+      "label": "Search Field",
+      "slug": "search-field",
+      "selector": "cs-search-field",
+      "category": "forms",
+      "description": "Search Field public API."
+    },
+    {
+      "name": "SectionComponent",
+      "label": "Section",
+      "slug": "section",
+      "selector": "cs-section",
+      "category": "foundations",
+      "description": "Section public API."
+    },
+    {
+      "name": "SectionHeaderComponent",
+      "label": "Section Header",
+      "slug": "section-header",
+      "selector": "cs-section-header",
+      "category": "foundations",
+      "description": "Section Header public API."
+    },
+    {
+      "name": "SegmentedControlComponent",
+      "label": "Segmented Control",
+      "slug": "segmented-control",
+      "selector": "cs-segmented-control",
+      "category": "navigation",
+      "description": "Segmented Control public API."
+    },
+    {
+      "name": "ShellComponent",
+      "label": "Shell",
+      "slug": "shell",
+      "selector": "cs-shell",
+      "category": "navigation",
+      "description": "Shell public API."
+    },
+    {
+      "name": "SidenavComponent",
+      "label": "Sidenav",
+      "slug": "sidenav",
+      "selector": "cs-sidenav",
+      "category": "navigation",
+      "description": "Sidenav public API."
+    },
+    {
+      "name": "SkeletonComponent",
+      "label": "Skeleton",
+      "slug": "skeleton",
+      "selector": "cs-skeleton",
+      "category": "foundations",
+      "description": "Skeleton public API."
+    },
+    {
+      "name": "SkeletonGroupComponent",
+      "label": "Skeleton Group",
+      "slug": "skeleton-group",
+      "selector": "cs-skeleton-group",
+      "category": "foundations",
+      "description": "Skeleton Group public API."
+    },
+    {
+      "name": "SpinnerComponent",
+      "label": "Spinner",
+      "slug": "spinner",
+      "selector": "cs-spinner",
+      "category": "foundations",
+      "description": "Spinner public API."
+    },
+    {
+      "name": "StatCardComponent",
+      "label": "Stat Card",
+      "slug": "stat-card",
+      "selector": "cs-stat-card",
+      "category": "data-display",
+      "description": "Stat Card public API."
+    },
+    {
+      "name": "StatePageComponent",
+      "label": "State Page",
+      "slug": "state-page",
+      "selector": "cs-state-page",
+      "category": "data-display",
+      "description": "State Page public API."
+    },
+    {
+      "name": "StatusRegionComponent",
+      "label": "Status Region",
+      "slug": "status-region",
+      "selector": "cs-status-region",
+      "category": "platform",
+      "description": "Status Region public API."
+    },
+    {
+      "name": "SubmissionStatusComponent",
+      "label": "Submission Status",
+      "slug": "submission-status",
+      "selector": "cs-submission-status",
+      "category": "workflows",
+      "description": "Submission Status public API."
+    },
+    {
+      "name": "SwitchComponent",
+      "label": "Switch",
+      "slug": "switch",
+      "selector": "cs-switch",
+      "category": "forms",
+      "description": "Switch public API."
+    },
+    {
+      "name": "TabComponent",
+      "label": "Tab",
+      "slug": "tab",
+      "selector": "cs-tab",
+      "category": "navigation",
+      "description": "Tab public API."
+    },
+    {
+      "name": "TabGroupComponent",
+      "label": "Tab Group",
+      "slug": "tab-group",
+      "selector": "cs-tab-group",
+      "category": "navigation",
+      "description": "Tab Group public API."
+    },
+    {
+      "name": "TableContainerComponent",
+      "label": "Table Container",
+      "slug": "table-container",
+      "selector": "cs-table-container",
+      "category": "data-display",
+      "description": "Table Container public API."
+    },
+    {
+      "name": "TeamBoardComponent",
+      "label": "Team Board",
+      "slug": "team-board",
+      "selector": "cs-team-board",
+      "category": "workflows",
+      "description": "Controlled team membership and project assignment; emits intent without persistence."
+    },
+    {
+      "name": "TimelineComponent",
+      "label": "Timeline",
+      "slug": "timeline",
+      "selector": "cs-timeline",
+      "category": "data-display",
+      "description": "Timeline public API."
+    },
+    {
+      "name": "ToastOutletComponent",
+      "label": "Toast Outlet",
+      "slug": "toast-outlet",
+      "selector": "cs-toast-outlet",
+      "category": "data-display",
+      "description": "Toast Outlet public API."
+    },
+    {
+      "name": "ToolbarComponent",
+      "label": "Toolbar",
+      "slug": "toolbar",
+      "selector": "cs-toolbar",
+      "category": "foundations",
+      "description": "Toolbar public API."
+    },
+    {
+      "name": "TopbarComponent",
+      "label": "Topbar",
+      "slug": "topbar",
+      "selector": "cs-topbar",
+      "category": "navigation",
+      "description": "Topbar public API."
+    },
+    {
+      "name": "UnsavedChangesDialogComponent",
+      "label": "Unsaved Changes Dialog",
+      "slug": "unsaved-changes-dialog",
+      "selector": "cs-unsaved-changes-dialog",
+      "category": "overlays",
+      "description": "Unsaved Changes Dialog public API."
+    },
+    {
+      "name": "ValidationSummaryComponent",
+      "label": "Validation Summary",
+      "slug": "validation-summary",
+      "selector": "cs-validation-summary",
+      "category": "forms",
+      "description": "Validation Summary public API."
+    },
+    {
+      "name": "WizardComponent",
+      "label": "Wizard",
+      "slug": "wizard",
+      "selector": "cs-wizard",
+      "category": "forms",
+      "description": "Wizard public API."
+    },
+    {
+      "name": "WorkItemCardComponent",
+      "label": "Work Item Card",
+      "slug": "work-item-card",
+      "selector": "cs-work-item-card",
+      "category": "process",
+      "description": "Work Item Card public API."
+    }
+  ]
+}

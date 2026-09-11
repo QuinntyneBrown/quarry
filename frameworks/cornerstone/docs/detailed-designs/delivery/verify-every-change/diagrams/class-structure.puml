@@ -1,0 +1,135 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Verify every change
+
+enum CsCheckOutcome {
+  passed
+  failed
+  skipped
+}
+
+enum CsThemeName {
+  light
+  dark
+}
+
+class CsTraceRecord {
+  +specPath: string
+  +declaredIds: readonly string[]
+  +headerLine: number
+}
+
+class CsTraceabilityResult {
+  +covered: ReadonlySet<string>
+  +declared: ReadonlySet<string>
+  +uncoveredIds: readonly string[]
+  +unknownIds: readonly string[]
+  +outcome: CsCheckOutcome
+}
+
+class CsCoverageThresholds {
+  +statements: number
+  +branches: number
+  +functions: number
+  +lines: number
+}
+
+class CsPublicSurfaceCoverage {
+  +exportedSymbols: readonly string[]
+  +coveredSymbols: readonly string[]
+  +uncoveredSymbols: readonly string[]
+}
+
+class CsVisualBaseline {
+  +componentName: string
+  +variantLabel: string
+  +theme: CsThemeName
+  +viewportWidth: number
+  +imagePath: string
+  +approvedInVersion: string
+}
+
+class CsVisualComparison {
+  +baseline: CsVisualBaseline
+  +renderedPath: string
+  +differingPixels: number
+  +diffPath: string | null
+  +outcome: CsCheckOutcome
+}
+
+class CsSupportedBrowser {
+  +engine: string
+  +minimumVersion: string
+}
+
+class CsScreenReaderVerification {
+  +componentName: string
+  +ariaPattern: string
+  +screenReader: string
+  +browser: string
+  +libraryVersion: string
+  +verifiedOn: string
+  +verifier: string
+}
+
+class CsVerificationReport {
+  +formatting: CsCheckOutcome
+  +unitCoverage: CsCheckOutcome
+  +surfaceCoverage: CsPublicSurfaceCoverage
+  +visual: readonly CsVisualComparison[]
+  +crossBrowser: Map<CsSupportedBrowser, CsCheckOutcome>
+  +traceability: CsTraceabilityResult
+  +overall(): CsCheckOutcome
+}
+
+interface CsVerificationCheck {
+  +name: string
+  +run(): Promise<CsCheckOutcome>
+  +describeFailure(): string
+}
+
+class CsTraceabilityGate {
+  +parse(specPath: string): CsTraceRecord
+  +declaredIds(specFile: string): ReadonlySet<string>
+  +run(): Promise<CsCheckOutcome>
+}
+
+class CsVisualRunner {
+  +baselines: readonly CsVisualBaseline[]
+  +render(baseline: CsVisualBaseline): string
+  +run(): Promise<CsCheckOutcome>
+}
+
+class CsCrossBrowserRunner {
+  +browsers: readonly CsSupportedBrowser[]
+  +run(): Promise<CsCheckOutcome>
+}
+
+CsTraceabilityGate ..|> CsVerificationCheck
+CsVisualRunner ..|> CsVerificationCheck
+CsCrossBrowserRunner ..|> CsVerificationCheck
+CsTraceabilityGate --> "0..*" CsTraceRecord : parses
+CsTraceabilityGate ..> CsTraceabilityResult : produces
+CsVisualRunner --> "1..*" CsVisualBaseline : compares against
+CsVisualRunner ..> CsVisualComparison : produces
+CsVisualComparison --> "1" CsVisualBaseline : refers to
+CsVisualBaseline --> CsThemeName : is captured under
+CsCrossBrowserRunner --> "1..*" CsSupportedBrowser : runs in
+CsVerificationReport *-- "0..*" CsVisualComparison : aggregates
+CsVerificationReport *-- "1" CsTraceabilityResult : aggregates
+CsVerificationReport *-- "1" CsPublicSurfaceCoverage : aggregates
+CsVerificationReport ..> CsCoverageThresholds : compares against
+CsVerificationReport ..> CsScreenReaderVerification : confirms presence of
+CsVerificationReport --> CsCheckOutcome : reports
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Bridge legacy markup
+
+Person(dev, "Application developer", "Opts in to the bridge and migrates templates")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(theme, "Theme stylesheet", "theme.scss over tokens and components", "Loaded by every consumer; references no compatibility partial")
+  Container(compat, "Compatibility stylesheet", "compat.scss over tokens, word-up-compat, and liturgy-compat", "Reproduces both legacy vocabularies on the token layer")
+  Container(lib, "Component library", "Angular standalone components", "The cs- replacements the mapping names")
+  Container(mapping, "Migration guide", "docs/specs/migration.md", "One row per legacy family with its replacement or an explicit gap")
+  Container(criteria, "Bridge removal criteria", "Declared conditions and measurements", "Decides when the compatibility stylesheet may be removed")
+  Container(docs, "Documentation site", "Angular application", "Publishes the migration guide as one of its seven guides")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(build, "Build configuration", "angular.json styles array", "Names the theme subpath and, when opted in, the compatibility subpath")
+  Container(templates, "Application templates", "HTML with legacy classes and cs- components", "Migrated one screen at a time")
+}
+
+System_Ext(npm, "npm registry", "Publishes ./styles/theme.scss and ./styles/compat.scss")
+System_Ext(actions, "GitHub Actions", "CI verify job")
+
+Rel(dev, build, "Adds the compatibility subpath after the theme in")
+Rel(build, npm, "Resolves both style subpaths from")
+Rel(compat, theme, "Shares the token layer with")
+Rel(compat, templates, "Preserves the rendering of")
+Rel(templates, lib, "Adopts cs- components from, screen by screen")
+Rel(dev, mapping, "Chooses the next screen from")
+Rel(mapping, lib, "Names the replacement in")
+Rel(mapping, compat, "Enumerates every family declared by")
+Rel(criteria, mapping, "Reads open gaps from")
+Rel(criteria, templates, "Counts remaining legacy families in")
+Rel(actions, compat, "Measures the bundle cost of omitting")
+Rel(actions, mapping, "Checks for a row per declared family")
+Rel(docs, mapping, "Publishes")
+Rel(npm, compat, "Distributes only through its own export subpath")
+@enduml

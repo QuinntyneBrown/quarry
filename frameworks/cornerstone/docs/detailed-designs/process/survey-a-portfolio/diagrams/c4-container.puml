@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Survey a portfolio
+
+Person(user, "Application user", "Surveys projects by phase")
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the portfolio view model and provides the process adapter")
+  Container(services, "Application services", "Angular injectables", "Own phase names, colours, routes, and enforcement results")
+  Container(shell, "Application shell", "Angular components", "Hosts the page and the theme class")
+}
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "PhaseLaneComponent, ProjectCardComponent, GratitudeWallComponent, and GratitudeNoteComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the adapter palette names")
+  Container(docs, "Documentation site", "Angular application", "Publishes the adapter contract and a neutral example adapter")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver and LiveAnnouncer")
+System_Ext(browser, "Browser platform", "Cascade, layout, and accessibility tree")
+
+Rel(user, shell, "Surveys the portfolio in")
+Rel(shell, page, "Renders")
+Rel(services, page, "Supply phases, projects, notes, and enforcement results to")
+Rel(page, lib, "Provides the typed adapter to", "provideCsProcessAdapter()")
+Rel(lib, page, "Emits ProjectOpenIntent to", "output()")
+Rel(page, services, "Resolves the open intent into routing through")
+Rel(lib, theme, "Resolves the token named by the adapter palette from")
+Rel(lib, cdk, "Observes the XS breakpoint and announces the empty state through")
+Rel(lib, browser, "Renders labelled regions and figure semantics to")
+Rel(docs, lib, "Documents the adapter contract of")
+@enduml

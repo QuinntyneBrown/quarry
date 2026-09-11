@@ -1,0 +1,53 @@
+{
+  "kind": "class",
+  "name": "UnsavedChangesDialogComponent",
+  "sourcePath": "src/cornerstone/unsaved-changes-dialog/unsaved-changes-dialog.component.ts",
+  "category": "overlays",
+  "description": "Unsaved Changes Dialog public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Unsaved changes'",
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "choice",
+      "bindingName": "choice",
+      "role": "output",
+      "type": "UnsavedChangesChoice",
+      "required": false,
+      "description": "Choice public API.",
+      "structured": false,
+      "options": ["save", "discard", "cancel"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-unsaved-changes-dialog",
+  "slug": "unsaved-changes-dialog",
+  "label": "Unsaved Changes Dialog",
+  "tokens": [],
+  "relatedSymbols": ["confirmLeave", "UnsavedChangesChoice"],
+  "relatedEntries": [
+    {
+      "kind": "function",
+      "name": "confirmLeave",
+      "sourcePath": "src/cornerstone/unsaved-changes-dialog/confirm-leave.function.ts",
+      "category": "overlays",
+      "description": "Confirm Leave public API."
+    },
+    {
+      "kind": "type",
+      "name": "UnsavedChangesChoice",
+      "sourcePath": "src/cornerstone/unsaved-changes-dialog/unsaved-changes-choice.type.ts",
+      "category": "overlays",
+      "description": "Unsaved Changes Choice public API.",
+      "declaration": "'save' | 'discard' | 'cancel'"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+<nav [attr.aria-label]="label()">
+  @for (item of items(); track item.id) {
+    <button
+      type="button"
+      [class.active]="item.active"
+      [disabled]="item.disabled"
+      (click)="activated.emit({ id: item.id, source: 'pointer' })"
+    >
+      @if (item.icon) {
+        <cs-icon [name]="item.icon" />
+      }
+      <span>{{ item.label }}</span>
+      @if (item.badge) {
+        <small>{{ item.badge }}</small>
+      }
+    </button>
+  }
+</nav>

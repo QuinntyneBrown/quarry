@@ -1,0 +1,13 @@
+<div role="radiogroup">
+  @for (option of options(); track option.label) {
+    <button
+      type="button"
+      role="radio"
+      [attr.aria-checked]="value() === option.value"
+      [disabled]="option.disabled"
+      (click)="choose(option.value)"
+    >
+      {{ option.label }}
+    </button>
+  }
+</div>

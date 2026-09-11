@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Reorder a stage and refuse a transition
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Curriculum authoring page component" as page
+  participant "Curriculum policy service" as rules
+end box
+box "Frontend — Cornerstone progression composite" #D1FADF
+  participant "ProgressionBuilderComponent" as builder
+  participant "CompetencyGridComponent" as grid
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Drag-drop, LiveAnnouncer, BreakpointObserver" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and input" as browser
+end box
+
+page -> builder : Bind CsProgressionViewModel and the transition rules
+builder -> grid : Supply the stage and competency matrix
+grid -> browser : Render the matrix semantics required by L2-096
+browser --> user : Ordered stages, terms, and the competency grid
+
+user -> browser : Reorder a stage by pointer drag
+browser -> cdk : Drag gesture
+cdk -> builder : Drop at the new index
+builder -> page : Emit CsProgressionReorderIntent per L2-129
+builder -> cdk : Announce the new position politely per L2-129
+cdk --> browser : Polite live region update
+
+user -> builder : Clear a required value on an editable row
+builder -> browser : Render the inline error associated to the control per L2-129
+builder -> builder : Block saving while the row is invalid per L2-129
+builder --> user : Row states its error in text
+
+alt Transition permitted by the supplied rules
+  user -> builder : Activate the transition control
+  builder -> page : Emit CsTransitionIntent per L2-129
+  page -> rules : Apply the domain rule and persist the transition
+  rules --> page : New stage state
+  page -> builder : Bind the next progression view model
+else Transition not permitted by the supplied rules
+  builder -> browser : Render the transition control disabled per L2-129
+  builder -> browser : Attach an accessible description stating the reason per L2-129
+  builder -> page : Emit no intent per L2-129
+  browser --> user : Reason available to assistive technology
+end
+
+opt Viewport XS
+  cdk -> builder : Report the XS breakpoint
+  builder -> browser : Stack each row into a labelled card per L2-129
+  builder -> browser : Keep the keyboard reorder path available per L2-129
+end
+@enduml

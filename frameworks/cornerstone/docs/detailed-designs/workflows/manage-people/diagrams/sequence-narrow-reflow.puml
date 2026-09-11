@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Reflow the directory at a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Directory service" as directorysvc
+end box
+box "Frontend — Cornerstone people composites" #D1FADF
+  participant "PeopleDirectoryComponent" as directory
+  participant "PersonRowComponent" as row
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Layout observer" as layout
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and media queries" as browser
+end box
+
+directorysvc -> page : Supply the scoped people
+page -> directory : Bind the row list with layout 'auto' per L2-123
+directory -> layout : Observe the wide breakpoint
+layout -> browser : Register the media query
+browser --> layout : Currently at or above the wide breakpoint
+layout --> directory : Wide
+directory -> row : Pass variant 'table'
+row -> row : Render the person as a table row per L2-123
+row --> browser : Table presented
+
+admin -> browser : Narrow the viewport below the breakpoint
+browser -> layout : Media query change event
+layout --> directory : Narrow
+directory -> directory : Resolve variant 'list' per L2-123
+directory -> row : Pass variant 'list'
+row -> row : Render avatar, identity, role, cohort, and status stacked per L2-123
+row --> browser : Stacked list presented
+
+directory -> directory : Retain the selection set across the reflow
+directory -> page : Emit no query intent
+page -> directorysvc : Issue no new query
+directory -> directory : Log nothing and persist nothing
+browser --> admin : Directory readable at the narrow viewport
+@enduml

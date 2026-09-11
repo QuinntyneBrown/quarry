@@ -1,0 +1,88 @@
+{
+  "kind": "class",
+  "name": "CurriculumEditorComponent",
+  "sourcePath": "src/cornerstone/curriculum-editor/curriculum-editor.component.ts",
+  "category": "workflows",
+  "description": "Curriculum Editor public API.",
+  "members": [
+    {
+      "name": "node",
+      "bindingName": "node",
+      "role": "input",
+      "type": "CsCurriculumNode",
+      "required": true,
+      "description": "Node public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "saved",
+      "bindingName": "saved",
+      "role": "output",
+      "type": "CsCurriculumNode",
+      "required": false,
+      "description": "Saved public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-curriculum-editor",
+  "slug": "curriculum-editor",
+  "label": "Curriculum Editor",
+  "tokens": [],
+  "relatedSymbols": ["CsCurriculumNode"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsCurriculumNode",
+      "sourcePath": "src/cornerstone/core/workflows/cs-curriculum-node.interface.ts",
+      "category": "workflows",
+      "description": "Cs Curriculum Node public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "parentId",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Parent Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "kind",
+          "role": "property",
+          "type": "CsCurriculumNodeKind",
+          "required": true,
+          "description": "Kind public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "CsCurriculumNodeState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "children",
+          "role": "property",
+          "type": "readonly CsCurriculumNode[]",
+          "required": false,
+          "description": "Children public API."
+        }
+      ]
+    }
+  ]
+}

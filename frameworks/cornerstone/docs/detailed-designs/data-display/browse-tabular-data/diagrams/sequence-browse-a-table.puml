@@ -1,0 +1,73 @@
+@startuml
+title UML sequence behaviour — Browse and sort a table
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Directory page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone table components" #D1FADF
+  participant "DataToolbarComponent" as toolbar
+  participant "TableContainerComponent" as container
+  participant "TableDirective" as table
+  participant "TableSortHeaderDirective" as sorthdr
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as live
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+admin -> toolbar : Type a search term
+toolbar -> toolbar : Debounce the term
+toolbar -> page : Update searchTerm per L2-095
+page -> container : Bind state { kind: 'loading' } per L2-101
+container -> dom : Set aria-busy="true" and project [csLoading]
+page -> services : Re-run the directory query
+
+services --> page : 24 matching rows
+page -> container : Bind state { kind: 'ready' }
+page -> table : Bind density 'comfortable' per L2-093
+table -> dom : Apply row padding and the sticky header row
+container -> dom : Render the caption and the labelled scroll region
+page -> toolbar : Bind resultCount 24 and the active filter chips
+toolbar -> live : Announce the result count politely per L2-095
+dom --> admin : Filtered rows under a sticky header
+
+admin -> sorthdr : Activate the surname column header
+sorthdr -> sorthdr : Advance the direction to ascending
+sorthdr -> dom : Set aria-sort="ascending" on the active header per L2-093
+sorthdr -> table : Report the column and the direction
+table -> page : Emit SortChange { column: 'surname', direction: 'asc' }
+page -> services : Apply the sort
+services --> page : Reordered rows
+page -> container : Bind state { kind: 'ready' }
+container -> dom : Render the reordered rows
+dom --> admin : Sorted table
+
+alt Query returns nothing
+  services --> page : Zero rows
+  page -> container : Bind state { kind: 'empty' } per L2-101
+  container -> dom : Project [csEmpty] in place of the table body
+else Query fails
+  services --> page : Error returned
+  page -> container : Bind state { kind: 'error', error }
+  container -> dom : Project [csError] with a retry control
+  admin -> container : Activate retry
+  container -> page : Emit retry
+end
+@enduml

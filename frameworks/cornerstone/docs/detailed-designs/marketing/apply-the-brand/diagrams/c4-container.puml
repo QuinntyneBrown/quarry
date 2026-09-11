@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Apply the brand
+
+Person(user, "Application user", "Sees the brand in the header, the authentication screen, and the footer")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies LogoMarkComponent, BrandLockupComponent, and the CsBrandAssets token")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the brand colours, size steps, and clear-space scale")
+  Container(docs, "Documentation site", "Angular application", "Publishes the brand variants, treatments, and clear-space rules")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Renders the product lockup in the header and the footer")
+  Container(page, "Feature page", "Angular routed components", "Renders the organisation lockup on authentication and public routes")
+  Container(config, "Application config", "Angular providers", "Provides CsBrandAssets for a further product brand")
+}
+
+System_Ext(browser, "Browser platform", "Inline SVG rendering and preference media queries")
+
+Rel(user, shell, "Sees the product brand in")
+Rel(user, page, "Sees the organisation brand in")
+Rel(shell, lib, "Renders the lockup from")
+Rel(page, lib, "Renders the lockup from")
+Rel(config, lib, "Supplies the artwork token to")
+Rel(lib, theme, "Resolves brand colour, size step, and clear space from")
+Rel(lib, browser, "Renders the inline SVG in")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the public API of")
+@enduml

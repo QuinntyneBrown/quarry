@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Authenticate a user
+
+Person(user, "Application user", "Signs in to Liturgy or Word Up")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies AuthLayoutComponent, AuthCardComponent, and the region directives")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the panel tones, heading scale, and container bound")
+  Container(docs, "Documentation site", "Angular application", "Publishes the centered and split variants and the error pattern")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(route, "Feature page", "Angular routed component", "Renders the authentication screen and owns the credential form")
+  Container(shell, "Application shell", "Angular components", "Redirects to the workspace once the session exists")
+  Container(services, "Application services", "Angular injectables", "Submits credentials and holds the session")
+}
+
+System_Ext(identity, "Identity service", "Verifies credentials and issues the session")
+System_Ext(browser, "Browser platform", "Rendering, focus, and viewport width")
+
+Rel(user, route, "Enters credentials in")
+Rel(route, lib, "Renders the layout and card from")
+Rel(lib, theme, "Resolves tone, typography, and spacing from")
+Rel(route, services, "Submits the form through")
+Rel(services, identity, "Requests a session from", "HTTPS")
+Rel(services, route, "Returns the failure message to")
+Rel(services, shell, "Signals the established session to")
+Rel(lib, browser, "Renders the alert region and moves focus in")
+Rel(docs, lib, "Documents the public API of")
+@enduml

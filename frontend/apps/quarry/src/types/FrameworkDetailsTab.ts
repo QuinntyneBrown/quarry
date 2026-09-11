@@ -1,1 +1,1 @@
-export type FrameworkDetailsTab = "overview" | "components";
+export type FrameworkDetailsTab = "overview" | "components" | "design-system";

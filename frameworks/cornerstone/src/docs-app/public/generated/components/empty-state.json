@@ -1,0 +1,57 @@
+{
+  "kind": "class",
+  "name": "EmptyStateComponent",
+  "sourcePath": "src/cornerstone/empty-state/empty-state.component.ts",
+  "category": "data-display",
+  "description": "Empty State public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "message",
+      "bindingName": "message",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Message public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "variant",
+      "bindingName": "variant",
+      "role": "input",
+      "type": "EmptyStateVariant",
+      "required": false,
+      "defaultValue": "'panel'",
+      "description": "Variant public API.",
+      "structured": false,
+      "options": ["inline", "panel", "page"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-empty-state",
+  "slug": "empty-state",
+  "label": "Empty State",
+  "tokens": ["--cs-space-8"],
+  "relatedSymbols": ["EmptyStateVariant"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "EmptyStateVariant",
+      "sourcePath": "src/cornerstone/empty-state/empty-state-variant.type.ts",
+      "category": "data-display",
+      "description": "Empty State Variant public API.",
+      "declaration": "'inline' | 'panel' | 'page'"
+    }
+  ]
+}

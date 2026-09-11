@@ -1,0 +1,114 @@
+{
+  "kind": "class",
+  "name": "BrandLockupComponent",
+  "sourcePath": "src/cornerstone/brand-lockup/brand-lockup.component.ts",
+  "category": "marketing",
+  "description": "Brand Lockup public API.",
+  "members": [
+    {
+      "name": "brand",
+      "bindingName": "brand",
+      "role": "input",
+      "type": "CsBrandName",
+      "required": false,
+      "defaultValue": "'faithtech'",
+      "description": "Brand public API.",
+      "structured": false,
+      "options": ["faithtech", "liturgy", "wordup"]
+    },
+    {
+      "name": "variant",
+      "bindingName": "variant",
+      "role": "input",
+      "type": "BrandLockupVariant",
+      "required": false,
+      "defaultValue": "'full'",
+      "description": "Variant public API.",
+      "structured": false,
+      "options": ["compact", "full"]
+    },
+    {
+      "name": "treatment",
+      "bindingName": "treatment",
+      "role": "input",
+      "type": "CsBrandTreatment",
+      "required": false,
+      "description": "Treatment public API.",
+      "structured": false,
+      "options": ["light", "dark", "mono"]
+    },
+    {
+      "name": "size",
+      "bindingName": "size",
+      "role": "input",
+      "type": "CsBrandSize",
+      "required": false,
+      "defaultValue": "'medium'",
+      "description": "Size public API.",
+      "structured": false,
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "orientation",
+      "bindingName": "orientation",
+      "role": "input",
+      "type": "'horizontal' | 'stacked'",
+      "required": false,
+      "defaultValue": "'horizontal'",
+      "description": "Orientation public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "href",
+      "bindingName": "href",
+      "role": "input",
+      "type": "string | null",
+      "required": false,
+      "defaultValue": "null",
+      "description": "Href public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-brand-lockup",
+  "slug": "brand-lockup",
+  "label": "Brand Lockup",
+  "tokens": ["--cs-ink-muted", "--cs-space-2"],
+  "relatedSymbols": ["BrandLockupVariant", "CsBrandName", "CsBrandSize", "CsBrandTreatment"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "BrandLockupVariant",
+      "sourcePath": "src/cornerstone/brand-lockup/brand-lockup-variant.type.ts",
+      "category": "marketing",
+      "description": "Brand Lockup Variant public API.",
+      "declaration": "'compact' | 'full'"
+    },
+    {
+      "kind": "type",
+      "name": "CsBrandName",
+      "sourcePath": "src/cornerstone/core/marketing/cs-brand-name.type.ts",
+      "category": "marketing",
+      "description": "Cs Brand Name public API.",
+      "declaration": "'faithtech' | 'liturgy' | 'wordup'"
+    },
+    {
+      "kind": "type",
+      "name": "CsBrandSize",
+      "sourcePath": "src/cornerstone/core/marketing/cs-brand-size.type.ts",
+      "category": "marketing",
+      "description": "Cs Brand Size public API.",
+      "declaration": "'small' | 'medium' | 'large'"
+    },
+    {
+      "kind": "type",
+      "name": "CsBrandTreatment",
+      "sourcePath": "src/cornerstone/core/marketing/cs-brand-treatment.type.ts",
+      "category": "marketing",
+      "description": "Cs Brand Treatment public API.",
+      "declaration": "'light' | 'dark' | 'mono'"
+    }
+  ]
+}

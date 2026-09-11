@@ -1,0 +1,107 @@
+:root,
+.cs-theme-light {
+  color-scheme: light;
+  --cs-paper: #fffef7;
+  --cs-surface: #f6f4e9;
+  --cs-surface-raised: #ffffff;
+  --cs-ink: #16160c;
+  --cs-ink-muted: #646455;
+  --cs-border: #d8d5c5;
+  --cs-border-strong: #8b897b;
+  --cs-lime: #d6ff36;
+  --cs-lime-strong: #b6df19;
+  --cs-info: #1769aa;
+  --cs-success: #26734d;
+  --cs-warning: #8a5800;
+  --cs-error: #b42318;
+  --cs-focus: #1769aa;
+  --cs-font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --cs-font-display: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --cs-font-mono: ui-monospace, 'Cascadia Code', monospace;
+  --cs-text-xs: 0.75rem;
+  --cs-text-sm: 0.875rem;
+  --cs-text-md: 1rem;
+  --cs-text-lg: 1.25rem;
+  --cs-text-xl: clamp(1.75rem, 4vw, 3rem);
+  --cs-space-1: 0.25rem;
+  --cs-space-2: 0.5rem;
+  --cs-space-3: 0.75rem;
+  --cs-space-4: 1rem;
+  --cs-space-5: 1.5rem;
+  --cs-space-6: 2rem;
+  --cs-space-8: 3rem;
+  --cs-radius-sm: 0.375rem;
+  --cs-radius-md: 0.75rem;
+  --cs-radius-lg: 1.25rem;
+  --cs-radius-pill: 999px;
+  --cs-shadow-sm: 0 1px 3px rgb(22 22 12 / 12%);
+  --cs-shadow-md: 0 8px 24px rgb(22 22 12 / 15%);
+  --cs-shadow-lg: 0 16px 42px rgb(22 22 12 / 20%);
+  --cs-duration-fast: 120ms;
+  --cs-duration: 200ms;
+  --cs-container-narrow: 48rem;
+  --cs-container: 76rem;
+  --cs-container-wide: 92rem;
+  --cs-breakpoint-xs: 0px;
+  --cs-breakpoint-sm: 576px;
+  --cs-breakpoint-md: 768px;
+  --cs-breakpoint-lg: 992px;
+  --cs-breakpoint-xl: 1200px;
+  --cs-countdown-size: clamp(2.75rem, 8vw, 7rem);
+  --cs-raffle-winner-size: clamp(2rem, 6vw, 5rem);
+  --cs-review-dialog-width: 36rem;
+  --cs-heading-leading: 1.04;
+  --cs-heading-tracking: -0.05em;
+  --cs-label-tracking: 0.12em;
+  --cs-font-weight-bold: 700;
+  --cs-border-width: 1px;
+  --cs-dialog-backdrop: rgb(22 22 12 / 48%);
+  --cs-team-board-column-width: 18rem;
+  --cs-drag-placeholder-opacity: 0.5;
+  --cs-raffle-stage-height: 24rem;
+  --cs-confetti-fall-distance: 30rem;
+  --cs-confetti-piece-width: 0.55rem;
+  --cs-confetti-duration: 5s;
+  --cs-confetti-start: -2rem;
+  --cs-confetti-spin: 540deg;
+}
+
+.cs-theme-dark {
+  color-scheme: dark;
+  --cs-paper: #16160c;
+  --cs-surface: #232318;
+  --cs-surface-raised: #303024;
+  --cs-ink: #fffef7;
+  --cs-ink-muted: #c8c5b8;
+  --cs-border: #4f4e41;
+  --cs-border-strong: #a6a394;
+  --cs-lime: #d6ff36;
+  --cs-lime-strong: #e5ff78;
+  --cs-info: #77bfff;
+  --cs-success: #75d9a7;
+  --cs-warning: #ffc864;
+  --cs-error: #ff9d96;
+  --cs-focus: #9bd1ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --cs-duration-fast: 1ms;
+    --cs-duration: 1ms;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --cs-focus: Highlight;
+    --cs-border: CanvasText;
+    --cs-border-strong: CanvasText;
+  }
+}

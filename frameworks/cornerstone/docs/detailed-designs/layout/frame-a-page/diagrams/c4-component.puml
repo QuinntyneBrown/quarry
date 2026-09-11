@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Frame a page
+
+Person(dev, "Application developer", "Sets the title, the state, and the actions")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(page, "PageComponent", "Standalone component", "Renders the single h1, the breadcrumb, actions, and the ready, loading, and error bodies")
+  Component(section, "SectionComponent", "Standalone component", "Renders a labelled section landmark at a chosen heading level")
+  Component(sechead, "SectionHeaderComponent", "Standalone component", "Renders the label, title, description, and actions of a section")
+  Component(toolbar, "ToolbarComponent", "Standalone component", "Groups controls in start and end slots with an optional sticky mode")
+  Component(actionbar, "ActionBarComponent", "Standalone component", "Groups page and form actions with an optional sticky mode")
+  Component(overflow, "Overflow strategy", "Component logic", "Moves trailing controls into a menu behind one labelled trigger")
+  Component(skip, "CsSkipLinkDirective", "Attribute directive", "Hides an anchor until focus and moves focus to the target")
+  Component(hidden, "CsVisuallyHiddenDirective", "Attribute directive", "Clips an element from view while keeping it announced")
+  Component(region, "CsResponsiveRegionDirective", "Attribute directive", "Reports the observed width that drives header and overflow behaviour")
+}
+
+System_Ext(cdk, "Angular CDK", "FocusMonitor, Overlay, and BreakpointObserver")
+System_Ext(browser, "Browser platform", "DOM, focus, and accessibility tree")
+
+Rel(dev, page, "Binds the title and state on")
+Rel(dev, section, "Binds the heading level on")
+Rel(page, sechead, "Renders its header through")
+Rel(page, toolbar, "Places the actions slot in")
+Rel(page, region, "Reads the header breakpoint from")
+Rel(section, sechead, "Renders its heading through")
+Rel(toolbar, overflow, "Applies")
+Rel(actionbar, overflow, "Applies")
+Rel(overflow, region, "Reads the observed inline size from")
+Rel(overflow, cdk, "Opens the overflow menu through", "Overlay")
+Rel(region, cdk, "Subscribes to width changes from", "BreakpointObserver")
+Rel(skip, cdk, "Moves focus through", "FocusMonitor")
+Rel(page, browser, "Renders the h1 and the aria-busy body into")
+Rel(section, browser, "Renders the labelled section landmark into")
+Rel(hidden, browser, "Keeps clipped text in the accessibility tree of")
+@enduml

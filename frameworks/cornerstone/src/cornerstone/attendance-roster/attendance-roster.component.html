@@ -1,0 +1,16 @@
+<h2>{{ view().title }}</h2>
+@for (row of view().rows; track row.id) {
+  <article>
+    <cs-person [person]="row.person" /><cs-attendance-choice
+      [value]="row.state"
+      (changed)="changed.emit({ rowId: row.id, state: $event })"
+    /><textarea
+      csTextarea
+      [value]="row.note ?? ''"
+      (change)="noteChanged.emit({ rowId: row.id, note: $any($event.target).value })"
+    ></textarea>
+    @if (row.conflict) {
+      <button (click)="conflict.emit({ rowId: row.id })">Resolve conflict</button>
+    }
+  </article>
+}

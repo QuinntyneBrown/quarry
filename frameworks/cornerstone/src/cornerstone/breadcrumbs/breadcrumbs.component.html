@@ -1,0 +1,16 @@
+<nav aria-label="Breadcrumb">
+  <ol>
+    @for (crumb of visible(); track crumb.label; let last = $last) {
+      <li>
+        @if (crumb.href && !last) {
+          <a [href]="crumb.href">{{ crumb.label }}</a>
+        } @else {
+          <span [attr.aria-current]="last ? 'page' : null">{{ crumb.label }}</span>
+        }
+        @if (!last) {
+          <span aria-hidden="true">{{ separator() }}</span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

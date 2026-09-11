@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Capture text
+
+Person(dev, "Application developer", "Places labelled text fields on Liturgy and Word Up pages")
+Person(user, "Application user", "Types values with a keyboard, a mobile keyboard, or assistive technology")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying field framing, input, textarea, and addon behaviour")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning the form model and validators")
+System_Ext(cdk, "Angular CDK", "Text-field autosize measurement")
+System_Ext(browser, "Browser platform", "Native input types, native validation, and autofill")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes fields from")
+Rel(dev, app, "Declares the form model in")
+Rel(app, cornerstone, "Binds form controls to")
+Rel(cornerstone, cdk, "Measures autosized textareas through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders native input and textarea elements to")
+Rel(user, browser, "Types into the rendered control in")
+Rel(browser, cornerstone, "Reports input, blur, and native validity to")
+@enduml

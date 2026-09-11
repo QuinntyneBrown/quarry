@@ -74,6 +74,23 @@ public sealed class CreateFrameworkDraftTests
     }
 
     [SqlServerFact]
+    public async Task InvalidDesignSystemUriIsRejectedWithoutPersistingMetadata()
+    {
+        // Extends L2-003's metadata-validation coverage for a framework's optional whole-app
+        // design-system iframe URL; no dedicated L2 ID exists yet.
+        await using var fixture = await SqlMaintenanceFixture.CreateAsync();
+        using var client = fixture.CreateClient();
+        var body = SqlMaintenanceFixture.DraftBody(Guid.NewGuid());
+        body["designSystemUri"] = "ftp://example.test/design-systems/cornerstone/";
+        var response = await client.PostAsJsonAsync("/api/maintenance/frameworks", body);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        using var error = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        Assert.True(error.RootElement.GetProperty("errors").TryGetProperty("designSystemUri", out _));
+        await using var database = fixture.CreateContext();
+        Assert.Empty(await database.FrameworkDrafts.ToListAsync());
+    }
+
+    [SqlServerFact]
     public async Task ConcurrentCreatesForOneIdentityProduceOneDraftAndOneAudit()
     {
         await using var fixture = await SqlMaintenanceFixture.CreateAsync();

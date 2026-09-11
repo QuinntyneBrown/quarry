@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server.mjs",
-    "build": "node --check server.mjs && node --check public/bundles/illustrative-v1/preview.js"
+    "build": "node --check server.mjs && node --check public/bundles/illustrative-v1/preview.js && node --check scripts/sync-design-system.mjs",
+    "sync:cornerstone": "node scripts/sync-design-system.mjs"
   }
 }

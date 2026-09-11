@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Hold a conversation
+
+Person(dev, "Application developer", "Composes Word Up messaging screens from Cornerstone components")
+Person(youth, "Youth", "Reads a thread and writes replies")
+Person(mentor, "Mentor", "Moves between conversations and answers them")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the thread, composer, and conversation list")
+System_Ext(app, "Consuming application", "Word Up Angular application owning message delivery, retry, and the offline queue")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for text autosizing, scrolling, focus, and layout observation")
+System_Ext(browser, "Browser platform", "Renders the log, reports scroll position, and voices live regions")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes messaging screens from")
+Rel(dev, app, "Binds the conversation view model in")
+Rel(app, cornerstone, "Supplies message and conversation view models to")
+Rel(cornerstone, app, "Emits send, retry, history, and selection intents to")
+Rel(cornerstone, cdk, "Builds autosize, scroll, and focus behaviour on")
+Rel(cornerstone, browser, "Reads scroll position and announces through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(youth, browser, "Reads and writes messages in")
+Rel(mentor, browser, "Selects conversations in")
+@enduml

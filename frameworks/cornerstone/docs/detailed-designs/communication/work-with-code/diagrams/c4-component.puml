@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Work with code
+
+Person(youth, "Youth", "Reads, edits, and runs lesson source")
+
+Container_Boundary(appsvc, "Consuming application services") {
+  Component(lessonvm, "LessonSourceService", "Angular injectable", "Supplies the starting source, the language, and the run state")
+  Component(runner, "SourceEvaluationHandler", "Angular injectable", "Receives run and reset intents and performs every evaluation")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(block, "CodeBlockComponent", "Standalone component", "Read-only pre and code display with language label, wrap or scroll, and copy")
+  Component(copy, "CsCopyToClipboardDirective", "Directive", "Writes to the clipboard and announces completion politely")
+  Component(editor, "CodeEditorComponent", "Standalone component", "Labelled textarea with line and column feedback, run, and reset")
+  Component(caret, "CaretPositionDirective", "Directive", "Tracks the caret line and column and exposes them on demand")
+  Component(pane, "PreviewPaneComponent", "Standalone component", "Text or sandboxed document output with an error state")
+  Component(confirm, "ConfirmDialogComponent", "Standalone component", "Presents the confirm step before a destructive reset")
+}
+
+System_Ext(cdk, "Angular CDK", "Clipboard and focus management")
+System_Ext(browser, "Browser platform", "Text rendering, iframe sandbox, and live regions")
+
+Rel(lessonvm, block, "Supplies the worked-example source to")
+Rel(lessonvm, editor, "Supplies the starting source and run state to")
+Rel(runner, pane, "Supplies the evaluated output to")
+Rel(editor, runner, "Emits runRequested with the current source to")
+Rel(editor, runner, "Emits resetRequested to")
+Rel(pane, runner, "Emits retryRequested to")
+Rel(editor, caret, "Reads the line and column from")
+Rel(editor, confirm, "Presents before discarding modified source", "L2-103")
+Rel(pane, block, "Renders text output through")
+Rel(block, copy, "Performs the copy action with")
+Rel(copy, cdk, "Writes to the clipboard using")
+Rel(copy, browser, "Announces the copy through", "aria-live polite")
+Rel(block, browser, "Renders source as a text node in")
+Rel(pane, browser, "Attaches the iframe with the documented sandbox set to")
+Rel(youth, editor, "Types and runs source in")
+@enduml

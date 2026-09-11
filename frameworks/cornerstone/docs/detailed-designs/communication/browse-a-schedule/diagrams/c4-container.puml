@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Browse a schedule
+
+Person(mentor, "Mentor", "Browses the cohort schedule")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides CalendarComponent, EventCardComponent, and ScheduleListComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the schedule surfaces resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes calendar and agenda usage examples")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular route component", "Places the calendar and the agenda list on the schedule screen")
+  Container(services, "Application services", "Angular injectables", "Builds the schedule view model and acts on emitted intents")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus management and layout observation")
+System_Ext(browser, "Browser platform", "Timezone, locale, and rendering")
+
+Rel(mentor, shell, "Opens the schedule screen in")
+Rel(shell, page, "Routes to")
+Rel(page, lib, "Binds the schedule view model into")
+Rel(lib, services, "Emits selection, range, and RSVP intents to")
+Rel(services, page, "Supplies the refreshed view model to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Uses for roving focus and breakpoint observation")
+Rel(lib, browser, "Reads resolved timezone and locale from")
+Rel(docs, lib, "Documents variants of")
+@enduml

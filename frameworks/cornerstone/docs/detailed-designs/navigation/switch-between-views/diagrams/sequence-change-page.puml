@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Change page and page size
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone paginator" #D1FADF
+  participant "PaginatorComponent" as pag
+  participant "Live region" as live
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and assistive technology" as dom
+end box
+
+page -> pag : Bind totalItems, pageIndex, pageSize, and pageSizeOptions
+pag -> pag : Derive the page count and the range label per L2-074
+pag -> dom : Render previous, next, page count, page size, and summary
+
+alt Narrow viewport
+  pag -> pag : Resolve to compact mode per L2-074
+  pag -> dom : Render previous, next, and the position summary only
+end
+
+user -> dom : Select a larger page size
+dom -> pag : Change event on the page-size control
+pag -> pag : Recompute pageIndex to keep the first visible item per L2-074
+pag -> pag : Update the pageIndex and pageSize models
+pag -> page : Emit pageChange with index, size, and total
+page -> services : Request the selected page of results
+services --> page : Result page
+page -> pag : Rebind totalItems
+pag -> live : Publish the new range label per L2-074
+live -> dom : Announce the range through the live region
+dom --> user : New page with the range announced
+
+opt First page reached
+  pag -> dom : Disable the previous control per L2-074
+end
+@enduml

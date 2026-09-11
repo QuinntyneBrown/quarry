@@ -1,0 +1,13 @@
+<ol>
+  @for (movement of movements(); track movement.id) {
+    <li>
+      <button
+        type="button"
+        [disabled]="movement.state === 'locked'"
+        (click)="activated.emit({ movementId: movement.id })"
+      >
+        {{ movement.label }} <cs-badge>{{ movement.state }}</cs-badge>
+      </button>
+    </li>
+  }
+</ol>

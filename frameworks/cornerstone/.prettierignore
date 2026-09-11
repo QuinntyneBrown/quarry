@@ -1,0 +1,13 @@
+dist
+node_modules
+out-tsc
+coverage
+.angular
+docs/detailed-designs
+docs/specs
+docs/marketing-site.md
+src/docs-app/generated
+src/marketing/styles
+src/cornerstone/styles/_word-up-compat.scss
+src/cornerstone/styles/_liturgy-compat.scss
+verification

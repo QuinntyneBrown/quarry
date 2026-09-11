@@ -1,0 +1,143 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — View media
+
+enum CsMediaKind {
+  image
+  video
+  iframe
+  document
+}
+
+enum CsDataState {
+  idle
+  loading
+  ready
+  empty
+  error
+}
+
+enum CsTransferStatus {
+  pending
+  uploading
+  stored
+  failed
+}
+
+class CsMediaViewModel {
+  +kind: CsMediaKind
+  +sourceUrl: string
+  +posterUrl: string | null
+  +caption: string | null
+  +aspectRatio: string
+  +frameTitle: string | null
+  +tracks: readonly CsCaptionTrack[]
+}
+
+class CsCaptionTrack {
+  +src: string
+  +srclang: string
+  +label: string
+  +kind: string
+}
+
+class CsMediaAction {
+  +key: string
+  +label: string
+  +href: string | null
+}
+
+class CsMediaActionIntent {
+  +mediaKey: string
+  +actionKey: string
+}
+
+class MediaViewerComponent {
+  +media: InputSignal<CsMediaViewModel>
+  +alt: InputSignal<string | null>
+  +decorative: InputSignal<boolean>
+  +state: InputSignal<CsDataState>
+  +actions: InputSignal<readonly CsMediaAction[]>
+  +retryRequested: OutputEmitterRef<string>
+  +actionInvoked: OutputEmitterRef<CsMediaActionIntent>
+  +resolvedAlt: Signal<string>
+  -sandboxTokens(): string
+}
+
+class MediaFrameDirective {
+  +ratio: InputSignal<string>
+  +reserve(): void
+}
+
+class CsSafeUrlPipe {
+  +transform(value: string, context: CsUrlContext): string | null
+  -isAllowedScheme(value: string): boolean
+}
+
+enum CsUrlContext {
+  media
+  frame
+  download
+  external
+}
+
+class AttachmentViewModel {
+  +id: string
+  +fileName: string
+  +mimeType: string
+  +sizeBytes: number
+  +status: CsTransferStatus
+  +failureReason: string | null
+  +previewUrl: string | null
+  +downloadUrl: string | null
+}
+
+class AttachmentListComponent {
+  +attachments: InputSignal<readonly AttachmentViewModel[]>
+  +state: InputSignal<CsDataState>
+  +removeRequested: OutputEmitterRef<string>
+  +retryRequested: OutputEmitterRef<string>
+  +downloadRequested: OutputEmitterRef<string>
+  +accessibleName(item: AttachmentViewModel): string
+}
+
+class EvidencePreviewComponent {
+  +attachment: InputSignal<AttachmentViewModel>
+  +previewName: Signal<string>
+  -revokeObjectUrl(): void
+}
+
+class MiddleTruncateDirective {
+  +text: InputSignal<string>
+  +headChars: InputSignal<number>
+  -preserveExtension(value: string): string
+}
+
+MediaViewerComponent ..> CsMediaViewModel : renders
+MediaViewerComponent *-- MediaFrameDirective
+MediaViewerComponent ..> CsSafeUrlPipe : validates through
+MediaViewerComponent "1" o-- "0..*" CsMediaAction
+MediaViewerComponent --> CsMediaActionIntent : emits
+MediaViewerComponent --> CsDataState : has
+CsMediaViewModel --> CsMediaKind : has
+CsMediaViewModel "1" o-- "0..*" CsCaptionTrack
+AttachmentListComponent "1" o-- "0..*" AttachmentViewModel
+AttachmentListComponent ..> EvidencePreviewComponent : renders for an image
+AttachmentListComponent *-- MiddleTruncateDirective
+AttachmentListComponent ..> CsSafeUrlPipe : validates through
+EvidencePreviewComponent ..> AttachmentViewModel : renders
+EvidencePreviewComponent ..> CsSafeUrlPipe : validates through
+AttachmentViewModel --> CsTransferStatus : has
+CsSafeUrlPipe --> CsUrlContext : reads
+@enduml

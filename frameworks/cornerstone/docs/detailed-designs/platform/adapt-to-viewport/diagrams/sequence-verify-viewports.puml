@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Verify the viewport matrix
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library contributor" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Pull request" as pr
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "ShellComponent" as shell
+end box
+box "Frontend — Cornerstone verification harness" #ECFDF3
+  participant "CsViewportHarness" as harness
+  participant "responsive-coverage gate" as coverage
+end box
+box "Browser — platform" #FFF4E5
+  participant "Headless browser viewport" as browser
+end box
+
+dev -> pr : Change the shell navigation behaviour
+pr -> harness : Start the responsive suite per L2-032
+harness -> harness : Read the five classes from CsBreakpoints per L2-030
+
+loop For each of XS, SM, MD, LG, XL
+  harness -> browser : Set the viewport to the class width
+  browser -> shell : Render at the class
+  shell --> harness : Rendered fixture
+  harness -> harness : Assert the documented transform for the class per L2-032
+end
+
+alt Every documented transform asserted
+  harness -> harness : Assert the collapsed navigation and sticky action bar at XS
+  harness --> coverage : Report the asserted transforms
+  coverage --> pr : Coverage passes
+else Transform rendered without an assertion
+  harness --> coverage : Report a rendered but unasserted transform
+  coverage --> pr : Fail naming the component and the class per L2-032
+  pr --> dev : Add the missing structural assertion
+else Mobile affordance missing at XS
+  coverage --> pr : Fail naming the absent XS affordance per L2-031
+  pr --> dev : Restore the collapsed navigation affordance
+end
+@enduml

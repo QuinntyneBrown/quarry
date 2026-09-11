@@ -1,0 +1,18 @@
+section {
+  inline-size: min(100vw - 2rem, 36rem);
+  max-block-size: min(90dvh, 48rem);
+  overflow: auto;
+  border-radius: var(--cs-radius-lg);
+  background: var(--cs-paper);
+  box-shadow: var(--cs-shadow-lg);
+}
+header,
+section > div,
+footer {
+  padding: var(--cs-space-5);
+}
+footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--cs-space-3);
+}

@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Browse a schedule
+
+Person(dev, "Application developer", "Composes Word Up schedule screens from Cornerstone components")
+Person(mentor, "Mentor", "Finds a day on the calendar and reads the events on it")
+Person(admin, "Administrator", "Reviews the cohort schedule and event attendance")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the calendar, event card, and schedule list")
+System_Ext(app, "Consuming application", "Word Up Angular application owning schedule data and routing")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for focus management and layout observation")
+System_Ext(browser, "Browser platform", "Reports the resolved timezone and locale and renders the grid")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes schedule screens from")
+Rel(dev, app, "Binds the schedule view model in")
+Rel(app, cornerstone, "Supplies the schedule view model to")
+Rel(cornerstone, app, "Emits selection, range, and RSVP intents to")
+Rel(cornerstone, cdk, "Builds focus and layout behaviour on")
+Rel(cornerstone, browser, "Reads resolved timezone and locale from")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(mentor, browser, "Navigates the calendar grid in")
+Rel(admin, browser, "Reads the agenda list in")
+@enduml

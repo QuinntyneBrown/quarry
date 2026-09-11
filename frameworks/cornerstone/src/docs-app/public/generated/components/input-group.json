@@ -1,0 +1,42 @@
+{
+  "kind": "class",
+  "name": "InputGroupComponent",
+  "sourcePath": "src/cornerstone/input-group/input-group.component.ts",
+  "category": "forms",
+  "description": "Input Group public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-input-group",
+  "slug": "input-group",
+  "label": "Input Group",
+  "tokens": ["--cs-radius-sm"],
+  "relatedSymbols": ["AddonPosition", "InputAddonDirective"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "AddonPosition",
+      "sourcePath": "src/cornerstone/input-group/addon-position.type.ts",
+      "category": "forms",
+      "description": "Addon Position public API.",
+      "declaration": "'prefix' | 'suffix'"
+    },
+    {
+      "kind": "class",
+      "name": "InputAddonDirective",
+      "sourcePath": "src/cornerstone/input-group/input-addon.directive.ts",
+      "category": "forms",
+      "description": "Input Addon public API.",
+      "members": [
+        {
+          "name": "position",
+          "bindingName": "csInputAddon",
+          "role": "input",
+          "type": "AddonPosition",
+          "required": false,
+          "defaultValue": "'prefix'",
+          "description": "Position public API."
+        }
+      ]
+    }
+  ]
+}

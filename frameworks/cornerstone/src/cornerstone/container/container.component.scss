@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  inline-size: min(100% - 2rem, var(--cs-container));
+  margin-inline: auto;
+}
+:host(.cs-container--wide) {
+  max-inline-size: var(--cs-container-wide);
+}
+:host(.cs-container--narrow) {
+  max-inline-size: var(--cs-container-narrow);
+}

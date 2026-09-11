@@ -1,0 +1,41 @@
+<a class="skip-link" href="#docs-content">Skip to content</a>
+<header class="topbar">
+  <a class="brand" routerLink="/components/categories" aria-label="Cornerstone components">
+    <span aria-hidden="true"></span><strong>Cornerstone</strong><small>Components</small>
+  </a>
+  <nav aria-label="Primary documentation">
+    <a routerLink="/components/categories" routerLinkActive="active">Components</a>
+  </nav>
+  <button type="button" class="theme-button" (click)="toggleTheme()">
+    {{ theme.resolved() === 'dark' ? 'Light theme' : 'Dark theme' }}
+  </button>
+</header>
+<div class="docs-layout">
+  <aside class="component-nav" aria-label="Components">
+    <label for="component-search">Find a component</label>
+    <input
+      id="component-search"
+      type="search"
+      placeholder="Search all 144 components"
+      [value]="query()"
+      (input)="query.set($any($event.target).value)"
+    />
+    <nav>
+      @for (category of visibleCategories(); track category.key) {
+        <section>
+          <h2>{{ category.label }}</h2>
+          @for (component of category.components; track component.name) {
+            <a
+              [routerLink]="['/components', component.slug, 'overview']"
+              routerLinkActive="active"
+              >{{ component.label }}</a
+            >
+          }
+        </section>
+      } @empty {
+        <p>No components match “{{ query() }}”.</p>
+      }
+    </nav>
+  </aside>
+  <main id="docs-content"><router-outlet /></main>
+</div>

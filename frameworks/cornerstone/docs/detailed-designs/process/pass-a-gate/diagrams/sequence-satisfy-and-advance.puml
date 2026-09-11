@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Satisfy requirements and advance
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone gate components" #D1FADF
+  participant "GateComponent" as gate
+  participant "RequirementChecklistComponent" as list
+  participant "GateAnnouncer" as announcer
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+services -> page : Enforcement result with one outstanding requirement
+page -> gate : Bind the gate summary, requirements, and adapter
+gate -> dom : Render the blocked state and disable the advance action per L2-134
+gate -> dom : Describe the outstanding count on the advance action
+gate -> list : Render the requirement list in the interactive mode
+list -> dom : Render each requirement as a Cornerstone checkbox per L2-135
+
+user -> dom : Toggle the last outstanding requirement
+dom -> list : Checkbox change
+list -> page : Emit CsRequirementToggleIntent without mutating the input
+list -> dom : Mark the item busy and refuse re-activation per L2-135
+page -> services : Persist the toggle and re-evaluate the workflow rule
+services --> page : Requirement done and gate open
+page -> gate : Rebind the requirements and the enforcement result
+
+list -> announcer : Report that all requirements are met
+announcer -> cdk : Announce politely once
+cdk --> dom : Polite live-region update
+gate -> dom : Render the open state and enable the advance action per L2-134
+gate -> announcer : Report the blocked to open transition
+announcer -> cdk : Announce politely once
+
+user -> dom : Activate the advance action
+dom -> gate : Click or Enter
+gate -> page : Emit exactly one GateAdvanceIntent
+page -> services : Authorize and perform the stage transition
+services --> page : Next stage state
+page --> user : Advanced process
+@enduml

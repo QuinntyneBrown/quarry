@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Open a drawer
+
+Person(dev, "Application developer", "Places drawers in feature pages and in the application shell")
+Person(user, "Application user", "Opens filters, editors, and navigation from an edge of the viewport")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the drawer panel, container, and service")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Overlay, focus trap, directionality, and layout observation primitives")
+System_Ext(browser, "Browser platform", "Reports the viewport size and writing direction, and owns focus and scrolling")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Declares cs-drawer and injects DrawerService in")
+Rel(app, cornerstone, "Opens drawers through")
+Rel(cornerstone, cdk, "Builds the overlay, trap, and breakpoint observation on")
+Rel(cornerstone, browser, "Renders the panel and moves focus in")
+Rel(browser, user, "Presents the drawer to")
+Rel(user, browser, "Opens, scrolls, and dismisses the drawer in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

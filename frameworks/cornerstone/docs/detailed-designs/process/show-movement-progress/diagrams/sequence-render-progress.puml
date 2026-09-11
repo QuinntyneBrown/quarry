@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Render movement progress
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone movement components" #D1FADF
+  participant "MovementDialComponent" as dial
+  participant "MovementListComponent" as list
+  participant "PipStripComponent" as strip
+  participant "ProgressRingComponent" as ring
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Component styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+services -> page : Movement states and the completed count
+page -> dial : Bind segments, completed, label, variant, and adapter
+dial -> dial : Read the label set from the adapter per L2-143
+dial -> ring : Delegate the arc and value semantics
+ring -> dom : Expose role=progressbar with aria-valuenow per L2-136
+dial -> styles : Resolve the paper or dark track and arc tokens
+styles --> dom : Segment strokes distinguishable under forced-colors
+
+page -> list : Bind movements, variant, and adapter
+list -> dom : Render ordered list semantics per L2-137
+list -> dom : Mark the current movement aria-current="step"
+list -> dom : State done, current, and locked in text
+
+alt Rail variant
+  list -> dom : Render the abbreviated label with the full accessible name per L2-137
+else Page variant
+  list -> dom : Render the full label
+end
+
+page -> strip : Bind count, current, and the configured label set
+strip -> dom : Expose one summary stating position and total per L2-138
+strip -> dom : Mark every pip aria-hidden="true" and non-focusable
+dom --> user : Completion, current position, and remaining movements
+@enduml

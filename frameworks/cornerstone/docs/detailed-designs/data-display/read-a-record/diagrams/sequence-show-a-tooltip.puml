@@ -1,0 +1,78 @@
+@startuml
+title UML sequence behaviour — Show a tooltip
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as mentor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Member detail page" as page
+end box
+box "Frontend — Cornerstone reading components" #D1FADF
+  participant "CsTooltipDirective" as tooltip
+  participant "DefinitionListComponent" as deflist
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay" as overlay
+  participant "FlexibleConnectedPositionStrategy" as strategy
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+page -> deflist : Render an abbreviated field value
+deflist -> tooltip : Apply csTooltip to the value element per L2-100
+tooltip -> dom : Set aria-describedby on the trigger
+
+mentor -> dom : Hover the abbreviated value
+dom -> tooltip : Pointer enter
+tooltip -> tooltip : Wait for the open delay per L2-100
+tooltip -> overlay : Create the overlay
+overlay -> strategy : Apply the preferred placement and its fallbacks
+strategy -> dom : Measure the trigger and the viewport
+dom --> strategy : Trigger rectangle near the viewport edge
+strategy -> strategy : Select the first fallback that fits
+strategy --> overlay : Resolved placement
+overlay -> dom : Attach the text-only panel
+dom --> mentor : Explanation beside the value
+
+mentor -> dom : Move the pointer away
+dom -> tooltip : Pointer leave
+tooltip -> tooltip : Wait for the close delay
+tooltip -> overlay : Detach the overlay
+
+alt Keyboard activation
+  mentor -> dom : Move focus to the trigger
+  dom -> tooltip : Focus
+  tooltip -> overlay : Attach the panel with no delay
+  mentor -> dom : Press Escape
+  dom -> tooltip : Escape key
+  tooltip -> overlay : Detach the overlay, leaving focus on the trigger
+else Touch activation
+  mentor -> dom : Long-press the trigger
+  dom -> tooltip : Long press per L2-100
+  tooltip -> overlay : Attach the panel
+  mentor -> dom : Tap outside the trigger
+  dom -> tooltip : Outside tap
+  tooltip -> overlay : Detach the overlay
+end
+
+opt Server-side render
+  tooltip -> dom : Leave aria-describedby in place and attach no overlay
+end
+
+opt Nearest scrolling ancestor scrolls
+  dom -> tooltip : Scroll event
+  tooltip -> overlay : Detach the overlay
+end
+@enduml

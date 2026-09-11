@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Activate a locked step
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth participant" as youth
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Progression service" as progression
+end box
+box "Frontend — Cornerstone journey composites" #D1FADF
+  participant "LearningJourneyComponent" as journey
+  participant "LessonStepListComponent" as steplist
+end box
+box "Browser — platform" #FFF4E5
+  participant "Assistive technology and rendering" as browser
+end box
+
+progression -> progression : Evaluate prerequisites for each step
+progression -> page : Mark the step 'locked' with a prerequisite label
+page -> journey : Bind the updated LearningJourneyView per L2-117
+journey -> steplist : Pass the step with state 'locked'
+steplist -> steplist : Apply locked presentation and aria-disabled per L2-117
+steplist -> browser : Expose the prerequisite label as the description
+browser --> youth : Locked step announced with its prerequisite
+
+youth -> browser : Activate the locked step
+browser -> steplist : Activation event
+
+alt Step remains locked
+  steplist -> page : Emit LessonStepSelect with state 'locked'
+  page -> progression : Ask for the blocking reason
+  progression --> page : Unmet prerequisite step identifiers
+  page -> page : Present the explanation the application owns
+else Prerequisite completed elsewhere
+  progression -> page : Publish revised journey records
+  page -> journey : Bind the revised view model
+  journey -> steplist : Pass the step with state 'available'
+  steplist --> browser : Repaint the row as available
+end
+
+steplist -> steplist : Emit no navigation and hold no rule
+browser --> youth : Journey reflects the current lock state
+@enduml

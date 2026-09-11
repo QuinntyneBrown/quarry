@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Answer and submit an attempt
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth participant" as youth
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Attempt service" as attempts
+  participant "Assessment service" as assessment
+end box
+box "Frontend — Cornerstone quiz composites" #D1FADF
+  participant "QuizComponent" as quiz
+  participant "QuizQuestionComponent" as question
+  participant "QuizResultComponent" as result
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and focus trap" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendering and input" as browser
+end box
+
+assessment -> page : Supply the quiz definition without the answer key
+page -> quiz : Bind QuizView and the answer map
+quiz -> question : Pass the current question and its recorded value
+question -> question : Render the single, multiple, or text shape per L2-118
+question --> browser : Rendered answer control
+
+youth -> browser : Enter an answer
+browser -> question : Input event
+question -> quiz : Emit QuizAnswerChange
+quiz -> page : Forward the answer intent
+page -> attempts : Persist the answer
+attempts --> page : Answer recorded
+
+youth -> browser : Move to the next question
+browser -> quiz : Activation event
+quiz -> quiz : Update progress indication per L2-118
+quiz -> page : Emit QuizNavigate
+
+youth -> browser : Activate submit
+browser -> quiz : Activation event
+quiz -> quiz : Check every required question holds a value per L2-118
+quiz -> overlay : Open the confirm dialog and trap focus
+overlay --> youth : Confirm prompt
+youth -> overlay : Confirm
+overlay -> quiz : Confirmed
+quiz -> page : Emit QuizSubmit with the answer map
+page -> assessment : Mark the attempt against the answer key
+assessment --> page : Score, pass state, and per-question outcomes
+page -> result : Bind QuizResultView per L2-119
+result -> result : Render score, pass state, and explanations per L2-119
+result --> browser : Rendered outcome
+browser --> youth : Marked attempt presented
+@enduml

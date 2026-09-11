@@ -1,0 +1,21 @@
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+[role='gridcell'] {
+  min-block-size: 6rem;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-paper);
+  text-align: start;
+  vertical-align: top;
+}
+small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

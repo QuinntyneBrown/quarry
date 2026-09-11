@@ -1,0 +1,82 @@
+{
+  "kind": "class",
+  "name": "AuthLayoutComponent",
+  "sourcePath": "src/cornerstone/auth-layout/auth-layout.component.ts",
+  "category": "marketing",
+  "description": "Auth Layout public API.",
+  "members": [
+    {
+      "name": "variant",
+      "bindingName": "variant",
+      "role": "input",
+      "type": "AuthLayoutVariant",
+      "required": false,
+      "defaultValue": "'centered'",
+      "description": "Variant public API.",
+      "structured": false,
+      "options": ["centered", "split"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-auth-layout",
+  "slug": "auth-layout",
+  "label": "Auth Layout",
+  "tokens": [
+    "--cs-ink",
+    "--cs-paper",
+    "--cs-space-4",
+    "--cs-space-5",
+    "--cs-space-6",
+    "--cs-space-8",
+    "--cs-surface"
+  ],
+  "relatedSymbols": [
+    "AuthAlternateDirective",
+    "AuthBrandDirective",
+    "AuthFooterDirective",
+    "AuthLayoutVariant",
+    "AuthPanelDirective"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "AuthAlternateDirective",
+      "sourcePath": "src/cornerstone/auth-layout/auth-alternate.directive.ts",
+      "category": "marketing",
+      "description": "Auth Alternate public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "AuthBrandDirective",
+      "sourcePath": "src/cornerstone/auth-layout/auth-brand.directive.ts",
+      "category": "marketing",
+      "description": "Auth Brand public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "AuthFooterDirective",
+      "sourcePath": "src/cornerstone/auth-layout/auth-footer.directive.ts",
+      "category": "marketing",
+      "description": "Auth Footer public API.",
+      "members": []
+    },
+    {
+      "kind": "type",
+      "name": "AuthLayoutVariant",
+      "sourcePath": "src/cornerstone/auth-layout/auth-layout-variant.type.ts",
+      "category": "marketing",
+      "description": "Auth Layout Variant public API.",
+      "declaration": "'centered' | 'split'"
+    },
+    {
+      "kind": "class",
+      "name": "AuthPanelDirective",
+      "sourcePath": "src/cornerstone/auth-layout/auth-panel.directive.ts",
+      "category": "marketing",
+      "description": "Auth Panel public API.",
+      "members": []
+    }
+  ]
+}

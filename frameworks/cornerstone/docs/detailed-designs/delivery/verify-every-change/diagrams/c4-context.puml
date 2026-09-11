@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Verify every change
+
+Person(maintainer, "Library maintainer", "Proposes a change to the library or the documentation site")
+Person(reviewer, "Change reviewer", "Approves a pull request and any replaced visual baseline")
+Person(verifier, "Accessibility verifier", "Records a manual screen-reader pass against an ARIA pattern")
+
+System(verification, "Cornerstone verification system", "Suites, baselines, gates, and the workflow that runs them")
+System_Ext(cornerstone, "Cornerstone", "Angular UI library and documentation site under verification")
+System_Ext(specs, "Requirement specification", "docs/specs/L1.md and docs/specs/L2.md")
+System_Ext(actions, "GitHub Actions", "Hosted runners executing the CI workflow on Node 22")
+System_Ext(repo, "GitHub repository", "Holds branch protection on main and the pull request record")
+System_Ext(browsers, "Browser engines", "Engines named in the published support matrix")
+System_Ext(sr, "Screen readers", "Assistive technologies used for the recorded manual pass")
+
+Rel(maintainer, cornerstone, "Changes")
+Rel(maintainer, repo, "Opens a pull request in")
+Rel(repo, actions, "Triggers the CI workflow in")
+Rel(actions, verification, "Runs")
+Rel(verification, cornerstone, "Exercises the public API of")
+Rel(verification, specs, "Reads declared L2 identifiers from")
+Rel(verification, browsers, "Executes behaviour suites in")
+Rel(verifier, sr, "Operates")
+Rel(sr, cornerstone, "Announces the ARIA semantics of")
+Rel(verifier, verification, "Records a manual verification in")
+Rel(verification, repo, "Reports the gate outcome to")
+Rel(repo, reviewer, "Presents the outcome and the diff to")
+Rel(reviewer, repo, "Approves the merge in")
+@enduml

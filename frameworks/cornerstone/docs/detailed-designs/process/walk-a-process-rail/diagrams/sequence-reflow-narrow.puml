@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Reflow the rail to a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone process components" #D1FADF
+  participant "ProcessRailComponent" as rail
+  participant "Orientation resolver" as resolver
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and DOM" as dom
+end box
+
+page -> rail : Bind orientation 'auto'
+rail -> resolver : Request the presentation for the current viewport
+resolver -> cdk : Observe the LG and XS breakpoints
+cdk --> resolver : Viewport LG matches
+resolver --> rail : Horizontal presentation
+rail -> dom : Lay steps out horizontally per L2-132
+
+user -> dom : Narrow the viewport to XS
+dom -> cdk : Media query change
+cdk --> resolver : Viewport XS matches
+resolver --> rail : Vertical presentation
+
+alt Reduced motion is not requested
+  rail -> dom : Transition to the vertical presentation
+else prefers-reduced-motion is set
+  rail -> dom : Switch presentation without motion
+end
+
+rail -> dom : Retain done, current, and locked state text per L2-132
+rail -> dom : Retain aria-current="step" on the current stage
+rail -> dom : Keep nested current-stage content keyboard reachable
+dom --> user : Vertical rail with unchanged state indication
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Import and author curriculum
+
+Person(admin, "Administrator", "Imports and authors curriculum")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies the import wizard, curriculum tree and editor, progression builder, and competency grid")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the FaithTech token set the authoring surfaces resolve their values from")
+  Container(docs, "Documentation site", "Angular application", "Publishes the import, curriculum, and progression contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing, the theme class, and the leave guard")
+  Container(importpage, "Curriculum import page", "Angular feature page", "Parses the selected file and builds the validation view model")
+  Container(authorpage, "Curriculum authoring page", "Angular feature page", "Builds the curriculum and progression view models and handles the intents")
+  Container(services, "Application services", "Angular services", "Owns parsing, validation rules, authorization, publishing, and persistence")
+  ContainerDb(curriculum, "Curriculum store", "Application data store", "Holds tracks, modules, lessons, questions, stages, and competencies")
+}
+
+System_Ext(cdk, "Angular CDK", "Drag-and-drop, LiveAnnouncer, and BreakpointObserver")
+System_Ext(browser, "Browser platform", "File selection, rendering, and input")
+
+Rel(admin, browser, "Selects a file and edits curriculum in")
+Rel(browser, lib, "Delivers the selected file and input events to")
+Rel(importpage, lib, "Supplies target columns, validation counts, and progress to")
+Rel(lib, importpage, "Emits fileSelected, mappingChanged, and importRequested to")
+Rel(authorpage, lib, "Supplies curriculum nodes and progression rows to")
+Rel(lib, authorpage, "Emits add, save, delete, reorder, and transition intents to")
+Rel(importpage, services, "Delegates parsing and validation to")
+Rel(authorpage, services, "Delegates every rule decision and write to")
+Rel(services, curriculum, "Reads and writes")
+Rel(shell, importpage, "Routes to")
+Rel(shell, authorpage, "Routes to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Performs reorder and announcement through")
+Rel(docs, lib, "Documents the public surface of")
+@enduml

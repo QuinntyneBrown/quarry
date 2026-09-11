@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Secure the supply chain
+
+Person(maintainer, "Library maintainer", "Owns the audit gate and the release credentials")
+Person(dev, "Application developer", "Binds application data and URLs into components")
+Person(user, "Application user", "Views content another user supplied")
+
+System(cornerstone, "Cornerstone", "Angular UI library rendering application-supplied content through Angular's sanitizer")
+System_Ext(app, "Consuming application", "Liturgy or Word Up, source of the content bound into components")
+System_Ext(actions, "GitHub Actions", "Runs the dependency audit, the security scan, and the attested publish")
+System_Ext(npm, "npm registry", "Records the provenance attestation and serves the tarball")
+System_Ext(advisories, "Advisory database", "Reports known vulnerabilities for installed dependencies")
+System_Ext(browser, "Browser platform", "Applies the sanitizer, the scheme policy, and the iframe sandbox")
+
+Rel(dev, app, "Binds untrusted content in")
+Rel(app, cornerstone, "Passes strings, markup, and URLs to")
+Rel(cornerstone, browser, "Renders sanitized content and validated URLs in")
+Rel(browser, user, "Presents inert content to")
+Rel(maintainer, cornerstone, "Changes the rendering and URL rules of")
+Rel(cornerstone, actions, "Is scanned, audited, and packed by")
+Rel(actions, advisories, "Queries for high and critical advisories")
+Rel(actions, npm, "Publishes with a provenance attestation to")
+Rel(app, npm, "Installs the attested package from")
+@enduml

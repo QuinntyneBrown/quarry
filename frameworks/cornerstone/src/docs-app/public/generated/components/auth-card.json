@@ -1,0 +1,15 @@
+{
+  "kind": "class",
+  "name": "AuthCardComponent",
+  "sourcePath": "src/cornerstone/auth-card/auth-card.component.ts",
+  "category": "marketing",
+  "description": "Auth Card public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-auth-card",
+  "slug": "auth-card",
+  "label": "Auth Card",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,13 @@
+<ol>
+  @for (step of steps(); track step.id; let i = $index) {
+    <li [attr.aria-current]="i === active() ? 'step' : null">{{ step.label }}</li>
+  }
+</ol>
+<ng-content />
+<div class="cs-action-bar">
+  <button csButton="secondary" type="button" [disabled]="active() === 0" (click)="back()">
+    Back</button
+  ><button csButton type="button" (click)="next()">
+    {{ active() === steps().length - 1 ? 'Finish' : 'Next' }}
+  </button>
+</div>

@@ -1,0 +1,43 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Manage people
+
+Person(admin, "Administrator", "Searches the directory and opens a record")
+
+Container_Boundary(page, "Consuming application — feature page and services") {
+  Component(directorysvc, "Directory service", "Angular injectable", "Owns querying, filtering, sorting, and the scope a viewer may see")
+  Component(personsvc, "Person service", "Angular injectable", "Owns the person record, contact visibility, and persistence")
+  Component(authz, "Authorization service", "Angular injectable", "Decides which people and which contact entries a viewer may see")
+  Component(vmbuilder, "People view model builder", "Application code", "Projects scoped records into PersonRowView, PersonSummaryView, and RecordSection")
+  Component(handler, "Intent handler", "Application code", "Receives PeopleQuery, PeopleSelectionChange, PersonRowAction, CsPersonOpen, and RecordSectionChange")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(directory, "PeopleDirectoryComponent", "Standalone component", "Renders search, filter, sort, selection, and the responsive table or list; applies no query itself")
+  Component(row, "PersonRowComponent", "Standalone component", "Renders avatar, identity, role, cohort, status, and row actions; neither logs nor persists the personal data it renders")
+  Component(summary, "PersonSummaryComponent", "Standalone component", "Renders the profile header with contact detail, status, and actions; neither logs nor persists the personal data it renders")
+  Component(tabs, "RecordTabsComponent", "Standalone component", "Renders overview, progress, attendance, and history sections as an accessible tab set")
+  Component(types, "People view model and intent types", "TypeScript types", "PersonRowView, PeopleQuery, PersonSummaryView, RecordSection, CsPersonOpen")
+}
+
+System_Ext(cdk, "Angular CDK", "Key manager and layout observer")
+
+Rel(authz, directorysvc, "Scopes the result set of")
+Rel(directorysvc, vmbuilder, "Supplies the scoped and ordered people to")
+Rel(personsvc, vmbuilder, "Supplies the person record and visible contacts to")
+Rel(vmbuilder, directory, "Supplies the row list and facets to", "PersonRowView[] input")
+Rel(vmbuilder, summary, "Supplies the header view model to", "PersonSummaryView input")
+Rel(vmbuilder, tabs, "Supplies the section list to", "RecordSection[] input")
+Rel(directory, row, "Passes one person and the resolved variant to", "PersonRowView input")
+Rel(row, directory, "Reports the row action and open request to", "outputs")
+Rel(directory, handler, "Emits the query and selection intents to", "outputs")
+Rel(summary, handler, "Emits the record action to", "PersonAction output")
+Rel(tabs, handler, "Emits the section change to", "RecordSectionChange output")
+Rel(handler, directorysvc, "Calls to re-query and re-order")
+Rel(handler, personsvc, "Calls to load a record section")
+Rel(directory, types, "Declares its input and output shapes in")
+Rel(tabs, cdk, "Moves the active tab with")
+Rel(directory, cdk, "Observes the viewport with")
+Rel(admin, directory, "Types a search term in")
+@enduml

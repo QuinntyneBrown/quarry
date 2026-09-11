@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Render contact detail without leaking personal data
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Consent page component" as page
+end box
+box "Frontend — Cornerstone consent composite" #D1FADF
+  participant "ConsentPanelComponent" as panel
+  participant "Contact detail block" as contact
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM text nodes" as dom
+  participant "Console" as console
+  participant "Web storage" as storage
+end box
+
+page -> panel : Bind ConsentPanelViewModel carrying guardian and minor detail
+panel -> contact : Pass the contact detail to the read-only block
+contact -> dom : Write each labelled line as a text node per L2-126
+contact -> contact : Set no title attribute on any element per L2-126
+contact -> console : No write per L2-126
+contact -> storage : No write per L2-126
+dom --> user : Guardian name, relationship, and contact lines as read-only text
+
+user -> panel : Activate the update-contact action
+panel -> page : Emit ConsentContactUpdateIntent carrying the subject identifier only per L2-126
+page --> user : Application opens its own contact-editing flow
+
+opt A decision is announced while contact detail is on screen
+  panel -> cdk : Announce the scope and decision only, excluding personal data, per L2-126
+  cdk --> dom : Polite live region update
+end
+@enduml

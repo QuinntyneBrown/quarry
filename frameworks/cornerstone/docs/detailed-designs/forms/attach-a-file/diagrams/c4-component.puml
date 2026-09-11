@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Attach a file
+
+Person(dev, "Application developer", "Binds the accept list and the upload state")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(picker, "FilePickerComponent", "Angular standalone component", "Owns the selection, the value accessor, and the queue over a native file input")
+  Component(dropzone, "DropzoneComponent", "Angular standalone component", "Focusable drop region opening the native file browser on Enter or Space")
+  Component(summary, "FileSummaryComponent", "Angular standalone component", "Per-entry name, size, state, remove action, and retry action")
+  Component(validator, "Accept and size validator", "Pure function", "Rejects a file violating the accept list or the maximum size before any intent")
+  Component(urls, "Object URL registry", "Injectable per component", "Creates preview URLs and revokes every one on removal and on destroy")
+  Component(progress, "Progress presenter", "Angular template", "Exposes aria-valuenow and announces at documented intervals")
+  Component(announcer, "Announcement adapter", "CDK LiveAnnouncer wrapper", "Announces the drop target politely and a rejection assertively")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Dropzone tokens", "CSS custom properties", "Declares the drop-target state, progress track, and validation colours")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer")
+System_Ext(browser, "Browser platform", "File browser, drag events, and object URLs")
+
+Rel(dev, picker, "Binds accept, maxSizeBytes, and uploads to")
+Rel(picker, dropzone, "Renders the drop surface as")
+Rel(picker, validator, "Screens every selection through")
+Rel(picker, summary, "Renders one entry per selection as")
+Rel(picker, urls, "Requests and revokes preview URLs through")
+Rel(summary, progress, "Displays in-flight state through")
+Rel(picker, announcer, "Announces rejection and drop state through")
+Rel(announcer, cdk, "Wraps")
+Rel(dropzone, browser, "Opens the native file browser in")
+Rel(urls, browser, "Creates and revokes object URLs in")
+Rel(dropzone, tokens, "Resolves the drop-target treatment from")
+Rel(progress, tokens, "Resolves the progress track from")
+@enduml

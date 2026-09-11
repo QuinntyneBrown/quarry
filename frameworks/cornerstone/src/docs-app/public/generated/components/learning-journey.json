@@ -1,0 +1,202 @@
+{
+  "kind": "class",
+  "name": "LearningJourneyComponent",
+  "sourcePath": "src/cornerstone/learning-journey/learning-journey.component.ts",
+  "category": "workflows",
+  "description": "Learning Journey public API.",
+  "members": [
+    {
+      "name": "view",
+      "bindingName": "view",
+      "role": "input",
+      "type": "LearningJourneyView",
+      "required": true,
+      "description": "View public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "layout",
+      "bindingName": "layout",
+      "role": "input",
+      "type": "JourneyLayout",
+      "required": false,
+      "defaultValue": "'auto'",
+      "description": "Layout public API.",
+      "structured": false,
+      "options": ["timeline", "columns", "auto"]
+    },
+    {
+      "name": "stepSelected",
+      "bindingName": "stepSelected",
+      "role": "output",
+      "type": "LessonStepSelect",
+      "required": false,
+      "description": "Step Selected public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "moduleToggled",
+      "bindingName": "moduleToggled",
+      "role": "output",
+      "type": "ModuleToggle",
+      "required": false,
+      "description": "Module Toggled public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-learning-journey",
+  "slug": "learning-journey",
+  "label": "Learning Journey",
+  "tokens": [],
+  "relatedSymbols": [
+    "JourneyLayout",
+    "JourneyModuleView",
+    "JourneyProgress",
+    "LearningJourneyView",
+    "LessonStepSelect",
+    "ModuleToggle"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "JourneyLayout",
+      "sourcePath": "src/cornerstone/learning-journey/journey-layout.type.ts",
+      "category": "workflows",
+      "description": "Journey Layout public API.",
+      "declaration": "'timeline' | 'columns' | 'auto'"
+    },
+    {
+      "kind": "interface",
+      "name": "JourneyModuleView",
+      "sourcePath": "src/cornerstone/learning-journey/journey-module-view.interface.ts",
+      "category": "workflows",
+      "description": "Journey Module View public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "expanded",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Expanded public API."
+        },
+        {
+          "name": "steps",
+          "role": "property",
+          "type": "readonly LessonStepView[]",
+          "required": true,
+          "description": "Steps public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "JourneyProgress",
+      "sourcePath": "src/cornerstone/learning-journey/journey-progress.interface.ts",
+      "category": "workflows",
+      "description": "Journey Progress public API.",
+      "members": [
+        {
+          "name": "complete",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Complete public API."
+        },
+        {
+          "name": "total",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Total public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "LearningJourneyView",
+      "sourcePath": "src/cornerstone/learning-journey/learning-journey-view.interface.ts",
+      "category": "workflows",
+      "description": "Learning Journey View public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "modules",
+          "role": "property",
+          "type": "readonly JourneyModuleView[]",
+          "required": true,
+          "description": "Modules public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "JourneyProgress",
+          "required": true,
+          "description": "Progress public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "LessonStepSelect",
+      "sourcePath": "src/cornerstone/lesson-step-list/lesson-step-select.interface.ts",
+      "category": "workflows",
+      "description": "Lesson Step Select public API.",
+      "members": [
+        {
+          "name": "stepId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Step Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ModuleToggle",
+      "sourcePath": "src/cornerstone/learning-journey/module-toggle.interface.ts",
+      "category": "workflows",
+      "description": "Module Toggle public API.",
+      "members": [
+        {
+          "name": "moduleId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Module Id public API."
+        },
+        {
+          "name": "expanded",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Expanded public API."
+        }
+      ]
+    }
+  ]
+}

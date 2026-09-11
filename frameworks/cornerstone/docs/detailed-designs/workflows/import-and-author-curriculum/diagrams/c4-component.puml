@@ -1,0 +1,49 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Import and author curriculum
+
+Person(admin, "Administrator", "Imports rows and authors the hierarchy")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(wizard, "CsvImportWizardComponent", "Standalone component, OnPush", "Upload, mapping, validation, confirmation, progress, and result steps; emits typed intents only")
+  Component(preview, "Row preview renderer", "Text interpolation only", "Renders a cell beginning with =, +, -, or @ as literal text and evaluates nothing")
+  Component(tree, "CurriculumTreeComponent", "Standalone component, ARIA tree", "Track, module, lesson, and question hierarchy with selection and reorder")
+  Component(editor, "CurriculumEditorComponent", "Standalone component, nested forms", "Edits the selected node and reports draft, dirty, and published state")
+  Component(builder, "ProgressionBuilderComponent", "Standalone component", "Ordered stages and terms with editable rows and transition controls")
+  Component(grid, "CompetencyGridComponent", "Standalone component (L2-096 matrix)", "Renders competencies against stages")
+  Component(confirm, "ConfirmDialogComponent", "Standalone component (L2-103)", "Destructive confirmation preceding a delete intent")
+  Component(unsaved, "UnsavedChangesDialogComponent", "Standalone component (L2-105)", "Presented when a dirty editor loses its selection")
+  Component(models, "Import, curriculum, and progression types", "TypeScript types", "CsImportValidation, CsCurriculumNode, CsProgressionViewModel and their intents")
+}
+
+Container_Boundary(app, "Consuming application — curriculum pages") {
+  Component(importcmp, "Curriculum import page component", "Angular feature page", "Reads the file, parses rows, and builds the validation view model")
+  Component(authorcmp, "Curriculum authoring page component", "Angular feature page", "Maps stored curriculum into the tree and builder view models")
+  Component(rules, "Curriculum policy service", "Angular service", "Owns validation rules, authorization, publishing, and transition permission")
+  Component(store, "Curriculum store", "Angular service", "Persists nodes, stages, and competencies")
+}
+
+System_Ext(cdk, "Angular CDK", "Drag-and-drop, LiveAnnouncer, and focus management")
+
+Rel(admin, wizard, "Imports a curriculum export through")
+Rel(admin, tree, "Selects and reorders nodes in")
+Rel(admin, builder, "Edits stages and competencies in")
+Rel(wizard, preview, "Renders every cell through")
+Rel(wizard, models, "Reads the import types and emits the intents defined in")
+Rel(tree, editor, "Publishes the selected node identifier to")
+Rel(tree, confirm, "Opens before emitting a delete intent")
+Rel(editor, unsaved, "Presents when dirty and the selection changes")
+Rel(builder, grid, "Supplies the stage and competency matrix to")
+Rel(importcmp, wizard, "Binds target columns, validation, and progress to")
+Rel(wizard, importcmp, "Emits fileSelected, mappingChanged, and importRequested to")
+Rel(authorcmp, tree, "Binds the curriculum nodes to")
+Rel(tree, authorcmp, "Emits add, delete, reorder, and selection intents to")
+Rel(authorcmp, builder, "Binds the progression and transition rules to")
+Rel(builder, authorcmp, "Emits row, reorder, and transition intents to")
+Rel(importcmp, rules, "Delegates parsing and validation to")
+Rel(authorcmp, rules, "Asks whether an edit, delete, or transition is permitted")
+Rel(authorcmp, store, "Writes accepted changes through")
+Rel(tree, cdk, "Performs pointer reorder and announces position through")
+Rel(wizard, cdk, "Announces progress and the result summary through", "LiveAnnouncer")
+@enduml

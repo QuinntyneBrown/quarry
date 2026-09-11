@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Schedule an announcement
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "AnnouncementViewModelService" as vm
+  participant "AnnouncementDeliveryHandler" as delivery
+end box
+box "Frontend — Cornerstone announcements" #D1FADF
+  participant "AnnouncementComposerComponent" as composer
+  participant "Cornerstone field components" as fields
+  participant "ValidationSummaryComponent" as summary
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region and focus" as browser
+end box
+
+vm --> composer : Supply the audience options and the idle submit state
+composer -> fields : Render targeting, scheduling, and content as labelled fieldsets per L2-112
+
+admin -> fields : Select scheduled delivery
+fields -> composer : Report the delivery mode change
+composer -> fields : Make the date-time field required per L2-112
+admin -> fields : Enter a scheduled instant
+fields -> fields : Validate the instant as future using the contract in L2-057
+fields --> composer : Validity of the scheduled instant
+
+admin -> composer : Activate submit with no audience selected
+composer -> composer : Block submission and emit no intent per L2-112
+composer -> summary : Report the blocking audience error
+summary -> browser : Announce the validation summary
+summary -> browser : Move focus to the audience control
+browser --> admin : Stated error at the audience control
+
+admin -> fields : Select one audience
+admin -> composer : Activate preview
+composer -> delivery : Emit previewRequested with the draft per L2-112
+delivery --> composer : Composed preview content
+composer -> composer : Render the preview and emit no send intent
+composer --> admin : Preview of the announcement
+
+admin -> composer : Activate submit
+composer -> delivery : Emit submitted once with the draft per L2-112
+composer -> composer : Enter the loading submit state
+admin -> composer : Activate submit again
+composer -> composer : Emit no additional intent while pending per L2-112
+
+alt Application reports success
+  vm --> composer : Supply the succeeded submit state
+  composer --> admin : Confirmed scheduled announcement
+else Application reports failure
+  vm --> composer : Supply the failed submit state and the reason
+  composer -> browser : Announce the failure and retain the draft
+  browser --> admin : Stated failure with the draft intact
+end
+@enduml

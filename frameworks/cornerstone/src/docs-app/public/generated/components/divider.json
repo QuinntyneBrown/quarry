@@ -1,0 +1,36 @@
+{
+  "kind": "class",
+  "name": "DividerComponent",
+  "sourcePath": "src/cornerstone/divider/divider.component.ts",
+  "category": "foundations",
+  "description": "Divider public API.",
+  "members": [
+    {
+      "name": "orientation",
+      "bindingName": "orientation",
+      "role": "input",
+      "type": "DividerOrientation",
+      "required": false,
+      "defaultValue": "'horizontal'",
+      "description": "Orientation public API.",
+      "structured": false,
+      "options": ["horizontal", "vertical"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-divider",
+  "slug": "divider",
+  "label": "Divider",
+  "tokens": ["--cs-border"],
+  "relatedSymbols": ["DividerOrientation"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "DividerOrientation",
+      "sourcePath": "src/cornerstone/divider/divider-orientation.type.ts",
+      "category": "foundations",
+      "description": "Divider Orientation public API.",
+      "declaration": "'horizontal' | 'vertical'"
+    }
+  ]
+}

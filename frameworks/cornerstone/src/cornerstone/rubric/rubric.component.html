@@ -1,0 +1,21 @@
+<div class="cs-table-container">
+  <table class="cs-table">
+    @for (criterion of rubric().criteria; track criterion.id) {
+      <tr>
+        <th>{{ criterion.label }}</th>
+        @for (level of criterion.levels; track level.id) {
+          <td>
+            <button
+              type="button"
+              [attr.aria-pressed]="criterion.selectedLevelId === level.id"
+              [disabled]="rubric().readonly"
+              (click)="selected.emit({ criterionId: criterion.id, levelId: level.id })"
+            >
+              {{ level.label }}
+            </button>
+          </td>
+        }
+      </tr>
+    }
+  </table>
+</div>

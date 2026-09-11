@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Review a visual difference
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+actor "Change reviewer" as reviewer
+box "Developer workstation" #E0F2FE
+  participant "Component styles" as styles
+  participant "Approved baselines" as baselines
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI verify job" as job
+  participant "Pull request record" as pr
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Visual runner" as visual
+  participant "Documented variant declarations" as variants
+end box
+
+maintainer -> styles : Change a component style
+maintainer -> job : Push the branch
+job -> visual : Run the visual comparison
+visual -> variants : Read every documented variant
+variants --> visual : Variant, theme, and viewport subjects per L2-155
+visual -> visual : Render each subject under both themes
+visual -> baselines : Read the approved image for each subject
+baselines --> visual : Approved images
+
+alt Every render matches its baseline
+  visual --> job : Pass the visual check
+else A render differs
+  visual -> visual : Write the differing pair to verification/diff
+  visual --> job : Fail the build naming variant, theme, and viewport per L2-155
+  job -> pr : Publish the diff artefact
+  pr --> reviewer : Diff for review
+
+  alt The change is an unintended regression
+    reviewer --> maintainer : Reject the difference
+    maintainer -> styles : Correct the style
+    maintainer -> job : Push the correction, rerunning the full suite per L2-158
+  else The change is intended
+    maintainer -> baselines : Replace the approved image in the commit
+    maintainer -> job : Push the replacement
+    job -> visual : Rerun the comparison
+    visual --> job : Pass against the replaced baseline
+    reviewer -> pr : Approve the replaced baseline as part of the review
+  end
+end
+
+job --> maintainer : Visual outcome for every documented variant
+@enduml

@@ -1,0 +1,7 @@
+{
+  "primitiveGzipKb": 8,
+  "interactiveGzipKb": 20,
+  "compositeGzipKb": 35,
+  "themeGzipKb": 30,
+  "fullFesmGzipKb": 400
+}

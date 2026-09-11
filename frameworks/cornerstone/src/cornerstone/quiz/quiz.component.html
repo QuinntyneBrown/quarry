@@ -1,0 +1,29 @@
+<h2>{{ view().title }}</h2>
+<cs-progress-bar [value]="view().activeIndex + 1" [max]="view().questions.length" />
+@if (active(); as question) {
+  <cs-quiz-question
+    [question]="question"
+    [value]="view().answers[question.id]"
+    (answerChanged)="answerChanged.emit($event)"
+  />
+}
+<div class="cs-action-bar">
+  <button
+    csButton="secondary"
+    [disabled]="view().activeIndex === 0"
+    (click)="navigate.emit({ index: view().activeIndex - 1 })"
+  >
+    Back
+  </button>
+  @if (view().activeIndex === view().questions.length - 1) {
+    <button
+      csButton
+      [disabled]="view().submitting"
+      (click)="submitted.emit({ answers: view().answers })"
+    >
+      Submit
+    </button>
+  } @else {
+    <button csButton (click)="navigate.emit({ index: view().activeIndex + 1 })">Next</button>
+  }
+</div>

@@ -1,0 +1,80 @@
+{
+  "kind": "class",
+  "name": "CountdownComponent",
+  "sourcePath": "src/cornerstone/countdown/countdown.component.ts",
+  "category": "communication",
+  "description": "A countdown driven by the consumer's clock, with no background timer.",
+  "members": [
+    {
+      "name": "target",
+      "bindingName": "target",
+      "role": "input",
+      "type": "number",
+      "required": true,
+      "description": "Target public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "now",
+      "bindingName": "now",
+      "role": "input",
+      "type": "number",
+      "required": true,
+      "description": "Now public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "ariaLabel",
+      "bindingName": "ariaLabel",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Time remaining'",
+      "description": "Aria Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "pendingCaption",
+      "bindingName": "pendingCaption",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'The event will begin soon.'",
+      "description": "Pending Caption public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "expiredCaption",
+      "bindingName": "expiredCaption",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'The countdown is complete.'",
+      "description": "Expired Caption public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-countdown",
+  "slug": "countdown",
+  "label": "Countdown",
+  "tokens": [
+    "--cs-countdown-size",
+    "--cs-font-display",
+    "--cs-font-weight-bold",
+    "--cs-heading-tracking",
+    "--cs-ink-muted",
+    "--cs-label-tracking",
+    "--cs-space-2",
+    "--cs-space-5",
+    "--cs-space-6",
+    "--cs-text-xs"
+  ],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

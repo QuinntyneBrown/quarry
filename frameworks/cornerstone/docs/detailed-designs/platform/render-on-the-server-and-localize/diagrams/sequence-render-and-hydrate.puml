@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Render on the server and hydrate
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up public site route" as route
+  participant "Node server renderer" as server
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "HeroComponent" as hero
+  participant "CsMenuDirective" as menu
+end box
+box "Frontend — Cornerstone platform guard layer" #ECFDF3
+  participant "csIsBrowser / csOnBrowser" as guard
+  participant "CsServerDefaults" as defaults
+  participant "CsIdService" as ids
+end box
+box "Browser — platform" #FFF4E5
+  participant "Browser and hydration runtime" as browser
+end box
+
+user -> route : Request the public page
+route -> server : Start the server render pass
+server -> hero : Render the hero
+hero -> guard : csIsBrowser()
+guard --> hero : false
+hero -> defaults : Read the documented server defaults per L2-167
+defaults --> hero : Theme, viewport class, and direction
+hero -> ids : Request element identifiers
+ids --> hero : Deterministic cs- prefixed identifiers per L2-168
+hero -> server : Emit complete static content per L2-167
+server -> menu : Render the menu trigger
+menu -> menu : Create no overlay container on the server per L2-168
+server --> browser : Complete server HTML
+browser --> user : Readable page before hydration
+
+browser -> hero : Begin hydration
+hero -> guard : csIsBrowser()
+guard --> hero : true
+hero -> ids : Request element identifiers
+ids --> hero : Identifiers matching the server pass per L2-168
+hero -> guard : csOnBrowser(read the colour scheme)
+guard -> browser : Defer the read to afterNextRender
+
+alt Markup matches
+  browser --> hero : Hydration completes with no NG0500 per L2-168
+else Markup differs
+  browser --> hero : Hydration mismatch reported
+  hero -> hero : The ssr-coverage gate fails the build per L2-169
+end
+
+opt Deferred block reaches its trigger
+  browser -> menu : Hydrate the deferred menu incrementally per L2-168
+  menu -> browser : Create the overlay container on first open
+  browser --> user : Interactive menu matching the server markup
+end
+@enduml

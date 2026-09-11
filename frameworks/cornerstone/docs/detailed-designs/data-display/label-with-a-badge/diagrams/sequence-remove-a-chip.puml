@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Remove a chip
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Tag editor page" as page
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "ChipListComponent" as list
+  participant "PillComponent" as pill
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusKeyManager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+alt Remove control activated
+  user -> dom : Activate the remove control
+  dom -> pill : Click event
+else Delete or Backspace pressed on the focused chip
+  user -> dom : Press Delete
+  dom -> pill : Keydown event
+  pill -> pill : Match Delete or Backspace per L2-078
+end
+
+pill -> pill : Read the remove control name naming the chip per L2-078
+pill -> list : Emit removed with value and index
+list -> page : Emit ChipRemoveEvent
+page -> page : Drop the tag from the page model
+page -> list : Re-project the remaining chips
+
+alt Chips remain
+  list -> keys : Set the active item to the next index
+  keys -> pill : Focus the next chip per L2-078
+else Removed chip was last in the list
+  list -> keys : Set the active item to the previous index
+  keys -> pill : Focus the previous chip
+else No chip remains
+  list -> dom : Move focus to the chip list host per L2-078
+end
+
+list -> dom : Rewrite the single tab stop across the remaining chips
+dom --> user : Remaining tags with focus in a predictable position
+@enduml

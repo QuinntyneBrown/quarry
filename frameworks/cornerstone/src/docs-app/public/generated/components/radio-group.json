@@ -1,0 +1,41 @@
+{
+  "kind": "class",
+  "name": "RadioGroupComponent",
+  "sourcePath": "src/cornerstone/radio-group/radio-group.component.ts",
+  "category": "forms",
+  "description": "Radio Group public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "select",
+      "role": "method",
+      "type": "void",
+      "parameters": [
+        {
+          "name": "value",
+          "type": "T",
+          "optional": false
+        }
+      ],
+      "description": "Select public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-radio-group",
+  "slug": "radio-group",
+  "label": "Radio Group",
+  "tokens": ["--cs-space-2"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Load the gratitude wall
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone portfolio components" #D1FADF
+  participant "GratitudeWallComponent" as wall
+  participant "GratitudeNoteComponent" as note
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+page -> wall : Bind loading true with no notes
+wall -> dom : Render skeleton notes and set aria-busy="true" per L2-142
+wall -> dom : Reserve the layout height so the page does not shift
+
+page -> services : Request the collected notes
+services --> page : Result
+
+alt The result holds notes
+  page -> wall : Bind the notes with loading false
+  wall -> dom : Render list semantics so the note count is reportable per L2-142
+  wall -> note : Render each note
+  note -> dom : Render figure, blockquote, and figcaption with the attribution associated
+else The result holds no note
+  page -> wall : Bind an empty note list with loading false
+  wall -> dom : Render the empty state
+  wall -> cdk : Announce the empty state politely once per L2-142
+  cdk --> dom : Polite live-region update
+end
+
+alt Viewport XS
+  wall -> dom : Stack notes in one column with reading order matching visual order per L2-142
+else Viewport LG
+  wall -> dom : Lay notes out across the responsive collection
+end
+
+dom --> user : Collected notes or the announced empty state
+@enduml

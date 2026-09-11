@@ -1,0 +1,11 @@
+<label class="cs-label" [for]="forId()"
+  >{{ label() }}
+  @if (required()) {
+    <span aria-hidden="true"> *</span>
+  }</label
+><ng-content />
+@if (error()) {
+  <div class="cs-error" [id]="errorId()" role="alert">{{ error() }}</div>
+} @else if (hint()) {
+  <div class="cs-hint" [id]="hintId()">{{ hint() }}</div>
+}

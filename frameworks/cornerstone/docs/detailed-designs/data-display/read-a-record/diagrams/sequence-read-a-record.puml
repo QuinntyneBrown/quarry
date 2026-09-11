@@ -1,0 +1,78 @@
+@startuml
+title UML sequence behaviour — Render a record detail
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as mentor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Member detail page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone reading components" #D1FADF
+  participant "DefinitionListComponent" as deflist
+  participant "ListComponent" as list
+  participant "ListItemComponent" as item
+  participant "TimelineComponent" as timeline
+  participant "ScriptureQuoteComponent" as quote
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "ListKeyManager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+mentor -> page : Open the member detail route
+page -> deflist : Bind state { kind: 'loading' } per L2-101
+page -> list : Bind state { kind: 'loading' }
+deflist -> dom : Render the field skeletons
+page -> services : Request the record, its items, and its history
+
+services --> page : Record, related items, and dated events
+page -> deflist : Bind DefinitionItem values in the inline layout per L2-092
+deflist -> dom : Render a native dl with one div per pair
+deflist -> dom : Render an em dash and hidden absence text for each null value
+
+page -> list : Bind selectionMode 'none' and dividers per L2-091
+list -> item : Project each related item
+item -> dom : Render leading visual, title, meta, trailing status, and actions
+item -> dom : Pair the unread marker with hidden unread text per L2-091
+
+page -> timeline : Bind TimelineEntry values per L2-098
+timeline -> dom : Render an ordered list with a past, current, or future marker per entry
+timeline -> dom : Set aria-current="step" on the current entry
+timeline -> dom : Mark the connecting rail aria-hidden="true"
+
+page -> quote : Bind the quotation, the citation, and the light surface per L2-099
+quote -> dom : Render figure, blockquote, and figcaption
+dom --> mentor : Record detail, related items, history, and quotation
+
+alt Selection is enabled on the related list
+  page -> list : Bind selectionMode 'multiple'
+  list -> keys : Manage roving focus across the items
+  mentor -> item : Move focus with the arrow keys
+  keys --> item : Active item
+  mentor -> item : Toggle selection
+  item -> list : Report the item key
+  list -> page : Emit selectionChange
+else History is empty
+  page -> timeline : Bind state { kind: 'empty' } per L2-101
+  timeline -> dom : Project the [csEmpty] slot in place of the rail
+end
+
+opt Narrow viewport
+  deflist -> dom : Collapse the inline layout to stacked per L2-092
+  timeline -> dom : Apply the compact variant per L2-098
+end
+@enduml

@@ -1,0 +1,5 @@
+@if (src()) {
+  <img [src]="src()" [alt]="name()" />
+} @else {
+  <span aria-hidden="true">{{ initials() }}</span>
+}

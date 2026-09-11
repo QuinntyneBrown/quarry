@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Verify a pull request
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Local repository" as repo
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI verify job" as job
+  participant "Branch protection on main" as protection
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Unit and coverage steps" as unit
+  participant "Visual runner" as visual
+  participant "Cross-browser runner" as cross
+  participant "Traceability gate" as trace
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Dependency install" as install
+end box
+
+maintainer -> repo : Commit a component change and its acceptance tests
+repo -> job : Push the branch and open a pull request per L2-158
+job -> install : Run npm ci on Node 22
+install --> job : Locked dependency tree
+
+job -> unit : Run ng test cornerstone --watch=false
+unit -> unit : Cover documented inputs, outputs, states, and edge cases per L2-154
+unit -> unit : Compare measures against CsCoverageThresholds
+unit -> unit : Confirm every export in public-api.ts has a suite per L2-154
+unit --> job : Unit outcome and coverage report
+
+job -> visual : Render every documented variant
+visual -> visual : Capture each variant under .cs-theme-light and .cs-theme-dark per L2-155
+visual --> job : Comparison outcome per variant
+
+job -> cross : Run behaviour suites in each supported engine
+cross -> cross : Read the browser list from the support matrix per L2-156
+cross -> cross : Confirm a current screen-reader record for each ARIA pattern per L2-156
+cross --> job : Cross-browser and assistive-technology outcome
+
+job -> trace : Run the traceability gate
+trace --> job : Uncovered and unknown identifiers per L2-157
+
+alt Every check passes
+  job -> protection : Report the required check as successful
+  protection --> maintainer : Merge to main permitted per L2-158
+else Any check fails
+  job -> protection : Report the required check as failed
+  protection -> protection : Hold the merge and refuse a direct push to main per L2-158
+  job --> maintainer : Report naming the failing requirement and artefact
+end
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Browse tabular data
+
+Person(admin, "Administrator", "Searches, sorts, selects, and exports")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(container, "TableContainerComponent", "Angular component", "Caption, scroll region, sticky-header frame, and data-state slots")
+  Component(tabledir, "TableDirective", "Angular directive", "Density, selection model, and sort coordination on a native table")
+  Component(sorthdr, "TableSortHeaderDirective", "Angular directive", "Renders a header as a button and sets aria-sort")
+  Component(rowdir, "TableRowDirective", "Angular directive", "Carries the row key and reflects aria-selected")
+  Component(selectall, "CsTableSelectAllDirective", "Angular directive", "Reflects none, all, and partial selection")
+  Component(responsive, "ResponsiveTableDirective", "Angular directive", "Reflows rows to labelled cards and restores the table roles")
+  Component(toolbar, "DataToolbarComponent", "Angular component", "Search, filter chips, view options, result count, export, and primary action")
+  Component(types, "Table and toolbar types", "TypeScript types", "SortChange, FilterChip, ExportRequest, and TableDensity")
+  Component(state, "CsDataState contract", "TypeScript types", "Idle, loading, empty, error, and ready conditions")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(density, "Density and sticky tokens", "CSS custom properties", "Row padding, header offset, and forced-colors boundaries")
+  Component(reflowcss, "Reflow resolution", "Media query block", "Card layout and per-cell label styling below the breakpoint")
+}
+
+System_Ext(page, "Feature page", "Angular component owning the query")
+System_Ext(cdk, "Angular CDK", "BreakpointObserver, LiveAnnouncer, and Overlay")
+
+Rel(admin, toolbar, "Types a search term and removes filter chips in")
+Rel(admin, sorthdr, "Activates a column header in")
+Rel(toolbar, page, "Emits search, filter, view, export, and primary-action intents to")
+Rel(page, container, "Passes the data state and the caption to")
+Rel(page, tabledir, "Passes density, selection mode, and the selection set to")
+Rel(container, state, "Projects slots from")
+Rel(tabledir, sorthdr, "Coordinates the active column with")
+Rel(tabledir, rowdir, "Collects row keys from")
+Rel(tabledir, selectall, "Publishes the selection condition to")
+Rel(tabledir, page, "Emits SortChange and selectionChange to")
+Rel(responsive, tabledir, "Reads the column headers of")
+Rel(responsive, reflowcss, "Applies")
+Rel(responsive, cdk, "Observes the breakpoint through", "BreakpointObserver")
+Rel(toolbar, cdk, "Announces the result count through", "LiveAnnouncer")
+Rel(toolbar, cdk, "Anchors the collapsed filter disclosure through", "Overlay")
+Rel(tabledir, density, "Resolves row padding from")
+Rel(toolbar, types, "Reads")
+Rel(tabledir, types, "Reads")
+@enduml

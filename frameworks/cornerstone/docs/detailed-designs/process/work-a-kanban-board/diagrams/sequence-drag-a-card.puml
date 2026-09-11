@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Move a card by pointer drag
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone kanban components" #D1FADF
+  participant "KanbanBoardComponent" as board
+  participant "KanbanColumnComponent" as column
+  participant "WorkItemCardComponent" as card
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "DragDropModule" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Pointer events and DOM" as dom
+end box
+
+services -> page : Columns, items, and accepted kinds
+page -> board : Bind columns and the process adapter
+board -> column : Render each column as a connected drop list per L2-139
+column -> dom : Expose the region name with the title and item count
+column -> card : Render each work item
+card -> dom : Combine the item code and title as the accessible name per L2-140
+card -> dom : Name the drag handle separately per L2-140
+
+user -> dom : Press the drag handle and move the pointer
+dom -> cdk : Pointer sequence
+cdk -> board : Drag entered a target column
+board -> board : Test the column accepts the item kind
+board -> column : Set dropState 'allowed'
+column -> dom : Render allowed drop feedback per L2-139
+
+user -> dom : Release over the accepting column
+dom -> cdk : Drop
+cdk -> board : CdkDragDrop with the source and target index
+board -> board : Leave the bound columns unmutated per L2-139
+board -> page : Emit exactly one WorkItemMoveIntent
+page -> services : Apply the move and persist it
+services --> page : Updated columns
+page -> board : Rebind the columns
+board --> dom : Re-render the card in its target position
+dom --> user : Card in the target column
+@enduml

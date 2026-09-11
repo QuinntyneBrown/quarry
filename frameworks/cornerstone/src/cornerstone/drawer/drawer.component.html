@@ -1,0 +1,14 @@
+@if (opened()) {
+  <section
+    cdkTrapFocus
+    [attr.role]="resolvedMode() === 'modal' ? 'dialog' : 'complementary'"
+    [attr.aria-modal]="resolvedMode() === 'modal' ? 'true' : null"
+  >
+    <header><ng-content select="[csDrawerHeader]" /></header>
+    <div class="content"><ng-content /></div>
+    <footer><ng-content select="[csDrawerFooter]" /></footer>
+  </section>
+  @if (resolvedMode() === 'modal') {
+    <button class="backdrop" aria-label="Close" (click)="dismiss()"></button>
+  }
+}

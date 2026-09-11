@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Label with a badge
+
+Person(user, "Application user", "Filters a directory and reads status labels")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies BadgeComponent, PillComponent, and ChipListComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tone, radius, and spacing tokens the labels resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the tone table and the chip keyboard contract")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Declares chip lists over its filter model and badges over its records")
+  Container(svc, "Application services", "Angular services", "Holds filter state and re-queries records on a selection change")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus key manager")
+System_Ext(browser, "Browser platform", "DOM, cascade, and accessibility tree")
+
+Rel(user, page, "Toggles filter pills in")
+Rel(page, lib, "Renders badges and chip lists from")
+Rel(lib, cdk, "Delegates arrow, Home, and End handling to")
+Rel(lib, theme, "Resolves tone and spacing values from")
+Rel(lib, page, "Emits ChipSelectionChange and ChipRemoveEvent to")
+Rel(page, svc, "Applies the reported filter set through")
+Rel(svc, page, "Returns the filtered record set to")
+Rel(lib, browser, "Writes roles, ARIA state, and tab index to")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the tone set and keyboard contract of")
+@enduml

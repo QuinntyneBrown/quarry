@@ -1,0 +1,37 @@
+{
+  "kind": "class",
+  "name": "SectionHeaderComponent",
+  "sourcePath": "src/cornerstone/section-header/section-header.component.ts",
+  "category": "foundations",
+  "description": "Section Header public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "description",
+      "bindingName": "description",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Description public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-section-header",
+  "slug": "section-header",
+  "label": "Section Header",
+  "tokens": ["--cs-ink-muted", "--cs-space-4"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

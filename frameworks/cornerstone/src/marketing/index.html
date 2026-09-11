@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cornerstone — the foundation under FaithTech's software</title>
+    <meta
+      name="description"
+      content="Cornerstone is FaithTech's Angular CDK component library: 144 standalone components with keyboard behavior, ARIA wiring, and responsive rules already solved."
+    />
+    <meta name="theme-color" content="#0d0d07" />
+    <meta property="og:title" content="Cornerstone — the foundation under FaithTech's software" />
+    <meta
+      property="og:description"
+      content="144 standalone Angular components with the accessibility work already done, and a bridge for the apps you have today."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="masthead">
+      <div class="masthead__inner">
+        <a class="wordmark" href="index.html" aria-label="Cornerstone home">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" stroke="currentColor" />
+            <path d="M1 1h6v6H1z" fill="currentColor" />
+          </svg>
+          Cornerstone
+        </a>
+        <nav class="masthead__nav" aria-label="Primary">
+          <a class="navlink" href="components.html">Components</a>
+          <a class="navlink" href="migration.html">Migration</a>
+          <a class="navlink navlink--long" href="https://github.com/QuinntyneBrown/Cornerstone"
+            >GitHub</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- ------------------------------------------------------------ hero -->
+      <section class="hero band band--open">
+        <canvas class="hero-gpu" aria-hidden="true"></canvas>
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Foundation</p>
+        </div>
+        <div class="band__body hero__body">
+          <p class="eyebrow lift lift-1">@quinntyne/cornerstone &nbsp;·&nbsp; Angular 21</p>
+          <h1 class="display lift lift-2">
+            Set every screen from <span class="accent">one stone</span>.
+          </h1>
+          <p class="lede lift lift-3">
+            FaithTech's Angular component library. Accessible behavior, responsive rules, and a
+            shared visual language—ready before the first feature ticket.
+          </p>
+          <div class="hero__actions lift lift-4">
+            <a class="btn btn--primary" href="components.html">
+              Browse the catalog
+              <svg
+                class="btn__arrow"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M2 7h9M7.5 3.5 11 7l-3.5 3.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+            <a class="btn btn--ghost" href="migration.html">Read the migration guide</a>
+            <p class="install"><span>$</span>npm install @quinntyne/cornerstone @angular/cdk@^21</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------- component documentation -->
+      <section class="band band--open band--tight" aria-labelledby="preview-title">
+        <div class="band__rail" aria-hidden="true"></div>
+        <div class="band__body">
+          <figure class="docs-preview lift lift-5">
+            <figcaption class="docs-preview__bar">
+              <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span id="preview-title">Rendered from the public package</span>
+              <span class="docs-preview__status"><i aria-hidden="true"></i> Live docs</span>
+            </figcaption>
+            <div class="docs-preview__viewport">
+              <img
+                src="assets/components-docs.png"
+                width="1440"
+                height="900"
+                alt="Cornerstone documentation showing button, badge, form field, and guide card components in the dark theme"
+                decoding="async"
+              />
+              <div class="docs-preview__callout docs-preview__callout--actions" aria-hidden="true">
+                <span>Buttons</span><code>csButton</code>
+              </div>
+              <div class="docs-preview__callout docs-preview__callout--forms" aria-hidden="true">
+                <span>Field</span><code>cs-field</code>
+              </div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------- capability -->
+      <section class="band" aria-labelledby="carries-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">What it carries</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="carries-title">The hard parts arrive finished.</h2>
+            <p class="lede">
+              CDK behavior, theming, and migration support—without a framework inside your
+              framework.
+            </p>
+          </div>
+
+          <div class="grid stagger">
+            <article class="card reveal">
+              <svg
+                class="card__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                aria-hidden="true"
+              >
+                <rect x="3" y="6" width="18" height="12" rx="2" />
+                <path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" stroke-linecap="round" />
+              </svg>
+              <h3 class="subhead">Behavior, not paint</h3>
+              <p>Focus, overlays, live regions, and typeahead are backed by the Angular CDK.</p>
+            </article>
+
+            <article class="card reveal">
+              <svg
+                class="card__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                aria-hidden="true"
+              >
+                <path d="M4 6h16M4 12h10M4 18h13" stroke-linecap="round" />
+                <circle cx="18" cy="12" r="2" />
+              </svg>
+              <h3 class="subhead">Tokens all the way down</h3>
+              <p>Override a CSS custom property globally or on one subtree. No rebuild required.</p>
+            </article>
+
+            <article class="card reveal">
+              <svg
+                class="card__icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                aria-hidden="true"
+              >
+                <path d="M12 3 20 7.5v9L12 21 4 16.5v-9L12 3Z" stroke-linejoin="round" />
+                <path d="M12 12v9M12 12 4 7.5M12 12l8-4.5" stroke-linejoin="round" />
+              </svg>
+              <h3 class="subhead">Standalone by default</h3>
+              <p>
+                Import only what a screen uses. Every component runs <code>OnPush</code> and works
+                zoneless.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ----------------------------------------------------- compositions -->
+      <section class="band" aria-labelledby="compositions-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">In context</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="compositions-title">Pieces that become a product.</h2>
+            <p class="lede">
+              Start with a field or a badge. Compose the full workflow without changing visual
+              language halfway down the screen.
+            </p>
+          </div>
+
+          <div class="product-showcase">
+            <figure class="product-frame product-frame--workflow reveal">
+              <figcaption class="product-frame__bar">
+                <span>Volunteer onboarding</span><code>12 components</code>
+              </figcaption>
+              <div class="app-shell" aria-hidden="true">
+                <aside class="app-nav">
+                  <span class="app-mark"></span>
+                  <span class="app-nav__item app-nav__item--active"></span>
+                  <span class="app-nav__item"></span>
+                  <span class="app-nav__item"></span>
+                </aside>
+                <div class="app-content">
+                  <div class="app-heading">
+                    <div>
+                      <small>People / Onboarding</small><strong>Welcome the next volunteer</strong>
+                    </div>
+                    <span class="ui-avatar">QB</span>
+                  </div>
+                  <div class="ui-progress"><i></i></div>
+                  <div class="ui-step-row">
+                    <span class="ui-step ui-step--done"><i>1</i>Profile</span>
+                    <span class="ui-step ui-step--active"><i>2</i>Safeguarding</span>
+                    <span class="ui-step"><i>3</i>Team</span>
+                  </div>
+                  <div class="ui-panel">
+                    <div class="ui-panel__head">
+                      <strong>Safeguarding check</strong><span class="ui-badge">In review</span>
+                    </div>
+                    <div class="ui-field">
+                      <small>Reference contact</small><span>miriam@example.org</span>
+                    </div>
+                    <div class="ui-action-row">
+                      <span class="ui-button ui-button--muted">Back</span
+                      ><span class="ui-button">Continue</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </figure>
+
+            <figure class="product-frame product-frame--insight reveal">
+              <figcaption class="product-frame__bar">
+                <span>Programme health</span><code>9 components</code>
+              </figcaption>
+              <div class="insight" aria-hidden="true">
+                <div class="insight__head">
+                  <div><small>This month</small><strong>Movement is growing</strong></div>
+                  <span class="ui-badge ui-badge--success">+18%</span>
+                </div>
+                <div class="metric-row">
+                  <div class="metric">
+                    <small>Active groups</small><strong>24</strong><span>3 added</span>
+                  </div>
+                  <div class="metric">
+                    <small>Attendance</small><strong>87%</strong><span>On target</span>
+                  </div>
+                  <div class="metric">
+                    <small>Milestones</small><strong>142</strong><span>Completed</span>
+                  </div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-card__meta">
+                    <span>Weekly participation</span><code>12 weeks</code>
+                  </div>
+                  <div class="chart-bars">
+                    <i style="--bar: 42%"></i><i style="--bar: 55%"></i><i style="--bar: 48%"></i
+                    ><i style="--bar: 64%"></i><i style="--bar: 59%"></i><i style="--bar: 75%"></i
+                    ><i style="--bar: 71%"></i><i style="--bar: 86%"></i><i style="--bar: 82%"></i
+                    ><i style="--bar: 96%"></i>
+                  </div>
+                </div>
+                <div class="activity-row">
+                  <span class="ui-avatar ui-avatar--small">AM</span>
+                  <p>
+                    <strong>Ada completed a milestone</strong
+                    ><small>Toronto Youth · 8 min ago</small>
+                  </p>
+                  <span class="ui-badge">Complete</span>
+                </div>
+              </div>
+            </figure>
+          </div>
+
+          <p class="reveal spaced">
+            <a class="arrowlink" href="components.html"
+              >Explore all 144 components
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path
+                  d="M2 7h9M7.5 3.5 11 7l-3.5 3.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------- inventory -->
+      <section class="band band--compact" aria-labelledby="inventory-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Inventory</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="inventory-title">Ten domains, drawn from real screens.</h2>
+            <p class="lede">
+              Nothing here was invented for a demo. Every domain was scoped by auditing what Liturgy
+              and Word Up already render in production.
+            </p>
+          </div>
+
+          <div class="schedule schedule--compact reveal">
+            <a class="schedule__row" href="components.html#foundations">
+              <p class="schedule__name">
+                Foundations
+                <span class="schedule__desc"
+                  >Page, section, card, container, icon, badge, progress, and skeleton
+                  primitives</span
+                >
+              </p>
+              <p class="schedule__count">20</p>
+            </a>
+            <a class="schedule__row" href="components.html#forms">
+              <p class="schedule__name">
+                Forms
+                <span class="schedule__desc"
+                  >Fields, validation summaries, comboboxes, date and file inputs, and a
+                  wizard</span
+                >
+              </p>
+              <p class="schedule__count">18</p>
+            </a>
+            <a class="schedule__row" href="components.html#navigation">
+              <p class="schedule__name">
+                Navigation
+                <span class="schedule__desc"
+                  >App shell, sidenav, topbar, tabs, breadcrumbs, paginator, and public chrome</span
+                >
+              </p>
+              <p class="schedule__count">16</p>
+            </a>
+            <a class="schedule__row" href="components.html#data-display">
+              <p class="schedule__name">
+                Data display
+                <span class="schedule__desc"
+                  >Tables, lists, timelines, KPIs, metric charts, and empty and error states</span
+                >
+              </p>
+              <p class="schedule__count">21</p>
+            </a>
+            <a class="schedule__row" href="components.html#overlays">
+              <p class="schedule__name">
+                Overlays
+                <span class="schedule__desc"
+                  >Dialog and drawer shells, plus confirm and unsaved-changes conversations</span
+                >
+              </p>
+              <p class="schedule__count">5</p>
+            </a>
+            <a class="schedule__row" href="components.html#communication">
+              <p class="schedule__name">
+                Communication
+                <span class="schedule__desc"
+                  >Calendars, message threads, notifications, media viewers, and code surfaces</span
+                >
+              </p>
+              <p class="schedule__count">16</p>
+            </a>
+            <a class="schedule__row" href="components.html#process">
+              <p class="schedule__name">
+                Process
+                <span class="schedule__desc"
+                  >Kanban boards, phase lanes, gates, journeys, and requirement checklists</span
+                >
+              </p>
+              <p class="schedule__count">14</p>
+            </a>
+            <a class="schedule__row" href="components.html#workflows">
+              <p class="schedule__name">
+                Workflows
+                <span class="schedule__desc"
+                  >Rosters, curricula, quizzes, rubrics, reports, imports, and audit logs</span
+                >
+              </p>
+              <p class="schedule__count">26</p>
+            </a>
+            <a class="schedule__row" href="components.html#marketing">
+              <p class="schedule__name">
+                Marketing and auth
+                <span class="schedule__desc"
+                  >Hero, content and CTA sections, brand lockups, and sign-in layouts</span
+                >
+              </p>
+              <p class="schedule__count">7</p>
+            </a>
+            <a class="schedule__row" href="components.html#platform">
+              <p class="schedule__name">
+                Platform
+                <span class="schedule__desc"
+                  >The polite status region every service announces through</span
+                >
+              </p>
+              <p class="schedule__count">1</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------- guarantees -->
+      <section class="band band--compact" aria-labelledby="guarantees-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Load bearing</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="guarantees-title">What the build refuses to let through.</h2>
+            <p class="lede">
+              Continuous integration runs the accessibility sweep, the size budget, the API-surface
+              diff, and the traceability check on every pull request.
+            </p>
+          </div>
+
+          <div class="facts reveal">
+            <div class="fact">
+              <p class="fact__value">144</p>
+              <p class="fact__label">standalone components, every one on <code>OnPush</code></p>
+            </div>
+            <div class="fact">
+              <p class="fact__value">55</p>
+              <p class="fact__label">directives that add behavior to markup you already have</p>
+            </div>
+            <div class="fact">
+              <p class="fact__value">400<span class="fact__unit"> KiB</span></p>
+              <p class="fact__label">gzip ceiling on the published bundle, enforced by CI</p>
+            </div>
+            <div class="fact">
+              <p class="fact__value">6</p>
+              <p class="fact__label">
+                browser targets under test: the latest two Chromium, Firefox, and WebKit releases
+              </p>
+            </div>
+          </div>
+
+          <p class="prose reveal spaced">
+            Breaking changes are announced two minor releases ahead of the removal, and anything an
+            <code>ng update</code> migration cannot rewrite is reported by file with its manual
+            replacement. The full policy lives in <code>support-matrix.json</code>.
+          </p>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------- migration -->
+      <section class="band band--compact" aria-labelledby="migration-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">The bridge</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="migration-title">Move one screen. Then move the next one.</h2>
+            <p class="lede">
+              An optional compatibility stylesheet keeps the old class vocabulary rendering, so a
+              half-migrated application still looks finished to the people using it.
+            </p>
+          </div>
+
+          <div
+            class="tablewrap reveal"
+            role="region"
+            aria-label="Legacy family to Cornerstone replacement"
+            tabindex="0"
+          >
+            <table>
+              <caption class="visually-hidden">
+                A sample of the audited mapping from legacy class families to Cornerstone APIs
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Legacy family</th>
+                  <th scope="col">Cornerstone replacement</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">wu-btn*</th>
+                  <td><code>CsButtonDirective</code>, <code>ButtonGroupComponent</code></td>
+                </tr>
+                <tr>
+                  <th scope="row">wu-table*</th>
+                  <td><code>TableDirective</code>, <code>TableContainerComponent</code></td>
+                </tr>
+                <tr>
+                  <th scope="row">wu-modal*, wu-drawer*</th>
+                  <td><code>DialogService</code>, <code>DrawerService</code></td>
+                </tr>
+                <tr>
+                  <th scope="row">rail*, station*, movement*</th>
+                  <td>process rail, journey, stage, and movement dial components</td>
+                </tr>
+                <tr>
+                  <th scope="row">gate*, requirement*</th>
+                  <td><code>GateComponent</code>, <code>RequirementChecklistComponent</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="reveal spaced">
+            <a class="arrowlink" href="migration.html">
+              See the full audited mapping
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path
+                  d="M2 7h9M7.5 3.5 11 7l-3.5 3.5"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </p>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------- questions -->
+      <section class="band band--compact" aria-labelledby="faq-title">
+        <div class="band__rail" aria-hidden="true">
+          <p class="band__tick">Questions</p>
+        </div>
+        <div class="band__body">
+          <div class="band__head reveal">
+            <h2 class="headline" id="faq-title">Before you adopt it.</h2>
+          </div>
+
+          <div class="faq reveal">
+            <details>
+              <summary>Will it work in the app I already have?</summary>
+              <p class="prose">
+                If that app is on Angular 21 and Node 22, yes. Cornerstone declares the CDK as a
+                peer dependency and ships nothing global beyond the theme stylesheet you name
+                yourself, so it can sit beside whatever you are using today.
+              </p>
+            </details>
+            <details>
+              <summary>How much can I change without forking it?</summary>
+              <p class="prose">
+                Color, type, spacing, radius, shadow, motion, and container widths are all CSS
+                custom properties. Set them on <code>:root</code> for the whole application or on
+                any ancestor element to re-theme one subtree. Nothing needs recompiling.
+              </p>
+            </details>
+            <details>
+              <summary>How is accessibility actually verified?</summary>
+              <p class="prose">
+                Every build runs axe-core against rendered components in Chromium, Firefox, and
+                WebKit, alongside unit tests for focus order, ARIA relationships, and keyboard
+                interaction. Reduced-motion and forced-colors behavior are part of the theme rather
+                than an opt-in.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------- cta -->
+      <section class="band band--compact" aria-labelledby="cta-title">
+        <div class="band__rail" aria-hidden="true"></div>
+        <div class="band__body">
+          <div class="cta reveal">
+            <h2 class="headline cta__title" id="cta-title">Lay the first stone this afternoon.</h2>
+            <p class="lede">
+              Install the package, name the theme, and compose a screen. If it does not fit, the
+              catalog will tell you exactly which component is missing.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary" href="components.html">
+                Browse the catalog
+                <svg
+                  class="btn__arrow"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 7h9M7.5 3.5 11 7l-3.5 3.5"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+              <a class="btn btn--ghost" href="https://github.com/QuinntyneBrown/Cornerstone"
+                >View the source</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__group">
+          <a class="wordmark" href="index.html">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" stroke="currentColor" />
+              <path d="M1 1h6v6H1z" fill="currentColor" />
+            </svg>
+            Cornerstone
+          </a>
+          <p class="footer__note">
+            The shared UI foundation for FaithTech's software. Built and maintained in the open.
+          </p>
+        </div>
+        <nav class="footer__group" aria-labelledby="footer-library">
+          <h2 id="footer-library">Library</h2>
+          <ul>
+            <li><a href="components.html">Component catalog</a></li>
+            <li><a href="migration.html">Migration guide</a></li>
+            <li><a href="components.html#support">Support matrix</a></li>
+          </ul>
+        </nav>
+        <nav class="footer__group" aria-labelledby="footer-source">
+          <h2 id="footer-source">Source</h2>
+          <ul>
+            <li><a href="https://github.com/QuinntyneBrown/Cornerstone">Cornerstone</a></li>
+            <li><a href="https://github.com/QuinntyneBrown/Liturgy">Liturgy</a></li>
+            <li><a href="https://github.com/QuinntyneBrown/word-up">Word Up</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="colophon">
+        <div class="colophon__inner">
+          <p>MIT licensed</p>
+          <p>Angular 21 · Node 22</p>
+          <p>Built by FaithTech</p>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="scripts/foundation-field.js"></script>
+  </body>
+</html>

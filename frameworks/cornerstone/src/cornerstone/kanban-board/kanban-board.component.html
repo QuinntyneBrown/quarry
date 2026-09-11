@@ -1,0 +1,5 @@
+<div>
+  @for (column of columns(); track column.id) {
+    <cs-kanban-column [column]="column" (opened)="opened.emit($event)" />
+  }
+</div>

@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Summarize a metric
+
+Person(dev, "Application developer", "Binds a metric view model to a statistic or a chart")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Holds CsStatCard, CsKpi, CsProgressMatrix, CsMetricBars, and CsComparisonChart")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares tone, fill, pattern, and print resolutions")
+  Container(docs, "Documentation site", "Angular application", "Publishes the tone set, the cell states, and the value-table contract")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the dashboard or report layout")
+  Container(services, "Application services", "Angular injectables", "Computes aggregates, deltas, and comparison periods")
+}
+
+System_Ext(cdk, "Angular CDK", "Layout observation")
+System_Ext(browser, "Browser platform", "Rendering, print media, and accessibility tree")
+
+Rel(dev, page, "Binds a metric view model in")
+Rel(services, page, "Publishes computed figures to")
+Rel(page, lib, "Passes MetricDelta and CsMetricSeries to")
+Rel(lib, page, "Emits activation and selection intents to")
+Rel(lib, theme, "Resolves tone, fill, and pattern values from")
+Rel(lib, cdk, "Observes narrow-viewport breakpoints through", "BreakpointObserver")
+Rel(lib, browser, "Renders bars, tables, and live summaries to")
+Rel(theme, browser, "Supplies the print resolution to", "@media print")
+Rel(docs, lib, "Documents the metric contract of")
+@enduml

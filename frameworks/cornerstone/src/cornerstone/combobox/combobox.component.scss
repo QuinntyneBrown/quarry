@@ -1,0 +1,22 @@
+:host {
+  position: relative;
+  display: block;
+}
+[role='listbox'] {
+  position: absolute;
+  z-index: 20;
+  inline-size: 100%;
+  max-block-size: 18rem;
+  overflow: auto;
+  border: 1px solid var(--cs-border);
+  background: var(--cs-paper);
+  box-shadow: var(--cs-shadow-md);
+}
+[role='option'] {
+  display: block;
+  inline-size: 100%;
+  padding: var(--cs-space-3);
+  border: 0;
+  text-align: start;
+  background: transparent;
+}

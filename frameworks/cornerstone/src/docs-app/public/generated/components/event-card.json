@@ -1,0 +1,121 @@
+{
+  "kind": "class",
+  "name": "EventCardComponent",
+  "sourcePath": "src/cornerstone/event-card/event-card.component.ts",
+  "category": "communication",
+  "description": "Event Card public API.",
+  "members": [
+    {
+      "name": "event",
+      "bindingName": "event",
+      "role": "input",
+      "type": "CsEventViewModel",
+      "required": true,
+      "description": "Event public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "rsvp",
+      "bindingName": "rsvp",
+      "role": "output",
+      "type": "RsvpIntent",
+      "required": false,
+      "description": "Rsvp public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-event-card",
+  "slug": "event-card",
+  "label": "Event Card",
+  "tokens": [],
+  "relatedSymbols": ["CsEventViewModel", "RsvpIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsEventViewModel",
+      "sourcePath": "src/cornerstone/core/communication/cs-event-view-model.interface.ts",
+      "category": "communication",
+      "description": "Cs Event View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "start",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Start public API."
+        },
+        {
+          "name": "end",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "End public API."
+        },
+        {
+          "name": "location",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Location public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Status public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "RsvpIntent",
+      "sourcePath": "src/cornerstone/event-card/rsvp-intent.interface.ts",
+      "category": "communication",
+      "description": "Rsvp Intent public API.",
+      "members": [
+        {
+          "name": "eventId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Event Id public API."
+        },
+        {
+          "name": "response",
+          "role": "property",
+          "type": "'yes' | 'maybe' | 'no'",
+          "required": true,
+          "description": "Response public API."
+        }
+      ]
+    }
+  ]
+}

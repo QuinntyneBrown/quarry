@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Present a card
+
+Person(dev, "Application developer", "Presents Liturgy and Word Up records as cards")
+Person(user, "Application user", "Reads cards and activates the ones that navigate or select")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the card, its slots, and the divider")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Focus and interaction primitives the activation target builds on")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Renders the surface, manages focus, and exposes the accessibility tree")
+
+Rel(dev, cornerstone, "Composes card surfaces from")
+Rel(dev, app, "Binds records to cards in")
+Rel(app, cornerstone, "Renders cards and dividers from")
+Rel(cornerstone, cdk, "Builds focus and activation behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders the card surface and separator semantics into")
+Rel(browser, user, "Presents cards to")
+Rel(user, browser, "Activates a card in")
+@enduml

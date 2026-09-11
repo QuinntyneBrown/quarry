@@ -1,0 +1,138 @@
+{
+  "kind": "class",
+  "name": "AccountMenuComponent",
+  "sourcePath": "src/cornerstone/account-menu/account-menu.component.ts",
+  "category": "navigation",
+  "description": "Account Menu public API.",
+  "members": [
+    {
+      "name": "account",
+      "bindingName": "account",
+      "role": "input",
+      "type": "Account",
+      "required": true,
+      "description": "Account public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "actions",
+      "bindingName": "actions",
+      "role": "input",
+      "type": "readonly AccountAction[]",
+      "required": true,
+      "description": "Actions public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "actionSelected",
+      "bindingName": "actionSelected",
+      "role": "output",
+      "type": "AccountAction",
+      "required": false,
+      "description": "Action Selected public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "signOut",
+      "bindingName": "signOut",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Sign Out public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-account-menu",
+  "slug": "account-menu",
+  "label": "Account Menu",
+  "tokens": [
+    "--cs-border",
+    "--cs-error",
+    "--cs-paper",
+    "--cs-shadow-md",
+    "--cs-space-2",
+    "--cs-space-3"
+  ],
+  "relatedSymbols": ["Account", "AccountAction"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "Account",
+      "sourcePath": "src/cornerstone/account-menu/account.interface.ts",
+      "category": "navigation",
+      "description": "Account public API.",
+      "members": [
+        {
+          "name": "displayName",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Display Name public API."
+        },
+        {
+          "name": "email",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Email public API."
+        },
+        {
+          "name": "avatarSrc",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Avatar Src public API."
+        },
+        {
+          "name": "role",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Role public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AccountAction",
+      "sourcePath": "src/cornerstone/account-menu/account-action.interface.ts",
+      "category": "navigation",
+      "description": "Account Action public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "icon",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Icon public API."
+        },
+        {
+          "name": "danger",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Danger public API."
+        }
+      ]
+    }
+  ]
+}

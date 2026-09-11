@@ -1,0 +1,77 @@
+{
+  "kind": "class",
+  "name": "DataToolbarComponent",
+  "sourcePath": "src/cornerstone/data-toolbar/data-toolbar.component.ts",
+  "category": "data-display",
+  "description": "Data Toolbar public API.",
+  "members": [
+    {
+      "name": "filters",
+      "bindingName": "filters",
+      "role": "input",
+      "type": "readonly FilterChip[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Filters public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "exportRequested",
+      "bindingName": "exportRequested",
+      "role": "output",
+      "type": "ExportRequest",
+      "required": false,
+      "description": "Export Requested public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-data-toolbar",
+  "slug": "data-toolbar",
+  "label": "Data Toolbar",
+  "tokens": [],
+  "relatedSymbols": ["ExportRequest", "FilterChip"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ExportRequest",
+      "sourcePath": "src/cornerstone/data-toolbar/export-request.interface.ts",
+      "category": "data-display",
+      "description": "Export Request public API.",
+      "members": [
+        {
+          "name": "format",
+          "role": "property",
+          "type": "'csv' | 'pdf' | 'print'",
+          "required": true,
+          "description": "Format public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "FilterChip",
+      "sourcePath": "src/cornerstone/data-toolbar/filter-chip.interface.ts",
+      "category": "data-display",
+      "description": "Filter Chip public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        }
+      ]
+    }
+  ]
+}

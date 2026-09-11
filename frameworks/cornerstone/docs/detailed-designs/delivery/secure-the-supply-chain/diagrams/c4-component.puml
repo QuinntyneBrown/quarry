@@ -1,0 +1,43 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Secure the supply chain
+
+Person(maintainer, "Library maintainer", "Receives the scan, audit, and provenance results")
+
+Container_Boundary(lib, "cornerstone library") {
+  Component(safeurl, "csSafeUrl()", "Internal function", "Normalizes a consumer URL and matches its scheme against the allowlist")
+  Component(encode, "csEncodeAddress()", "Internal function", "Percent-encodes mailto and tel values against header injection")
+  Component(linkrules, "Link and iframe rules", "Component templates", "Apply rel noopener noreferrer, sandbox, title, and referrerpolicy")
+  Component(sanrules, "Sanitizer rules", "Component bindings", "Bind through Angular interpolation and never bypass the sanitizer")
+}
+
+Container_Boundary(ciw, "CI workflow") {
+  Component(lint, "Bypass lint rules", "Static analysis", "Forbid bypassSecurityTrust* on consumer values and innerHTML assignment")
+  Component(inject, "Injection suite", "Component tests", "Feed script and onerror payloads into every string and URL input")
+  Component(audit, "Dependency audit step", "npm audit --omit=dev --audit-level=high", "Fails on any high or critical production advisory")
+  Component(licence, "Dependency report step", "Workflow step", "Reports added dependencies, transitive additions, and licences")
+}
+
+Container_Boundary(rel, "Release workflow") {
+  Component(pack, "Tarball inspection step", "npm pack and file list check", "Fails on .env, credentials, or internal-only files")
+  Component(prov, "Provenance publish step", "npm publish --provenance --access public", "Records repository, workflow, and commit SHA")
+  Component(repro, "Reproducibility check", "Repeat build comparison", "Compares the packed output byte for byte")
+}
+
+System_Ext(sanitizer, "Angular sanitizer", "Strips unsafe markup and URL schemes")
+System_Ext(npm, "npm registry", "Stores the attestation")
+
+Rel(sanrules, sanitizer, "Delegates untrusted markup to")
+Rel(linkrules, safeurl, "Validates every rendered URL through")
+Rel(safeurl, encode, "Encodes mailto and tel values with")
+Rel(lint, sanrules, "Scans")
+Rel(lint, safeurl, "Requires every URL binding to call")
+Rel(inject, linkrules, "Drives hostile payloads through")
+Rel(audit, licence, "Runs alongside")
+Rel(audit, maintainer, "Reports advisories to")
+Rel(pack, prov, "Gates")
+Rel(prov, npm, "Publishes the attested tarball to")
+Rel(repro, pack, "Compares the output of")
+Rel(prov, maintainer, "Records the attestation identifier for")
+@enduml

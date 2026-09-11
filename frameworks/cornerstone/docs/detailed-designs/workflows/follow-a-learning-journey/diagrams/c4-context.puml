@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Follow a learning journey
+
+Person(youth, "Youth participant", "Works through the modules and lessons of a track")
+Person(guardian, "Guardian", "Reviews the progress of a participant")
+Person(dev, "Application developer", "Builds the Word Up journey screen from Cornerstone components")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the learning journey composites")
+System_Ext(app, "Consuming application", "Word Up Angular application owning progression rules and persistence")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for list key management and layout observation")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Renders the timeline and reports viewport and motion preferences")
+
+Rel(dev, cornerstone, "Composes the journey screen from")
+Rel(dev, app, "Implements progression services in")
+Rel(app, cornerstone, "Supplies the journey view model to")
+Rel(cornerstone, app, "Emits step and module intents to")
+Rel(cornerstone, cdk, "Builds keyboard and layout behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders the journey into")
+Rel(browser, youth, "Presents the journey to")
+Rel(browser, guardian, "Presents the progress summary to")
+Rel(youth, browser, "Activates a lesson step in")
+@enduml

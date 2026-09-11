@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Present a card
+
+Person(dev, "Application developer", "Chooses a tone, a presentation, and the slots to fill")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(card, "CardComponent", "Standalone component", "Renders the surface and owns the single activation target")
+  Component(header, "CsCardHeaderComponent", "Standalone component", "Renders the overline, title, subtitle, and trailing control")
+  Component(media, "CsCardMediaComponent", "Standalone component", "Reserves the aspect box and holds the image")
+  Component(content, "CsCardContentComponent", "Standalone component", "Holds the body at the readable prose measure")
+  Component(footer, "CsCardFooterComponent", "Standalone component", "Holds supporting metadata beneath the content")
+  Component(actions, "CsCardActionsComponent", "Standalone component", "Groups the card controls in a wrapping cluster")
+  Component(divider, "DividerComponent", "Standalone component", "Draws a rule with decorative or separator semantics")
+  Component(cluster, "CsClusterDirective", "Attribute directive", "Arranges the card actions so they wrap")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Tone, radius, and shadow tokens", "CSS custom properties", "Declare the paper, greige, ink, and lime surfaces and the elevation steps")
+}
+
+System_Ext(cdk, "Angular CDK", "FocusMonitor")
+System_Ext(browser, "Browser platform", "DOM, focus, and accessibility tree")
+
+Rel(dev, card, "Sets the tone and presentation on")
+Rel(card, header, "Projects")
+Rel(card, media, "Projects")
+Rel(card, content, "Projects")
+Rel(card, footer, "Projects")
+Rel(card, actions, "Projects")
+Rel(card, divider, "Separates its slots with")
+Rel(actions, cluster, "Arranges its children with")
+Rel(card, cdk, "Reports the focus origin of its activation target through")
+Rel(card, tokens, "Resolves the tone surface and elevation from")
+Rel(divider, tokens, "Resolves the rule colour and spacing from")
+Rel(card, browser, "Renders one anchor or button as the activation target into")
+Rel(divider, browser, "Sets role='separator' or aria-hidden on")
+Rel(tokens, browser, "Is resolved by", "CSS cascade")
+@enduml

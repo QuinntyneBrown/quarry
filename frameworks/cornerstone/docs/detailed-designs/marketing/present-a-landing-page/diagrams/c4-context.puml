@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Present a landing page
+
+Person(dev, "Application developer", "Composes the Word Up public site and the Liturgy cover page")
+Person_Ext(youth, "Youth", "Reads the programme description before signing up")
+Person_Ext(guardian, "Guardian", "Reads the programme and consent information before enrolling a young person")
+Person_Ext(volunteer, "Volunteer", "Reads the volunteer routes before applying")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the hero, content section, and call-to-action components")
+System_Ext(app, "Consuming application", "Word Up public site or Liturgy cover page")
+System_Ext(browser, "Browser platform", "Renders the page, resolves the cascade, and reports the viewport width")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Composes the public routes of")
+Rel(app, cornerstone, "Renders the page sections from")
+Rel(cornerstone, browser, "Renders the sections and scrolls anchors in")
+Rel(browser, youth, "Presents the landing page to")
+Rel(browser, guardian, "Presents the landing page to")
+Rel(browser, volunteer, "Presents the landing page to")
+Rel(youth, browser, "Selects a call-to-action in")
+Rel(app, browser, "Routes to the sign-up screen in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — Read a progress matrix
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as mentor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Competency report page" as page
+end box
+box "Frontend — Cornerstone metric components" #D1FADF
+  participant "ProgressMatrixComponent" as matrix
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+  participant "Screen reader" as sr
+end box
+
+page -> matrix : Bind rows, columns, and cell states per L2-096
+matrix -> matrix : Count cells per state
+matrix -> dom : Render caption with the done, in-progress, none, and not-applicable totals
+matrix -> dom : Render th scope="col" for each column
+matrix -> dom : Render th scope="row" for each row
+matrix -> dom : Render each cell with a glyph and its state name per L2-096
+matrix -> bp : Observe the narrow-viewport breakpoint
+bp --> matrix : Wide viewport
+
+matrix -> dom : Apply sticky position to the header row and the first column
+dom --> mentor : Matrix with headers held in view
+
+mentor -> sr : Move to a cell
+sr -> dom : Read the cell
+dom --> sr : Row header, column header, and state name
+sr --> mentor : "Isaiah, Scripture memory, in progress"
+
+opt Cell carries a note
+  mentor -> matrix : Activate the cell
+  matrix -> page : Emit CsMatrixCellRef { rowKey, columnKey }
+  page -> page : Open the competency detail
+end
+
+alt Narrow viewport
+  bp --> matrix : Narrow viewport
+  matrix -> dom : Drop the sticky first column
+  matrix -> dom : Wrap the table in a labelled region with tabindex="0"
+  mentor -> dom : Pan the region with the keyboard
+else Loading or error state
+  page -> matrix : Bind state { kind: 'loading' } per L2-101
+  matrix -> dom : Render the matrix skeleton and set aria-busy="true"
+end
+@enduml

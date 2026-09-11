@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Resolve the brand treatment
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell" as shell
+  participant "Hero panel" as hero
+end box
+box "Frontend — Cornerstone brand components" #D1FADF
+  participant "BrandLockupComponent" as lockup
+  participant "CsThemeService" as themesvc
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Brand colour styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Cascade and media queries" as browser
+end box
+
+user -> browser : Change the operating system colour scheme to dark
+browser -> themesvc : Emit the colour-scheme change
+themesvc -> lockup : Update the resolved theme signal per L2-033
+
+alt Treatment input is unset
+  lockup -> lockup : Select the dark treatment from the resolved theme per L2-148
+  lockup -> styles : Read the dark treatment palette
+  styles --> lockup : Computed fills
+else Treatment input is set on a dark hero panel
+  hero -> lockup : Bind treatment 'dark' explicitly
+  lockup -> lockup : Honour the explicit input over the resolved theme per L2-148
+end
+
+opt forced-colors is active
+  browser -> styles : Apply the forced-colours block
+  styles -> lockup : Select the mono treatment per L2-007
+end
+
+lockup -> browser : Re-render the inline SVG fills only
+lockup -> lockup : Hold the artwork geometry and the clear space unchanged
+browser --> user : Lockup legible on the new surface
+shell --> user : Header brand matching the active theme
+@enduml

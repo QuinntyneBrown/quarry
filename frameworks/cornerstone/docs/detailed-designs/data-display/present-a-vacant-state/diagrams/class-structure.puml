@@ -1,0 +1,114 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Present a vacant state
+
+enum CsDataStateKind {
+  idle
+  loading
+  empty
+  error
+  ready
+}
+
+interface CsDataState<T = void> {
+  +kind: CsDataStateKind
+  +value?: T
+  +error?: CsDataStateError
+}
+
+class CsDataStateError {
+  +message: string
+  +code?: string
+  +retryable?: boolean
+}
+
+class DataStateOutletComponent {
+  +state: InputSignal<CsDataState<unknown>>
+  +retry: OutputEmitterRef<void>
+  +stateChange: OutputEmitterRef<CsDataStateKind>
+  -kind: Signal<CsDataStateKind>
+  -announceTransition(kind: CsDataStateKind): void
+}
+
+class DataStateHostDirective {
+  +csDataState: InputSignal<CsDataState<unknown>>
+  +busy: Signal<boolean>
+  +retry: OutputEmitterRef<void>
+}
+
+class EmptyStateComponent {
+  +icon: InputSignal<string | null>
+  +eyebrow: InputSignal<string | null>
+  +title: InputSignal<string>
+  +description: InputSignal<string | null>
+  +variant: InputSignal<EmptyStateVariant>
+}
+
+enum EmptyStateVariant {
+  compact
+  card
+  fullPage
+}
+
+class StatePageComponent {
+  +condition: InputSignal<StatePageCondition>
+  +title: InputSignal<string | null>
+  +description: InputSignal<string | null>
+  +showBrand: InputSignal<boolean>
+  +action: OutputEmitterRef<CsStatePageAction>
+  -defaultsFor(condition: StatePageCondition): CsStatePageDefaults
+  -focusHeading(): void
+}
+
+enum StatePageCondition {
+  notFound
+  forbidden
+  sessionExpired
+  accountState
+  serverError
+  maintenance
+  offline
+  consentRequired
+}
+
+class CsStatePageDefaults {
+  +icon: string
+  +title: string
+  +description: string
+  +actions: CsStatePageAction[]
+}
+
+class CsStatePageAction {
+  +id: string
+  +condition: StatePageCondition
+}
+
+class CsStateAnnouncer {
+  +announce(kind: CsDataStateKind, summary: string): void
+  -politeness(kind: CsDataStateKind): CsAriaLive
+}
+
+CsDataState --> CsDataStateKind : discriminated by
+CsDataState o-- CsDataStateError : carries on error
+DataStateOutletComponent --> CsDataState : reads
+DataStateHostDirective --> CsDataState : reads
+DataStateOutletComponent ..> CsStateAnnouncer : reports transitions to
+DataStateHostDirective ..> CsStateAnnouncer : reports transitions to
+DataStateOutletComponent "1" --> "0..1" EmptyStateComponent : projects into the empty slot
+EmptyStateComponent --> EmptyStateVariant : has
+StatePageComponent --> StatePageCondition : has
+StatePageComponent ..> CsStatePageDefaults : resolves
+StatePageComponent --> CsStatePageAction : emits
+StatePageComponent *-- EmptyStateComponent : composes in full-page form
+@enduml

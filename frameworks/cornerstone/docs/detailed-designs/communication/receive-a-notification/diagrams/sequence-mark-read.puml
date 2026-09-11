@@ -1,0 +1,71 @@
+@startuml
+title UML sequence behaviour — Mark notifications read
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "NotificationViewModelService" as vm
+  participant "NotificationIntentHandler" as intent
+  participant "Application router" as router
+end box
+box "Frontend — Cornerstone notifications" #D1FADF
+  participant "NotificationListComponent" as list
+  participant "NotificationItemComponent" as item
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and FocusTrap" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region and focus" as browser
+end box
+
+intent -> vm : Record the announcement delivered per L2-112 as a new notification
+vm --> intent : Updated unread count
+
+user -> browser : Activate the notification trigger
+browser -> list : Open the panel
+list -> cdk : Trap focus inside the overlay panel per L2-111
+vm --> list : Supply the notification view model and unread count
+list -> item : Render one item per notification
+item -> item : Include the unread state in the accessible name per L2-111
+item -> browser : Show the unread state by icon and text as well as colour
+
+user -> item : Activate a notification carrying a deep link
+item -> intent : Emit a typed navigate intent with the target per L2-111
+item -> item : Perform no navigation
+intent -> router : Route to the target screen
+intent -> vm : Mark that notification read
+vm --> list : Supply the refreshed view model
+
+user -> list : Activate mark-all-read
+list -> intent : Emit one markAllRead intent per L2-111
+intent -> vm : Persist the read state of every unread notification
+vm --> list : Supply the refreshed view model and the marked count
+list -> browser : Announce how many were marked politely
+list -> browser : Keep focus on the mark-all-read action
+browser --> user : Stated count without a focus move
+
+alt The list is now empty
+  list -> list : Render the documented empty state and disable mark-all-read per L2-111
+  list --> user : Empty panel with a disabled action
+else Notifications remain
+  list --> user : Remaining notifications in the read state
+end
+
+opt Escape pressed at viewport XS
+  user -> browser : Press Escape
+  cdk -> browser : Close the panel and restore focus to the trigger per L2-111
+end
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Navigate the public site
+
+Person_Ext(visitor, "Visitor", "Reaches a public destination or the call to action")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(header, "MarketingHeaderComponent", "Standalone component", "Header landmark with brand, link set, call to action, and mobile menu state")
+  Component(toggle, "Mobile menu toggle", "Component-scoped template", "Expands the link list in flow with aria-expanded")
+  Component(cta, "Call-to-action control", "Component-scoped template", "Renders the primary and secondary public actions")
+  Component(footer, "MarketingFooterComponent", "Standalone component", "Footer landmark with grouped, social, and legal links")
+  Component(group, "Footer link group", "Component-scoped template", "Labelled nav landmark that collapses to a disclosure on narrow viewports")
+  Component(ext, "External link marker", "Component-scoped template", "Applies rel=noopener noreferrer and names the destination as external")
+}
+
+Container_Boundary(appb, "Consuming application") {
+  Component(config, "Public link configuration", "Plain data", "CsMarketingLink, MarketingLinkGroup, SocialLink, and MarketingCta values")
+  Component(router, "Angular Router", "Application routing", "Resolves routerLink bindings on internal public links")
+  Component(handler, "Call-to-action handler", "Angular component", "Acts on the emitted intent")
+}
+
+System_Ext(browserx, "Browser platform", "Viewport width, anchor activation, focus")
+
+Rel(config, header, "Supplies brand, links, and actions to")
+Rel(config, footer, "Supplies groups, social links, and legal links to")
+Rel(header, toggle, "Shows on narrow viewports")
+Rel(header, cta, "Renders the primary and secondary actions as")
+Rel(footer, group, "Renders each link group as")
+Rel(header, ext, "Marks external links with")
+Rel(footer, ext, "Marks external and social links with")
+Rel(visitor, toggle, "Activates")
+Rel(visitor, cta, "Activates")
+Rel(cta, handler, "Emits ctaSelected to")
+Rel(header, router, "Renders anchors resolved by", "routerLink supplied by the application")
+Rel(footer, router, "Renders anchors resolved by", "routerLink supplied by the application")
+Rel(ext, browserx, "Opens the external destination in")
+Rel(header, browserx, "Reads the viewport width from")
+@enduml

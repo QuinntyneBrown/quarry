@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Evaluate bridge removal
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Liturgy and Word Up templates" as templates
+  participant "docs/specs/migration.md" as guide
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI verify job" as job
+  participant "Deprecation announcement" as announce
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Selector inventory" as inventory
+  participant "Mapping completeness check" as complete
+  participant "Legacy usage report" as usage
+  participant "Removal criteria evaluator" as evaluator
+end box
+
+maintainer -> job : Run the bridge governance checks
+job -> inventory : Extract every family from the two compatibility partials
+inventory --> complete : Expected row set
+
+complete -> guide : Read the mapping rows
+guide --> complete : Replacement or explicit gap per family per L2-187
+alt Every declared family has a row
+  complete --> evaluator : Mapping complete, open gaps listed
+else A declared family has no row
+  complete --> job : Fail, naming the unmapped family per L2-187
+end
+
+job -> usage : Count remaining legacy occurrences
+usage -> templates : Scan for each legacy family
+templates --> usage : Occurrence count per family
+usage --> evaluator : Remaining counts per application
+
+evaluator -> evaluator : Evaluate no remaining legacy family per L2-189
+evaluator -> evaluator : Evaluate no open gap in the mapping per L2-189
+evaluator -> evaluator : Evaluate no application reference to the unprefixed token block per L2-189
+evaluator -> evaluator : Evaluate the announcement condition per L2-189
+
+alt Every criterion satisfied
+  evaluator --> job : Removal permitted
+  job -> announce : Mark the compatibility subpath deprecated with its removing major release
+  announce --> maintainer : Notice published under the deprecation policy
+else A criterion outstanding
+  evaluator --> maintainer : Report naming each outstanding criterion and its current value
+end
+@enduml

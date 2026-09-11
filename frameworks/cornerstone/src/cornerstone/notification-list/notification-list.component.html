@@ -1,0 +1,6 @@
+<button csButton="ghost" type="button" [disabled]="!unreadCount()" (click)="markAllRead.emit()">
+  Mark all read
+</button>
+@for (notification of notifications(); track notification.id) {
+  <cs-notification-item [notification]="notification" (activated)="navigate.emit($event)" />
+}

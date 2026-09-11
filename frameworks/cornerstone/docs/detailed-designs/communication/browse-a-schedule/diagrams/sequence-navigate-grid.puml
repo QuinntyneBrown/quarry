@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Navigate the calendar grid by keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "ScheduleViewModelService" as vm
+  participant "ScheduleIntentHandler" as intent
+end box
+box "Frontend — Cornerstone calendar" #D1FADF
+  participant "CalendarComponent" as calendar
+  participant "CalendarKeyboardGrid" as grid
+  participant "CalendarDate utilities" as dates
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusKeyManager" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region and focus" as browser
+end box
+
+user -> browser : Press ArrowDown on a focused day cell
+browser -> grid : Deliver keydown to the grid host
+grid -> dates : Move focused date by 7 days per L2-106
+dates --> grid : Target calendar date
+
+alt Target lies inside the displayed period
+  grid -> cdk : Move the roving tabindex to the target cell
+  cdk -> browser : Focus the target gridcell
+  browser --> user : Announce the full date accessible name per L2-106
+else Target lies outside the displayed period
+  grid -> calendar : Request the next period
+  calendar -> dates : Compute the next range from calendar dates
+  dates --> calendar : New CalendarRange
+  calendar -> intent : Emit rangeChange
+  intent -> vm : Load events for the new range
+  vm --> calendar : Refreshed CsCalendarDayEvents per L2-107
+  calendar -> calendar : Rebuild cells and mark outside-month days
+  calendar -> cdk : Place the roving tabindex on the target date
+  cdk -> browser : Focus the target gridcell
+  calendar -> browser : Announce the new period politely per L2-106
+  browser --> user : New period and focused date
+end
+
+opt Overflow indicator activated on the focused cell
+  user -> calendar : Activate the hidden-event indicator
+  calendar -> intent : Emit overflowOpened with the cell date
+  intent --> vm : Request the full day agenda
+end
+@enduml

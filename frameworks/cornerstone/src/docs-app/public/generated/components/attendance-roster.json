@@ -1,0 +1,226 @@
+{
+  "kind": "class",
+  "name": "AttendanceRosterComponent",
+  "sourcePath": "src/cornerstone/attendance-roster/attendance-roster.component.ts",
+  "category": "workflows",
+  "description": "Attendance Roster public API.",
+  "members": [
+    {
+      "name": "view",
+      "bindingName": "view",
+      "role": "input",
+      "type": "AttendanceRosterViewModel",
+      "required": true,
+      "description": "View public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "changed",
+      "bindingName": "changed",
+      "role": "output",
+      "type": "AttendanceChange",
+      "required": false,
+      "description": "Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "bulkChanged",
+      "bindingName": "bulkChanged",
+      "role": "output",
+      "type": "AttendanceBulkChange",
+      "required": false,
+      "description": "Bulk Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "noteChanged",
+      "bindingName": "noteChanged",
+      "role": "output",
+      "type": "AttendanceNoteChange",
+      "required": false,
+      "description": "Note Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "conflict",
+      "bindingName": "conflict",
+      "role": "output",
+      "type": "AttendanceConflictIntent",
+      "required": false,
+      "description": "Conflict public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-attendance-roster",
+  "slug": "attendance-roster",
+  "label": "Attendance Roster",
+  "tokens": [],
+  "relatedSymbols": [
+    "AttendanceBulkChange",
+    "AttendanceChange",
+    "AttendanceConflictIntent",
+    "AttendanceNoteChange",
+    "AttendanceRosterViewModel",
+    "AttendanceRowViewModel"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AttendanceBulkChange",
+      "sourcePath": "src/cornerstone/attendance-roster/attendance-bulk-change.interface.ts",
+      "category": "workflows",
+      "description": "Attendance Bulk Change public API.",
+      "members": [
+        {
+          "name": "state",
+          "role": "property",
+          "type": "CsAttendanceState",
+          "required": true,
+          "description": "State public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AttendanceChange",
+      "sourcePath": "src/cornerstone/attendance-roster/attendance-change.interface.ts",
+      "category": "workflows",
+      "description": "Attendance Change public API.",
+      "members": [
+        {
+          "name": "rowId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Row Id public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "CsAttendanceState",
+          "required": true,
+          "description": "State public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AttendanceConflictIntent",
+      "sourcePath": "src/cornerstone/attendance-roster/attendance-conflict-intent.interface.ts",
+      "category": "workflows",
+      "description": "Attendance Conflict Intent public API.",
+      "members": [
+        {
+          "name": "rowId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Row Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AttendanceNoteChange",
+      "sourcePath": "src/cornerstone/attendance-roster/attendance-note-change.interface.ts",
+      "category": "workflows",
+      "description": "Attendance Note Change public API.",
+      "members": [
+        {
+          "name": "rowId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Row Id public API."
+        },
+        {
+          "name": "note",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Note public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AttendanceRosterViewModel",
+      "sourcePath": "src/cornerstone/attendance-roster/attendance-roster-view-model.interface.ts",
+      "category": "workflows",
+      "description": "Attendance Roster View Model public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "rows",
+          "role": "property",
+          "type": "readonly AttendanceRowViewModel[]",
+          "required": true,
+          "description": "Rows public API."
+        },
+        {
+          "name": "pending",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Pending public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AttendanceRowViewModel",
+      "sourcePath": "src/cornerstone/attendance-roster/attendance-row-view-model.interface.ts",
+      "category": "workflows",
+      "description": "Attendance Row View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "person",
+          "role": "property",
+          "type": "PersonSummary",
+          "required": true,
+          "description": "Person public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "CsAttendanceState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "note",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Note public API."
+        },
+        {
+          "name": "conflict",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Conflict public API."
+        }
+      ]
+    }
+  ]
+}

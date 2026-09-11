@@ -1,0 +1,46 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Document the library
+
+Person(dev, "Application developer", "Opens a component page and copies an example")
+
+Container_Boundary(docsite, "Documentation site") {
+  Component(shell, "CsDocsShellComponent", "Angular component", "Navigation rail, search, theme toggle, and router outlet")
+  Component(page, "CsDocsPageComponent", "Angular component", "Projects the seven sections of an API page in a fixed order")
+  Component(example, "CsDocsExampleComponent", "Angular component", "Hosts one live example and switches between preview and source")
+  Component(viewer, "CsDocsSourceViewerComponent", "Angular component", "Renders example source and exposes the copy action")
+  Component(gallery, "CsDocsVariantGalleryComponent", "Angular component", "Renders every documented variant in the light and dark themes")
+  Component(apitable, "CsDocsApiTableComponent", "Angular component", "Groups members into inputs, outputs, methods, and injection tokens")
+  Component(a11y, "CsDocsAccessibilityNotesComponent", "Angular component", "Names the ARIA pattern and tabulates key bindings")
+  Component(theming, "CsDocsThemingNotesComponent", "Angular component", "Lists the --cs- tokens the component reads")
+  Component(guides, "Guide pages", "Angular routed components", "Getting started, theming, accessibility, SSR, forms, migration, contribution")
+  Component(registry, "CsDocsExampleRegistry", "Injectable service", "Maps an example identifier to a component type and its source text")
+  Component(apiservice, "CsDocsApiService", "Injectable service", "Loads the manifest and resolves an entry by symbol name")
+}
+
+Container_Boundary(gen, "API extraction") {
+  Component(walker, "Export walker", "TypeScript compiler API", "Resolves every symbol re-exported from public-api.ts")
+  ComponentDb(manifest, "api.json", "Generated JSON asset", "One CsDocsApiEntry per exported symbol")
+}
+
+Container_Ext(lib, "Component library", "Angular standalone components", "The documented public surface")
+
+Rel(dev, shell, "Navigates")
+Rel(shell, page, "Routes to")
+Rel(shell, guides, "Routes to")
+Rel(page, example, "Projects")
+Rel(page, gallery, "Projects")
+Rel(page, apitable, "Projects")
+Rel(page, a11y, "Projects")
+Rel(page, theming, "Projects")
+Rel(example, viewer, "Shows source through")
+Rel(example, registry, "Resolves the example component from")
+Rel(registry, lib, "Instantiates examples that import")
+Rel(gallery, lib, "Renders variants of")
+Rel(page, apiservice, "Resolves the API entry from")
+Rel(apitable, apiservice, "Reads members from")
+Rel(apiservice, manifest, "Loads", "HTTP fetch")
+Rel(walker, lib, "Reads the public entry point of")
+Rel(walker, manifest, "Writes")
+@enduml

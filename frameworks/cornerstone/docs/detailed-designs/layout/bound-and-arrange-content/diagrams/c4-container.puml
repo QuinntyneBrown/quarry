@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Bound and arrange content
+
+Person(dev, "Application developer", "Applies bounds and arrangement in feature templates")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Provides ContainerComponent, the layout primitives, and CsResponsiveRegionDirective")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the spacing scale and the container width tokens")
+  Container(docs, "Documentation site", "Angular application", "Publishes the layout recipes and the reflow pattern table")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Bounds the routed outlet")
+  Container(page, "Feature page", "Angular components", "Applies csStack, csCluster, csGrid, and csResponsiveRegion")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver and layout observation")
+System_Ext(browser, "Browser platform", "Layout engine and resize reporting")
+
+Rel(dev, page, "Applies the layout primitives in")
+Rel(shell, lib, "Bounds the routed outlet with cs-container from")
+Rel(page, lib, "Arranges children with directives from")
+Rel(lib, theme, "Resolves gap, gutter, and bound values from")
+Rel(lib, cdk, "Subscribes to width changes through", "BreakpointObserver")
+Rel(cdk, browser, "Observes element size in", "ResizeObserver")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(lib, browser, "Declares grid and flex tracks to")
+Rel(docs, lib, "Documents the inputs of")
+@enduml

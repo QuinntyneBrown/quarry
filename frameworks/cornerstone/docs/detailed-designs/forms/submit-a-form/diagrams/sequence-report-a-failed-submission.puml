@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Report a failed submission
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormGroup" as form
+end box
+box "Frontend — Cornerstone submission components" #D1FADF
+  participant "FormActionsComponent" as actions
+  participant "ValidationSummaryComponent" as summary
+  participant "Focus router" as focus
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendered form" as dom
+  participant "Assistive technology" as at
+end box
+
+user -> dom : Activate the submit control
+dom -> page : submit event
+page -> form : Read the form status
+form --> page : status INVALID with three invalid controls
+
+page -> summary : Supply the error entries
+summary -> summary : Order the entries by the DOM order of the fields per L2-061
+summary -> dom : Render one link per entry pointing at its control identifier per L2-061
+summary -> focus : Move focus to the summary heading
+focus -> dom : Focus the heading per L2-061
+summary -> announcer : Announce the failure assertively exactly once per L2-061
+announcer -> at : Assertive announcement
+actions -> dom : Keep the primary action out of the loading state per L2-060
+
+user -> dom : Activate a summary entry
+dom -> summary : entryActivated(controlId)
+summary -> focus : focusControl(controlId)
+focus -> dom : Move focus to the control and scroll it into view per L2-061
+
+user -> dom : Correct every invalid control
+user -> dom : Activate the submit control again
+dom -> page : submit event
+page -> form : Read the form status
+form --> page : status VALID
+page -> summary : Supply an empty error list
+summary -> dom : Leave the DOM per L2-061
+summary --> announcer : No stale announcement per L2-061
+summary --> user : Submission proceeds with no summary present
+@enduml

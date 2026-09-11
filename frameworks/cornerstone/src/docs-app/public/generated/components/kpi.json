@@ -1,0 +1,36 @@
+{
+  "kind": "class",
+  "name": "KpiComponent",
+  "sourcePath": "src/cornerstone/kpi/kpi.component.ts",
+  "category": "data-display",
+  "description": "Kpi public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "string | number",
+      "required": true,
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-kpi",
+  "slug": "kpi",
+  "label": "Kpi",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

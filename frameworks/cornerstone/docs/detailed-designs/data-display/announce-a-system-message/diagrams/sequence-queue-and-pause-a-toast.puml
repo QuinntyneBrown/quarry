@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Queue, pause, and act on a toast
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application services" as svc
+  participant "Application shell" as shell
+end box
+box "Frontend — Cornerstone message runtime" #D1FADF
+  participant "ToastService" as toasts
+  participant "ToastRef" as ref
+  participant "ToastOutletComponent" as outlet
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and assistive technology" as dom
+end box
+
+shell -> outlet : Mount the single outlet
+svc -> toasts : open() three times in sequence
+
+alt Outlet is absent in development mode
+  toasts -> toasts : Throw an error naming the required outlet per L2-083
+else Outlet is mounted
+  toasts -> toasts : Admit messages up to the maximum visible and queue the rest per L2-083
+end
+
+toasts -> ref : Create one handle per message
+ref --> svc : ToastRef with afterDismissed
+toasts -> outlet : Release the visible messages in order
+outlet -> cdk : Position the outlet above the page
+outlet -> dom : Announce each message in order without dropping one per L2-083
+
+user -> dom : Move the pointer over the second message
+dom -> outlet : Pointer enter
+outlet -> outlet : Pause the timeout per L2-083
+user -> dom : Move focus into the message
+dom -> outlet : Focus in
+outlet -> outlet : Keep the timeout paused per L2-083
+user -> dom : Leave with pointer and focus
+dom -> outlet : Pointer leave and focus out
+outlet -> outlet : Resume from the remaining time per L2-083
+
+user -> dom : Activate the message action
+dom -> outlet : Click event
+outlet -> toasts : Report the action outcome
+toasts -> ref : Resolve afterDismissed with 'action' per L2-083
+ref --> svc : ToastResult 'action'
+outlet -> dom : Remove the message and move no focus per L2-083
+toasts -> outlet : Release the queued message into the freed slot
+dom --> user : Next message presented in order
+@enduml

@@ -1,0 +1,57 @@
+{
+  "kind": "class",
+  "name": "CtaSectionComponent",
+  "sourcePath": "src/cornerstone/cta-section/cta-section.component.ts",
+  "category": "marketing",
+  "description": "Cta Section public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "summary",
+      "bindingName": "summary",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Summary public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "actions",
+      "bindingName": "actions",
+      "role": "input",
+      "type": "readonly CtaAction[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Actions public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-cta-section",
+  "slug": "cta-section",
+  "label": "Cta Section",
+  "tokens": ["--cs-ink", "--cs-paper", "--cs-radius-lg", "--cs-space-8"],
+  "relatedSymbols": ["CtaAction"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CtaAction",
+      "sourcePath": "src/cornerstone/cta-section/cta-action.interface.ts",
+      "category": "marketing",
+      "description": "Cta Action public API.",
+      "members": []
+    }
+  ]
+}

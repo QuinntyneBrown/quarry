@@ -1,0 +1,112 @@
+{
+  "kind": "class",
+  "name": "RecordTabsComponent",
+  "sourcePath": "src/cornerstone/record-tabs/record-tabs.component.ts",
+  "category": "workflows",
+  "description": "Record Tabs public API.",
+  "members": [
+    {
+      "name": "sections",
+      "bindingName": "sections",
+      "role": "input",
+      "type": "readonly RecordSection[]",
+      "required": true,
+      "description": "Sections public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "active",
+      "bindingName": "active",
+      "role": "model",
+      "type": "string",
+      "required": true,
+      "description": "Active public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "orientation",
+      "bindingName": "orientation",
+      "role": "input",
+      "type": "RecordTabsOrientation",
+      "required": false,
+      "defaultValue": "'horizontal'",
+      "description": "Orientation public API.",
+      "structured": false,
+      "options": ["horizontal", "vertical"]
+    },
+    {
+      "name": "changed",
+      "bindingName": "changed",
+      "role": "output",
+      "type": "RecordSectionChange",
+      "required": false,
+      "description": "Changed public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-record-tabs",
+  "slug": "record-tabs",
+  "label": "Record Tabs",
+  "tokens": [],
+  "relatedSymbols": ["RecordSection", "RecordSectionChange", "RecordTabsOrientation"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "RecordSection",
+      "sourcePath": "src/cornerstone/record-tabs/record-section.interface.ts",
+      "category": "workflows",
+      "description": "Record Section public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "disabled",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Disabled public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "RecordSectionChange",
+      "sourcePath": "src/cornerstone/record-tabs/record-section-change.interface.ts",
+      "category": "workflows",
+      "description": "Record Section Change public API.",
+      "members": [
+        {
+          "name": "sectionId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Section Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "RecordTabsOrientation",
+      "sourcePath": "src/cornerstone/record-tabs/record-tabs-orientation.type.ts",
+      "category": "workflows",
+      "description": "Record Tabs Orientation public API.",
+      "declaration": "'horizontal' | 'vertical'"
+    }
+  ]
+}

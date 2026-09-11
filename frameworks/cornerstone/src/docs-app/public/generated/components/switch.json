@@ -1,0 +1,22 @@
+{
+  "kind": "class",
+  "name": "SwitchComponent",
+  "sourcePath": "src/cornerstone/switch/switch.component.ts",
+  "category": "forms",
+  "description": "Switch public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-switch",
+  "slug": "switch",
+  "label": "Switch",
+  "tokens": [
+    "--cs-border-strong",
+    "--cs-duration",
+    "--cs-ink",
+    "--cs-lime",
+    "--cs-space-2",
+    "--cs-surface"
+  ],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Capture attendance
+
+Person(volunteer, "Volunteer", "Records who attended a session from a phone at the venue")
+Person(mentor, "Mentor", "Reviews and corrects attendance for a cohort")
+Person(admin, "Administrator", "Resolves attendance conflicts and audits a session")
+Person(dev, "Application developer", "Builds the Word Up session screen from Cornerstone components")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the attendance roster composite")
+System_Ext(app, "Consuming application", "Word Up portal; owns attendance rules, persistence, and authorization")
+System_Ext(cdk, "Angular CDK", "Focus, live announcement, and layout observation primitives")
+System_Ext(browser, "Browser platform", "Renders the roster and reports pointer, keyboard, and connectivity events")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(volunteer, browser, "Marks attendance in")
+Rel(mentor, browser, "Corrects attendance in")
+Rel(admin, browser, "Resolves conflicts in")
+Rel(dev, cornerstone, "Composes the session screen from")
+Rel(dev, app, "Implements the attendance rules in")
+Rel(app, cornerstone, "Supplies the roster view model to")
+Rel(cornerstone, app, "Emits typed attendance intents to")
+Rel(cornerstone, cdk, "Builds behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders the roster in")
+@enduml

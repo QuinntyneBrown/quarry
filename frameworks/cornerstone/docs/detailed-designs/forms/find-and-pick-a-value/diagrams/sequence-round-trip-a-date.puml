@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Round-trip a date value
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+end box
+box "Frontend — Cornerstone selection components" #D1FADF
+  participant "DateTimeFieldComponent" as field
+  participant "Bound validator" as bounds
+end box
+box "Browser — platform" #FFF4E5
+  participant "Native datetime-local input" as dom
+  participant "Local timezone and picker" as platform
+end box
+
+page -> field : Bind min, max, and the timezone input
+control -> field : registerOnChange(fn)
+control -> field : registerOnTouched(fn)
+control -> field : writeValue('2026-07-20T18:30:00-04:00')
+field -> platform : Read the local timezone offset
+field -> dom : Assign the native local value without silent conversion per L2-057
+
+user -> platform : Open the platform picker at viewport XS
+platform --> dom : Selected value
+dom -> field : change event
+field -> field : Convert the local value to the timezone-explicit contract per L2-057
+field -> control : onChange(contractValue)
+control -> bounds : Validate against min and max
+
+alt Value inside the bounds
+  bounds --> control : status VALID
+  field -> dom : Keep aria-invalid unset
+else Value outside the bounds
+  bounds --> control : Documented bound error per L2-057
+  field -> dom : Set aria-invalid=true
+else Manual entry is unparseable
+  user -> dom : Type an unparseable value and blur
+  dom -> field : blur event
+  field -> control : onTouched()
+  field -> control : Report the documented parse error per L2-057
+  field -> dom : Retain the entered text and substitute no previous value per L2-057
+end
+
+control -> field : writeValue(contractValue)
+field -> dom : Render the identical value in any supported timezone per L2-057
+field --> user : Round-tripped value shown with its validation state
+@enduml

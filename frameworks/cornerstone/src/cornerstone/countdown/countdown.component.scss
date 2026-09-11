@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+.clock {
+  display: flex;
+  gap: var(--cs-space-5);
+  flex-wrap: wrap;
+}
+.unit {
+  display: grid;
+  gap: var(--cs-space-2);
+}
+.value {
+  font: var(--cs-font-weight-bold) var(--cs-countdown-size)/1 var(--cs-font-display);
+  letter-spacing: var(--cs-heading-tracking);
+  font-variant-numeric: tabular-nums;
+}
+.label {
+  color: var(--cs-ink-muted);
+  font-size: var(--cs-text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--cs-label-tracking);
+}
+.caption {
+  color: var(--cs-ink-muted);
+  margin-block-start: var(--cs-space-6);
+}

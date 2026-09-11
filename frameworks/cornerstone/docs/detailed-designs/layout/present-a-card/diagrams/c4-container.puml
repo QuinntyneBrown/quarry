@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Present a card
+
+Person(dev, "Application developer", "Places cards in feature templates")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides CardComponent, the five card slots, and DividerComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tone, radius, shadow, and spacing tokens the card resolves")
+  Container(docs, "Documentation site", "Angular application", "Publishes the tone and presentation matrix")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Binds records to cards and handles the activated output")
+  Container(services, "Application services", "Angular services", "Own routing, selection state, and persistence")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus and interaction primitives")
+System_Ext(browser, "Browser platform", "DOM, focus, and accessibility tree")
+
+Rel(dev, page, "Places cs-card and cs-divider in")
+Rel(page, lib, "Renders cards and dividers from")
+Rel(lib, page, "Emits the activated intent to")
+Rel(page, services, "Delegates routing and selection to")
+Rel(lib, theme, "Resolves tone, radius, shadow, and spacing from")
+Rel(lib, cdk, "Reports focus origin through", "FocusMonitor")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(lib, browser, "Renders the surface and separator semantics into")
+Rel(docs, lib, "Documents the tones and presentations of")
+@enduml

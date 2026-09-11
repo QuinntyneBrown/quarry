@@ -1,0 +1,8 @@
+<ul>
+  @for (item of items(); track item.id) {
+    <li>
+      <a [href]="item.url">{{ item.name }}</a
+      ><span>{{ item.size }} bytes</span>
+    </li>
+  }
+</ul>

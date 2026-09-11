@@ -1,0 +1,8 @@
+<button
+  type="button"
+  [attr.aria-pressed]="selected()"
+  [disabled]="disabled()"
+  (click)="selectedChange.emit(!selected())"
+>
+  <ng-content />
+</button>

@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Locate the current page
+
+Person(dev, "Application developer", "Binds the crumb list in the top bar region")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies BreadcrumbsComponent and the anchored overflow menu")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the type, spacing, and colour tokens the trail reads")
+  Container(docs, "Documentation site", "Angular application", "Publishes the crumb model and the router integration contract")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular component", "Hosts the top bar that contains the trail")
+  Container(page, "Feature page", "Angular routed components", "Declares its own crumb data")
+  Container(services, "Application services", "Angular injectables", "Owns the route table and resolves route data into crumbs")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay and connected position strategy")
+System_Ext(browser, "Browser platform", "Anchor activation and viewport width")
+
+Rel(dev, shell, "Places cs-breadcrumbs in the top bar of")
+Rel(page, services, "Contributes route data to")
+Rel(services, shell, "Supplies the resolved crumb list to")
+Rel(shell, lib, "Renders the breadcrumbs component of")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Opens the overflow menu through")
+Rel(lib, browser, "Renders anchors and the nav landmark in")
+Rel(browser, services, "Reports anchor activation to", "Angular Router")
+Rel(docs, lib, "Documents the crumb model of")
+@enduml

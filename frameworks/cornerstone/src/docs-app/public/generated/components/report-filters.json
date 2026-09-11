@@ -1,0 +1,107 @@
+{
+  "kind": "class",
+  "name": "ReportFiltersComponent",
+  "sourcePath": "src/cornerstone/report-filters/report-filters.component.ts",
+  "category": "workflows",
+  "description": "Report Filters public API.",
+  "members": [
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "ReportFilterState",
+      "required": true,
+      "description": "Value public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "changed",
+      "bindingName": "changed",
+      "role": "output",
+      "type": "ReportFilterState",
+      "required": false,
+      "description": "Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "exported",
+      "bindingName": "exported",
+      "role": "output",
+      "type": "ReportExportIntent",
+      "required": false,
+      "description": "Exported public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-report-filters",
+  "slug": "report-filters",
+  "label": "Report Filters",
+  "tokens": [],
+  "relatedSymbols": ["ReportExportIntent", "ReportFilterState"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ReportExportIntent",
+      "sourcePath": "src/cornerstone/report-filters/report-export-intent.interface.ts",
+      "category": "workflows",
+      "description": "Report Export Intent public API.",
+      "members": [
+        {
+          "name": "format",
+          "role": "property",
+          "type": "'csv' | 'pdf' | 'print'",
+          "required": true,
+          "description": "Format public API."
+        },
+        {
+          "name": "filters",
+          "role": "property",
+          "type": "ReportFilterState",
+          "required": true,
+          "description": "Filters public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ReportFilterState",
+      "sourcePath": "src/cornerstone/report-filters/report-filter-state.interface.ts",
+      "category": "workflows",
+      "description": "Report Filter State public API.",
+      "members": [
+        {
+          "name": "search",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Search public API."
+        },
+        {
+          "name": "from",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "From public API."
+        },
+        {
+          "name": "to",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "To public API."
+        },
+        {
+          "name": "facets",
+          "role": "property",
+          "type": "Readonly<Record<string, readonly string[]>>",
+          "required": false,
+          "description": "Facets public API."
+        }
+      ]
+    }
+  ]
+}

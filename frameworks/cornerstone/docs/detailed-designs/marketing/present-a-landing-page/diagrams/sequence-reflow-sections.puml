@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Reflow sections on a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as visitor
+box "Frontend — Cornerstone marketing components" #D1FADF
+  participant "HeroComponent" as hero
+  participant "ContentSectionComponent" as section
+  participant "CtaSectionComponent" as cta
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Section rhythm styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport and cascade" as browser
+end box
+
+visitor -> browser : Open the page on a handset
+browser -> styles : Evaluate the section media queries
+
+alt Viewport below the section breakpoint
+  styles -> hero : Apply the stacked hero rules per L2-145
+  hero -> browser : Place the media beneath the copy and stack the actions full width
+  styles -> section : Collapse the prose-media band to one column per L2-146
+  section -> browser : Emit prose before media in reading order regardless of reverse
+  styles -> section : Reduce the card grid and stats to a single column per L2-146
+  styles -> cta : Apply the compact width and stack the actions per L2-147
+else Viewport at or above the section breakpoint
+  styles -> hero : Apply the two-column hero rules per L2-145
+  styles -> section : Restore the alternating two-column bands per L2-146
+  styles -> cta : Apply the configured compact or full width per L2-147
+end
+
+styles -> browser : Reduce the vertical band padding to the narrow step
+browser --> visitor : Page at the arrangement the viewport supports
+@enduml

@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Reflow a data table
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up people directory page" as page
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "TableContainerComponent" as table
+  participant "ResponsiveTableDirective" as rtable
+  participant "CsScrollRegionDirective" as scroll
+end box
+box "Frontend — Cornerstone CDK adapter layer" #ECFDF3
+  participant "CsBreakpointService" as bp
+end box
+box "Browser — platform" #FFF4E5
+  participant "Media query engine and layout" as browser
+end box
+
+page -> table : Render the directory at 1280 CSS pixels
+table -> bp : Read the active viewport class
+bp -> browser : Observe the published CsBreakpoints queries per L2-030
+browser --> bp : Matches lg
+bp --> table : active() = 'lg'
+table -> browser : Render rows, headers, and a horizontal scroll container
+table -> scroll : Name the scroller and set tabindex="0" per L2-031
+browser --> user : Tabular directory
+
+user -> browser : Zoom to 400 percent, giving a 320 CSS pixel width
+browser -> bp : Media query change event
+bp -> bp : Recompute the active class from CsBreakpoints per L2-030
+bp --> rtable : active() = 'xs'
+
+alt Active class is below the configured reflow class
+  rtable -> table : Switch to the labelled card layout per L2-031
+  rtable -> rtable : Keep each cell associated with its header identifier
+  rtable -> browser : Project the row content once, not per variant
+  browser -> browser : Lay out cards in a single column with no second scroll axis
+  browser --> user : Labelled cards readable at 320 CSS pixels
+else Active class is at or above the configured class
+  rtable -> table : Keep the tabular layout
+end
+
+user -> browser : Tab through the card layout
+browser -> rtable : Focus moves cell by cell
+rtable --> user : Keyboard order matching the table reading order
+browser -> browser : Render every row action at 24 by 24 CSS pixels per L2-031
+@enduml

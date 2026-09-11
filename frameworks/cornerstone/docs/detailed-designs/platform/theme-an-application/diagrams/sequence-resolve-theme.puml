@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Resolve the active theme
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application config" as config
+  participant "Application shell" as shell
+end box
+box "Frontend — Cornerstone theme runtime" #D1FADF
+  participant "provideCsTheme()" as provider
+  participant "CsThemeService" as service
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Component styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Cascade and media queries" as browser
+end box
+
+dev -> config : Call provideCsTheme()
+config -> provider : Bootstrap providers
+provider -> service : Register in the injector per L2-033
+service -> service : Read default preference 'system'
+
+alt Server-side render
+  service -> service : Resolve documented server default per L2-033
+else Client render
+  service -> browser : Query prefers-color-scheme
+  browser --> service : Current colour scheme
+end
+
+service -> shell : Publish resolved theme signal
+shell -> shell : Stamp .cs-theme-dark or .cs-theme-light
+shell -> browser : Attach theme class to ancestor element
+browser -> styles : Resolve --cs- custom properties per L2-005
+styles -> browser : Apply dark palette per L2-006
+browser -> browser : Apply forced-colors overrides per L2-007
+browser -> browser : Collapse motion durations per L2-008
+browser --> shell : Computed styles
+shell --> dev : Themed screen
+
+opt Operating system scheme changes
+  browser -> service : Media query change event
+  service -> shell : Update resolved theme signal
+  shell -> browser : Restamp theme class
+end
+@enduml

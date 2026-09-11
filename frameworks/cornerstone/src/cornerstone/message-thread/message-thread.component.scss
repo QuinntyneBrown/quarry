@@ -1,0 +1,22 @@
+ol {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--cs-space-4);
+}
+li {
+  display: flex;
+  gap: var(--cs-space-3);
+}
+li.own {
+  flex-direction: row-reverse;
+}
+article {
+  max-inline-size: 70ch;
+  padding: var(--cs-space-3);
+  border-radius: var(--cs-radius-md);
+  background: var(--cs-surface);
+}
+p {
+  white-space: pre-wrap;
+}

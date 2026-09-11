@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Render the public page chrome
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Visitor" as visitor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Angular Router" as router
+  participant "Public route layout" as layout
+  participant "Call-to-action handler" as handler
+end box
+box "Frontend — Cornerstone public chrome" #D1FADF
+  participant "MarketingHeaderComponent" as header
+  participant "MarketingFooterComponent" as footer
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Theme stylesheet" as theme
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and viewport" as dom
+end box
+
+visitor -> dom : Open a public URL without a session
+dom -> router : Resolve the public route
+router -> layout : Activate the public layout
+layout -> header : Bind brand, links, and the call to action per L2-075
+layout -> footer : Bind link groups, social links, legal links, and copyright per L2-075
+
+header -> dom : Render the header landmark and its nav landmark
+header -> dom : Render each internal link as an anchor carrying the supplied routerLink per L2-076
+header -> dom : Mark each external link with rel="noopener noreferrer" per L2-075
+theme -> dom : Resolve the public chrome tokens per L2-005
+
+footer -> dom : Render one labelled nav landmark per link group per L2-075
+footer -> dom : Render social links with accessible labels
+footer -> dom : Render the legal links and the copyright line
+dom --> visitor : Public page framed by header and footer
+
+visitor -> dom : Activate the call to action
+dom -> header : Click or Enter event
+header -> handler : Emit ctaSelected per L2-075
+handler -> router : Navigate to the sign-up route
+dom --> visitor : Sign-up page
+@enduml

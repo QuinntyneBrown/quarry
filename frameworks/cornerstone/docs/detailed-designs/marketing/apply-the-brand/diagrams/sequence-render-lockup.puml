@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Render a brand lockup
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell" as shell
+end box
+box "Frontend — Cornerstone brand components" #D1FADF
+  participant "BrandLockupComponent" as lockup
+  participant "LogoMarkComponent" as mark
+  participant "CsThemeService" as themesvc
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Brand colour and metric styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and cascade" as browser
+end box
+
+shell -> lockup : Render brand 'wordup', variant 'full', size 'medium', href '/'
+lockup -> themesvc : Read the resolved theme
+themesvc --> lockup : 'light'
+lockup -> lockup : Select the light treatment per L2-148
+lockup -> lockup : Read the artwork for the brand from CsBrandAssets
+lockup -> mark : Render the mark at the medium size step with aria-hidden true
+mark -> styles : Resolve the mark height and the treatment palette
+styles --> mark : Computed height and fill
+mark -> browser : Emit the inline SVG at the intrinsic aspect ratio
+lockup -> browser : Render the wordmark and the descriptor beside the mark per L2-148
+lockup -> styles : Resolve the clear space from the mark height
+styles --> lockup : Computed padding
+lockup -> browser : Reserve the clear space as the host padding
+lockup -> browser : Render the host as a link with the single accessible name
+browser --> user : Product lockup in the application header
+
+user -> lockup : Activate the lockup link
+lockup -> shell : Navigate to the home route
+shell --> user : Home route
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Follow an anchored section link
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as visitor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Sticky public header" as header
+  participant "Public-site route" as page
+end box
+box "Frontend — Cornerstone marketing components" #D1FADF
+  participant "CsSectionAnchorDirective" as anchor
+  participant "ContentSectionComponent" as section
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and scrolling" as browser
+end box
+
+page -> section : Render each band with an anchorId per L2-146
+section -> anchor : Register the anchor id and the sticky header offset
+anchor -> browser : Stamp the id on the section element
+anchor --> header : Report the registered anchor ids
+
+visitor -> header : Select an in-page link
+header -> anchor : Request the registered section
+
+alt Reduced motion is not set
+  anchor -> browser : Scroll the section into view with the header offset applied per L2-146
+else prefers-reduced-motion is reduce
+  anchor -> browser : Jump to the section without animation per L2-008
+end
+
+anchor -> section : Move focus to the section heading
+section -> browser : Expose the h2 as the focused element
+browser --> visitor : Anchored section in view with the heading uncovered
+@enduml

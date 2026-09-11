@@ -1,0 +1,24 @@
+{
+  "kind": "class",
+  "name": "SectionComponent",
+  "sourcePath": "src/cornerstone/section/section.component.ts",
+  "category": "foundations",
+  "description": "Section public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-section",
+  "slug": "section",
+  "label": "Section",
+  "tokens": ["--cs-space-4"],
+  "relatedSymbols": ["SectionActionsDirective"],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "SectionActionsDirective",
+      "sourcePath": "src/cornerstone/section/section-actions.directive.ts",
+      "category": "foundations",
+      "description": "Section Actions public API.",
+      "members": []
+    }
+  ]
+}

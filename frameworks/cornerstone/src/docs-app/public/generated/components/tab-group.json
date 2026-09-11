@@ -1,0 +1,37 @@
+{
+  "kind": "class",
+  "name": "TabGroupComponent",
+  "sourcePath": "src/cornerstone/tab-group/tab-group.component.ts",
+  "category": "navigation",
+  "description": "Tab Group public API.",
+  "members": [
+    {
+      "name": "selectedIndex",
+      "bindingName": "selectedIndex",
+      "role": "model",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Selected Index public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "output",
+      "type": "number",
+      "required": false,
+      "description": "Selected public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-tab-group",
+  "slug": "tab-group",
+  "label": "Tab Group",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

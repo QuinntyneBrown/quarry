@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Confirm a decision
+
+Person(user, "Application user", "Deletes a record or navigates away from unsaved work")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and services", "Supplies ConfirmDialogComponent, UnsavedChangesDialogComponent, and confirmLeave()")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the danger, warning, and success tone colours")
+  Container(docs, "Documentation site", "Angular application", "Publishes the confirmation patterns and guard example")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Opens the confirm dialog before a destructive action")
+  Container(shell, "Application shell", "Angular routing configuration", "Registers confirmLeave() as a CanDeactivateFn")
+  Container(services, "Application services", "Angular injectables", "Performs the deletion or the save the dialog authorises")
+}
+
+System_Ext(router, "Angular router", "Runs deactivation guards")
+System_Ext(cdk, "Angular CDK", "Dialog, overlay, and focus trap")
+
+Rel(user, page, "Activates a destructive action in")
+Rel(user, shell, "Navigates away from an edited route of")
+Rel(page, lib, "Opens the confirm dialog through", "DialogService.confirm()")
+Rel(router, shell, "Calls the deactivation guard of")
+Rel(shell, lib, "Opens the unsaved-changes dialog through", "confirmLeave()")
+Rel(lib, cdk, "Attaches the dialog through")
+Rel(lib, theme, "Resolves tone colour and icon size from")
+Rel(page, services, "Runs the confirmed action through")
+Rel(shell, services, "Runs the save callback through")
+Rel(docs, lib, "Documents the public API of")
+@enduml

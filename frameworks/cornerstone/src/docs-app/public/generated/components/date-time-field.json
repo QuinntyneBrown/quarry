@@ -1,0 +1,15 @@
+{
+  "kind": "class",
+  "name": "DateTimeFieldComponent",
+  "sourcePath": "src/cornerstone/date-time-field/date-time-field.component.ts",
+  "category": "forms",
+  "description": "Date Time Field public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-date-time-field",
+  "slug": "date-time-field",
+  "label": "Date Time Field",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

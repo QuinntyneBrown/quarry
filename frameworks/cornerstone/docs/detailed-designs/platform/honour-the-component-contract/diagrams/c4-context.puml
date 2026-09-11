@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Honour the component contract
+
+Person(dev, "Application developer", "Imports Cornerstone symbols and binds them to application state")
+Person(user, "Application user", "Fills in forms and acts on composite screens")
+
+System(cornerstone, "Cornerstone", "Angular UI library exposing one API contract across every public symbol")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning routing, persistence, and authorization")
+System_Ext(cdk, "Angular CDK", "Supplies the identifier and accessibility primitives the contract wires with")
+System_Ext(browser, "Browser platform", "Renders the accessibility tree and native form semantics")
+System_Ext(npm, "npm registry", "Distributes the published package and its surface report")
+
+Rel(dev, cornerstone, "Imports every public symbol from the root of")
+Rel(dev, app, "Owns routing, persistence, and authorization in")
+Rel(app, cornerstone, "Supplies view models to and handles intents from")
+Rel(cornerstone, cdk, "Generates identifiers and manages focus through")
+Rel(cornerstone, browser, "Wires labels, descriptions, and validation state into")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(user, browser, "Enters values and triggers actions in")
+Rel(browser, user, "Presents the accessible name, state, and error of each control to")
+@enduml

@@ -112,6 +112,19 @@ npm run dev --workspace=@quarry/previews
 
 Open Quarry at `http://127.0.0.1:5173`; preview assets use `http://localhost:4180`. Distinct hostnames keep Quarry host cookies off asset requests. The asset host has no credentials or API access. Its default `QUARRY_APP_ORIGINS` allows the local app and Playwright origin (`http://127.0.0.1:4173`). If changing deployment origins, configure that space-separated exact-origin list and rebuild the app with `VITE_PREVIEW_ORIGIN`; use a distinct credential-free hostname. The shipped bundle is explicitly illustrative and only appears for a matching published preview manifest.
 
+To show a framework's whole design-system documentation site in an iframe (distinct from the per-component preview above, and not governed by its postMessage protocol), build it and copy its static output into the same isolated asset host:
+
+```powershell
+Set-Location frameworks/cornerstone
+$env:QUARRY_DESIGN_SYSTEM_BASE = '/design-systems/cornerstone/'
+npm ci
+npm run build:docs
+Set-Location ../../frontend/apps/quarry-preview
+npm run sync:cornerstone
+```
+
+`QUARRY_DESIGN_SYSTEM_BASE` must match the path it will be served under; omitting it builds Cornerstone's own root-hosted default instead. The sync script copies `frameworks/cornerstone/dist/design-system/browser` into `public/design-systems/cornerstone/`, served at `http://localhost:4180/design-systems/cornerstone/` once `npm run dev --workspace=@quarry/previews` is running. Authorized draft/update metadata carries this as a plain `designSystemUri` string (no build ID or protocol version); the API accepts an absolute HTTPS URL, or HTTP on loopback only.
+
 Authorized draft create/update metadata can include an optional definition:
 
 ```json

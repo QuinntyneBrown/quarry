@@ -1,0 +1,10 @@
+<form (submit)="send($event)">
+  <textarea
+    csTextarea
+    [maxRows]="8"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="value.set($any($event.target).value)"
+  ></textarea
+  ><button csButton type="submit" [disabled]="!value().trim() || pending()">Send</button>
+</form>

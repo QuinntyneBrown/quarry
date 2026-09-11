@@ -1,0 +1,123 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Walk a process rail
+
+enum CsProcessStageState {
+  done
+  current
+  locked
+}
+
+enum RailOrientation {
+  vertical
+  horizontal
+  auto
+}
+
+enum CsJourneyDensity {
+  comfortable
+  compact
+}
+
+class CsProcessStage {
+  +id: string
+  +label: string
+  +state: CsProcessStageState
+  +description?: string
+  +lockReason?: string
+  +badge?: string
+  +gate?: GateSummary
+}
+
+class GateSummary {
+  +id: string
+  +label: string
+  +open: boolean
+  +outstandingCount: number
+  +blockedReason?: string
+}
+
+interface CsProcessAdapter {
+  +labels: CsProcessLabels
+  +palette: CsProcessPalette
+  +enforcement: ReadonlyMap<string, GateSummary>
+}
+
+class CsProcessLabels {
+  +doneLabel: string
+  +currentLabel: string
+  +lockedLabel: string
+  +gateOpenLabel: string
+  +gateBlockedLabel: string
+}
+
+class CsProcessPalette {
+  +stageToken: ReadonlyMap<string, string>
+  +defaultToken: string
+}
+
+class ProcessRailComponent {
+  +stages: InputSignal<readonly CsProcessStage[]>
+  +orientation: InputSignal<RailOrientation>
+  +adapter: InputSignal<CsProcessAdapter>
+  +activeStageId: InputSignal<string | null>
+  +stageActivated: OutputEmitterRef<CsStageActivation>
+  #resolvedOrientation: Signal<RailOrientation>
+  -stateText(stage: CsProcessStage): string
+}
+
+class ProcessJourneyComponent {
+  +stages: InputSignal<readonly CsProcessStage[]>
+  +adapter: InputSignal<CsProcessAdapter>
+  +density: InputSignal<CsJourneyDensity>
+  +stageActivated: OutputEmitterRef<CsStageActivation>
+  +stageAction: OutputEmitterRef<StageActionIntent>
+}
+
+class StageContentDirective {
+  +csStageContent: InputSignal<string>
+}
+
+class CsStageActivation {
+  +stageId: string
+  +index: number
+}
+
+class StageActionIntent {
+  +stageId: string
+  +actionId: string
+  +payload?: unknown
+}
+
+class GateComponent {
+  +gate: InputSignal<GateSummary>
+}
+
+ProcessRailComponent "1" o-- "0..*" CsProcessStage : renders
+ProcessJourneyComponent "1" o-- "0..*" CsProcessStage : renders
+CsProcessStage --> CsProcessStageState : has
+CsProcessStage "1" *-- "0..1" GateSummary : is followed by
+ProcessRailComponent --> CsProcessAdapter : reads labels and colours from
+ProcessJourneyComponent --> CsProcessAdapter : reads labels and colours from
+CsProcessAdapter *-- CsProcessLabels
+CsProcessAdapter *-- CsProcessPalette
+CsProcessAdapter --> GateSummary : supplies enforcement results as
+ProcessRailComponent --> RailOrientation : resolves
+ProcessJourneyComponent --> CsJourneyDensity : has
+ProcessRailComponent ..> CsStageActivation : emits
+ProcessJourneyComponent ..> StageActionIntent : emits
+ProcessRailComponent ..> StageContentDirective : projects
+ProcessRailComponent ..> GateComponent : renders between stages
+ProcessJourneyComponent ..> GateComponent : renders as a gate panel
+@enduml
