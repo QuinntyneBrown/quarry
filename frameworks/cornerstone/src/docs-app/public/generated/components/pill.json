@@ -1,0 +1,47 @@
+{
+  "kind": "class",
+  "name": "PillComponent",
+  "sourcePath": "src/cornerstone/pill/pill.component.ts",
+  "category": "foundations",
+  "description": "Pill public API.",
+  "members": [
+    {
+      "name": "tone",
+      "bindingName": "tone",
+      "role": "input",
+      "type": "CsMessageTone",
+      "required": false,
+      "defaultValue": "'neutral'",
+      "description": "Tone public API.",
+      "structured": false,
+      "options": ["neutral", "success", "warning", "error", "info", "lime"]
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Selected public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-pill",
+  "slug": "pill",
+  "label": "Pill",
+  "tokens": [],
+  "relatedSymbols": ["CsMessageTone"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsMessageTone",
+      "sourcePath": "src/cornerstone/core/platform/cs-message-tone.type.ts",
+      "category": "platform",
+      "description": "Cs Message Tone public API.",
+      "declaration": "'neutral' | 'success' | 'warning' | 'error' | 'info' | 'lime'"
+    }
+  ]
+}

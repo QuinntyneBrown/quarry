@@ -1,0 +1,7 @@
+<cs-search-field
+  [value]="query().search"
+  (searched)="queryChanged.emit({ ...query(), search: $event })"
+/>
+@for (person of people(); track person.id) {
+  <cs-person-row [person]="person" (opened)="opened.emit($event)" />
+}

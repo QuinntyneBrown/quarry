@@ -1,0 +1,36 @@
+{
+  "kind": "class",
+  "name": "CompetencyGridComponent",
+  "sourcePath": "src/cornerstone/competency-grid/competency-grid.component.ts",
+  "category": "workflows",
+  "description": "Competency Grid public API.",
+  "members": [
+    {
+      "name": "columns",
+      "bindingName": "columns",
+      "role": "input",
+      "type": "readonly string[]",
+      "required": true,
+      "description": "Columns public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "rows",
+      "bindingName": "rows",
+      "role": "input",
+      "type": "readonly {\n      label: string;\n      cells: readonly ('complete' | 'in-progress' | 'empty' | 'not-applicable')[];\n    }[]",
+      "required": true,
+      "description": "Rows public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-competency-grid",
+  "slug": "competency-grid",
+  "label": "Competency Grid",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

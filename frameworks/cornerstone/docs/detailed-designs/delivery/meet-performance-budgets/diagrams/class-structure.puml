@@ -1,0 +1,101 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Meet performance budgets
+
+enum CsBudgetKind {
+  bundleSize
+  styleSize
+  overlayPaint
+  listPaint
+  inputToPaint
+  layoutShift
+}
+
+enum CsVerdict {
+  withinBudget
+  exceeded
+  unmeasured
+}
+
+class CsSizeBudget {
+  +entryPoint: string
+  +maxMinifiedKb: number
+  +maxGzippedKb: number
+  +revisedOn: string
+}
+
+class CsLatencyBudget {
+  +kind: CsBudgetKind
+  +componentSelector: string
+  +percentile: 95
+  +maxMilliseconds: number
+  +maxLayoutShift: number
+}
+
+class CsReferenceProfile {
+  +runnerClass: string
+  +browser: string
+  +cpuThrottling: number
+  +viewport: string
+}
+
+class CsMeasurement {
+  +kind: CsBudgetKind
+  +subject: string
+  +previousValue: number
+  +observedValue: number
+  +budgetValue: number
+  +verdict: CsVerdict
+}
+
+class CsBudgetReport {
+  +commitSha: string
+  +measurements: CsMeasurement[]
+  +failed(): boolean
+  +toMarkdownSummary(): string
+}
+
+class CsLeakFinding {
+  +componentSelector: string
+  +cycles: 100
+  +retainedListeners: number
+  +retainedTimers: number
+  +retainedSubscriptions: number
+}
+
+class CsEntryPointProbe {
+  +entryPoint: string
+  +importedSymbol: string
+  +build(): CsMeasurement
+  +containsOtherEntryPoints(): boolean
+}
+
+class CsChangeDetectionPolicy {
+  +zoneless: true
+  +strategy: 'OnPush'
+  +throttledSources: string[]
+  +schedulesWhileIdle(): false
+}
+
+CsBudgetReport "1" *-- "0..*" CsMeasurement
+CsBudgetReport "1" o-- "0..*" CsLeakFinding
+CsMeasurement --> CsVerdict
+CsMeasurement --> CsBudgetKind
+CsLatencyBudget --> CsBudgetKind
+CsLatencyBudget --> CsReferenceProfile : measured on
+CsEntryPointProbe ..> CsSizeBudget : compares against
+CsEntryPointProbe ..> CsMeasurement : produces
+CsLeakFinding ..> CsChangeDetectionPolicy : verifies teardown of
+CsSizeBudget ..> CsBudgetKind : classified by
+@enduml

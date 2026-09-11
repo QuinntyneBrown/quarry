@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Support and migrate consumers
+
+Person(dev, "Application developer", "Runs ng add and ng update")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "The public surface a deprecation and a migration act on")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Added to the styles array by the setup schematic")
+  Container(manifest, "Package manifest", "package.json", "Declares peerDependencies, engines, ng-update, and schematics")
+  ContainerDb(matrix, "Support matrix", "support-matrix.json", "Angular range, Node range, and browsers with minimum versions")
+  Container(ngadd, "Setup schematic collection", "Angular schematics", "Configures a consuming workspace on first install")
+  Container(ngupdate, "Migration collection", "Angular schematics keyed by version", "One automated migration per breaking change")
+  Container(policy, "Deprecation policy", "Published document and JSDoc tags", "States how a public API is marked, announced, and removed")
+  Container(docs, "Documentation site", "Angular application", "Publishes the rendered matrix and the policy")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(workspace, "Workspace configuration", "angular.json and package.json", "Styles array, dependency set, and target project")
+  Container(config, "Application config", "Angular providers", "Receives provideCsTheme()")
+  Container(sources, "Application sources", "TypeScript and HTML templates", "Rewritten by a migration transform")
+}
+
+System_Ext(cli, "Angular CLI", "Schematic engine")
+System_Ext(npm, "npm registry", "Package and schematic distribution")
+System_Ext(actions, "GitHub Actions", "CI verify job")
+
+Rel(dev, cli, "Runs ng add and ng update in")
+Rel(cli, npm, "Resolves the package from")
+Rel(cli, ngadd, "Executes")
+Rel(cli, ngupdate, "Executes the migrations keyed above the installed version")
+Rel(ngadd, matrix, "Reads the supported Angular and Node ranges from")
+Rel(ngadd, workspace, "Adds dependencies and the theme stylesheet to")
+Rel(ngadd, config, "Adds provideCsTheme() to")
+Rel(ngadd, theme, "References by export subpath")
+Rel(ngupdate, sources, "Rewrites imports, symbols, and template references in")
+Rel(ngupdate, policy, "Removes the APIs announced by")
+Rel(policy, lib, "Marks deprecated symbols in")
+Rel(manifest, matrix, "Mirrors as peerDependencies and engines")
+Rel(actions, matrix, "Checks against the manifest and the workflow Node version")
+Rel(docs, matrix, "Publishes the rendered form of")
+Rel(docs, policy, "Publishes")
+@enduml

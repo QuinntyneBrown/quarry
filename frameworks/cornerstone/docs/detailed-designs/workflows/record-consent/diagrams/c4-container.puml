@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Record consent
+
+Person(guardian, "Guardian", "Changes the consent recorded for a young person")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies the consent panel; holds no store and writes no log")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the FaithTech token set the panel resolves its values from")
+  Container(docs, "Documentation site", "Angular application", "Publishes the consent view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Consent page", "Angular feature page", "Builds the consent view model and handles the emitted intents")
+  Container(services, "Application services", "Angular services", "Owns consent rules, authorization, persistence, and the audit write")
+  ContainerDb(record, "Consent record", "Application data store", "Holds consent scopes, decisions, history, and contact detail")
+}
+
+System_Ext(cdk, "Angular CDK", "Dialog, focus trap, and live announcement")
+System_Ext(browser, "Browser platform", "Rendering and input")
+
+Rel(guardian, browser, "Grants and revokes consent in")
+Rel(browser, lib, "Delivers pointer and keyboard events to")
+Rel(page, lib, "Supplies ConsentPanelViewModel to")
+Rel(lib, page, "Emits decision, revoke, and contact-update intents to")
+Rel(page, services, "Delegates every rule decision and write to")
+Rel(services, record, "Reads and writes")
+Rel(services, page, "Returns the next consent view model to")
+Rel(shell, page, "Routes to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Opens the confirm dialog and announces through")
+Rel(docs, lib, "Documents the public surface of")
+@enduml

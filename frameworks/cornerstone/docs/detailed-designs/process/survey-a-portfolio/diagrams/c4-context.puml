@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Survey a portfolio
+
+Person(dev, "Application developer", "Composes a portfolio dashboard from Cornerstone components")
+Person(user, "Application user", "Surveys projects by phase and reads collected gratitude notes")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying domain-neutral phase lanes, project cards, and the gratitude wall")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning phase names, colours, routes, and enforcement results")
+System_Ext(cdk, "Angular CDK", "Layout observation and live announcement")
+System_Ext(browser, "Browser platform", "Renders lanes and quotation semantics")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the portfolio survey from")
+Rel(dev, app, "Writes the typed adapter in")
+Rel(app, cornerstone, "Supplies labels, palette, ordering, and enforcement results to", "CsProcessAdapter")
+Rel(cornerstone, app, "Emits project open intents to", "output()")
+Rel(app, app, "Owns phase names, routes, and enforcement rules")
+Rel(cornerstone, cdk, "Observes breakpoints and announces state through")
+Rel(cornerstone, browser, "Renders labelled regions and figure semantics to")
+Rel(browser, user, "Presents phase lanes and notes to")
+Rel(user, browser, "Activates a project card in")
+Rel(app, npm, "Installs Cornerstone from")
+@enduml

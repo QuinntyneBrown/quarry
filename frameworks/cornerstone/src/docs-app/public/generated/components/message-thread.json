@@ -1,0 +1,142 @@
+{
+  "kind": "class",
+  "name": "MessageThreadComponent",
+  "sourcePath": "src/cornerstone/message-thread/message-thread.component.ts",
+  "category": "communication",
+  "description": "Message Thread public API.",
+  "members": [
+    {
+      "name": "messages",
+      "bindingName": "messages",
+      "role": "input",
+      "type": "readonly MessageViewModel[]",
+      "required": true,
+      "description": "Messages public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "CsDataState",
+      "required": false,
+      "defaultValue": "{ status: 'ready', data: undefined }",
+      "description": "State public API.",
+      "structured": false,
+      "options": ["idle", "loading", "empty", "error", "ready"]
+    },
+    {
+      "name": "loadEarlier",
+      "bindingName": "loadEarlier",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Load Earlier public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-message-thread",
+  "slug": "message-thread",
+  "label": "Message Thread",
+  "tokens": ["--cs-radius-md", "--cs-space-3", "--cs-space-4", "--cs-surface"],
+  "relatedSymbols": [
+    "CsDataState",
+    "MessageViewModel",
+    "ThreadAnnouncerService",
+    "ThreadScrollAnchor"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsDataState",
+      "sourcePath": "src/cornerstone/core/platform/cs-data-state.type.ts",
+      "category": "platform",
+      "description": "Cs Data State public API.",
+      "declaration": "| { readonly status: 'idle' | 'loading' | 'empty' }\n  | { readonly status: 'error'; readonly error: CsDataStateError }\n  | { readonly status: 'ready'; readonly data: T }"
+    },
+    {
+      "kind": "interface",
+      "name": "MessageViewModel",
+      "sourcePath": "src/cornerstone/message-thread/message-view-model.interface.ts",
+      "category": "communication",
+      "description": "Message View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "author",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Author public API."
+        },
+        {
+          "name": "authorId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Author Id public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Instant public API."
+        },
+        {
+          "name": "avatarSrc",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Avatar Src public API."
+        },
+        {
+          "name": "own",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Own public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Status public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "ThreadAnnouncerService",
+      "sourcePath": "src/cornerstone/message-thread/thread-announcer.service.ts",
+      "category": "communication",
+      "description": "Thread Announcer Service public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "ThreadScrollAnchor",
+      "sourcePath": "src/cornerstone/message-thread/thread-scroll-anchor.class.ts",
+      "category": "communication",
+      "description": "Thread Scroll Anchor public API.",
+      "members": []
+    }
+  ]
+}

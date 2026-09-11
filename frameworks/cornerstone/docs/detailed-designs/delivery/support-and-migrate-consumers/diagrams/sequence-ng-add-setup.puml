@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Configure an application with ng add
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Developer workstation" #E0F2FE
+  participant "Angular CLI" as cli
+  participant "Consuming workspace" as workspace
+  participant "Application config" as config
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Package resolution" as npm
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "ng-add schematic" as ngadd
+  participant "Support matrix" as matrix
+end box
+
+dev -> cli : Run ng add @quinntyne/cornerstone
+cli -> npm : Resolve the package and its schematics field
+npm --> cli : Package tarball and collection path
+cli -> ngadd : Execute the ng-add factory per L2-185
+
+ngadd -> matrix : Read the supported Angular and Node ranges
+matrix --> ngadd : Declared ranges and browser list per L2-182
+ngadd -> workspace : Read the Angular and Node versions in use
+workspace --> ngadd : Installed versions
+
+alt Workspace inside the declared ranges
+  ngadd -> dev : Prompt for target project, theme, and compatibility styles
+  dev --> ngadd : CsNgAddOptions
+  ngadd -> workspace : Add the peer dependencies at the matrix version per L2-182
+  ngadd -> workspace : Insert the theme stylesheet ahead of the application stylesheet
+  opt Compatibility styles requested
+    ngadd -> workspace : Insert the compatibility stylesheet after the theme per L2-186
+  end
+  ngadd -> config : Add provideCsTheme() to the provider array
+  config --> ngadd : Edit recorded
+  ngadd -> workspace : Apply every recorded edit
+  workspace --> ngadd : Files written
+  ngadd --> dev : Report naming each edited file per L2-185
+else Workspace outside the declared ranges
+  ngadd -> ngadd : Make no edit
+  ngadd --> dev : Refuse, naming the declared range and the installed version per L2-182
+end
+@enduml

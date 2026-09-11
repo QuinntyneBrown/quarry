@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Report a field error
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+end box
+box "Frontend — Cornerstone text controls" #D1FADF
+  participant "FieldComponent" as field
+  participant "CsTextareaDirective" as textarea
+  participant "Character count region" as count
+end box
+box "Browser — platform" #FFF4E5
+  participant "Native textarea element" as native
+  participant "Assistive technology" as at
+end box
+
+user -> native : Type past the documented warning threshold
+native -> textarea : input event
+textarea -> control : onChange(nextValue)
+textarea -> field : Report the current length
+field -> count : Update the count text
+count -> at : Announce politely at the threshold only per L2-047
+
+user -> native : Continue typing past maxLength
+field -> count : Update the count to the limit
+count -> at : Announce politely at the limit per L2-049
+control -> control : Run the maxLength validator
+
+user -> native : Blur the control
+native -> textarea : blur event
+textarea -> control : onTouched()
+control --> field : status INVALID
+
+alt Control is invalid and touched
+  field -> field : Enter the error state per L2-047
+  field -> native : Set aria-invalid=true
+  field -> native : Add the error element to aria-describedby
+  field -> field : Render the error icon and text alongside the colour change per L2-047
+  field --> at : Error text available on focus
+else Control becomes valid
+  field -> native : Remove aria-invalid and drop the error element
+  field -> field : Render the success icon and text without aria-invalid per L2-047
+end
+
+page -> field : Set readonly true
+field -> native : Set readonly and keep the control focusable per L2-047
+field --> user : Field state reflected without a layout shift
+@enduml

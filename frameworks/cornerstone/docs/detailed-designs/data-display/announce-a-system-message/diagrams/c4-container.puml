@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Announce a system message
+
+Person(user, "Application user", "Hears and reads system messages")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and services", "Supplies AlertComponent, OfflineBannerComponent, ToastService, and ToastOutletComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tone, elevation, and motion tokens the messages resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the announcement policy table and the timeout defaults")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Mounts the toast outlet and offsets content by the banner height")
+  Container(page, "Feature page", "Angular components", "Renders inline alerts beside the regions they describe")
+  Container(svc, "Application services", "Angular services", "Reports connectivity state and raises confirmation and failure messages")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and overlay")
+System_Ext(browser, "Browser platform", "Live regions and assistive technology bridge")
+
+Rel(svc, lib, "Opens toasts and reports connectivity state to")
+Rel(page, lib, "Renders inline alerts from")
+Rel(shell, lib, "Mounts the toast outlet from")
+Rel(lib, shell, "Reports the banner height to")
+Rel(lib, cdk, "Announces through and positions the outlet with")
+Rel(lib, theme, "Resolves tone, elevation, and motion values from")
+Rel(cdk, browser, "Writes announcements to the live regions of")
+Rel(lib, browser, "Writes role status and role alert markup to")
+Rel(browser, user, "Announces the message to")
+Rel(lib, svc, "Returns ToastResult to")
+Rel(docs, lib, "Documents the politeness routing of")
+@enduml

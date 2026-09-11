@@ -1,0 +1,6386 @@
+[
+  {
+    "kind": "class",
+    "name": "AccordionComponent",
+    "sourcePath": "src/cornerstone/accordion/accordion.component.ts",
+    "category": "navigation",
+    "description": "Accordion public API.",
+    "members": [
+      {
+        "name": "multiple",
+        "bindingName": "multiple",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Multiple public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-accordion",
+    "slug": "accordion",
+    "label": "Accordion",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "AccordionItemComponent",
+    "sourcePath": "src/cornerstone/accordion-item/accordion-item.component.ts",
+    "category": "navigation",
+    "description": "Accordion Item public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "expanded",
+        "bindingName": "expanded",
+        "role": "model",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Expanded public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "disabled",
+        "bindingName": "disabled",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Disabled public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-accordion-item",
+    "slug": "accordion-item",
+    "label": "Accordion Item",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "AccountMenuComponent",
+    "sourcePath": "src/cornerstone/account-menu/account-menu.component.ts",
+    "category": "navigation",
+    "description": "Account Menu public API.",
+    "members": [
+      {
+        "name": "account",
+        "bindingName": "account",
+        "role": "input",
+        "type": "Account",
+        "required": true,
+        "description": "Account public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "actions",
+        "bindingName": "actions",
+        "role": "input",
+        "type": "readonly AccountAction[]",
+        "required": true,
+        "description": "Actions public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "actionSelected",
+        "bindingName": "actionSelected",
+        "role": "output",
+        "type": "AccountAction",
+        "required": false,
+        "description": "Action Selected public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "signOut",
+        "bindingName": "signOut",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Sign Out public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-account-menu",
+    "slug": "account-menu",
+    "label": "Account Menu",
+    "tokens": [
+      "--cs-border",
+      "--cs-error",
+      "--cs-paper",
+      "--cs-shadow-md",
+      "--cs-space-2",
+      "--cs-space-3"
+    ],
+    "relatedSymbols": ["Account", "AccountAction"]
+  },
+  {
+    "kind": "class",
+    "name": "AchievementCardComponent",
+    "sourcePath": "src/cornerstone/achievement-card/achievement-card.component.ts",
+    "category": "workflows",
+    "description": "Achievement Card public API.",
+    "members": [
+      {
+        "name": "achievement",
+        "bindingName": "achievement",
+        "role": "input",
+        "type": "AchievementView",
+        "required": true,
+        "description": "Achievement public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "output",
+        "type": "AchievementSelect",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-achievement-card",
+    "slug": "achievement-card",
+    "label": "Achievement Card",
+    "tokens": [],
+    "relatedSymbols": ["AchievementProgress", "AchievementSelect", "AchievementView"]
+  },
+  {
+    "kind": "class",
+    "name": "ActionBarComponent",
+    "sourcePath": "src/cornerstone/action-bar/action-bar.component.ts",
+    "category": "foundations",
+    "description": "Action Bar public API.",
+    "members": [
+      {
+        "name": "sticky",
+        "bindingName": "sticky",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Sticky public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-action-bar",
+    "slug": "action-bar",
+    "label": "Action Bar",
+    "tokens": ["--cs-space-3"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "AlertComponent",
+    "sourcePath": "src/cornerstone/alert/alert.component.ts",
+    "category": "foundations",
+    "description": "Alert public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "tone",
+        "bindingName": "tone",
+        "role": "input",
+        "type": "CsMessageTone",
+        "required": false,
+        "defaultValue": "'info'",
+        "description": "Tone public API.",
+        "structured": false,
+        "options": ["neutral", "success", "warning", "error", "info", "lime"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-alert",
+    "slug": "alert",
+    "label": "Alert",
+    "tokens": [],
+    "relatedSymbols": ["CsMessageTone"]
+  },
+  {
+    "kind": "class",
+    "name": "AnnouncementComposerComponent",
+    "sourcePath": "src/cornerstone/announcement-composer/announcement-composer.component.ts",
+    "category": "communication",
+    "description": "Announcement Composer public API.",
+    "members": [
+      {
+        "name": "audiences",
+        "bindingName": "audiences",
+        "role": "input",
+        "type": "readonly AudienceOption[]",
+        "required": true,
+        "description": "Audiences public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "model",
+        "type": "AnnouncementDraft",
+        "required": true,
+        "description": "Value public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "submitted",
+        "bindingName": "submitted",
+        "role": "output",
+        "type": "AnnouncementDraft",
+        "required": false,
+        "description": "Submitted public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "previewRequested",
+        "bindingName": "previewRequested",
+        "role": "output",
+        "type": "AnnouncementDraft",
+        "required": false,
+        "description": "Preview Requested public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-announcement-composer",
+    "slug": "announcement-composer",
+    "label": "Announcement Composer",
+    "tokens": [],
+    "relatedSymbols": ["AnnouncementDraft", "AudienceOption"]
+  },
+  {
+    "kind": "class",
+    "name": "AssessmentEditorComponent",
+    "sourcePath": "src/cornerstone/assessment-editor/assessment-editor.component.ts",
+    "category": "workflows",
+    "description": "Assessment Editor public API.",
+    "members": [
+      {
+        "name": "assessment",
+        "bindingName": "assessment",
+        "role": "input",
+        "type": "AssessmentView",
+        "required": true,
+        "description": "Assessment public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "changed",
+        "bindingName": "changed",
+        "role": "output",
+        "type": "AssessmentChange",
+        "required": false,
+        "description": "Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "decided",
+        "bindingName": "decided",
+        "role": "output",
+        "type": "AssessmentDecision",
+        "required": false,
+        "description": "Decided public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-assessment-editor",
+    "slug": "assessment-editor",
+    "label": "Assessment Editor",
+    "tokens": [],
+    "relatedSymbols": ["AssessmentChange", "AssessmentDecision", "AssessmentView"]
+  },
+  {
+    "kind": "class",
+    "name": "AssignmentCardComponent",
+    "sourcePath": "src/cornerstone/assignment-card/assignment-card.component.ts",
+    "category": "workflows",
+    "description": "Assignment Card public API.",
+    "members": [
+      {
+        "name": "assignment",
+        "bindingName": "assignment",
+        "role": "input",
+        "type": "AssignmentView",
+        "required": true,
+        "description": "Assignment public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "AssignmentAction",
+        "required": false,
+        "description": "Action public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-assignment-card",
+    "slug": "assignment-card",
+    "label": "Assignment Card",
+    "tokens": [],
+    "relatedSymbols": ["AssignmentAction", "AssignmentDueState", "AssignmentView"]
+  },
+  {
+    "kind": "class",
+    "name": "AttachmentListComponent",
+    "sourcePath": "src/cornerstone/attachment-list/attachment-list.component.ts",
+    "category": "communication",
+    "description": "Attachment List public API.",
+    "members": [
+      {
+        "name": "items",
+        "bindingName": "items",
+        "role": "input",
+        "type": "readonly AttachmentViewModel[]",
+        "required": true,
+        "description": "Items public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-attachment-list",
+    "slug": "attachment-list",
+    "label": "Attachment List",
+    "tokens": [],
+    "relatedSymbols": ["AttachmentViewModel", "MiddleTruncateDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "AttendanceChoiceComponent",
+    "sourcePath": "src/cornerstone/attendance-choice/attendance-choice.component.ts",
+    "category": "workflows",
+    "description": "Attendance Choice public API.",
+    "members": [
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "CsAttendanceState",
+        "required": false,
+        "defaultValue": "'unknown'",
+        "description": "Value public API.",
+        "structured": false,
+        "options": ["present", "absent", "late", "excused", "unknown"]
+      },
+      {
+        "name": "changed",
+        "bindingName": "changed",
+        "role": "output",
+        "type": "CsAttendanceState",
+        "required": false,
+        "description": "Changed public API.",
+        "structured": false,
+        "options": ["present", "absent", "late", "excused", "unknown"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-attendance-choice",
+    "slug": "attendance-choice",
+    "label": "Attendance Choice",
+    "tokens": [],
+    "relatedSymbols": ["CsAttendanceState"]
+  },
+  {
+    "kind": "class",
+    "name": "AttendanceRosterComponent",
+    "sourcePath": "src/cornerstone/attendance-roster/attendance-roster.component.ts",
+    "category": "workflows",
+    "description": "Attendance Roster public API.",
+    "members": [
+      {
+        "name": "view",
+        "bindingName": "view",
+        "role": "input",
+        "type": "AttendanceRosterViewModel",
+        "required": true,
+        "description": "View public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "changed",
+        "bindingName": "changed",
+        "role": "output",
+        "type": "AttendanceChange",
+        "required": false,
+        "description": "Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "bulkChanged",
+        "bindingName": "bulkChanged",
+        "role": "output",
+        "type": "AttendanceBulkChange",
+        "required": false,
+        "description": "Bulk Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "noteChanged",
+        "bindingName": "noteChanged",
+        "role": "output",
+        "type": "AttendanceNoteChange",
+        "required": false,
+        "description": "Note Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "conflict",
+        "bindingName": "conflict",
+        "role": "output",
+        "type": "AttendanceConflictIntent",
+        "required": false,
+        "description": "Conflict public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-attendance-roster",
+    "slug": "attendance-roster",
+    "label": "Attendance Roster",
+    "tokens": [],
+    "relatedSymbols": [
+      "AttendanceBulkChange",
+      "AttendanceChange",
+      "AttendanceConflictIntent",
+      "AttendanceNoteChange",
+      "AttendanceRosterViewModel",
+      "AttendanceRowViewModel"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "AuditLogComponent",
+    "sourcePath": "src/cornerstone/audit-log/audit-log.component.ts",
+    "category": "workflows",
+    "description": "Audit Log public API.",
+    "members": [
+      {
+        "name": "events",
+        "bindingName": "events",
+        "role": "input",
+        "type": "readonly AuditEvent[]",
+        "required": true,
+        "description": "Events public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "CsDataState",
+        "required": false,
+        "defaultValue": "{ status: 'ready', data: undefined }",
+        "description": "State public API.",
+        "structured": false,
+        "options": ["idle", "loading", "empty", "error", "ready"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-audit-log",
+    "slug": "audit-log",
+    "label": "Audit Log",
+    "tokens": [],
+    "relatedSymbols": ["AuditDetailField", "AuditEvent", "CsDataState"]
+  },
+  {
+    "kind": "class",
+    "name": "AuthCardComponent",
+    "sourcePath": "src/cornerstone/auth-card/auth-card.component.ts",
+    "category": "marketing",
+    "description": "Auth Card public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-auth-card",
+    "slug": "auth-card",
+    "label": "Auth Card",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "AuthLayoutComponent",
+    "sourcePath": "src/cornerstone/auth-layout/auth-layout.component.ts",
+    "category": "marketing",
+    "description": "Auth Layout public API.",
+    "members": [
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "AuthLayoutVariant",
+        "required": false,
+        "defaultValue": "'centered'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["centered", "split"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-auth-layout",
+    "slug": "auth-layout",
+    "label": "Auth Layout",
+    "tokens": [
+      "--cs-ink",
+      "--cs-paper",
+      "--cs-space-4",
+      "--cs-space-5",
+      "--cs-space-6",
+      "--cs-space-8",
+      "--cs-surface"
+    ],
+    "relatedSymbols": [
+      "AuthAlternateDirective",
+      "AuthBrandDirective",
+      "AuthFooterDirective",
+      "AuthLayoutVariant",
+      "AuthPanelDirective"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "AvatarComponent",
+    "sourcePath": "src/cornerstone/avatar/avatar.component.ts",
+    "category": "foundations",
+    "description": "Avatar public API.",
+    "members": [
+      {
+        "name": "name",
+        "bindingName": "name",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Name public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "src",
+        "bindingName": "src",
+        "role": "input",
+        "type": "string | null",
+        "required": false,
+        "defaultValue": "null",
+        "description": "Src public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-avatar",
+    "slug": "avatar",
+    "label": "Avatar",
+    "tokens": ["--cs-avatar-size", "--cs-lime"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "AvatarStackComponent",
+    "sourcePath": "src/cornerstone/avatar-stack/avatar-stack.component.ts",
+    "category": "foundations",
+    "description": "Avatar Stack public API.",
+    "members": [
+      {
+        "name": "people",
+        "bindingName": "people",
+        "role": "input",
+        "type": "readonly { id: string; name: string; src?: string }[]",
+        "required": true,
+        "description": "People public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "max",
+        "bindingName": "max",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "4",
+        "description": "Max public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-avatar-stack",
+    "slug": "avatar-stack",
+    "label": "Avatar Stack",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "BadgeCollectionComponent",
+    "sourcePath": "src/cornerstone/badge-collection/badge-collection.component.ts",
+    "category": "workflows",
+    "description": "Badge Collection public API.",
+    "members": [
+      {
+        "name": "items",
+        "bindingName": "items",
+        "role": "input",
+        "type": "readonly AchievementView[]",
+        "required": true,
+        "description": "Items public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "layout",
+        "bindingName": "layout",
+        "role": "input",
+        "type": "CollectionLayout",
+        "required": false,
+        "defaultValue": "'grid'",
+        "description": "Layout public API.",
+        "structured": false,
+        "options": ["grid", "list"]
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "output",
+        "type": "AchievementSelect",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-badge-collection",
+    "slug": "badge-collection",
+    "label": "Badge Collection",
+    "tokens": ["--cs-space-4"],
+    "relatedSymbols": ["AchievementSelect", "AchievementView", "CollectionLayout"]
+  },
+  {
+    "kind": "class",
+    "name": "BadgeComponent",
+    "sourcePath": "src/cornerstone/badge/badge.component.ts",
+    "category": "foundations",
+    "description": "Badge public API.",
+    "members": [
+      {
+        "name": "tone",
+        "bindingName": "tone",
+        "role": "input",
+        "type": "CsMessageTone",
+        "required": false,
+        "defaultValue": "'neutral'",
+        "description": "Tone public API.",
+        "structured": false,
+        "options": ["neutral", "success", "warning", "error", "info", "lime"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-badge",
+    "slug": "badge",
+    "label": "Badge",
+    "tokens": [],
+    "relatedSymbols": ["CsMessageTone"]
+  },
+  {
+    "kind": "class",
+    "name": "BottomNavComponent",
+    "sourcePath": "src/cornerstone/bottom-nav/bottom-nav.component.ts",
+    "category": "navigation",
+    "description": "Bottom Nav public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Primary navigation'",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "items",
+        "bindingName": "items",
+        "role": "input",
+        "type": "readonly BottomNavItem[]",
+        "required": true,
+        "description": "Items public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "CsNavItemActivation",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-bottom-nav",
+    "slug": "bottom-nav",
+    "label": "Bottom Nav",
+    "tokens": ["--cs-border", "--cs-ink", "--cs-paper"],
+    "relatedSymbols": ["BottomNavItem", "CsNavItemActivation"]
+  },
+  {
+    "kind": "class",
+    "name": "BrandLockupComponent",
+    "sourcePath": "src/cornerstone/brand-lockup/brand-lockup.component.ts",
+    "category": "marketing",
+    "description": "Brand Lockup public API.",
+    "members": [
+      {
+        "name": "brand",
+        "bindingName": "brand",
+        "role": "input",
+        "type": "CsBrandName",
+        "required": false,
+        "defaultValue": "'faithtech'",
+        "description": "Brand public API.",
+        "structured": false,
+        "options": ["faithtech", "liturgy", "wordup"]
+      },
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "BrandLockupVariant",
+        "required": false,
+        "defaultValue": "'full'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["compact", "full"]
+      },
+      {
+        "name": "treatment",
+        "bindingName": "treatment",
+        "role": "input",
+        "type": "CsBrandTreatment",
+        "required": false,
+        "description": "Treatment public API.",
+        "structured": false,
+        "options": ["light", "dark", "mono"]
+      },
+      {
+        "name": "size",
+        "bindingName": "size",
+        "role": "input",
+        "type": "CsBrandSize",
+        "required": false,
+        "defaultValue": "'medium'",
+        "description": "Size public API.",
+        "structured": false,
+        "options": ["small", "medium", "large"]
+      },
+      {
+        "name": "orientation",
+        "bindingName": "orientation",
+        "role": "input",
+        "type": "'horizontal' | 'stacked'",
+        "required": false,
+        "defaultValue": "'horizontal'",
+        "description": "Orientation public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "href",
+        "bindingName": "href",
+        "role": "input",
+        "type": "string | null",
+        "required": false,
+        "defaultValue": "null",
+        "description": "Href public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-brand-lockup",
+    "slug": "brand-lockup",
+    "label": "Brand Lockup",
+    "tokens": ["--cs-ink-muted", "--cs-space-2"],
+    "relatedSymbols": ["BrandLockupVariant", "CsBrandName", "CsBrandSize", "CsBrandTreatment"]
+  },
+  {
+    "kind": "class",
+    "name": "BreadcrumbsComponent",
+    "sourcePath": "src/cornerstone/breadcrumbs/breadcrumbs.component.ts",
+    "category": "navigation",
+    "description": "Breadcrumbs public API.",
+    "members": [
+      {
+        "name": "crumbs",
+        "bindingName": "crumbs",
+        "role": "input",
+        "type": "readonly Crumb[]",
+        "required": true,
+        "description": "Crumbs public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "maxVisible",
+        "bindingName": "maxVisible",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "4",
+        "description": "Max Visible public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "separator",
+        "bindingName": "separator",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'/'",
+        "description": "Separator public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-breadcrumbs",
+    "slug": "breadcrumbs",
+    "label": "Breadcrumbs",
+    "tokens": ["--cs-space-2"],
+    "relatedSymbols": ["Crumb", "CrumbOverflow"]
+  },
+  {
+    "kind": "class",
+    "name": "ButtonGroupComponent",
+    "sourcePath": "src/cornerstone/button-group/button-group.component.ts",
+    "category": "foundations",
+    "description": "Button Group public API.",
+    "members": [
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "'related' | 'split'",
+        "required": false,
+        "defaultValue": "'related'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-button-group",
+    "slug": "button-group",
+    "label": "Button Group",
+    "tokens": ["--cs-space-2"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "CalendarComponent",
+    "sourcePath": "src/cornerstone/calendar/calendar.component.ts",
+    "category": "communication",
+    "description": "Calendar public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "dates",
+        "bindingName": "dates",
+        "role": "input",
+        "type": "readonly CalendarDate[]",
+        "required": true,
+        "description": "Dates public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "events",
+        "bindingName": "events",
+        "role": "input",
+        "type": "readonly CsEventViewModel[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Events public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "model",
+        "type": "string",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "dateSelected",
+        "bindingName": "dateSelected",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Date Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "previous",
+        "bindingName": "previous",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Previous public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "next",
+        "bindingName": "next",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Next public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-calendar",
+    "slug": "calendar",
+    "label": "Calendar",
+    "tokens": ["--cs-border", "--cs-paper"],
+    "relatedSymbols": ["CalendarDate", "CalendarKeyboardGrid", "CalendarRange", "CsEventViewModel"]
+  },
+  {
+    "kind": "class",
+    "name": "CardComponent",
+    "sourcePath": "src/cornerstone/card/card.component.ts",
+    "category": "foundations",
+    "description": "Card public API.",
+    "members": [
+      {
+        "name": "tone",
+        "bindingName": "tone",
+        "role": "input",
+        "type": "CardTone",
+        "required": false,
+        "defaultValue": "'paper'",
+        "description": "Tone public API.",
+        "structured": false,
+        "options": ["paper", "greige", "ink", "lime"]
+      },
+      {
+        "name": "presentation",
+        "bindingName": "presentation",
+        "role": "input",
+        "type": "CardPresentation",
+        "required": false,
+        "defaultValue": "'outlined'",
+        "description": "Presentation public API.",
+        "structured": false,
+        "options": ["flat", "raised", "outlined"]
+      },
+      {
+        "name": "interactive",
+        "bindingName": "interactive",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Interactive public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-card",
+    "slug": "card",
+    "label": "Card",
+    "tokens": [],
+    "relatedSymbols": [
+      "CardActionsDirective",
+      "CardContentDirective",
+      "CardFooterDirective",
+      "CardHeaderDirective",
+      "CardMediaDirective",
+      "CardPresentation",
+      "CardTone"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "CheckboxComponent",
+    "sourcePath": "src/cornerstone/checkbox/checkbox.component.ts",
+    "category": "forms",
+    "description": "Checkbox public API.",
+    "members": [
+      {
+        "name": "indeterminate",
+        "bindingName": "indeterminate",
+        "role": "model",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Indeterminate public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-checkbox",
+    "slug": "checkbox",
+    "label": "Checkbox",
+    "tokens": ["--cs-lime-strong", "--cs-space-2"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ChipListComponent",
+    "sourcePath": "src/cornerstone/chip-list/chip-list.component.ts",
+    "category": "data-display",
+    "description": "Chip List public API.",
+    "members": [
+      {
+        "name": "chips",
+        "bindingName": "chips",
+        "role": "input",
+        "type": "readonly { id: string; label: string; selected?: boolean }[]",
+        "required": true,
+        "description": "Chips public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "removable",
+        "bindingName": "removable",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Removable public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "selectable",
+        "bindingName": "selectable",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Selectable public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "removed",
+        "bindingName": "removed",
+        "role": "output",
+        "type": "ChipRemoveEvent",
+        "required": false,
+        "description": "Removed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selectionChange",
+        "bindingName": "selectionChange",
+        "role": "output",
+        "type": "ChipSelectionChange",
+        "required": false,
+        "description": "Selection Change public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-chip-list",
+    "slug": "chip-list",
+    "label": "Chip List",
+    "tokens": [],
+    "relatedSymbols": ["ChipRemoveEvent", "ChipSelectionChange"]
+  },
+  {
+    "kind": "class",
+    "name": "ChoiceCardComponent",
+    "sourcePath": "src/cornerstone/choice-card/choice-card.component.ts",
+    "category": "forms",
+    "description": "Choice Card public API.",
+    "members": [
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "disabled",
+        "bindingName": "disabled",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Disabled public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "selectedChange",
+        "bindingName": "selectedChange",
+        "role": "output",
+        "type": "boolean",
+        "required": false,
+        "description": "Selected Change public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-choice-card",
+    "slug": "choice-card",
+    "label": "Choice Card",
+    "tokens": [
+      "--cs-border",
+      "--cs-ink",
+      "--cs-lime",
+      "--cs-paper",
+      "--cs-radius-md",
+      "--cs-space-4"
+    ],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ChoiceGroupComponent",
+    "sourcePath": "src/cornerstone/choice-group/choice-group.component.ts",
+    "category": "forms",
+    "description": "Choice Group public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "ChoiceMode",
+        "required": false,
+        "defaultValue": "'single'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["single", "multiple"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-choice-group",
+    "slug": "choice-group",
+    "label": "Choice Group",
+    "tokens": ["--cs-space-3"],
+    "relatedSymbols": ["ChoiceMode"]
+  },
+  {
+    "kind": "class",
+    "name": "CodeBlockComponent",
+    "sourcePath": "src/cornerstone/code-block/code-block.component.ts",
+    "category": "communication",
+    "description": "Code Block public API.",
+    "members": [
+      {
+        "name": "code",
+        "bindingName": "code",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Code public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "language",
+        "bindingName": "language",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'text'",
+        "description": "Language public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "copied",
+        "bindingName": "copied",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Copied public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-code-block",
+    "slug": "code-block",
+    "label": "Code Block",
+    "tokens": ["--cs-ink", "--cs-paper", "--cs-radius-md", "--cs-space-4"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "CodeEditorComponent",
+    "sourcePath": "src/cornerstone/code-editor/code-editor.component.ts",
+    "category": "communication",
+    "description": "Code Editor public API.",
+    "members": [
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "model",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "language",
+        "bindingName": "language",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'text'",
+        "description": "Language public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "RunState",
+        "required": false,
+        "defaultValue": "'idle'",
+        "description": "State public API.",
+        "structured": false,
+        "options": ["idle", "running", "success", "error"]
+      },
+      {
+        "name": "run",
+        "bindingName": "run",
+        "role": "output",
+        "type": "RunIntent",
+        "required": false,
+        "description": "Run public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-code-editor",
+    "slug": "code-editor",
+    "label": "Code Editor",
+    "tokens": [],
+    "relatedSymbols": ["CaretPositionDirective", "RunIntent", "RunState"]
+  },
+  {
+    "kind": "class",
+    "name": "ComboboxComponent",
+    "sourcePath": "src/cornerstone/combobox/combobox.component.ts",
+    "category": "forms",
+    "description": "Combobox public API.",
+    "members": [
+      {
+        "name": "options",
+        "bindingName": "options",
+        "role": "input",
+        "type": "readonly { label: string; value: string }[]",
+        "required": true,
+        "description": "Options public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "ComboboxMode",
+        "required": false,
+        "defaultValue": "'single'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["single", "multiple"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-combobox",
+    "slug": "combobox",
+    "label": "Combobox",
+    "tokens": ["--cs-border", "--cs-paper", "--cs-shadow-md", "--cs-space-3"],
+    "relatedSymbols": ["ComboboxMode"]
+  },
+  {
+    "kind": "class",
+    "name": "ComparisonChartComponent",
+    "sourcePath": "src/cornerstone/comparison-chart/comparison-chart.component.ts",
+    "category": "data-display",
+    "description": "Comparison Chart public API.",
+    "members": [
+      {
+        "name": "series",
+        "bindingName": "series",
+        "role": "input",
+        "type": "readonly CsMetricSeries[]",
+        "required": true,
+        "description": "Series public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-comparison-chart",
+    "slug": "comparison-chart",
+    "label": "Comparison Chart",
+    "tokens": [],
+    "relatedSymbols": ["CsMetricSeries"]
+  },
+  {
+    "kind": "class",
+    "name": "CompetencyGridComponent",
+    "sourcePath": "src/cornerstone/competency-grid/competency-grid.component.ts",
+    "category": "workflows",
+    "description": "Competency Grid public API.",
+    "members": [
+      {
+        "name": "columns",
+        "bindingName": "columns",
+        "role": "input",
+        "type": "readonly string[]",
+        "required": true,
+        "description": "Columns public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "rows",
+        "bindingName": "rows",
+        "role": "input",
+        "type": "readonly {\n      label: string;\n      cells: readonly ('complete' | 'in-progress' | 'empty' | 'not-applicable')[];\n    }[]",
+        "required": true,
+        "description": "Rows public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-competency-grid",
+    "slug": "competency-grid",
+    "label": "Competency Grid",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ConfirmDialogComponent",
+    "sourcePath": "src/cornerstone/confirm-dialog/confirm-dialog.component.ts",
+    "category": "overlays",
+    "description": "Confirm Dialog public API.",
+    "members": [
+      {
+        "name": "data",
+        "bindingName": "data",
+        "role": "input",
+        "type": "ConfirmDialogData",
+        "required": true,
+        "description": "Data public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "resolved",
+        "bindingName": "resolved",
+        "role": "output",
+        "type": "ConfirmResult",
+        "required": false,
+        "description": "Resolved public API.",
+        "structured": false,
+        "options": ["confirm", "cancel"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-confirm-dialog",
+    "slug": "confirm-dialog",
+    "label": "Confirm Dialog",
+    "tokens": [],
+    "relatedSymbols": ["ConfirmDialogData", "ConfirmResult", "ConfirmTone"]
+  },
+  {
+    "kind": "class",
+    "name": "ConsentPanelComponent",
+    "sourcePath": "src/cornerstone/consent-panel/consent-panel.component.ts",
+    "category": "workflows",
+    "description": "Consent Panel public API.",
+    "members": [
+      {
+        "name": "view",
+        "bindingName": "view",
+        "role": "input",
+        "type": "ConsentPanelViewModel",
+        "required": true,
+        "description": "View public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "decision",
+        "bindingName": "decision",
+        "role": "output",
+        "type": "ConsentDecisionIntent",
+        "required": false,
+        "description": "Decision public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "revoke",
+        "bindingName": "revoke",
+        "role": "output",
+        "type": "ConsentRevokeIntent",
+        "required": false,
+        "description": "Revoke public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "contactUpdate",
+        "bindingName": "contactUpdate",
+        "role": "output",
+        "type": "ConsentContactUpdateIntent",
+        "required": false,
+        "description": "Contact Update public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-consent-panel",
+    "slug": "consent-panel",
+    "label": "Consent Panel",
+    "tokens": [],
+    "relatedSymbols": [
+      "ConsentChoice",
+      "ConsentContactDetail",
+      "ConsentContactUpdateIntent",
+      "ConsentDecisionIntent",
+      "ConsentGroup",
+      "ConsentHistoryEntry",
+      "ConsentPanelViewModel",
+      "ConsentRevokeIntent",
+      "ConsentStatus"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "ContainerComponent",
+    "sourcePath": "src/cornerstone/container/container.component.ts",
+    "category": "foundations",
+    "description": "Container public API.",
+    "members": [
+      {
+        "name": "width",
+        "bindingName": "width",
+        "role": "input",
+        "type": "'default' | 'wide' | 'narrow'",
+        "required": false,
+        "defaultValue": "'default'",
+        "description": "Width public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-container",
+    "slug": "container",
+    "label": "Container",
+    "tokens": ["--cs-container", "--cs-container-narrow", "--cs-container-wide"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ContentSectionComponent",
+    "sourcePath": "src/cornerstone/content-section/content-section.component.ts",
+    "category": "marketing",
+    "description": "Content Section public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "summary",
+        "bindingName": "summary",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Summary public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "ContentSectionVariant",
+        "required": false,
+        "defaultValue": "'plain'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["plain", "cards", "split", "stats"]
+      },
+      {
+        "name": "cards",
+        "bindingName": "cards",
+        "role": "input",
+        "type": "readonly SectionCard[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Cards public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "stats",
+        "bindingName": "stats",
+        "role": "input",
+        "type": "readonly SectionStat[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Stats public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-content-section",
+    "slug": "content-section",
+    "label": "Content Section",
+    "tokens": ["--cs-space-4", "--cs-space-8", "--cs-text-xl"],
+    "relatedSymbols": ["ContentSectionVariant", "SectionCard", "SectionStat"]
+  },
+  {
+    "kind": "class",
+    "name": "ConversationItemComponent",
+    "sourcePath": "src/cornerstone/conversation-item/conversation-item.component.ts",
+    "category": "communication",
+    "description": "Conversation Item public API.",
+    "members": [
+      {
+        "name": "conversation",
+        "bindingName": "conversation",
+        "role": "input",
+        "type": "ConversationItem",
+        "required": true,
+        "description": "Conversation public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-conversation-item",
+    "slug": "conversation-item",
+    "label": "Conversation Item",
+    "tokens": [],
+    "relatedSymbols": ["ConversationItem"]
+  },
+  {
+    "kind": "class",
+    "name": "ConversationListComponent",
+    "sourcePath": "src/cornerstone/conversation-list/conversation-list.component.ts",
+    "category": "communication",
+    "description": "Conversation List public API.",
+    "members": [
+      {
+        "name": "conversations",
+        "bindingName": "conversations",
+        "role": "input",
+        "type": "readonly ConversationItem[]",
+        "required": true,
+        "description": "Conversations public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-conversation-list",
+    "slug": "conversation-list",
+    "label": "Conversation List",
+    "tokens": [],
+    "relatedSymbols": ["ConversationItem"]
+  },
+  {
+    "kind": "class",
+    "name": "CountdownComponent",
+    "sourcePath": "src/cornerstone/countdown/countdown.component.ts",
+    "category": "communication",
+    "description": "A countdown driven by the consumer's clock, with no background timer.",
+    "members": [
+      {
+        "name": "target",
+        "bindingName": "target",
+        "role": "input",
+        "type": "number",
+        "required": true,
+        "description": "Target public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "now",
+        "bindingName": "now",
+        "role": "input",
+        "type": "number",
+        "required": true,
+        "description": "Now public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "ariaLabel",
+        "bindingName": "ariaLabel",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Time remaining'",
+        "description": "Aria Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "pendingCaption",
+        "bindingName": "pendingCaption",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'The event will begin soon.'",
+        "description": "Pending Caption public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "expiredCaption",
+        "bindingName": "expiredCaption",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'The countdown is complete.'",
+        "description": "Expired Caption public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-countdown",
+    "slug": "countdown",
+    "label": "Countdown",
+    "tokens": [
+      "--cs-countdown-size",
+      "--cs-font-display",
+      "--cs-font-weight-bold",
+      "--cs-heading-tracking",
+      "--cs-ink-muted",
+      "--cs-label-tracking",
+      "--cs-space-2",
+      "--cs-space-5",
+      "--cs-space-6",
+      "--cs-text-xs"
+    ],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "CsvImportWizardComponent",
+    "sourcePath": "src/cornerstone/csv-import-wizard/csv-import-wizard.component.ts",
+    "category": "workflows",
+    "description": "Csv Import Wizard public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Import CSV'",
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "columns",
+        "bindingName": "columns",
+        "role": "input",
+        "type": "readonly ImportTargetColumn[]",
+        "required": true,
+        "description": "Columns public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "progress",
+        "bindingName": "progress",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Progress public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "fileSelected",
+        "bindingName": "fileSelected",
+        "role": "output",
+        "type": "Event",
+        "required": false,
+        "description": "File Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "submitted",
+        "bindingName": "submitted",
+        "role": "output",
+        "type": "readonly Record<string, string>[]",
+        "required": false,
+        "description": "Submitted public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-csv-import-wizard",
+    "slug": "csv-import-wizard",
+    "label": "Csv Import Wizard",
+    "tokens": [],
+    "relatedSymbols": ["ImportCellText", "ImportTargetColumn"]
+  },
+  {
+    "kind": "class",
+    "name": "CtaSectionComponent",
+    "sourcePath": "src/cornerstone/cta-section/cta-section.component.ts",
+    "category": "marketing",
+    "description": "Cta Section public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "summary",
+        "bindingName": "summary",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Summary public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "actions",
+        "bindingName": "actions",
+        "role": "input",
+        "type": "readonly CtaAction[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Actions public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-cta-section",
+    "slug": "cta-section",
+    "label": "Cta Section",
+    "tokens": ["--cs-ink", "--cs-paper", "--cs-radius-lg", "--cs-space-8"],
+    "relatedSymbols": ["CtaAction"]
+  },
+  {
+    "kind": "class",
+    "name": "CurriculumEditorComponent",
+    "sourcePath": "src/cornerstone/curriculum-editor/curriculum-editor.component.ts",
+    "category": "workflows",
+    "description": "Curriculum Editor public API.",
+    "members": [
+      {
+        "name": "node",
+        "bindingName": "node",
+        "role": "input",
+        "type": "CsCurriculumNode",
+        "required": true,
+        "description": "Node public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "saved",
+        "bindingName": "saved",
+        "role": "output",
+        "type": "CsCurriculumNode",
+        "required": false,
+        "description": "Saved public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-curriculum-editor",
+    "slug": "curriculum-editor",
+    "label": "Curriculum Editor",
+    "tokens": [],
+    "relatedSymbols": ["CsCurriculumNode"]
+  },
+  {
+    "kind": "class",
+    "name": "CurriculumTreeComponent",
+    "sourcePath": "src/cornerstone/curriculum-tree/curriculum-tree.component.ts",
+    "category": "workflows",
+    "description": "Curriculum Tree public API.",
+    "members": [
+      {
+        "name": "nodes",
+        "bindingName": "nodes",
+        "role": "input",
+        "type": "readonly CsCurriculumNode[]",
+        "required": true,
+        "description": "Nodes public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "reordered",
+        "bindingName": "reordered",
+        "role": "output",
+        "type": "CsCurriculumReorderIntent",
+        "required": false,
+        "description": "Reordered public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-curriculum-tree",
+    "slug": "curriculum-tree",
+    "label": "Curriculum Tree",
+    "tokens": [],
+    "relatedSymbols": ["CsCurriculumNode", "CsCurriculumReorderIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "DataStateOutletComponent",
+    "sourcePath": "src/cornerstone/data-state-outlet/data-state-outlet.component.ts",
+    "category": "data-display",
+    "description": "Data State Outlet public API.",
+    "members": [
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "CsDataState<T>",
+        "required": true,
+        "description": "State public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-data-state-outlet",
+    "slug": "data-state-outlet",
+    "label": "Data State Outlet",
+    "tokens": [],
+    "relatedSymbols": ["CsDataState", "DataStateHostDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "DataToolbarComponent",
+    "sourcePath": "src/cornerstone/data-toolbar/data-toolbar.component.ts",
+    "category": "data-display",
+    "description": "Data Toolbar public API.",
+    "members": [
+      {
+        "name": "filters",
+        "bindingName": "filters",
+        "role": "input",
+        "type": "readonly FilterChip[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Filters public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "exportRequested",
+        "bindingName": "exportRequested",
+        "role": "output",
+        "type": "ExportRequest",
+        "required": false,
+        "description": "Export Requested public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-data-toolbar",
+    "slug": "data-toolbar",
+    "label": "Data Toolbar",
+    "tokens": [],
+    "relatedSymbols": ["ExportRequest", "FilterChip"]
+  },
+  {
+    "kind": "class",
+    "name": "DateFieldComponent",
+    "sourcePath": "src/cornerstone/date-field/date-field.component.ts",
+    "category": "forms",
+    "description": "Date Field public API.",
+    "members": [
+      {
+        "name": "bounds",
+        "bindingName": "bounds",
+        "role": "input",
+        "type": "DateBounds",
+        "required": false,
+        "defaultValue": "{}",
+        "description": "Bounds public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-date-field",
+    "slug": "date-field",
+    "label": "Date Field",
+    "tokens": [],
+    "relatedSymbols": ["DateBounds"]
+  },
+  {
+    "kind": "class",
+    "name": "DateTimeFieldComponent",
+    "sourcePath": "src/cornerstone/date-time-field/date-time-field.component.ts",
+    "category": "forms",
+    "description": "Date Time Field public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-date-time-field",
+    "slug": "date-time-field",
+    "label": "Date Time Field",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "DefinitionListComponent",
+    "sourcePath": "src/cornerstone/definition-list/definition-list.component.ts",
+    "category": "data-display",
+    "description": "Definition List public API.",
+    "members": [
+      {
+        "name": "items",
+        "bindingName": "items",
+        "role": "input",
+        "type": "readonly DefinitionItem[]",
+        "required": true,
+        "description": "Items public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-definition-list",
+    "slug": "definition-list",
+    "label": "Definition List",
+    "tokens": ["--cs-space-3", "--cs-space-4"],
+    "relatedSymbols": ["DefinitionItem"]
+  },
+  {
+    "kind": "class",
+    "name": "DialogShellComponent",
+    "sourcePath": "src/cornerstone/dialog-shell/dialog-shell.component.ts",
+    "category": "overlays",
+    "description": "Dialog Shell public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-dialog-shell",
+    "slug": "dialog-shell",
+    "label": "Dialog Shell",
+    "tokens": ["--cs-paper", "--cs-radius-lg", "--cs-shadow-lg", "--cs-space-3", "--cs-space-5"],
+    "relatedSymbols": [
+      "DialogActionsDirective",
+      "DialogConfig",
+      "DialogDescriptionDirective",
+      "DialogRef",
+      "DialogService",
+      "DialogSize",
+      "DialogTitleDirective"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "DividerComponent",
+    "sourcePath": "src/cornerstone/divider/divider.component.ts",
+    "category": "foundations",
+    "description": "Divider public API.",
+    "members": [
+      {
+        "name": "orientation",
+        "bindingName": "orientation",
+        "role": "input",
+        "type": "DividerOrientation",
+        "required": false,
+        "defaultValue": "'horizontal'",
+        "description": "Orientation public API.",
+        "structured": false,
+        "options": ["horizontal", "vertical"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-divider",
+    "slug": "divider",
+    "label": "Divider",
+    "tokens": ["--cs-border"],
+    "relatedSymbols": ["DividerOrientation"]
+  },
+  {
+    "kind": "class",
+    "name": "DrawerComponent",
+    "sourcePath": "src/cornerstone/drawer/drawer.component.ts",
+    "category": "overlays",
+    "description": "Drawer public API.",
+    "members": [
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "model",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Opened public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "position",
+        "bindingName": "position",
+        "role": "input",
+        "type": "DrawerPosition",
+        "required": false,
+        "defaultValue": "'end'",
+        "description": "Position public API.",
+        "structured": false,
+        "options": ["start", "end", "bottom"]
+      },
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "DrawerMode",
+        "required": false,
+        "defaultValue": "'modal'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["modal", "non-modal"]
+      },
+      {
+        "name": "responsiveFullScreen",
+        "bindingName": "responsiveFullScreen",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Responsive Full Screen public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "dismissible",
+        "bindingName": "dismissible",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "true",
+        "description": "Dismissible public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "size",
+        "bindingName": "size",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'24rem'",
+        "description": "Size public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "closed",
+        "bindingName": "closed",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Closed public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-drawer",
+    "slug": "drawer",
+    "label": "Drawer",
+    "tokens": ["--cs-paper", "--cs-shadow-lg", "--cs-space-4", "--cs-space-5"],
+    "relatedSymbols": [
+      "DrawerConfig",
+      "DrawerFooterDirective",
+      "DrawerHeaderDirective",
+      "DrawerMode",
+      "DrawerPosition",
+      "DrawerRef",
+      "DrawerService"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "DrawerContainerComponent",
+    "sourcePath": "src/cornerstone/drawer-container/drawer-container.component.ts",
+    "category": "overlays",
+    "description": "Drawer Container public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-drawer-container",
+    "slug": "drawer-container",
+    "label": "Drawer Container",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "DropzoneComponent",
+    "sourcePath": "src/cornerstone/dropzone/dropzone.component.ts",
+    "category": "forms",
+    "description": "Dropzone public API.",
+    "members": [
+      {
+        "name": "multiple",
+        "bindingName": "multiple",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Multiple public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "accept",
+        "bindingName": "accept",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Accept public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "filesSelected",
+        "bindingName": "filesSelected",
+        "role": "output",
+        "type": "readonly File[]",
+        "required": false,
+        "description": "Files Selected public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-dropzone",
+    "slug": "dropzone",
+    "label": "Dropzone",
+    "tokens": ["--cs-border-strong", "--cs-radius-md", "--cs-space-6"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "EmptyStateComponent",
+    "sourcePath": "src/cornerstone/empty-state/empty-state.component.ts",
+    "category": "data-display",
+    "description": "Empty State public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "message",
+        "bindingName": "message",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Message public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "EmptyStateVariant",
+        "required": false,
+        "defaultValue": "'panel'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["inline", "panel", "page"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-empty-state",
+    "slug": "empty-state",
+    "label": "Empty State",
+    "tokens": ["--cs-space-8"],
+    "relatedSymbols": ["EmptyStateVariant"]
+  },
+  {
+    "kind": "class",
+    "name": "EventCardComponent",
+    "sourcePath": "src/cornerstone/event-card/event-card.component.ts",
+    "category": "communication",
+    "description": "Event Card public API.",
+    "members": [
+      {
+        "name": "event",
+        "bindingName": "event",
+        "role": "input",
+        "type": "CsEventViewModel",
+        "required": true,
+        "description": "Event public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "rsvp",
+        "bindingName": "rsvp",
+        "role": "output",
+        "type": "RsvpIntent",
+        "required": false,
+        "description": "Rsvp public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-event-card",
+    "slug": "event-card",
+    "label": "Event Card",
+    "tokens": [],
+    "relatedSymbols": ["CsEventViewModel", "RsvpIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "EvidencePreviewComponent",
+    "sourcePath": "src/cornerstone/evidence-preview/evidence-preview.component.ts",
+    "category": "communication",
+    "description": "Evidence Preview public API.",
+    "members": [
+      {
+        "name": "media",
+        "bindingName": "media",
+        "role": "input",
+        "type": "CsMediaViewModel | null",
+        "required": false,
+        "defaultValue": "null",
+        "description": "Media public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-evidence-preview",
+    "slug": "evidence-preview",
+    "label": "Evidence Preview",
+    "tokens": [],
+    "relatedSymbols": ["CsMediaViewModel"]
+  },
+  {
+    "kind": "class",
+    "name": "FieldComponent",
+    "sourcePath": "src/cornerstone/field/field.component.ts",
+    "category": "forms",
+    "description": "Field public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "forId",
+        "bindingName": "forId",
+        "role": "input",
+        "type": "unknown",
+        "required": false,
+        "defaultValue": "this.ids.next('control')",
+        "description": "For Id public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "hint",
+        "bindingName": "hint",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Hint public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "error",
+        "bindingName": "error",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Error public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "required",
+        "bindingName": "required",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Required public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-field",
+    "slug": "field",
+    "label": "Field",
+    "tokens": [],
+    "relatedSymbols": ["FieldState"]
+  },
+  {
+    "kind": "class",
+    "name": "FilePickerComponent",
+    "sourcePath": "src/cornerstone/file-picker/file-picker.component.ts",
+    "category": "forms",
+    "description": "File Picker public API.",
+    "members": [
+      {
+        "name": "multiple",
+        "bindingName": "multiple",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Multiple public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "accept",
+        "bindingName": "accept",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Accept public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "maxBytes",
+        "bindingName": "maxBytes",
+        "role": "input",
+        "type": "unknown",
+        "required": false,
+        "defaultValue": "Number.MAX_SAFE_INTEGER",
+        "description": "Max Bytes public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "filesSelected",
+        "bindingName": "filesSelected",
+        "role": "output",
+        "type": "readonly File[]",
+        "required": false,
+        "description": "Files Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "rejected",
+        "bindingName": "rejected",
+        "role": "output",
+        "type": "readonly FileRejection[]",
+        "required": false,
+        "description": "Rejected public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-file-picker",
+    "slug": "file-picker",
+    "label": "File Picker",
+    "tokens": [],
+    "relatedSymbols": ["FileRejection"]
+  },
+  {
+    "kind": "class",
+    "name": "FileSummaryComponent",
+    "sourcePath": "src/cornerstone/file-summary/file-summary.component.ts",
+    "category": "forms",
+    "description": "File Summary public API.",
+    "members": [
+      {
+        "name": "files",
+        "bindingName": "files",
+        "role": "input",
+        "type": "readonly FileEntry[]",
+        "required": true,
+        "description": "Files public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "removed",
+        "bindingName": "removed",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Removed public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-file-summary",
+    "slug": "file-summary",
+    "label": "File Summary",
+    "tokens": [],
+    "relatedSymbols": ["FileEntry"]
+  },
+  {
+    "kind": "class",
+    "name": "FormActionsComponent",
+    "sourcePath": "src/cornerstone/form-actions/form-actions.component.ts",
+    "category": "forms",
+    "description": "Form Actions public API.",
+    "members": [
+      {
+        "name": "pending",
+        "bindingName": "pending",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Pending public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-form-actions",
+    "slug": "form-actions",
+    "label": "Form Actions",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "GateComponent",
+    "sourcePath": "src/cornerstone/gate/gate.component.ts",
+    "category": "process",
+    "description": "Gate public API.",
+    "members": [
+      {
+        "name": "id",
+        "bindingName": "id",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Id public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "requirements",
+        "bindingName": "requirements",
+        "role": "input",
+        "type": "readonly CsRequirement[]",
+        "required": true,
+        "description": "Requirements public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "GateMode",
+        "required": false,
+        "defaultValue": "'read'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["read", "edit"]
+      },
+      {
+        "name": "requirementToggle",
+        "bindingName": "requirementToggle",
+        "role": "output",
+        "type": "CsRequirementToggleIntent",
+        "required": false,
+        "description": "Requirement Toggle public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "advance",
+        "bindingName": "advance",
+        "role": "output",
+        "type": "GateAdvanceIntent",
+        "required": false,
+        "description": "Advance public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-gate",
+    "slug": "gate",
+    "label": "Gate",
+    "tokens": [],
+    "relatedSymbols": [
+      "CsRequirement",
+      "CsRequirementToggleIntent",
+      "GateAdvanceIntent",
+      "GateAnnouncer",
+      "GateMode",
+      "GateSummary"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "GratitudeNoteComponent",
+    "sourcePath": "src/cornerstone/gratitude-note/gratitude-note.component.ts",
+    "category": "process",
+    "description": "Gratitude Note public API.",
+    "members": [
+      {
+        "name": "note",
+        "bindingName": "note",
+        "role": "input",
+        "type": "GratitudeNote",
+        "required": true,
+        "description": "Note public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-gratitude-note",
+    "slug": "gratitude-note",
+    "label": "Gratitude Note",
+    "tokens": [],
+    "relatedSymbols": ["GratitudeNote"]
+  },
+  {
+    "kind": "class",
+    "name": "GratitudeWallComponent",
+    "sourcePath": "src/cornerstone/gratitude-wall/gratitude-wall.component.ts",
+    "category": "process",
+    "description": "Gratitude Wall public API.",
+    "members": [
+      {
+        "name": "notes",
+        "bindingName": "notes",
+        "role": "input",
+        "type": "readonly GratitudeNote[]",
+        "required": true,
+        "description": "Notes public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-gratitude-wall",
+    "slug": "gratitude-wall",
+    "label": "Gratitude Wall",
+    "tokens": ["--cs-space-4"],
+    "relatedSymbols": ["GratitudeNote"]
+  },
+  {
+    "kind": "class",
+    "name": "HeroComponent",
+    "sourcePath": "src/cornerstone/hero/hero.component.ts",
+    "category": "marketing",
+    "description": "Hero public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "summary",
+        "bindingName": "summary",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Summary public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "actions",
+        "bindingName": "actions",
+        "role": "input",
+        "type": "readonly HeroAction[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Actions public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-hero",
+    "slug": "hero",
+    "label": "Hero",
+    "tokens": ["--cs-font-display", "--cs-space-8", "--cs-text-lg"],
+    "relatedSymbols": ["HeroAction", "HeroActionsDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "IconComponent",
+    "sourcePath": "src/cornerstone/icon/icon.component.ts",
+    "category": "foundations",
+    "description": "Icon public API.",
+    "members": [
+      {
+        "name": "name",
+        "bindingName": "name",
+        "role": "input",
+        "type": "IconName",
+        "required": true,
+        "description": "Name public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "size",
+        "bindingName": "size",
+        "role": "input",
+        "type": "IconSize",
+        "required": false,
+        "defaultValue": "'medium'",
+        "description": "Size public API.",
+        "structured": false,
+        "options": ["small", "medium", "large"]
+      },
+      {
+        "name": "fill",
+        "bindingName": "fill",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Fill public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-icon",
+    "slug": "icon",
+    "label": "Icon",
+    "tokens": ["--cs-icon-size"],
+    "relatedSymbols": [
+      "IconDefinition",
+      "IconName",
+      "IconRegistry",
+      "ICONS",
+      "IconSet",
+      "IconSize",
+      "provideCsIcons"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "InputGroupComponent",
+    "sourcePath": "src/cornerstone/input-group/input-group.component.ts",
+    "category": "forms",
+    "description": "Input Group public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-input-group",
+    "slug": "input-group",
+    "label": "Input Group",
+    "tokens": ["--cs-radius-sm"],
+    "relatedSymbols": ["AddonPosition", "InputAddonDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "KanbanBoardComponent",
+    "sourcePath": "src/cornerstone/kanban-board/kanban-board.component.ts",
+    "category": "process",
+    "description": "Kanban Board public API.",
+    "members": [
+      {
+        "name": "columns",
+        "bindingName": "columns",
+        "role": "input",
+        "type": "readonly KanbanColumn[]",
+        "required": true,
+        "description": "Columns public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "moved",
+        "bindingName": "moved",
+        "role": "output",
+        "type": "WorkItemMoveIntent",
+        "required": false,
+        "description": "Moved public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "WorkItemOpenIntent",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-kanban-board",
+    "slug": "kanban-board",
+    "label": "Kanban Board",
+    "tokens": ["--cs-space-4"],
+    "relatedSymbols": [
+      "KanbanAnnouncer",
+      "KanbanColumn",
+      "KanbanKeyboardMove",
+      "WorkItemMoveIntent",
+      "WorkItemOpenIntent"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "KanbanColumnComponent",
+    "sourcePath": "src/cornerstone/kanban-column/kanban-column.component.ts",
+    "category": "process",
+    "description": "Kanban Column public API.",
+    "members": [
+      {
+        "name": "column",
+        "bindingName": "column",
+        "role": "input",
+        "type": "KanbanColumn",
+        "required": true,
+        "description": "Column public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "WorkItemOpenIntent",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-kanban-column",
+    "slug": "kanban-column",
+    "label": "Kanban Column",
+    "tokens": ["--cs-radius-md", "--cs-space-3", "--cs-surface"],
+    "relatedSymbols": ["DropState", "KanbanColumn", "WorkItemOpenIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "KpiComponent",
+    "sourcePath": "src/cornerstone/kpi/kpi.component.ts",
+    "category": "data-display",
+    "description": "Kpi public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "string | number",
+        "required": true,
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-kpi",
+    "slug": "kpi",
+    "label": "Kpi",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "LearningJourneyComponent",
+    "sourcePath": "src/cornerstone/learning-journey/learning-journey.component.ts",
+    "category": "workflows",
+    "description": "Learning Journey public API.",
+    "members": [
+      {
+        "name": "view",
+        "bindingName": "view",
+        "role": "input",
+        "type": "LearningJourneyView",
+        "required": true,
+        "description": "View public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "layout",
+        "bindingName": "layout",
+        "role": "input",
+        "type": "JourneyLayout",
+        "required": false,
+        "defaultValue": "'auto'",
+        "description": "Layout public API.",
+        "structured": false,
+        "options": ["timeline", "columns", "auto"]
+      },
+      {
+        "name": "stepSelected",
+        "bindingName": "stepSelected",
+        "role": "output",
+        "type": "LessonStepSelect",
+        "required": false,
+        "description": "Step Selected public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "moduleToggled",
+        "bindingName": "moduleToggled",
+        "role": "output",
+        "type": "ModuleToggle",
+        "required": false,
+        "description": "Module Toggled public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-learning-journey",
+    "slug": "learning-journey",
+    "label": "Learning Journey",
+    "tokens": [],
+    "relatedSymbols": [
+      "JourneyLayout",
+      "JourneyModuleView",
+      "JourneyProgress",
+      "LearningJourneyView",
+      "LessonStepSelect",
+      "ModuleToggle"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "LessonStepListComponent",
+    "sourcePath": "src/cornerstone/lesson-step-list/lesson-step-list.component.ts",
+    "category": "workflows",
+    "description": "Lesson Step List public API.",
+    "members": [
+      {
+        "name": "steps",
+        "bindingName": "steps",
+        "role": "input",
+        "type": "readonly LessonStepView[]",
+        "required": true,
+        "description": "Steps public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "output",
+        "type": "LessonStepSelect",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-lesson-step-list",
+    "slug": "lesson-step-list",
+    "label": "Lesson Step List",
+    "tokens": [],
+    "relatedSymbols": ["LessonStepSelect", "LessonStepState", "LessonStepView"]
+  },
+  {
+    "kind": "class",
+    "name": "ListComponent",
+    "sourcePath": "src/cornerstone/list/list.component.ts",
+    "category": "data-display",
+    "description": "List public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-list",
+    "slug": "list",
+    "label": "List",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ListItemComponent",
+    "sourcePath": "src/cornerstone/list-item/list-item.component.ts",
+    "category": "data-display",
+    "description": "List Item public API.",
+    "members": [
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-list-item",
+    "slug": "list-item",
+    "label": "List Item",
+    "tokens": ["--cs-border", "--cs-space-3"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "LogoMarkComponent",
+    "sourcePath": "src/cornerstone/logo-mark/logo-mark.component.ts",
+    "category": "marketing",
+    "description": "Logo Mark public API.",
+    "members": [
+      {
+        "name": "brand",
+        "bindingName": "brand",
+        "role": "input",
+        "type": "CsBrandName",
+        "required": false,
+        "defaultValue": "'faithtech'",
+        "description": "Brand public API.",
+        "structured": false,
+        "options": ["faithtech", "liturgy", "wordup"]
+      },
+      {
+        "name": "size",
+        "bindingName": "size",
+        "role": "input",
+        "type": "CsBrandSize",
+        "required": false,
+        "defaultValue": "'medium'",
+        "description": "Size public API.",
+        "structured": false,
+        "options": ["small", "medium", "large"]
+      },
+      {
+        "name": "treatment",
+        "bindingName": "treatment",
+        "role": "input",
+        "type": "CsBrandTreatment",
+        "required": false,
+        "description": "Treatment public API.",
+        "structured": false,
+        "options": ["light", "dark", "mono"]
+      },
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-logo-mark",
+    "slug": "logo-mark",
+    "label": "Logo Mark",
+    "tokens": ["--cs-lime-strong"],
+    "relatedSymbols": ["CsBrandName", "CsBrandSize", "CsBrandTreatment"]
+  },
+  {
+    "kind": "class",
+    "name": "MarketingFooterComponent",
+    "sourcePath": "src/cornerstone/marketing-footer/marketing-footer.component.ts",
+    "category": "navigation",
+    "description": "Marketing Footer public API.",
+    "members": [
+      {
+        "name": "groups",
+        "bindingName": "groups",
+        "role": "input",
+        "type": "readonly MarketingLinkGroup[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Groups public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-marketing-footer",
+    "slug": "marketing-footer",
+    "label": "Marketing Footer",
+    "tokens": ["--cs-ink", "--cs-paper", "--cs-space-2", "--cs-space-6", "--cs-space-8"],
+    "relatedSymbols": ["MarketingLinkGroup", "SocialLink"]
+  },
+  {
+    "kind": "class",
+    "name": "MarketingHeaderComponent",
+    "sourcePath": "src/cornerstone/marketing-header/marketing-header.component.ts",
+    "category": "navigation",
+    "description": "Marketing Header public API.",
+    "members": [
+      {
+        "name": "links",
+        "bindingName": "links",
+        "role": "input",
+        "type": "readonly CsMarketingLink[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Links public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-marketing-header",
+    "slug": "marketing-header",
+    "label": "Marketing Header",
+    "tokens": ["--cs-space-4", "--cs-space-5"],
+    "relatedSymbols": ["CsMarketingLink", "MarketingCta"]
+  },
+  {
+    "kind": "class",
+    "name": "MediaViewerComponent",
+    "sourcePath": "src/cornerstone/media-viewer/media-viewer.component.ts",
+    "category": "communication",
+    "description": "Media Viewer public API.",
+    "members": [
+      {
+        "name": "media",
+        "bindingName": "media",
+        "role": "input",
+        "type": "CsMediaViewModel",
+        "required": true,
+        "description": "Media public API.",
+        "structured": false,
+        "options": ["image", "video", "audio", "iframe"]
+      },
+      {
+        "name": "failed",
+        "bindingName": "failed",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Failed public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-media-viewer",
+    "slug": "media-viewer",
+    "label": "Media Viewer",
+    "tokens": [],
+    "relatedSymbols": ["CsMediaViewModel", "MediaFrameDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "MessageComposerComponent",
+    "sourcePath": "src/cornerstone/message-composer/message-composer.component.ts",
+    "category": "communication",
+    "description": "Message Composer public API.",
+    "members": [
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "model",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "placeholder",
+        "bindingName": "placeholder",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Write a message'",
+        "description": "Placeholder public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "pending",
+        "bindingName": "pending",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Pending public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "sent",
+        "bindingName": "sent",
+        "role": "output",
+        "type": "SendIntent",
+        "required": false,
+        "description": "Sent public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-message-composer",
+    "slug": "message-composer",
+    "label": "Message Composer",
+    "tokens": ["--cs-space-3"],
+    "relatedSymbols": ["SendIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "MessageThreadComponent",
+    "sourcePath": "src/cornerstone/message-thread/message-thread.component.ts",
+    "category": "communication",
+    "description": "Message Thread public API.",
+    "members": [
+      {
+        "name": "messages",
+        "bindingName": "messages",
+        "role": "input",
+        "type": "readonly MessageViewModel[]",
+        "required": true,
+        "description": "Messages public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "CsDataState",
+        "required": false,
+        "defaultValue": "{ status: 'ready', data: undefined }",
+        "description": "State public API.",
+        "structured": false,
+        "options": ["idle", "loading", "empty", "error", "ready"]
+      },
+      {
+        "name": "loadEarlier",
+        "bindingName": "loadEarlier",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Load Earlier public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-message-thread",
+    "slug": "message-thread",
+    "label": "Message Thread",
+    "tokens": ["--cs-radius-md", "--cs-space-3", "--cs-space-4", "--cs-surface"],
+    "relatedSymbols": [
+      "CsDataState",
+      "MessageViewModel",
+      "ThreadAnnouncerService",
+      "ThreadScrollAnchor"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "MetricBarsComponent",
+    "sourcePath": "src/cornerstone/metric-bars/metric-bars.component.ts",
+    "category": "data-display",
+    "description": "Metric Bars public API.",
+    "members": [
+      {
+        "name": "series",
+        "bindingName": "series",
+        "role": "input",
+        "type": "readonly CsMetricSeries[]",
+        "required": true,
+        "description": "Series public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-metric-bars",
+    "slug": "metric-bars",
+    "label": "Metric Bars",
+    "tokens": ["--cs-lime-strong", "--cs-space-2"],
+    "relatedSymbols": ["CsMetricSeries"]
+  },
+  {
+    "kind": "class",
+    "name": "MetricLegendComponent",
+    "sourcePath": "src/cornerstone/metric-legend/metric-legend.component.ts",
+    "category": "data-display",
+    "description": "Metric Legend public API.",
+    "members": [
+      {
+        "name": "series",
+        "bindingName": "series",
+        "role": "input",
+        "type": "readonly CsMetricSeries[]",
+        "required": true,
+        "description": "Series public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-metric-legend",
+    "slug": "metric-legend",
+    "label": "Metric Legend",
+    "tokens": [],
+    "relatedSymbols": ["CsMetricSeries"]
+  },
+  {
+    "kind": "class",
+    "name": "MetricValueTableComponent",
+    "sourcePath": "src/cornerstone/metric-value-table/metric-value-table.component.ts",
+    "category": "data-display",
+    "description": "Metric Value Table public API.",
+    "members": [
+      {
+        "name": "series",
+        "bindingName": "series",
+        "role": "input",
+        "type": "readonly CsMetricSeries[]",
+        "required": true,
+        "description": "Series public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-metric-value-table",
+    "slug": "metric-value-table",
+    "label": "Metric Value Table",
+    "tokens": [],
+    "relatedSymbols": ["CsMetricSeries"]
+  },
+  {
+    "kind": "class",
+    "name": "MovementDialComponent",
+    "sourcePath": "src/cornerstone/movement-dial/movement-dial.component.ts",
+    "category": "process",
+    "description": "Movement Dial public API.",
+    "members": [
+      {
+        "name": "movements",
+        "bindingName": "movements",
+        "role": "input",
+        "type": "readonly Movement[]",
+        "required": true,
+        "description": "Movements public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "DialVariant",
+        "required": false,
+        "defaultValue": "'full'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["full", "compact"]
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "MovementActivation",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-movement-dial",
+    "slug": "movement-dial",
+    "label": "Movement Dial",
+    "tokens": [],
+    "relatedSymbols": ["DialVariant", "Movement", "MovementActivation"]
+  },
+  {
+    "kind": "class",
+    "name": "MovementListComponent",
+    "sourcePath": "src/cornerstone/movement-list/movement-list.component.ts",
+    "category": "process",
+    "description": "Movement List public API.",
+    "members": [
+      {
+        "name": "movements",
+        "bindingName": "movements",
+        "role": "input",
+        "type": "readonly Movement[]",
+        "required": true,
+        "description": "Movements public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "MovementListVariant",
+        "required": false,
+        "defaultValue": "'rows'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["cards", "rows"]
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "MovementActivation",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-movement-list",
+    "slug": "movement-list",
+    "label": "Movement List",
+    "tokens": [],
+    "relatedSymbols": ["Movement", "MovementActivation", "MovementListVariant", "MovementState"]
+  },
+  {
+    "kind": "class",
+    "name": "NavGroupComponent",
+    "sourcePath": "src/cornerstone/nav-group/nav-group.component.ts",
+    "category": "navigation",
+    "description": "Nav Group public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-nav-group",
+    "slug": "nav-group",
+    "label": "Nav Group",
+    "tokens": ["--cs-ink-muted", "--cs-text-xs"],
+    "relatedSymbols": ["NavGroup"]
+  },
+  {
+    "kind": "class",
+    "name": "NotificationItemComponent",
+    "sourcePath": "src/cornerstone/notification-item/notification-item.component.ts",
+    "category": "communication",
+    "description": "Notification Item public API.",
+    "members": [
+      {
+        "name": "notification",
+        "bindingName": "notification",
+        "role": "input",
+        "type": "CsNotificationViewModel",
+        "required": true,
+        "description": "Notification public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "readToggled",
+        "bindingName": "readToggled",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Read Toggled public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "CsNotificationNavigateIntent",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-notification-item",
+    "slug": "notification-item",
+    "label": "Notification Item",
+    "tokens": [],
+    "relatedSymbols": ["CsNotificationNavigateIntent", "CsNotificationViewModel"]
+  },
+  {
+    "kind": "class",
+    "name": "NotificationListComponent",
+    "sourcePath": "src/cornerstone/notification-list/notification-list.component.ts",
+    "category": "communication",
+    "description": "Notification List public API.",
+    "members": [
+      {
+        "name": "notifications",
+        "bindingName": "notifications",
+        "role": "input",
+        "type": "readonly CsNotificationViewModel[]",
+        "required": true,
+        "description": "Notifications public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "CsDataState",
+        "required": false,
+        "defaultValue": "{ status: 'ready', data: undefined }",
+        "description": "State public API.",
+        "structured": false,
+        "options": ["idle", "loading", "empty", "error", "ready"]
+      },
+      {
+        "name": "unreadCount",
+        "bindingName": "unreadCount",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Unread Count public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "markRead",
+        "bindingName": "markRead",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Mark Read public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "markAllRead",
+        "bindingName": "markAllRead",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Mark All Read public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "navigate",
+        "bindingName": "navigate",
+        "role": "output",
+        "type": "CsNotificationNavigateIntent",
+        "required": false,
+        "description": "Navigate public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-notification-list",
+    "slug": "notification-list",
+    "label": "Notification List",
+    "tokens": [],
+    "relatedSymbols": ["CsDataState", "CsNotificationNavigateIntent", "CsNotificationViewModel"]
+  },
+  {
+    "kind": "class",
+    "name": "OfflineBannerComponent",
+    "sourcePath": "src/cornerstone/offline-banner/offline-banner.component.ts",
+    "category": "data-display",
+    "description": "Offline Banner public API.",
+    "members": [
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "ConnectivityState",
+        "required": false,
+        "defaultValue": "'online'",
+        "description": "State public API.",
+        "structured": false,
+        "options": ["online", "offline", "reconnecting", "queued", "syncing"]
+      },
+      {
+        "name": "queued",
+        "bindingName": "queued",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Queued public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-offline-banner",
+    "slug": "offline-banner",
+    "label": "Offline Banner",
+    "tokens": ["--cs-ink", "--cs-paper", "--cs-space-2", "--cs-space-4"],
+    "relatedSymbols": ["ConnectivityState"]
+  },
+  {
+    "kind": "class",
+    "name": "PageComponent",
+    "sourcePath": "src/cornerstone/page/page.component.ts",
+    "category": "foundations",
+    "description": "Page public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "subtitle",
+        "bindingName": "subtitle",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Subtitle public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-page",
+    "slug": "page",
+    "label": "Page",
+    "tokens": [
+      "--cs-font-display",
+      "--cs-ink-muted",
+      "--cs-space-3",
+      "--cs-space-6",
+      "--cs-text-xl"
+    ],
+    "relatedSymbols": ["PageActionsDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "PaginatorComponent",
+    "sourcePath": "src/cornerstone/paginator/paginator.component.ts",
+    "category": "navigation",
+    "description": "Paginator public API.",
+    "members": [
+      {
+        "name": "page",
+        "bindingName": "page",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "1",
+        "description": "Page public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "pageSize",
+        "bindingName": "pageSize",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "25",
+        "description": "Page Size public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "length",
+        "bindingName": "length",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Length public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "pageSizeOptions",
+        "bindingName": "pageSizeOptions",
+        "role": "input",
+        "type": "readonly number[]",
+        "required": false,
+        "defaultValue": "[10, 25, 50, 100]",
+        "description": "Page Size Options public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "pageChange",
+        "bindingName": "pageChange",
+        "role": "output",
+        "type": "PageChange",
+        "required": false,
+        "description": "Page Change public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-paginator",
+    "slug": "paginator",
+    "label": "Paginator",
+    "tokens": [],
+    "relatedSymbols": ["PageChange"]
+  },
+  {
+    "kind": "class",
+    "name": "PeopleDirectoryComponent",
+    "sourcePath": "src/cornerstone/people-directory/people-directory.component.ts",
+    "category": "workflows",
+    "description": "People Directory public API.",
+    "members": [
+      {
+        "name": "people",
+        "bindingName": "people",
+        "role": "input",
+        "type": "readonly PersonRowView[]",
+        "required": true,
+        "description": "People public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "query",
+        "bindingName": "query",
+        "role": "input",
+        "type": "PeopleQuery",
+        "required": true,
+        "description": "Query public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "state",
+        "bindingName": "state",
+        "role": "input",
+        "type": "CsDataState",
+        "required": false,
+        "defaultValue": "{ status: 'ready', data: undefined }",
+        "description": "State public API.",
+        "structured": false,
+        "options": ["idle", "loading", "empty", "error", "ready"]
+      },
+      {
+        "name": "layout",
+        "bindingName": "layout",
+        "role": "input",
+        "type": "DirectoryLayout",
+        "required": false,
+        "defaultValue": "'auto'",
+        "description": "Layout public API.",
+        "structured": false,
+        "options": ["table", "list", "auto"]
+      },
+      {
+        "name": "queryChanged",
+        "bindingName": "queryChanged",
+        "role": "output",
+        "type": "PeopleQuery",
+        "required": false,
+        "description": "Query Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "CsPersonOpen",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selectionChanged",
+        "bindingName": "selectionChanged",
+        "role": "output",
+        "type": "PeopleSelectionChange",
+        "required": false,
+        "description": "Selection Changed public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-people-directory",
+    "slug": "people-directory",
+    "label": "People Directory",
+    "tokens": [],
+    "relatedSymbols": [
+      "CsDataState",
+      "CsPersonOpen",
+      "DirectoryLayout",
+      "PeopleFacet",
+      "PeopleQuery",
+      "PeopleSelectionChange",
+      "PersonRowView"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "PersonComponent",
+    "sourcePath": "src/cornerstone/person/person.component.ts",
+    "category": "data-display",
+    "description": "Person public API.",
+    "members": [
+      {
+        "name": "person",
+        "bindingName": "person",
+        "role": "input",
+        "type": "PersonSummary",
+        "required": true,
+        "description": "Person public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-person",
+    "slug": "person",
+    "label": "Person",
+    "tokens": ["--cs-ink-muted", "--cs-space-3"],
+    "relatedSymbols": ["PersonSummary"]
+  },
+  {
+    "kind": "class",
+    "name": "PersonRowComponent",
+    "sourcePath": "src/cornerstone/person-row/person-row.component.ts",
+    "category": "workflows",
+    "description": "Person Row public API.",
+    "members": [
+      {
+        "name": "person",
+        "bindingName": "person",
+        "role": "input",
+        "type": "PersonRowView",
+        "required": true,
+        "description": "Person public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "variant",
+        "bindingName": "variant",
+        "role": "input",
+        "type": "PersonRowVariant",
+        "required": false,
+        "defaultValue": "'list'",
+        "description": "Variant public API.",
+        "structured": false,
+        "options": ["table", "list"]
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "CsPersonOpen",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "PersonRowAction",
+        "required": false,
+        "description": "Action public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selectionChanged",
+        "bindingName": "selectionChanged",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Selection Changed public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-person-row",
+    "slug": "person-row",
+    "label": "Person Row",
+    "tokens": [],
+    "relatedSymbols": [
+      "CsPersonOpen",
+      "PersonRowAction",
+      "PersonRowVariant",
+      "PersonRowView",
+      "PersonStatus"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "PersonSummaryComponent",
+    "sourcePath": "src/cornerstone/person-summary/person-summary.component.ts",
+    "category": "workflows",
+    "description": "Person Summary public API.",
+    "members": [
+      {
+        "name": "view",
+        "bindingName": "view",
+        "role": "input",
+        "type": "PersonSummaryView",
+        "required": true,
+        "description": "View public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "PersonAction",
+        "required": false,
+        "description": "Action public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-person-summary",
+    "slug": "person-summary",
+    "label": "Person Summary",
+    "tokens": [],
+    "relatedSymbols": ["ContactEntry", "PersonAction", "PersonSummaryView"]
+  },
+  {
+    "kind": "class",
+    "name": "PhaseLaneComponent",
+    "sourcePath": "src/cornerstone/phase-lane/phase-lane.component.ts",
+    "category": "process",
+    "description": "Phase Lane public API.",
+    "members": [
+      {
+        "name": "phase",
+        "bindingName": "phase",
+        "role": "input",
+        "type": "Phase",
+        "required": true,
+        "description": "Phase public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "projects",
+        "bindingName": "projects",
+        "role": "input",
+        "type": "readonly Project[]",
+        "required": true,
+        "description": "Projects public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "ProjectOpenIntent",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-phase-lane",
+    "slug": "phase-lane",
+    "label": "Phase Lane",
+    "tokens": [],
+    "relatedSymbols": ["Phase", "PortfolioLayout", "Project", "ProjectOpenIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "PillComponent",
+    "sourcePath": "src/cornerstone/pill/pill.component.ts",
+    "category": "foundations",
+    "description": "Pill public API.",
+    "members": [
+      {
+        "name": "tone",
+        "bindingName": "tone",
+        "role": "input",
+        "type": "CsMessageTone",
+        "required": false,
+        "defaultValue": "'neutral'",
+        "description": "Tone public API.",
+        "structured": false,
+        "options": ["neutral", "success", "warning", "error", "info", "lime"]
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Selected public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-pill",
+    "slug": "pill",
+    "label": "Pill",
+    "tokens": [],
+    "relatedSymbols": ["CsMessageTone"]
+  },
+  {
+    "kind": "class",
+    "name": "PipStripComponent",
+    "sourcePath": "src/cornerstone/pip-strip/pip-strip.component.ts",
+    "category": "process",
+    "description": "Pip Strip public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Progress'",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "items",
+        "bindingName": "items",
+        "role": "input",
+        "type": "readonly Movement[]",
+        "required": true,
+        "description": "Items public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-pip-strip",
+    "slug": "pip-strip",
+    "label": "Pip Strip",
+    "tokens": ["--cs-border", "--cs-lime-strong", "--cs-space-1"],
+    "relatedSymbols": ["Movement"]
+  },
+  {
+    "kind": "class",
+    "name": "PopoverComponent",
+    "sourcePath": "src/cornerstone/popover/popover.component.ts",
+    "category": "navigation",
+    "description": "Popover public API.",
+    "members": [
+      {
+        "name": "open",
+        "bindingName": "open",
+        "role": "model",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Open public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "position",
+        "bindingName": "position",
+        "role": "input",
+        "type": "CsAnchorPosition",
+        "required": false,
+        "defaultValue": "'below-start'",
+        "description": "Position public API.",
+        "structured": false,
+        "options": ["below-start", "below-end", "above-start", "above-end", "right", "left"]
+      },
+      {
+        "name": "trapFocus",
+        "bindingName": "trapFocus",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Trap Focus public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "ariaLabel",
+        "bindingName": "ariaLabel",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Aria Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "closed",
+        "bindingName": "closed",
+        "role": "output",
+        "type": "CsDismissReason",
+        "required": false,
+        "description": "Closed public API.",
+        "structured": false,
+        "options": ["select", "escape", "outside-click", "trigger", "detach"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-popover",
+    "slug": "popover",
+    "label": "Popover",
+    "tokens": ["--cs-border", "--cs-paper", "--cs-radius-md", "--cs-shadow-md", "--cs-space-4"],
+    "relatedSymbols": ["CsAnchorPosition", "CsDismissReason"]
+  },
+  {
+    "kind": "class",
+    "name": "PreviewPaneComponent",
+    "sourcePath": "src/cornerstone/preview-pane/preview-pane.component.ts",
+    "category": "communication",
+    "description": "Preview Pane public API.",
+    "members": [
+      {
+        "name": "output",
+        "bindingName": "output",
+        "role": "input",
+        "type": "PreviewOutput",
+        "required": true,
+        "description": "Output public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-preview-pane",
+    "slug": "preview-pane",
+    "label": "Preview Pane",
+    "tokens": [],
+    "relatedSymbols": ["PreviewOutput"]
+  },
+  {
+    "kind": "class",
+    "name": "ProcessJourneyComponent",
+    "sourcePath": "src/cornerstone/process-journey/process-journey.component.ts",
+    "category": "process",
+    "description": "Process Journey public API.",
+    "members": [
+      {
+        "name": "stages",
+        "bindingName": "stages",
+        "role": "input",
+        "type": "readonly CsProcessStage[]",
+        "required": true,
+        "description": "Stages public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "orientation",
+        "bindingName": "orientation",
+        "role": "input",
+        "type": "RailOrientation",
+        "required": false,
+        "defaultValue": "'auto'",
+        "description": "Orientation public API.",
+        "structured": false,
+        "options": ["horizontal", "vertical", "auto"]
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "CsStageActivation",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "StageActionIntent",
+        "required": false,
+        "description": "Action public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-process-journey",
+    "slug": "process-journey",
+    "label": "Process Journey",
+    "tokens": [],
+    "relatedSymbols": [
+      "CsProcessStage",
+      "CsStageActivation",
+      "RailOrientation",
+      "StageActionIntent"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "ProcessRailComponent",
+    "sourcePath": "src/cornerstone/process-rail/process-rail.component.ts",
+    "category": "process",
+    "description": "Process Rail public API.",
+    "members": [
+      {
+        "name": "stages",
+        "bindingName": "stages",
+        "role": "input",
+        "type": "readonly CsProcessStage[]",
+        "required": true,
+        "description": "Stages public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "orientation",
+        "bindingName": "orientation",
+        "role": "input",
+        "type": "RailOrientation",
+        "required": false,
+        "defaultValue": "'auto'",
+        "description": "Orientation public API.",
+        "structured": false,
+        "options": ["horizontal", "vertical", "auto"]
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "CsStageActivation",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-process-rail",
+    "slug": "process-rail",
+    "label": "Process Rail",
+    "tokens": ["--cs-lime", "--cs-space-4"],
+    "relatedSymbols": [
+      "CsProcessStage",
+      "CsStageActivation",
+      "RailOrientation",
+      "StageContentDirective"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "ProgressBarComponent",
+    "sourcePath": "src/cornerstone/progress-bar/progress-bar.component.ts",
+    "category": "foundations",
+    "description": "Progress Bar public API.",
+    "members": [
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "max",
+        "bindingName": "max",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "100",
+        "description": "Max public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "indeterminate",
+        "bindingName": "indeterminate",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Indeterminate public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-progress-bar",
+    "slug": "progress-bar",
+    "label": "Progress Bar",
+    "tokens": ["--cs-border", "--cs-lime-strong"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ProgressionBuilderComponent",
+    "sourcePath": "src/cornerstone/progression-builder/progression-builder.component.ts",
+    "category": "workflows",
+    "description": "Progression Builder public API.",
+    "members": [
+      {
+        "name": "nodes",
+        "bindingName": "nodes",
+        "role": "input",
+        "type": "readonly CsCurriculumNode[]",
+        "required": true,
+        "description": "Nodes public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "reordered",
+        "bindingName": "reordered",
+        "role": "output",
+        "type": "CsCurriculumReorderIntent",
+        "required": false,
+        "description": "Reordered public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-progression-builder",
+    "slug": "progression-builder",
+    "label": "Progression Builder",
+    "tokens": [],
+    "relatedSymbols": ["CsCurriculumNode", "CsCurriculumReorderIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "ProgressMatrixComponent",
+    "sourcePath": "src/cornerstone/progress-matrix/progress-matrix.component.ts",
+    "category": "data-display",
+    "description": "Progress Matrix public API.",
+    "members": [
+      {
+        "name": "rowLabel",
+        "bindingName": "rowLabel",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Name'",
+        "description": "Row Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "columns",
+        "bindingName": "columns",
+        "role": "input",
+        "type": "readonly string[]",
+        "required": true,
+        "description": "Columns public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "rows",
+        "bindingName": "rows",
+        "role": "input",
+        "type": "readonly { label: string; cells: readonly MatrixCellState[] }[]",
+        "required": true,
+        "description": "Rows public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-progress-matrix",
+    "slug": "progress-matrix",
+    "label": "Progress Matrix",
+    "tokens": [],
+    "relatedSymbols": ["MatrixCellState"]
+  },
+  {
+    "kind": "class",
+    "name": "ProgressRingComponent",
+    "sourcePath": "src/cornerstone/progress-ring/progress-ring.component.ts",
+    "category": "foundations",
+    "description": "Progress Ring public API.",
+    "members": [
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "max",
+        "bindingName": "max",
+        "role": "input",
+        "type": "number",
+        "required": false,
+        "defaultValue": "100",
+        "description": "Max public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-progress-ring",
+    "slug": "progress-ring",
+    "label": "Progress Ring",
+    "tokens": ["--cs-border", "--cs-lime-strong"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "ProjectCardComponent",
+    "sourcePath": "src/cornerstone/project-card/project-card.component.ts",
+    "category": "process",
+    "description": "Project Card public API.",
+    "members": [
+      {
+        "name": "project",
+        "bindingName": "project",
+        "role": "input",
+        "type": "Project",
+        "required": true,
+        "description": "Project public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "ProjectOpenIntent",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-project-card",
+    "slug": "project-card",
+    "label": "Project Card",
+    "tokens": [],
+    "relatedSymbols": ["Project", "ProjectOpenIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "QuizComponent",
+    "sourcePath": "src/cornerstone/quiz/quiz.component.ts",
+    "category": "workflows",
+    "description": "Quiz public API.",
+    "members": [
+      {
+        "name": "view",
+        "bindingName": "view",
+        "role": "input",
+        "type": "QuizView",
+        "required": true,
+        "description": "View public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "QuizMode",
+        "required": false,
+        "defaultValue": "'take'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["take", "review"]
+      },
+      {
+        "name": "answerChanged",
+        "bindingName": "answerChanged",
+        "role": "output",
+        "type": "QuizAnswerChange",
+        "required": false,
+        "description": "Answer Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "navigate",
+        "bindingName": "navigate",
+        "role": "output",
+        "type": "QuizNavigate",
+        "required": false,
+        "description": "Navigate public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "submitted",
+        "bindingName": "submitted",
+        "role": "output",
+        "type": "QuizSubmit",
+        "required": false,
+        "description": "Submitted public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-quiz",
+    "slug": "quiz",
+    "label": "Quiz",
+    "tokens": [],
+    "relatedSymbols": [
+      "QuizAnswerChange",
+      "QuizAnswerMap",
+      "QuizAnswerType",
+      "QuizAnswerValue",
+      "QuizMode",
+      "QuizNavigate",
+      "QuizSubmit",
+      "QuizView"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "QuizQuestionComponent",
+    "sourcePath": "src/cornerstone/quiz-question/quiz-question.component.ts",
+    "category": "workflows",
+    "description": "Quiz Question public API.",
+    "members": [
+      {
+        "name": "question",
+        "bindingName": "question",
+        "role": "input",
+        "type": "QuizQuestionView",
+        "required": true,
+        "description": "Question public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "QuizAnswerValue",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "answerChanged",
+        "bindingName": "answerChanged",
+        "role": "output",
+        "type": "QuizAnswerChange",
+        "required": false,
+        "description": "Answer Changed public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-quiz-question",
+    "slug": "quiz-question",
+    "label": "Quiz Question",
+    "tokens": [],
+    "relatedSymbols": ["QuizAnswerChange", "QuizAnswerValue", "QuizQuestionView"]
+  },
+  {
+    "kind": "class",
+    "name": "QuizResultComponent",
+    "sourcePath": "src/cornerstone/quiz-result/quiz-result.component.ts",
+    "category": "workflows",
+    "description": "Quiz Result public API.",
+    "members": [
+      {
+        "name": "result",
+        "bindingName": "result",
+        "role": "input",
+        "type": "QuizResultView",
+        "required": true,
+        "description": "Result public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "QuizResultAction",
+        "required": false,
+        "description": "Action public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-quiz-result",
+    "slug": "quiz-result",
+    "label": "Quiz Result",
+    "tokens": [],
+    "relatedSymbols": ["QuizOutcome", "QuizQuestionResult", "QuizResultAction", "QuizResultView"]
+  },
+  {
+    "kind": "class",
+    "name": "RadioComponent",
+    "sourcePath": "src/cornerstone/radio/radio.component.ts",
+    "category": "forms",
+    "description": "Radio public API.",
+    "members": [
+      {
+        "name": "name",
+        "bindingName": "name",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Name public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "T",
+        "required": true,
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Selected public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "disabled",
+        "bindingName": "disabled",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Disabled public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "selectedValue",
+        "bindingName": "selectedValue",
+        "role": "output",
+        "type": "T",
+        "required": false,
+        "description": "Selected Value public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-radio",
+    "slug": "radio",
+    "label": "Radio",
+    "tokens": ["--cs-lime-strong", "--cs-space-2"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "RadioGroupComponent",
+    "sourcePath": "src/cornerstone/radio-group/radio-group.component.ts",
+    "category": "forms",
+    "description": "Radio Group public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "select",
+        "role": "method",
+        "type": "void",
+        "parameters": [{ "name": "value", "type": "T", "optional": false }],
+        "description": "Select public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-radio-group",
+    "slug": "radio-group",
+    "label": "Radio Group",
+    "tokens": ["--cs-space-2"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "RaffleStageComponent",
+    "sourcePath": "src/cornerstone/raffle-stage/raffle-stage.component.ts",
+    "category": "communication",
+    "description": "Presents a consumer-supplied draw; never generates a winner or stores participant data.",
+    "members": [
+      {
+        "name": "result",
+        "bindingName": "result",
+        "role": "input",
+        "type": "RaffleResult | null",
+        "required": false,
+        "defaultValue": "null",
+        "description": "Result public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "now",
+        "bindingName": "now",
+        "role": "input",
+        "type": "number | null",
+        "required": false,
+        "defaultValue": "null",
+        "description": "Now public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "forceFallback",
+        "bindingName": "forceFallback",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Force Fallback public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "text",
+        "bindingName": "text",
+        "role": "input",
+        "type": "Partial<RaffleStageText>",
+        "required": false,
+        "defaultValue": "{}",
+        "description": "Text public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "stopEffects",
+        "role": "method",
+        "type": "void",
+        "parameters": [],
+        "description": "Stop Effects public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-raffle-stage",
+    "slug": "raffle-stage",
+    "label": "Raffle Stage",
+    "tokens": [
+      "--cs-border",
+      "--cs-border-width",
+      "--cs-confetti-duration",
+      "--cs-confetti-fall-distance",
+      "--cs-confetti-piece-width",
+      "--cs-confetti-spin",
+      "--cs-confetti-start",
+      "--cs-font-mono",
+      "--cs-font-weight-bold",
+      "--cs-heading-leading",
+      "--cs-heading-tracking",
+      "--cs-ink-muted",
+      "--cs-lime",
+      "--cs-radius-lg",
+      "--cs-radius-pill",
+      "--cs-raffle-stage-height",
+      "--cs-raffle-winner-size",
+      "--cs-space-3",
+      "--cs-space-5",
+      "--cs-space-8",
+      "--cs-surface",
+      "--cs-text-lg",
+      "--cs-text-xl"
+    ],
+    "relatedSymbols": ["RaffleResult", "RaffleStageText"]
+  },
+  {
+    "kind": "class",
+    "name": "RecordTabsComponent",
+    "sourcePath": "src/cornerstone/record-tabs/record-tabs.component.ts",
+    "category": "workflows",
+    "description": "Record Tabs public API.",
+    "members": [
+      {
+        "name": "sections",
+        "bindingName": "sections",
+        "role": "input",
+        "type": "readonly RecordSection[]",
+        "required": true,
+        "description": "Sections public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "active",
+        "bindingName": "active",
+        "role": "model",
+        "type": "string",
+        "required": true,
+        "description": "Active public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "orientation",
+        "bindingName": "orientation",
+        "role": "input",
+        "type": "RecordTabsOrientation",
+        "required": false,
+        "defaultValue": "'horizontal'",
+        "description": "Orientation public API.",
+        "structured": false,
+        "options": ["horizontal", "vertical"]
+      },
+      {
+        "name": "changed",
+        "bindingName": "changed",
+        "role": "output",
+        "type": "RecordSectionChange",
+        "required": false,
+        "description": "Changed public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-record-tabs",
+    "slug": "record-tabs",
+    "label": "Record Tabs",
+    "tokens": [],
+    "relatedSymbols": ["RecordSection", "RecordSectionChange", "RecordTabsOrientation"]
+  },
+  {
+    "kind": "class",
+    "name": "ReportDashboardComponent",
+    "sourcePath": "src/cornerstone/report-dashboard/report-dashboard.component.ts",
+    "category": "workflows",
+    "description": "Report Dashboard public API.",
+    "members": [
+      {
+        "name": "view",
+        "bindingName": "view",
+        "role": "input",
+        "type": "ReportViewModel",
+        "required": true,
+        "description": "View public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-report-dashboard",
+    "slug": "report-dashboard",
+    "label": "Report Dashboard",
+    "tokens": [],
+    "relatedSymbols": ["PanelState", "ReportView", "ReportViewModel"]
+  },
+  {
+    "kind": "class",
+    "name": "ReportFiltersComponent",
+    "sourcePath": "src/cornerstone/report-filters/report-filters.component.ts",
+    "category": "workflows",
+    "description": "Report Filters public API.",
+    "members": [
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "ReportFilterState",
+        "required": true,
+        "description": "Value public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "changed",
+        "bindingName": "changed",
+        "role": "output",
+        "type": "ReportFilterState",
+        "required": false,
+        "description": "Changed public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "exported",
+        "bindingName": "exported",
+        "role": "output",
+        "type": "ReportExportIntent",
+        "required": false,
+        "description": "Exported public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-report-filters",
+    "slug": "report-filters",
+    "label": "Report Filters",
+    "tokens": [],
+    "relatedSymbols": ["ReportExportIntent", "ReportFilterState"]
+  },
+  {
+    "kind": "class",
+    "name": "RequirementChecklistComponent",
+    "sourcePath": "src/cornerstone/requirement-checklist/requirement-checklist.component.ts",
+    "category": "process",
+    "description": "Requirement Checklist public API.",
+    "members": [
+      {
+        "name": "requirements",
+        "bindingName": "requirements",
+        "role": "input",
+        "type": "readonly CsRequirement[]",
+        "required": true,
+        "description": "Requirements public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "toggled",
+        "bindingName": "toggled",
+        "role": "output",
+        "type": "CsRequirementToggleIntent",
+        "required": false,
+        "description": "Toggled public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-requirement-checklist",
+    "slug": "requirement-checklist",
+    "label": "Requirement Checklist",
+    "tokens": [],
+    "relatedSymbols": ["CsRequirement", "CsRequirementToggleIntent"]
+  },
+  {
+    "kind": "class",
+    "name": "ReviewDialogComponent",
+    "sourcePath": "src/cornerstone/review-dialog/review-dialog.component.ts",
+    "category": "overlays",
+    "description": "A controlled native modal dialog. Consumers set open=false after a dismissal request.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "open",
+        "bindingName": "open",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Open public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "closeLabel",
+        "bindingName": "closeLabel",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Close dialog'",
+        "description": "Close Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "closed",
+        "bindingName": "closed",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Closed public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "restoreFocus",
+        "role": "method",
+        "type": "void",
+        "parameters": [],
+        "description": "Restore Focus public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-review-dialog",
+    "slug": "review-dialog",
+    "label": "Review Dialog",
+    "tokens": [
+      "--cs-border",
+      "--cs-border-width",
+      "--cs-dialog-backdrop",
+      "--cs-ink",
+      "--cs-paper",
+      "--cs-radius-lg",
+      "--cs-review-dialog-width",
+      "--cs-shadow-lg",
+      "--cs-space-4",
+      "--cs-space-6",
+      "--cs-text-lg"
+    ],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "RubricComponent",
+    "sourcePath": "src/cornerstone/rubric/rubric.component.ts",
+    "category": "workflows",
+    "description": "Rubric public API.",
+    "members": [
+      {
+        "name": "rubric",
+        "bindingName": "rubric",
+        "role": "input",
+        "type": "RubricView",
+        "required": true,
+        "description": "Rubric public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "output",
+        "type": "RubricLevelSelect",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-rubric",
+    "slug": "rubric",
+    "label": "Rubric",
+    "tokens": [],
+    "relatedSymbols": [
+      "RubricCriterion",
+      "RubricLevel",
+      "RubricLevelSelect",
+      "RubricSelection",
+      "RubricView"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "ScheduleListComponent",
+    "sourcePath": "src/cornerstone/schedule-list/schedule-list.component.ts",
+    "category": "communication",
+    "description": "Schedule List public API.",
+    "members": [
+      {
+        "name": "groups",
+        "bindingName": "groups",
+        "role": "input",
+        "type": "readonly ScheduleGroup[]",
+        "required": true,
+        "description": "Groups public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-schedule-list",
+    "slug": "schedule-list",
+    "label": "Schedule List",
+    "tokens": [],
+    "relatedSymbols": ["ScheduleGroup"]
+  },
+  {
+    "kind": "class",
+    "name": "ScriptureQuoteComponent",
+    "sourcePath": "src/cornerstone/scripture-quote/scripture-quote.component.ts",
+    "category": "data-display",
+    "description": "Scripture Quote public API.",
+    "members": [
+      {
+        "name": "reference",
+        "bindingName": "reference",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Reference public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-scripture-quote",
+    "slug": "scripture-quote",
+    "label": "Scripture Quote",
+    "tokens": ["--cs-lime-strong", "--cs-space-5", "--cs-surface", "--cs-text-lg"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "SearchFieldComponent",
+    "sourcePath": "src/cornerstone/search-field/search-field.component.ts",
+    "category": "forms",
+    "description": "Search Field public API.",
+    "members": [
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "SearchMode",
+        "required": false,
+        "defaultValue": "'instant'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["instant", "submit"]
+      },
+      {
+        "name": "placeholder",
+        "bindingName": "placeholder",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Search'",
+        "description": "Placeholder public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "searched",
+        "bindingName": "searched",
+        "role": "output",
+        "type": "string",
+        "required": false,
+        "description": "Searched public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-search-field",
+    "slug": "search-field",
+    "label": "Search Field",
+    "tokens": ["--cs-space-2"],
+    "relatedSymbols": ["SearchMode"]
+  },
+  {
+    "kind": "class",
+    "name": "SectionComponent",
+    "sourcePath": "src/cornerstone/section/section.component.ts",
+    "category": "foundations",
+    "description": "Section public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-section",
+    "slug": "section",
+    "label": "Section",
+    "tokens": ["--cs-space-4"],
+    "relatedSymbols": ["SectionActionsDirective"]
+  },
+  {
+    "kind": "class",
+    "name": "SectionHeaderComponent",
+    "sourcePath": "src/cornerstone/section-header/section-header.component.ts",
+    "category": "foundations",
+    "description": "Section Header public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "description",
+        "bindingName": "description",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Description public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-section-header",
+    "slug": "section-header",
+    "label": "Section Header",
+    "tokens": ["--cs-ink-muted", "--cs-space-4"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "SegmentedControlComponent",
+    "sourcePath": "src/cornerstone/segmented-control/segmented-control.component.ts",
+    "category": "navigation",
+    "description": "Segmented Control public API.",
+    "members": [
+      {
+        "name": "options",
+        "bindingName": "options",
+        "role": "input",
+        "type": "readonly SegmentOption<T>[]",
+        "required": true,
+        "description": "Options public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "model",
+        "type": "T",
+        "required": false,
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "selectionChange",
+        "bindingName": "selectionChange",
+        "role": "output",
+        "type": "T",
+        "required": false,
+        "description": "Selection Change public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-segmented-control",
+    "slug": "segmented-control",
+    "label": "Segmented Control",
+    "tokens": [],
+    "relatedSymbols": ["SegmentOption"]
+  },
+  {
+    "kind": "class",
+    "name": "ShellComponent",
+    "sourcePath": "src/cornerstone/shell/shell.component.ts",
+    "category": "navigation",
+    "description": "Shell public API.",
+    "members": [
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "model",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Opened public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "mode",
+        "bindingName": "mode",
+        "role": "input",
+        "type": "ShellSidenavMode",
+        "required": false,
+        "defaultValue": "'auto'",
+        "description": "Mode public API.",
+        "structured": false,
+        "options": ["side", "over", "compact", "auto"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-shell",
+    "slug": "shell",
+    "label": "Shell",
+    "tokens": ["--cs-duration", "--cs-ink", "--cs-paper"],
+    "relatedSymbols": ["ShellSidenavMode"]
+  },
+  {
+    "kind": "class",
+    "name": "SidenavComponent",
+    "sourcePath": "src/cornerstone/sidenav/sidenav.component.ts",
+    "category": "navigation",
+    "description": "Sidenav public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Primary navigation'",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-sidenav",
+    "slug": "sidenav",
+    "label": "Sidenav",
+    "tokens": ["--cs-space-3", "--cs-space-4"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "SkeletonComponent",
+    "sourcePath": "src/cornerstone/skeleton/skeleton.component.ts",
+    "category": "foundations",
+    "description": "Skeleton public API.",
+    "members": [
+      {
+        "name": "preset",
+        "bindingName": "preset",
+        "role": "input",
+        "type": "'text' | 'title' | 'circle' | 'block' | 'button' | 'table-row'",
+        "required": false,
+        "defaultValue": "'text'",
+        "description": "Preset public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-skeleton",
+    "slug": "skeleton",
+    "label": "Skeleton",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "SkeletonGroupComponent",
+    "sourcePath": "src/cornerstone/skeleton-group/skeleton-group.component.ts",
+    "category": "foundations",
+    "description": "Skeleton Group public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Loading'",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-skeleton-group",
+    "slug": "skeleton-group",
+    "label": "Skeleton Group",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "SpinnerComponent",
+    "sourcePath": "src/cornerstone/spinner/spinner.component.ts",
+    "category": "foundations",
+    "description": "Spinner public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Loading'",
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-spinner",
+    "slug": "spinner",
+    "label": "Spinner",
+    "tokens": ["--cs-border", "--cs-ink"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "StatCardComponent",
+    "sourcePath": "src/cornerstone/stat-card/stat-card.component.ts",
+    "category": "data-display",
+    "description": "Stat Card public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "value",
+        "bindingName": "value",
+        "role": "input",
+        "type": "number",
+        "required": true,
+        "description": "Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "formattedValue",
+        "bindingName": "formattedValue",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Formatted Value public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "delta",
+        "bindingName": "delta",
+        "role": "input",
+        "type": "MetricDelta | null",
+        "required": false,
+        "defaultValue": "null",
+        "description": "Delta public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "activated",
+        "bindingName": "activated",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Activated public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-stat-card",
+    "slug": "stat-card",
+    "label": "Stat Card",
+    "tokens": ["--cs-font-display", "--cs-text-xl"],
+    "relatedSymbols": ["MetricDelta"]
+  },
+  {
+    "kind": "class",
+    "name": "StatePageComponent",
+    "sourcePath": "src/cornerstone/state-page/state-page.component.ts",
+    "category": "data-display",
+    "description": "State Page public API.",
+    "members": [
+      {
+        "name": "condition",
+        "bindingName": "condition",
+        "role": "input",
+        "type": "StatePageCondition",
+        "required": false,
+        "defaultValue": "'error'",
+        "description": "Condition public API.",
+        "structured": false,
+        "options": ["not-found", "forbidden", "offline", "error", "maintenance"]
+      },
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "message",
+        "bindingName": "message",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Message public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Action public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-state-page",
+    "slug": "state-page",
+    "label": "State Page",
+    "tokens": [],
+    "relatedSymbols": ["StatePageCondition"]
+  },
+  {
+    "kind": "class",
+    "name": "StatusRegionComponent",
+    "sourcePath": "src/cornerstone/status-region/status-region.component.ts",
+    "category": "platform",
+    "description": "Status Region public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-status-region",
+    "slug": "status-region",
+    "label": "Status Region",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "SubmissionStatusComponent",
+    "sourcePath": "src/cornerstone/submission-status/submission-status.component.ts",
+    "category": "workflows",
+    "description": "Submission Status public API.",
+    "members": [
+      {
+        "name": "submission",
+        "bindingName": "submission",
+        "role": "input",
+        "type": "SubmissionView",
+        "required": true,
+        "description": "Submission public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "versionSelected",
+        "bindingName": "versionSelected",
+        "role": "output",
+        "type": "SubmissionVersionSelect",
+        "required": false,
+        "description": "Version Selected public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-submission-status",
+    "slug": "submission-status",
+    "label": "Submission Status",
+    "tokens": [],
+    "relatedSymbols": [
+      "EvidenceItem",
+      "ReviewFeedback",
+      "SubmissionStatus",
+      "SubmissionVersion",
+      "SubmissionVersionSelect",
+      "SubmissionView"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "SwitchComponent",
+    "sourcePath": "src/cornerstone/switch/switch.component.ts",
+    "category": "forms",
+    "description": "Switch public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-switch",
+    "slug": "switch",
+    "label": "Switch",
+    "tokens": [
+      "--cs-border-strong",
+      "--cs-duration",
+      "--cs-ink",
+      "--cs-lime",
+      "--cs-space-2",
+      "--cs-surface"
+    ],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "TabComponent",
+    "sourcePath": "src/cornerstone/tab/tab.component.ts",
+    "category": "navigation",
+    "description": "Tab public API.",
+    "members": [
+      {
+        "name": "label",
+        "bindingName": "label",
+        "role": "input",
+        "type": "string",
+        "required": true,
+        "description": "Label public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "disabled",
+        "bindingName": "disabled",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Disabled public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "badge",
+        "bindingName": "badge",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Badge public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-tab",
+    "slug": "tab",
+    "label": "Tab",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "TabGroupComponent",
+    "sourcePath": "src/cornerstone/tab-group/tab-group.component.ts",
+    "category": "navigation",
+    "description": "Tab Group public API.",
+    "members": [
+      {
+        "name": "selectedIndex",
+        "bindingName": "selectedIndex",
+        "role": "model",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Selected Index public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "selected",
+        "bindingName": "selected",
+        "role": "output",
+        "type": "number",
+        "required": false,
+        "description": "Selected public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-tab-group",
+    "slug": "tab-group",
+    "label": "Tab Group",
+    "tokens": [],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "TableContainerComponent",
+    "sourcePath": "src/cornerstone/table-container/table-container.component.ts",
+    "category": "data-display",
+    "description": "Table Container public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-table-container",
+    "slug": "table-container",
+    "label": "Table Container",
+    "tokens": [],
+    "relatedSymbols": [
+      "ResponsiveTableDirective",
+      "SortChange",
+      "TableDensity",
+      "TableDirective",
+      "TableRowDirective",
+      "TableSortHeaderDirective"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "TeamBoardComponent",
+    "sourcePath": "src/cornerstone/team-board/team-board.component.ts",
+    "category": "workflows",
+    "description": "Controlled team membership and project assignment; emits intent without persistence.",
+    "members": [
+      {
+        "name": "groups",
+        "bindingName": "groups",
+        "role": "input",
+        "type": "readonly BoardGroup[]",
+        "required": true,
+        "description": "Groups public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "members",
+        "bindingName": "members",
+        "role": "input",
+        "type": "readonly BoardMember[]",
+        "required": true,
+        "description": "Members public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "projects",
+        "bindingName": "projects",
+        "role": "input",
+        "type": "readonly BoardProject[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Projects public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "editable",
+        "bindingName": "editable",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Editable public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "disabled",
+        "bindingName": "disabled",
+        "role": "input",
+        "type": "boolean",
+        "required": false,
+        "defaultValue": "false",
+        "description": "Disabled public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "currentMember",
+        "bindingName": "currentMember",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "''",
+        "description": "Current Member public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "text",
+        "bindingName": "text",
+        "role": "input",
+        "type": "Partial<TeamBoardText>",
+        "required": false,
+        "defaultValue": "{}",
+        "description": "Text public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "moved",
+        "bindingName": "moved",
+        "role": "output",
+        "type": "MemberMove",
+        "required": false,
+        "description": "Moved public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "assigned",
+        "bindingName": "assigned",
+        "role": "output",
+        "type": "ProjectAssignment",
+        "required": false,
+        "description": "Assigned public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "newTeamRequested",
+        "bindingName": "newTeamRequested",
+        "role": "output",
+        "type": "NewTeamRequest",
+        "required": false,
+        "description": "New Team Requested public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "moveMember",
+        "role": "method",
+        "type": "void",
+        "parameters": [
+          { "name": "memberId", "type": "string", "optional": false },
+          { "name": "groupId", "type": "string", "optional": false }
+        ],
+        "description": "Move Member public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "assignProject",
+        "role": "method",
+        "type": "void",
+        "parameters": [
+          { "name": "groupId", "type": "string", "optional": false },
+          { "name": "projectId", "type": "string", "optional": false }
+        ],
+        "description": "Assign Project public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "requestNewTeam",
+        "role": "method",
+        "type": "void",
+        "parameters": [{ "name": "memberId", "type": "string", "optional": false }],
+        "description": "Request New Team public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-team-board",
+    "slug": "team-board",
+    "label": "Team Board",
+    "tokens": [
+      "--cs-border",
+      "--cs-border-width",
+      "--cs-drag-placeholder-opacity",
+      "--cs-ink-muted",
+      "--cs-lime-strong",
+      "--cs-paper",
+      "--cs-radius-sm",
+      "--cs-shadow-lg",
+      "--cs-space-1",
+      "--cs-space-2",
+      "--cs-space-3",
+      "--cs-space-4",
+      "--cs-space-5",
+      "--cs-space-8",
+      "--cs-surface",
+      "--cs-team-board-column-width",
+      "--cs-text-lg",
+      "--cs-text-sm",
+      "--cs-text-xs"
+    ],
+    "relatedSymbols": [
+      "BoardGroup",
+      "BoardMember",
+      "BoardProject",
+      "MemberMove",
+      "NewTeamRequest",
+      "ProjectAssignment",
+      "TeamBoardText"
+    ]
+  },
+  {
+    "kind": "class",
+    "name": "TimelineComponent",
+    "sourcePath": "src/cornerstone/timeline/timeline.component.ts",
+    "category": "data-display",
+    "description": "Timeline public API.",
+    "members": [
+      {
+        "name": "entries",
+        "bindingName": "entries",
+        "role": "input",
+        "type": "readonly TimelineEntry[]",
+        "required": true,
+        "description": "Entries public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-timeline",
+    "slug": "timeline",
+    "label": "Timeline",
+    "tokens": ["--cs-border", "--cs-lime-strong", "--cs-space-5"],
+    "relatedSymbols": ["TimelineEntry"]
+  },
+  {
+    "kind": "class",
+    "name": "ToastOutletComponent",
+    "sourcePath": "src/cornerstone/toast-outlet/toast-outlet.component.ts",
+    "category": "data-display",
+    "description": "Toast Outlet public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-toast-outlet",
+    "slug": "toast-outlet",
+    "label": "Toast Outlet",
+    "tokens": ["--cs-ink", "--cs-paper", "--cs-space-2", "--cs-space-5"],
+    "relatedSymbols": ["ToastConfig", "ToastRef", "ToastResult", "ToastService"]
+  },
+  {
+    "kind": "class",
+    "name": "ToolbarComponent",
+    "sourcePath": "src/cornerstone/toolbar/toolbar.component.ts",
+    "category": "foundations",
+    "description": "Toolbar public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-toolbar",
+    "slug": "toolbar",
+    "label": "Toolbar",
+    "tokens": ["--cs-space-3"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "TopbarComponent",
+    "sourcePath": "src/cornerstone/topbar/topbar.component.ts",
+    "category": "navigation",
+    "description": "Topbar public API.",
+    "members": [],
+    "component": true,
+    "selector": "cs-topbar",
+    "slug": "topbar",
+    "label": "Topbar",
+    "tokens": ["--cs-border", "--cs-paper", "--cs-space-4"],
+    "relatedSymbols": []
+  },
+  {
+    "kind": "class",
+    "name": "UnsavedChangesDialogComponent",
+    "sourcePath": "src/cornerstone/unsaved-changes-dialog/unsaved-changes-dialog.component.ts",
+    "category": "overlays",
+    "description": "Unsaved Changes Dialog public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Unsaved changes'",
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "choice",
+        "bindingName": "choice",
+        "role": "output",
+        "type": "UnsavedChangesChoice",
+        "required": false,
+        "description": "Choice public API.",
+        "structured": false,
+        "options": ["save", "discard", "cancel"]
+      }
+    ],
+    "component": true,
+    "selector": "cs-unsaved-changes-dialog",
+    "slug": "unsaved-changes-dialog",
+    "label": "Unsaved Changes Dialog",
+    "tokens": [],
+    "relatedSymbols": ["confirmLeave", "UnsavedChangesChoice"]
+  },
+  {
+    "kind": "class",
+    "name": "ValidationSummaryComponent",
+    "sourcePath": "src/cornerstone/validation-summary/validation-summary.component.ts",
+    "category": "forms",
+    "description": "Validation Summary public API.",
+    "members": [
+      {
+        "name": "title",
+        "bindingName": "title",
+        "role": "input",
+        "type": "string",
+        "required": false,
+        "defaultValue": "'Please correct the following'",
+        "description": "Title public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "errors",
+        "bindingName": "errors",
+        "role": "input",
+        "type": "readonly ValidationEntry[]",
+        "required": false,
+        "defaultValue": "[]",
+        "description": "Errors public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-validation-summary",
+    "slug": "validation-summary",
+    "label": "Validation Summary",
+    "tokens": [],
+    "relatedSymbols": ["ValidationEntry"]
+  },
+  {
+    "kind": "class",
+    "name": "WizardComponent",
+    "sourcePath": "src/cornerstone/wizard/wizard.component.ts",
+    "category": "forms",
+    "description": "Wizard public API.",
+    "members": [
+      {
+        "name": "steps",
+        "bindingName": "steps",
+        "role": "input",
+        "type": "readonly WizardStep[]",
+        "required": true,
+        "description": "Steps public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "active",
+        "bindingName": "active",
+        "role": "model",
+        "type": "number",
+        "required": false,
+        "defaultValue": "0",
+        "description": "Active public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "completed",
+        "bindingName": "completed",
+        "role": "output",
+        "type": "void",
+        "required": false,
+        "description": "Completed public API.",
+        "structured": false,
+        "options": []
+      },
+      {
+        "name": "stepChanged",
+        "bindingName": "stepChanged",
+        "role": "output",
+        "type": "number",
+        "required": false,
+        "description": "Step Changed public API.",
+        "structured": false,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-wizard",
+    "slug": "wizard",
+    "label": "Wizard",
+    "tokens": [],
+    "relatedSymbols": ["Step", "WizardStep", "WizardStepState"]
+  },
+  {
+    "kind": "class",
+    "name": "WorkItemCardComponent",
+    "sourcePath": "src/cornerstone/work-item-card/work-item-card.component.ts",
+    "category": "process",
+    "description": "Work Item Card public API.",
+    "members": [
+      {
+        "name": "item",
+        "bindingName": "item",
+        "role": "input",
+        "type": "WorkItem",
+        "required": true,
+        "description": "Item public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "opened",
+        "bindingName": "opened",
+        "role": "output",
+        "type": "WorkItemOpenIntent",
+        "required": false,
+        "description": "Opened public API.",
+        "structured": true,
+        "options": []
+      },
+      {
+        "name": "action",
+        "bindingName": "action",
+        "role": "output",
+        "type": "WorkItemActionIntent",
+        "required": false,
+        "description": "Action public API.",
+        "structured": true,
+        "options": []
+      }
+    ],
+    "component": true,
+    "selector": "cs-work-item-card",
+    "slug": "work-item-card",
+    "label": "Work Item Card",
+    "tokens": [],
+    "relatedSymbols": ["WorkItem", "WorkItemActionIntent", "WorkItemOpenIntent"]
+  }
+]

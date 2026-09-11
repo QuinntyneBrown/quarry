@@ -1,0 +1,41 @@
+@startuml
+title UML sequence behaviour — Override a design token
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application stylesheet" as appcss
+  participant "Application subtree" as subtree
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Theme stylesheet" as theme
+  participant "Component styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Cascade" as cascade
+end box
+
+dev -> appcss : Declare --cs-lime on a subtree per L2-009
+appcss -> cascade : Contribute declaration
+theme -> cascade : Contribute base token declarations per L2-005
+cascade -> cascade : Resolve custom property by specificity and proximity
+cascade --> subtree : Subtree value of --cs-lime
+subtree -> styles : Render component beneath the subtree
+styles -> cascade : Read var(--cs-lime)
+cascade --> styles : Overridden value
+styles -> styles : Declare no !important on overridable properties per L2-009
+styles --> subtree : Restyled component
+subtree --> dev : Application theme applied without internal selectors
+@enduml

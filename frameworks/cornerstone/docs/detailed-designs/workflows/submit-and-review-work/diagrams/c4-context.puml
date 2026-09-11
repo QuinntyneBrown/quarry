@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Submit and review work
+
+Person(youth, "Youth participant", "Submits work against an assignment and collects badges")
+Person(mentor, "Mentor", "Assesses a submission against a rubric")
+Person(admin, "Administrator", "Maintains rubrics and badge criteria")
+Person(dev, "Application developer", "Builds the Word Up assignment and review screens from Cornerstone components")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the assignment, rubric, and achievement composites")
+System_Ext(app, "Consuming application", "Word Up Angular application owning grading rules, awards, uploads, and persistence")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for tables, focus, and layout observation")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Renders the surfaces and reports input events")
+
+Rel(dev, cornerstone, "Composes the assignment and review screens from")
+Rel(dev, app, "Implements submission and assessment services in")
+Rel(app, cornerstone, "Supplies the assignment, submission, rubric, and achievement view models to")
+Rel(cornerstone, app, "Emits submit, version, assessment, and achievement intents to")
+Rel(cornerstone, cdk, "Builds grid and focus behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders the surfaces into")
+Rel(browser, youth, "Presents the assignment, submission status, and badges to")
+Rel(browser, mentor, "Presents the rubric and assessment editor to")
+Rel(admin, app, "Maintains rubric and badge definitions in")
+Rel(youth, browser, "Submits work in")
+Rel(mentor, browser, "Records an assessment in")
+@enduml

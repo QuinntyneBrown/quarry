@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Attach a file
+
+Person(dev, "Application developer", "Configures accept and size rules")
+Person(user, "Application user", "Selects files")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies FilePickerComponent, DropzoneComponent, and FileSummaryComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares dropzone, drop-target, progress, and validation tokens")
+  Container(docs, "Documentation site", "Angular application", "Publishes the intent contract and the object URL lifetime rules")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Binds accept and size rules and renders reported progress")
+  Container(services, "Application services", "Angular injectables", "Performs the transfer, owns the endpoint, and reports progress and failure")
+}
+
+System_Ext(cdk, "Angular CDK", "Live announcer")
+System_Ext(browser, "Browser platform", "File browser, drag events, and object URLs")
+
+Rel(dev, page, "Configures the file surface in")
+Rel(page, lib, "Binds accept, maxSizeBytes, and the upload state to")
+Rel(lib, page, "Emits upload and retry intents to")
+Rel(page, services, "Transfers the named file through")
+Rel(services, page, "Reports progress and failure to")
+Rel(lib, theme, "Resolves drop-target and progress values from")
+Rel(lib, cdk, "Announces drop and rejection through", "LiveAnnouncer")
+Rel(lib, browser, "Opens the file browser and creates object URLs in")
+Rel(user, browser, "Drops or browses for a file in")
+Rel(browser, lib, "Reports drag, drop, and change events to")
+Rel(docs, lib, "Documents the intent contract of")
+@enduml

@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Record consent
+
+Person(guardian, "Guardian", "Grants or revokes a consent scope")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(panel, "ConsentPanelComponent", "Standalone component, OnPush", "Renders status, contact detail, grouped choices, actions, and history; emits typed intents only")
+  Component(groups, "Consent group fieldsets", "Rendered fieldset and legend", "Present participation and media scopes with the scope stated in text")
+  Component(history, "Consent history list", "Rendered list", "States scope, decision, actor, and locale-formatted timestamp")
+  Component(contact, "Contact detail block", "Read-only text", "Renders guardian and minor details with no title attribute and no copy held")
+  Component(confirm, "ConfirmDialogComponent", "Standalone component (L2-103)", "Destructive confirmation preceding a revocation")
+  Component(models, "Consent view model and intent types", "TypeScript types", "ConsentPanelViewModel, ConsentDecisionIntent, ConsentRevokeIntent")
+}
+
+Container_Boundary(app, "Consuming application — consent page") {
+  Component(pagecmp, "Consent page component", "Angular feature page", "Maps the consent record into the view model")
+  Component(rules, "Consent policy service", "Angular service", "Holds the domain rules and the authorization decision")
+  Component(store, "Consent store", "Angular service", "Persists decisions and appends the audit entry")
+}
+
+System_Ext(cdk, "Angular CDK", "Dialog, focus trap, and LiveAnnouncer")
+
+Rel(guardian, panel, "Changes consent in")
+Rel(panel, groups, "Renders one fieldset per group")
+Rel(panel, history, "Renders one entry per recorded decision")
+Rel(panel, contact, "Renders the framed contact detail")
+Rel(panel, confirm, "Opens before emitting a revocation")
+Rel(panel, models, "Reads the view model and emits the intents defined in")
+Rel(pagecmp, panel, "Binds the consent view model to")
+Rel(panel, pagecmp, "Emits decisionRequested, revokeRequested, contactUpdateRequested to")
+Rel(pagecmp, rules, "Asks whether the decision is permitted")
+Rel(pagecmp, store, "Writes the confirmed decision through")
+Rel(store, pagecmp, "Returns the next view model and history to")
+Rel(panel, cdk, "Announces the scope and decision through", "LiveAnnouncer")
+Rel(confirm, cdk, "Traps and restores focus through", "cdk/a11y")
+@enduml

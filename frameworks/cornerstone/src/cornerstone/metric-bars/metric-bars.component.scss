@@ -1,0 +1,10 @@
+div {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+  gap: var(--cs-space-2);
+}
+i {
+  display: block;
+  block-size: 0.75rem;
+  background: var(--cs-lime-strong);
+}

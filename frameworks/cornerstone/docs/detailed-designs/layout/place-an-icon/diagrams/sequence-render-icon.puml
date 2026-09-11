@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Render a registered icon
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application config" as config
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone icon runtime" #D1FADF
+  participant "provideCsIcons()" as provider
+  participant "IconRegistry" as registry
+  participant "IconComponent" as icon
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Icon styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as browser
+end box
+
+dev -> config : Call provideCsIcons(navigationSet)
+config -> provider : Bootstrap providers
+provider -> registry : Register statically per L2-034
+provider -> registry : Seed definitions from the imported set
+registry --> provider : Registration complete
+
+page -> icon : Bind name='calendar', size='md', label='Schedule'
+icon -> registry : resolve('calendar')
+registry --> icon : IconDefinition
+
+alt Label supplied
+  icon -> browser : Set role='img' and aria-label per L2-034 labelled mode
+else Label absent
+  icon -> browser : Set aria-hidden='true' per L2-034 decorative mode
+end
+
+icon -> browser : Inline SVG paths without an HTTP request per L2-034
+icon -> styles : Apply the md size step and the outline fill variant
+styles -> browser : Resolve edge length from a spacing token
+styles -> browser : Inherit currentColor from the surrounding text
+browser --> page : Rendered glyph
+page --> dev : Icon placed by name
+@enduml

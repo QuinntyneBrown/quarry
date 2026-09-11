@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Refuse a drop on a locked column
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone kanban components" #D1FADF
+  participant "KanbanBoardComponent" as board
+  participant "KanbanColumnComponent" as column
+  participant "KanbanAnnouncer" as announcer
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "DragDropModule and LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Pointer events and DOM" as dom
+end box
+
+page -> board : Bind a locked column and an empty column
+board -> column : Render the locked column with its lock reason in text
+board -> column : Render the empty column as a valid drop target per L2-139
+column -> dom : Expose the drop description on the empty column
+
+user -> dom : Drag a card over the locked column
+dom -> cdk : Pointer sequence
+cdk -> board : Drag entered the locked column
+board -> board : Refuse the drop without mutating the columns
+board -> column : Set dropState 'blocked'
+column -> dom : Render blocked drop feedback per L2-139
+board -> announcer : Report the lock reason once per drag
+announcer -> cdk : Announce politely
+cdk --> dom : Polite live-region update
+
+user -> dom : Release over the locked column
+dom -> cdk : Drop
+cdk -> board : CdkDragDrop on a refused target
+board -> page : Emit no move intent per L2-139
+board -> dom : Return the card to its source position
+
+alt The card is released over the empty accepting column
+  board -> page : Emit one WorkItemMoveIntent
+else The card is released outside every drop list
+  board -> page : Emit no move intent
+end
+
+dom --> user : Card unchanged with the lock reason announced
+@enduml

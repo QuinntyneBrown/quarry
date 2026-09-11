@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Manage people
+
+Person(admin, "Administrator", "Manages the roster")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Renders PeopleDirectoryComponent, PersonRowComponent, PersonSummaryComponent, and RecordTabsComponent; writes no personal data to storage")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the directory and record styles resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular components", "Binds the directory and record view models and handles emitted intents")
+  Container(services, "Application services", "Angular injectables", "Own querying, filtering, sorting, scoping, authorization, persistence, and audit logging")
+}
+
+System_Ext(cdk, "Angular CDK", "Key manager and layout observer")
+System_Ext(browser, "Browser platform", "Rendering and media query engine")
+
+Rel(admin, shell, "Opens the directory screen in")
+Rel(shell, page, "Routes to")
+Rel(services, page, "Computes PersonRowView, PersonSummaryView, and RecordSection for")
+Rel(page, lib, "Binds the directory and record view models to")
+Rel(lib, page, "Emits PeopleQuery, PeopleSelectionChange, PersonRowAction, and RecordSectionChange to")
+Rel(page, services, "Forwards intents to")
+Rel(services, services, "Records the access in the audit log the application owns")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Observes the viewport and manages tab focus with")
+Rel(lib, browser, "Renders into")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the public API of")
+@enduml

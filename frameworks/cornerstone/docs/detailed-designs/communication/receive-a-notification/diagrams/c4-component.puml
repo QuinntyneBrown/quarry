@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Receive a notification
+
+Person(youth, "Youth", "Reads and clears notifications")
+Person(admin, "Administrator", "Targets and schedules an announcement")
+
+Container_Boundary(appsvc, "Consuming application services") {
+  Component(notifvm, "NotificationViewModelService", "Angular injectable", "Builds CsNotificationViewModel and the unread count from application data")
+  Component(readsvc, "NotificationIntentHandler", "Angular injectable", "Receives mark-read and navigate intents and performs persistence and routing")
+  Component(annvm, "AnnouncementViewModelService", "Angular injectable", "Builds AudienceOption sets and reports the submit state")
+  Component(sendsvc, "AnnouncementDeliveryHandler", "Angular injectable", "Receives preview and submit intents and delivers announcements")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(list, "NotificationListComponent", "Standalone component", "Scrolling list with mark-all-read, empty, and loading states")
+  Component(item, "NotificationItemComponent", "Standalone component", "Category icon, timestamp, read state, and deep link")
+  Component(composer, "AnnouncementComposerComponent", "Standalone component", "Targeting, scheduling, content, preview, and submit state")
+  Component(fields, "Cornerstone field components", "Standalone components", "Select, date-time, and text fields with the shared validation contract")
+  Component(summary, "ValidationSummaryComponent", "Standalone component", "States blocking errors and moves focus to the first invalid control")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay, focus trapping, and breakpoint observation")
+System_Ext(browser, "Browser platform", "Focus and live regions")
+
+Rel(notifvm, list, "Supplies the notification view model to")
+Rel(list, item, "Renders one per notification")
+Rel(list, readsvc, "Emits markRead and markAllRead to")
+Rel(item, readsvc, "Emits activated with the deep link target to")
+Rel(annvm, composer, "Supplies audience options and the submit state to")
+Rel(composer, sendsvc, "Emits previewRequested and submitted to")
+Rel(composer, fields, "Composes targeting, scheduling, and content from")
+Rel(composer, summary, "Reports blocking validation through")
+Rel(fields, browser, "Validates the scheduled instant against", "timezone-safe contract L2-057")
+Rel(list, cdk, "Traps focus in the overlay panel with")
+Rel(list, browser, "Announces the marked count through", "aria-live polite")
+Rel(summary, browser, "Moves focus to the audience control in")
+Rel(youth, item, "Activates a notification in")
+Rel(admin, composer, "Selects an audience in")
+@enduml

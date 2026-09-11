@@ -1,0 +1,37 @@
+{
+  "kind": "class",
+  "name": "AvatarStackComponent",
+  "sourcePath": "src/cornerstone/avatar-stack/avatar-stack.component.ts",
+  "category": "foundations",
+  "description": "Avatar Stack public API.",
+  "members": [
+    {
+      "name": "people",
+      "bindingName": "people",
+      "role": "input",
+      "type": "readonly { id: string; name: string; src?: string }[]",
+      "required": true,
+      "description": "People public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "max",
+      "bindingName": "max",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "4",
+      "description": "Max public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-avatar-stack",
+  "slug": "avatar-stack",
+  "label": "Avatar Stack",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

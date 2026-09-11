@@ -1,0 +1,77 @@
+:host {
+  display: block;
+}
+.stage {
+  position: relative;
+  overflow: hidden;
+  min-block-size: var(--cs-raffle-stage-height);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border: var(--cs-border-width) solid var(--cs-border);
+  border-radius: var(--cs-radius-lg);
+  background: var(--cs-surface);
+  padding: var(--cs-space-8) var(--cs-space-5);
+}
+.content {
+  position: relative;
+  max-inline-size: 100%;
+}
+h2 {
+  font-size: var(--cs-raffle-winner-size);
+  line-height: var(--cs-heading-leading);
+  letter-spacing: var(--cs-heading-tracking);
+  margin-block: var(--cs-space-5);
+  overflow-wrap: anywhere;
+}
+.cycling {
+  font-size: var(--cs-text-xl);
+  font-weight: var(--cs-font-weight-bold);
+  overflow-wrap: anywhere;
+  min-block-size: var(--cs-space-8);
+}
+.identity {
+  font-family: var(--cs-font-mono);
+  color: var(--cs-ink-muted);
+}
+.celebration-copy {
+  font-size: var(--cs-text-lg);
+}
+.sparkle {
+  display: inline-grid;
+  place-items: center;
+  background: var(--cs-lime);
+  border-radius: var(--cs-radius-pill);
+  inline-size: var(--cs-space-8);
+  block-size: var(--cs-space-8);
+  font-size: var(--cs-text-lg);
+}
+canvas,
+.particles {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+canvas[hidden] {
+  display: none;
+}
+.particles span {
+  position: absolute;
+  top: var(--cs-confetti-start);
+  inline-size: var(--cs-confetti-piece-width);
+  block-size: var(--cs-space-3);
+  animation: fall var(--cs-confetti-duration) linear infinite;
+}
+@keyframes fall {
+  to {
+    transform: translate(var(--drift), var(--cs-confetti-fall-distance))
+      rotate(var(--cs-confetti-spin));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .particles {
+    display: none;
+  }
+}

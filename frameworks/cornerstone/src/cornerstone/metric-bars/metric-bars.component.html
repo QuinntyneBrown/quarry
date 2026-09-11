@@ -1,0 +1,8 @@
+@for (series of series(); track series.label) {
+  <div>
+    <span>{{ series.label }}</span>
+    @for (value of series.values; track $index) {
+      <i [style.inline-size.%]="value"></i>
+    }
+  </div>
+}

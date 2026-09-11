@@ -1,0 +1,200 @@
+{
+  "kind": "class",
+  "name": "CalendarComponent",
+  "sourcePath": "src/cornerstone/calendar/calendar.component.ts",
+  "category": "communication",
+  "description": "Calendar public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "dates",
+      "bindingName": "dates",
+      "role": "input",
+      "type": "readonly CalendarDate[]",
+      "required": true,
+      "description": "Dates public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "events",
+      "bindingName": "events",
+      "role": "input",
+      "type": "readonly CsEventViewModel[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Events public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "model",
+      "type": "string",
+      "required": false,
+      "description": "Selected public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "dateSelected",
+      "bindingName": "dateSelected",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Date Selected public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "previous",
+      "bindingName": "previous",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Previous public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "next",
+      "bindingName": "next",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Next public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-calendar",
+  "slug": "calendar",
+  "label": "Calendar",
+  "tokens": ["--cs-border", "--cs-paper"],
+  "relatedSymbols": ["CalendarDate", "CalendarKeyboardGrid", "CalendarRange", "CsEventViewModel"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CalendarDate",
+      "sourcePath": "src/cornerstone/calendar/calendar-date.interface.ts",
+      "category": "communication",
+      "description": "Calendar Date public API.",
+      "members": [
+        {
+          "name": "iso",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Iso public API."
+        },
+        {
+          "name": "day",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Day public API."
+        },
+        {
+          "name": "inMonth",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "In Month public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "CalendarKeyboardGrid",
+      "sourcePath": "src/cornerstone/calendar/calendar-keyboard-grid.class.ts",
+      "category": "communication",
+      "description": "Calendar Keyboard Grid public API.",
+      "members": []
+    },
+    {
+      "kind": "interface",
+      "name": "CalendarRange",
+      "sourcePath": "src/cornerstone/calendar/calendar-range.interface.ts",
+      "category": "communication",
+      "description": "Calendar Range public API.",
+      "members": [
+        {
+          "name": "start",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Start public API."
+        },
+        {
+          "name": "end",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "End public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsEventViewModel",
+      "sourcePath": "src/cornerstone/core/communication/cs-event-view-model.interface.ts",
+      "category": "communication",
+      "description": "Cs Event View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "start",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Start public API."
+        },
+        {
+          "name": "end",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "End public API."
+        },
+        {
+          "name": "location",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Location public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Status public API."
+        }
+      ]
+    }
+  ]
+}

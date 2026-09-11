@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Present a vacant state
+
+Person(dev, "Application developer", "Supplies a typed data state and the copy")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(outlet, "DataStateOutletComponent", "Angular component", "Narrows CsDataState and projects the idle, loading, empty, error, or ready slot")
+  Component(host, "DataStateHostDirective", "Angular directive", "Applies the same contract to a component that renders its own content")
+  Component(empty, "EmptyStateComponent", "Angular component", "Renders icon, eyebrow, title, description, and actions in compact, card, or full-page form")
+  Component(statepage, "StatePageComponent", "Angular component", "Renders one of eight full-page conditions and emits the activated action")
+  Component(types, "CsDataState and CsDataStateError", "TypeScript types", "Discriminated union carrying idle, loading, empty, error, and ready")
+  Component(announce, "State announcer", "Injectable service", "Applies the polite and assertive announcement policy for state transitions")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Vacant-state tokens", "CSS custom properties", "Icon frame, surface, spacing, and muted text values")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and focus utilities")
+System_Ext(page, "Feature page", "Angular component owning the query result")
+
+Rel(dev, page, "Binds a data state in")
+Rel(page, outlet, "Passes CsDataState to")
+Rel(page, host, "Applies to a data-bearing component")
+Rel(outlet, types, "Narrows")
+Rel(host, types, "Narrows")
+Rel(outlet, empty, "Projects into the empty slot")
+Rel(outlet, announce, "Reports each transition to")
+Rel(host, announce, "Reports each transition to")
+Rel(announce, cdk, "Announces through", "LiveAnnouncer")
+Rel(statepage, cdk, "Moves focus to the heading through")
+Rel(statepage, page, "Emits CsStatePageAction to")
+Rel(empty, tokens, "Resolves visual values from")
+Rel(statepage, tokens, "Resolves visual values from")
+@enduml

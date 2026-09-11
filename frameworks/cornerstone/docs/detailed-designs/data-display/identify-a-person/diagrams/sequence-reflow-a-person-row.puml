@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Reflow a person row at viewport XS
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Directory page" as page
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "PersonComponent" as person
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Person row styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Layout engine and accessibility tree" as dom
+end box
+
+user -> dom : Narrow the viewport below the XS breakpoint
+dom -> bp : Media query change
+bp --> person : XS breakpoint matched
+person -> person : Set the narrow layout state
+person -> styles : Apply the stacked row layout per L2-080
+styles -> dom : Place the action slot beneath the name block
+dom -> dom : Reflow without introducing horizontal overflow per L2-080
+person -> dom : Preserve the DOM order of avatar, name, meta, and actions
+dom --> user : Row readable at 320 px with every action reachable
+
+opt Row is clickable
+  person -> dom : Keep exactly one row-spanning activation target per L2-080
+  user -> dom : Activate a nested action instead of the row
+  dom -> person : Click event on the nested action
+  person -> person : Stop propagation and emit no row intent per L2-080
+end
+@enduml

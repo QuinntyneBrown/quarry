@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  border-inline-start: 3px solid var(--cs-lime-strong);
+  padding: var(--cs-space-5);
+  background: var(--cs-surface);
+}
+blockquote {
+  margin: 0;
+  font-size: var(--cs-text-lg);
+}

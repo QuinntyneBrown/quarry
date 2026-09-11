@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Fail the accessibility gate
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library contributor" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Pull request" as pr
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "Component gallery" as gallery
+  participant "ChoiceCardComponent" as comp
+end box
+box "Frontend — Cornerstone verification gate" #ECFDF3
+  participant "csExpectNoViolations()" as scan
+  participant "a11y-coverage gate" as coverage
+end box
+box "Browser — platform" #FFF4E5
+  participant "Headless browser and scan engine" as engine
+end box
+
+dev -> pr : Add a component variant
+pr -> gallery : Start the accessibility suite per L2-029
+gallery -> comp : Render every documented variant and state
+gallery -> scan : Scan the rendered variant
+scan -> engine : Run the rule set against the accessibility tree
+
+alt No violation
+  engine --> scan : Zero findings
+  scan --> gallery : Variant passes
+else Serious or critical violation
+  engine --> scan : Finding with rule, impact, and element
+  scan --> pr : Fail naming the component, the rule, and the element per L2-029
+  pr --> dev : Correct the role, name, or contrast per L2-026 and L2-028
+end
+
+gallery -> coverage : Report the tested components and key bindings
+alt Every component and binding covered
+  coverage --> pr : Coverage passes
+else Component or key binding untested
+  coverage --> pr : Fail naming the uncovered component per L2-029
+  pr --> dev : Add the missing variant scan or key-binding test per L2-024
+end
+@enduml

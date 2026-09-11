@@ -1,0 +1,138 @@
+{
+  "kind": "class",
+  "name": "AnnouncementComposerComponent",
+  "sourcePath": "src/cornerstone/announcement-composer/announcement-composer.component.ts",
+  "category": "communication",
+  "description": "Announcement Composer public API.",
+  "members": [
+    {
+      "name": "audiences",
+      "bindingName": "audiences",
+      "role": "input",
+      "type": "readonly AudienceOption[]",
+      "required": true,
+      "description": "Audiences public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "model",
+      "type": "AnnouncementDraft",
+      "required": true,
+      "description": "Value public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "submitted",
+      "bindingName": "submitted",
+      "role": "output",
+      "type": "AnnouncementDraft",
+      "required": false,
+      "description": "Submitted public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "previewRequested",
+      "bindingName": "previewRequested",
+      "role": "output",
+      "type": "AnnouncementDraft",
+      "required": false,
+      "description": "Preview Requested public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-announcement-composer",
+  "slug": "announcement-composer",
+  "label": "Announcement Composer",
+  "tokens": [],
+  "relatedSymbols": ["AnnouncementDraft", "AudienceOption"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AnnouncementDraft",
+      "sourcePath": "src/cornerstone/announcement-composer/announcement-draft.interface.ts",
+      "category": "communication",
+      "description": "Announcement Draft public API.",
+      "members": [
+        {
+          "name": "audienceIds",
+          "role": "property",
+          "type": "readonly string[]",
+          "required": true,
+          "description": "Audience Ids public API."
+        },
+        {
+          "name": "delivery",
+          "role": "property",
+          "type": "'now' | 'scheduled'",
+          "required": true,
+          "description": "Delivery public API."
+        },
+        {
+          "name": "scheduledAt",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Scheduled At public API."
+        },
+        {
+          "name": "subject",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Subject public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AudienceOption",
+      "sourcePath": "src/cornerstone/announcement-composer/audience-option.interface.ts",
+      "category": "communication",
+      "description": "Audience Option public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "kind",
+          "role": "property",
+          "type": "'cohort' | 'role' | 'individual'",
+          "required": true,
+          "description": "Kind public API."
+        },
+        {
+          "name": "count",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Count public API."
+        }
+      ]
+    }
+  ]
+}

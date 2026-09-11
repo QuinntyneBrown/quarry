@@ -1,0 +1,14 @@
+:host {
+  position: fixed;
+  z-index: 100;
+  inset: auto var(--cs-space-5) var(--cs-space-5) auto;
+  max-inline-size: 24rem;
+}
+div {
+  display: grid;
+  gap: var(--cs-space-2);
+}
+article {
+  background: var(--cs-ink);
+  color: var(--cs-paper);
+}

@@ -1,0 +1,120 @@
+{
+  "kind": "class",
+  "name": "AuditLogComponent",
+  "sourcePath": "src/cornerstone/audit-log/audit-log.component.ts",
+  "category": "workflows",
+  "description": "Audit Log public API.",
+  "members": [
+    {
+      "name": "events",
+      "bindingName": "events",
+      "role": "input",
+      "type": "readonly AuditEvent[]",
+      "required": true,
+      "description": "Events public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "CsDataState",
+      "required": false,
+      "defaultValue": "{ status: 'ready', data: undefined }",
+      "description": "State public API.",
+      "structured": false,
+      "options": ["idle", "loading", "empty", "error", "ready"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-audit-log",
+  "slug": "audit-log",
+  "label": "Audit Log",
+  "tokens": [],
+  "relatedSymbols": ["AuditDetailField", "AuditEvent", "CsDataState"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AuditDetailField",
+      "sourcePath": "src/cornerstone/audit-log/audit-detail-field.interface.ts",
+      "category": "workflows",
+      "description": "Audit Detail Field public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Value public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AuditEvent",
+      "sourcePath": "src/cornerstone/audit-log/audit-event.interface.ts",
+      "category": "workflows",
+      "description": "Audit Event public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "action",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Action public API."
+        },
+        {
+          "name": "actor",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Actor public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Instant public API."
+        },
+        {
+          "name": "details",
+          "role": "property",
+          "type": "readonly AuditDetailField[]",
+          "required": true,
+          "description": "Details public API."
+        },
+        {
+          "name": "private",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Private public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "CsDataState",
+      "sourcePath": "src/cornerstone/core/platform/cs-data-state.type.ts",
+      "category": "platform",
+      "description": "Cs Data State public API.",
+      "declaration": "| { readonly status: 'idle' | 'loading' | 'empty' }\n  | { readonly status: 'error'; readonly error: CsDataStateError }\n  | { readonly status: 'ready'; readonly data: T }"
+    }
+  ]
+}

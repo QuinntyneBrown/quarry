@@ -1,0 +1,137 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Browse tabular data
+
+enum TableDensity {
+  compact
+  comfortable
+}
+
+enum CsTableSelectionMode {
+  none
+  single
+  multiple
+}
+
+enum CsSortDirection {
+  asc
+  desc
+  none
+}
+
+class SortChange {
+  +column: string
+  +direction: CsSortDirection
+}
+
+class TableDirective {
+  +density: InputSignal<TableDensity>
+  +stickyHeader: InputSignal<boolean>
+  +selectionMode: InputSignal<CsTableSelectionMode>
+  +selection: ModelSignal<ReadonlySet<string>>
+  +sortChange: OutputEmitterRef<SortChange>
+  +selectionChange: OutputEmitterRef<ReadonlySet<string>>
+  +toggleRow(key: string): void
+  +toggleAll(): void
+  -activeSort: Signal<SortChange | null>
+}
+
+class TableSortHeaderDirective {
+  +csSortHeader: InputSignal<string>
+  +disabled: InputSignal<boolean>
+  -ariaSort: Signal<CsSortDirection>
+  -activate(): void
+}
+
+class TableRowDirective {
+  +csRow: InputSignal<string>
+  +disabled: InputSignal<boolean>
+  -selected: Signal<boolean>
+}
+
+class CsTableSelectAllDirective {
+  -checked: Signal<boolean>
+  -indeterminate: Signal<boolean>
+}
+
+class TableContainerComponent {
+  +caption: InputSignal<string>
+  +captionVisible: InputSignal<boolean>
+  +maxHeight: InputSignal<string | null>
+  +state: InputSignal<CsDataState<void>>
+  +retry: OutputEmitterRef<void>
+}
+
+class ResponsiveTableDirective {
+  +breakpoint: InputSignal<string>
+  +primaryColumn: InputSignal<string | null>
+  -reflowed: Signal<boolean>
+  -readColumnHeaders(): string[]
+  -applyTableRoles(): void
+  -applyCellLabels(headers: string[]): void
+}
+
+class DataToolbarComponent {
+  +searchTerm: ModelSignal<string>
+  +searchPlaceholder: InputSignal<string>
+  +filters: InputSignal<FilterChip[]>
+  +resultCount: InputSignal<number | null>
+  +resultLabel: InputSignal<string>
+  +collapsible: InputSignal<boolean>
+  +state: InputSignal<CsDataState<void>>
+  +filterRemoved: OutputEmitterRef<FilterChip>
+  +filtersCleared: OutputEmitterRef<void>
+  +viewChange: OutputEmitterRef<string>
+  +exportRequested: OutputEmitterRef<ExportRequest>
+  +primaryAction: OutputEmitterRef<void>
+  -announceCount(count: number): void
+}
+
+class FilterChip {
+  +id: string
+  +label: string
+  +value: string
+  +removable?: boolean
+}
+
+class ExportRequest {
+  +format: CsExportFormat
+  +scope: CsExportScope
+}
+
+enum CsExportScope {
+  all
+  filtered
+  selected
+}
+
+interface CsDataState<T> {
+  +kind: CsDataStateKind
+}
+
+TableContainerComponent *-- "1" TableDirective : frames
+TableContainerComponent ..> CsDataState : renders states of
+TableDirective --> TableDensity : has
+TableDirective --> CsTableSelectionMode : has
+TableDirective o-- "0..*" TableSortHeaderDirective : coordinates
+TableDirective o-- "0..*" TableRowDirective : collects keys from
+TableDirective o-- "0..1" CsTableSelectAllDirective : publishes condition to
+TableDirective --> SortChange : emits
+SortChange --> CsSortDirection : has
+ResponsiveTableDirective ..> TableDirective : reads column headers of
+DataToolbarComponent --> "0..*" FilterChip : presents
+DataToolbarComponent --> ExportRequest : emits
+ExportRequest --> CsExportScope : has
+DataToolbarComponent ..> CsDataState : renders states of
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Review a marked attempt
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth participant" as youth
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Assessment service" as assessment
+  participant "Routing service" as router
+end box
+box "Frontend — Cornerstone quiz composites" #D1FADF
+  participant "QuizResultComponent" as result
+  participant "QuizComponent" as quiz
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendering and input" as browser
+end box
+
+assessment -> page : Supply score, pass state, and per-question outcomes
+page -> result : Bind QuizResultView and the action list
+result -> result : Render score and pass state per L2-119
+result -> result : Render each question as correct or incorrect with its explanation per L2-119
+result -> browser : Convey correctness in text as well as colour
+browser --> youth : Marked attempt presented
+
+youth -> browser : Select a follow-on action
+browser -> result : Activation event
+result -> page : Emit QuizResultAction
+
+alt Action kind is 'retry'
+  page -> assessment : Open a new attempt
+  assessment --> page : Fresh quiz definition
+  page -> quiz : Bind QuizView in attempt mode per L2-118
+  quiz --> browser : Question one presented
+else Action kind is 'review'
+  page -> quiz : Bind QuizView in review mode per L2-118
+  quiz -> quiz : Render recorded answers read-only
+  quiz --> browser : Reviewed questions presented
+else Action kind is 'next'
+  page -> router : Navigate to the next lesson step
+  router --> page : Route activated
+end
+
+browser --> youth : Follow-on action resolved by the application
+@enduml

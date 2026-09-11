@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Enforce a bundle budget
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Feature branch" as branch
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI workflow (ci.yml)" as ci
+  participant "budgets job" as job
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Entry point probe builder" as probe
+  participant "Size reporter" as sizer
+  participant "size-budgets.json" as budgets
+  participant "Budget report" as report
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Release publication" as release
+end box
+
+maintainer -> branch : Push a component change
+branch -> ci : Trigger the workflow
+ci -> ci : Run npm ci, npm test, and npm run build
+ci -> job : Start the budgets job
+job -> probe : Build one probe application per public entry point
+probe -> probe : Import exactly one component per probe
+probe --> job : Probe bundles
+job -> sizer : Measure minified and gzipped output
+sizer -> sizer : Assert no other entry point appears in the probe per L2-159
+sizer -> budgets : Read the recorded bound for each entry point
+budgets --> sizer : Budget in kilobytes
+sizer -> report : Record entry point, previous size, new size, and budget per L2-160
+
+alt An entry point exceeds its budget
+  report --> job : Verdict exceeded
+  job -> ci : Fail the run naming the entry point and both sizes per L2-160
+  ci --> maintainer : Failed check with the size report attached
+  ci -> release : Withhold publication
+else Every entry point is within budget
+  report --> job : Verdict within budget
+  job -> ci : Upload the size report as a workflow artifact per L2-160
+  ci -> maintainer : Summarize the report on the pull request
+  ci --> release : Allow publication to proceed
+end
+
+opt Theme stylesheet is rebuilt
+  job -> sizer : Compile and gzip the theme stylesheet
+  sizer -> budgets : Compare to the recorded stylesheet budget per L2-160
+  budgets --> sizer : Stylesheet verdict
+end
+@enduml

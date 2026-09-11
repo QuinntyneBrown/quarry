@@ -1,0 +1,16 @@
+<div [attr.role]="selectable() ? 'listbox' : 'list'">
+  @for (chip of chips(); track chip.id) {
+    <span class="cs-pill" [attr.aria-selected]="selectable() ? chip.selected : null"
+      >{{ chip.label }}
+      @if (removable()) {
+        <button
+          type="button"
+          [attr.aria-label]="'Remove ' + chip.label"
+          (click)="removed.emit({ id: chip.id })"
+        >
+          ×
+        </button>
+      }
+    </span>
+  }
+</div>

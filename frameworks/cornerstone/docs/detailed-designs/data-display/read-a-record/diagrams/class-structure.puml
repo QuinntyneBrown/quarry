@@ -1,0 +1,149 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Read a record
+
+enum CsListDensity {
+  compact
+  comfortable
+}
+
+enum CsListSelectionMode {
+  none
+  single
+  multiple
+}
+
+enum CsListItemInteraction {
+  static
+  link
+  selectable
+}
+
+class ListComponent {
+  +dividers: InputSignal<boolean>
+  +density: InputSignal<CsListDensity>
+  +selectionMode: InputSignal<CsListSelectionMode>
+  +state: InputSignal<CsDataState<void>>
+  +selectionChange: OutputEmitterRef<ReadonlySet<string>>
+  -keyManager: ListKeyManager<ListItemComponent>
+  -role: Signal<string>
+}
+
+class ListItemComponent {
+  +key: InputSignal<string>
+  +title: InputSignal<string>
+  +meta: InputSignal<string | null>
+  +interaction: InputSignal<CsListItemInteraction>
+  +selected: ModelSignal<boolean>
+  +unread: InputSignal<boolean>
+  +disabled: InputSignal<boolean>
+  +activated: OutputEmitterRef<void>
+}
+
+class DefinitionListComponent {
+  +items: InputSignal<DefinitionItem[]>
+  +layout: InputSignal<CsDefinitionLayout>
+  +state: InputSignal<CsDataState<void>>
+}
+
+class DefinitionItem {
+  +term: string
+  +value: string | null
+  +emptyText?: string
+}
+
+enum CsDefinitionLayout {
+  inline
+  stacked
+  compact
+}
+
+class TimelineComponent {
+  +entries: InputSignal<TimelineEntry[]>
+  +variant: InputSignal<CsTimelineVariant>
+  +state: InputSignal<CsDataState<void>>
+  +entryActivated: OutputEmitterRef<CsTimelineEntryRef>
+}
+
+class TimelineEntry {
+  +key: string
+  +title: string
+  +date: string
+  +position: CsTimelinePosition
+  +meta?: string
+  +description?: string
+}
+
+enum CsTimelinePosition {
+  past
+  current
+  future
+}
+
+enum CsTimelineVariant {
+  vertical
+  compact
+}
+
+class ScriptureQuoteComponent {
+  +citation: InputSignal<string | null>
+  +reference: InputSignal<string | null>
+  +surface: InputSignal<CsQuoteSurface>
+  +size: InputSignal<CsQuoteSize>
+}
+
+enum CsQuoteSurface {
+  light
+  dark
+}
+
+class CsTooltipDirective {
+  +csTooltip: InputSignal<string>
+  +position: InputSignal<CsTooltipPosition>
+  +showDelay: InputSignal<number>
+  +hideDelay: InputSignal<number>
+  +disabled: InputSignal<boolean>
+  +show(): void
+  +hide(): void
+  -fallbacksFor(position: CsTooltipPosition): ConnectedPosition[]
+}
+
+enum CsTooltipPosition {
+  above
+  below
+  before
+  after
+}
+
+interface CsDataState<T> {
+  +kind: CsDataStateKind
+}
+
+ListComponent *-- "0..*" ListItemComponent : contains
+ListComponent --> CsListDensity : has
+ListComponent --> CsListSelectionMode : has
+ListComponent ..> CsDataState : renders states of
+ListItemComponent --> CsListItemInteraction : has
+DefinitionListComponent --> "0..*" DefinitionItem : renders
+DefinitionListComponent --> CsDefinitionLayout : has
+DefinitionListComponent ..> CsDataState : renders states of
+TimelineComponent --> "0..*" TimelineEntry : renders
+TimelineComponent --> CsTimelineVariant : has
+TimelineComponent ..> CsDataState : renders states of
+TimelineEntry --> CsTimelinePosition : has
+ScriptureQuoteComponent --> CsQuoteSurface : has
+CsTooltipDirective --> CsTooltipPosition : prefers
+ListItemComponent ..> CsTooltipDirective : may carry on a trailing action
+DefinitionListComponent ..> CsTooltipDirective : may carry on an abbreviated value
+@enduml

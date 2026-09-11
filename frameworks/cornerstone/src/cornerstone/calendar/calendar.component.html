@@ -1,0 +1,20 @@
+<div class="head">
+  <button type="button" (click)="previous.emit()">‹</button>
+  <h2>{{ label() }}</h2>
+  <button type="button" (click)="next.emit()">›</button>
+</div>
+<div class="grid" role="grid">
+  @for (date of dates(); track date.iso) {
+    <button
+      role="gridcell"
+      type="button"
+      [attr.aria-selected]="selected() === date.iso"
+      (click)="select(date.iso)"
+    >
+      <span>{{ date.day }}</span>
+      @for (event of eventsFor(date.iso).slice(0, 3); track event.id) {
+        <small>{{ event.title }}</small>
+      }
+    </button>
+  }
+</div>

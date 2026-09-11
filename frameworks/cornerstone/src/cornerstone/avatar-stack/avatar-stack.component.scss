@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+}
+:host > * {
+  margin-inline-start: -0.625rem;
+}
+:host > *:first-child {
+  margin-inline-start: 0;
+}

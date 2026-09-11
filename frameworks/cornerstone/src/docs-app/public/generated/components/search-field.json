@@ -1,0 +1,57 @@
+{
+  "kind": "class",
+  "name": "SearchFieldComponent",
+  "sourcePath": "src/cornerstone/search-field/search-field.component.ts",
+  "category": "forms",
+  "description": "Search Field public API.",
+  "members": [
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "SearchMode",
+      "required": false,
+      "defaultValue": "'instant'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": ["instant", "submit"]
+    },
+    {
+      "name": "placeholder",
+      "bindingName": "placeholder",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Search'",
+      "description": "Placeholder public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "searched",
+      "bindingName": "searched",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Searched public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-search-field",
+  "slug": "search-field",
+  "label": "Search Field",
+  "tokens": ["--cs-space-2"],
+  "relatedSymbols": ["SearchMode"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "SearchMode",
+      "sourcePath": "src/cornerstone/search-field/search-mode.type.ts",
+      "category": "forms",
+      "description": "Search Mode public API.",
+      "declaration": "'instant' | 'submit'"
+    }
+  ]
+}

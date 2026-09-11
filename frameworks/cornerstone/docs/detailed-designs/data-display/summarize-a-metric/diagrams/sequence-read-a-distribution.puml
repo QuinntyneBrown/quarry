@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Read a distribution without colour
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Report page" as page
+end box
+box "Frontend — Cornerstone metric components" #D1FADF
+  participant "MetricBarsComponent" as bars
+  participant "MetricValueTableComponent" as table
+  participant "MetricLegendComponent" as legend
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Print resolution" as printcss
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+  participant "Print engine" as print
+end box
+
+page -> bars : Bind series in distribution mode per L2-097
+bars -> legend : Pass each series key, label, and pattern
+legend -> dom : Render colour, label, and pattern per entry
+bars -> table : Pass every series and point
+table -> dom : Render the value table, exposed to assistive technology
+bars -> dom : Render the stacked segments to 100 percent
+dom --> admin : Distribution with a legend and a value table
+
+admin -> print : Print the report
+print -> printcss : Resolve the print media query
+printcss -> bars : Replace tone fills with patterned fills per L2-097
+printcss -> table : Expand the value table into visible flow
+printcss -> bars : Drop hover and activation affordances
+bars --> print : Monochrome-safe layout
+print --> admin : Printed page carrying the numbers
+
+opt Series has no values
+  page -> bars : Bind state { kind: 'empty' } per L2-101
+  bars -> dom : Project the [csEmpty] slot in place of the plot
+end
+@enduml

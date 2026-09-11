@@ -1,0 +1,15 @@
+{
+  "kind": "class",
+  "name": "StatusRegionComponent",
+  "sourcePath": "src/cornerstone/status-region/status-region.component.ts",
+  "category": "platform",
+  "description": "Status Region public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-status-region",
+  "slug": "status-region",
+  "label": "Status Region",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

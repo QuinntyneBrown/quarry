@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "ButtonGroupComponent",
+  "sourcePath": "src/cornerstone/button-group/button-group.component.ts",
+  "category": "foundations",
+  "description": "Button Group public API.",
+  "members": [
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "'related' | 'split'",
+      "required": false,
+      "defaultValue": "'related'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-button-group",
+  "slug": "button-group",
+  "label": "Button Group",
+  "tokens": ["--cs-space-2"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,15 @@
+<cs-dialog-shell
+  ><h2 csDialogTitle>{{ data().title }}</h2>
+  <p csDialogDescription>{{ data().message }}</p>
+  <div csDialogActions>
+    <button csButton="secondary" type="button" (click)="resolved.emit('cancel')">
+      {{ data().cancelLabel ?? strings.strings.cancel }}</button
+    ><button
+      [csButton]="data().tone === 'danger' ? 'danger' : 'primary'"
+      type="button"
+      (click)="resolved.emit('confirm')"
+    >
+      {{ data().confirmLabel ?? strings.strings.confirm }}
+    </button>
+  </div></cs-dialog-shell
+>

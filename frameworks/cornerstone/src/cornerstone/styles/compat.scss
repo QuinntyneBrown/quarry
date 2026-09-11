@@ -1,0 +1,31 @@
+/* Opt-in migration bridge. It is deliberately excluded from theme.scss. */
+/* Drop-in bridge for the current Liturgy and Word Up class vocabularies. */
+@use 'token-values';
+@use 'word-up-compat';
+@use 'liturgy-compat';
+
+.wu-card,
+.lit-card {
+  border: 1px solid var(--cs-border);
+  border-radius: var(--cs-radius-md);
+  padding: var(--cs-space-5);
+  background: var(--cs-surface-raised);
+}
+.wu-btn,
+.lit-button {
+  min-block-size: 2.75rem;
+  border: 0;
+  border-radius: var(--cs-radius-pill);
+  padding: 0.65rem 1.15rem;
+  background: var(--cs-lime);
+  color: #16160c;
+  font-weight: 650;
+}
+.wu-input,
+.lit-input {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+  border: 1px solid var(--cs-border-strong);
+  border-radius: var(--cs-radius-sm);
+  padding: 0.65rem 0.75rem;
+}

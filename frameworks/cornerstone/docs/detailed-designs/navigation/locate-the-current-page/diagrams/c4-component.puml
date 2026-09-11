@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Locate the current page
+
+Person(user, "Application user", "Reads the trail and opens the hidden segment")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(crumbs, "BreadcrumbsComponent", "Standalone component", "Renders the nav landmark, the ordered crumb list, and the current-page marker")
+  Component(overflow, "Overflow control", "Component-scoped template", "Replaces the hidden middle crumbs with a single trigger")
+  Component(menu, "CsMenuDirective", "Attribute directive", "Presents the hidden crumbs as an anchored menu with focus return")
+  Component(truncate, "Truncation rule", "Component-scoped CSS and signal", "Reduces the trail to parent and current page on narrow viewports")
+}
+
+Container_Boundary(appb, "Consuming application") {
+  Component(resolver, "Crumb resolver", "Application service", "Maps activated route data into Crumb values")
+  Component(router, "Angular Router", "Application routing", "Resolves routerLink bindings and sets routerLinkActive")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay and connected position strategy")
+
+Rel(resolver, crumbs, "Supplies the crumb list to")
+Rel(crumbs, overflow, "Delegates the hidden segment to")
+Rel(overflow, menu, "Opens the hidden crumbs through")
+Rel(menu, cdk, "Positions the panel with", "Overlay")
+Rel(crumbs, truncate, "Applies on narrow viewports")
+Rel(user, crumbs, "Activates an ancestor link in")
+Rel(user, overflow, "Activates the hidden segment trigger of")
+Rel(crumbs, router, "Renders anchors resolved by", "routerLink supplied by the application")
+Rel(menu, router, "Renders anchors resolved by", "routerLink supplied by the application")
+@enduml

@@ -1,0 +1,108 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Pass a gate
+
+enum GateMode {
+  interactive
+  readonly
+}
+
+class GateSummary {
+  +id: string
+  +label: string
+  +open: boolean
+  +outstandingCount: number
+  +blockedReason?: string
+}
+
+class CsRequirement {
+  +id: string
+  +label: string
+  +done: boolean
+  +meta?: string
+  +busy?: boolean
+  +error?: string
+}
+
+interface CsProcessAdapter {
+  +labels: CsProcessLabels
+  +palette: CsProcessPalette
+  +enforcement: ReadonlyMap<string, GateSummary>
+}
+
+class CsProcessLabels {
+  +gateOpenLabel: string
+  +gateBlockedLabel: string
+  +advanceLabel: string
+  +outstandingLabel: string
+  +allMetLabel: string
+}
+
+class GateComponent {
+  +gate: InputSignal<GateSummary>
+  +requirements: InputSignal<readonly CsRequirement[]>
+  +adapter: InputSignal<CsProcessAdapter>
+  +mode: InputSignal<GateMode>
+  +helperText: InputSignal<string | null>
+  +advanceRequested: OutputEmitterRef<GateAdvanceIntent>
+  +requirementToggled: OutputEmitterRef<CsRequirementToggleIntent>
+  #advanceDisabled: Signal<boolean>
+  -statusText(): string
+}
+
+class RequirementChecklistComponent {
+  +requirements: InputSignal<readonly CsRequirement[]>
+  +mode: InputSignal<GateMode>
+  +groupLabel: InputSignal<string>
+  +adapter: InputSignal<CsProcessAdapter>
+  +requirementToggled: OutputEmitterRef<CsRequirementToggleIntent>
+  -isActivatable(item: CsRequirement): boolean
+}
+
+class CheckboxComponent {
+  +checked: ModelSignal<boolean>
+  +disabled: InputSignal<boolean>
+  +describedBy: InputSignal<string | null>
+}
+
+class GateAnnouncer {
+  +announceOpen(label: string): void
+  +announceAllMet(label: string): void
+  +announceError(message: string): void
+}
+
+class GateAdvanceIntent {
+  +gateId: string
+}
+
+class CsRequirementToggleIntent {
+  +gateId: string
+  +requirementId: string
+  +done: boolean
+}
+
+GateComponent --> GateSummary : renders the enforcement result
+GateComponent "1" *-- "1" RequirementChecklistComponent : contains
+GateComponent --> GateMode : has
+RequirementChecklistComponent "1" o-- "0..*" CsRequirement : renders
+RequirementChecklistComponent ..> CheckboxComponent : renders each interactive item as
+GateComponent --> CsProcessAdapter : reads labels from
+RequirementChecklistComponent --> CsProcessAdapter : reads labels from
+CsProcessAdapter *-- CsProcessLabels
+CsProcessAdapter --> GateSummary : supplies
+GateComponent ..> GateAdvanceIntent : emits
+RequirementChecklistComponent ..> CsRequirementToggleIntent : emits
+GateComponent ..> GateAnnouncer : announces through
+RequirementChecklistComponent ..> GateAnnouncer : announces through
+@enduml

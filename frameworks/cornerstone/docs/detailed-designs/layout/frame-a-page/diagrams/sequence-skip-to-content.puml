@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Skip to main content
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Keyboard and screen reader user" as kbd
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell" as shell
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone page frame" #D1FADF
+  participant "CsSkipLinkDirective" as skip
+  participant "CsVisuallyHiddenDirective" as hidden
+  participant "PageComponent" as frame
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusMonitor" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as browser
+end box
+
+shell -> skip : Bind target='cs-main' on the first anchor per L2-042
+skip -> hidden : Clip the anchor from the visual flow per L2-042
+hidden -> browser : Keep the anchor in the accessibility tree
+
+kbd -> browser : Press Tab on a fresh page
+browser -> cdk : Report focus on the skip link
+cdk --> skip : Focus origin 'keyboard'
+skip -> browser : Reveal the anchor at the start of the page per L2-042
+browser --> kbd : Announce the skip link
+
+kbd -> browser : Press Enter
+browser -> skip : Activation event
+skip -> frame : Resolve the element with id 'cs-main'
+frame --> skip : Main content element
+skip -> cdk : Move focus to the main content per L2-042
+cdk -> browser : Set focus, not scroll position alone
+skip -> shell : Emit activated
+browser --> kbd : Focus inside the page content, past the navigation
+
+kbd -> browser : Press Tab again
+browser -> skip : Focus leaves the skip link
+skip -> hidden : Clip the anchor again
+page --> kbd : Content reached without traversing the navigation
+@enduml

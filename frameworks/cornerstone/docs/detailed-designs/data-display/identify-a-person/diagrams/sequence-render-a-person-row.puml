@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Render a person row
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Directory page" as page
+  participant "Application services" as svc
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "PersonComponent" as person
+  participant "AvatarComponent" as avatar
+  participant "csAvatarPalette()" as palette
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+svc -> page : Person records
+page -> page : Map each record to PersonSummary
+page -> person : Bind person, size 'md', clickable true
+person -> bp : Observe the XS breakpoint
+bp --> person : Wide viewport
+
+person -> avatar : Bind name, src, personId, decorative true
+avatar -> avatar : Enter the loading state per L2-079
+avatar -> dom : Request the profile image
+dom --> avatar : Image loaded
+avatar -> avatar : Enter the image state
+avatar -> palette : Request the entry for personId
+palette --> avatar : Stable palette entry per L2-079
+avatar -> dom : Write aria-hidden true beside the visible name per L2-079
+
+person -> dom : Render the name block, meta slot, and action slot
+person -> dom : Write one row-spanning activation target per L2-080
+dom --> user : Person row with avatar, name, meta, and actions
+
+user -> dom : Activate the row target
+dom -> person : Click event
+person -> person : Confirm the event did not originate in a nested action per L2-080
+person -> page : Emit CsPersonActivated with the person identifier
+page -> svc : Open the person record
+svc --> page : Navigated route
+@enduml

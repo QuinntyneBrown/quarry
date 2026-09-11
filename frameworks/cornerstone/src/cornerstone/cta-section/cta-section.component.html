@@ -1,0 +1,9 @@
+<section>
+  <h2>{{ title() }}</h2>
+  <p>{{ summary() }}</p>
+  @for (action of actions(); track action.id) {
+    <a [href]="action.href ?? '#'" [csButton]="action.appearance ?? 'primary'">{{
+      action.label
+    }}</a>
+  }
+</section>

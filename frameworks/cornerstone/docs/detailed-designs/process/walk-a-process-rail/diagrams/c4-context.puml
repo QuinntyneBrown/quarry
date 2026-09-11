@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Walk a process rail
+
+Person(dev, "Application developer", "Composes a process screen from Cornerstone components")
+Person(user, "Application user", "Reads where a unit of work stands in its process")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the domain-neutral process rail and journey")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning stages, routes, and enforcement")
+System_Ext(cdk, "Angular CDK", "Breakpoint observation and focus behaviour")
+System_Ext(browser, "Browser platform", "Renders the rail and reports viewport changes")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the rail and journey from")
+Rel(dev, app, "Writes the stage view model and adapter in")
+Rel(app, cornerstone, "Supplies stages and a typed adapter to", "signal inputs")
+Rel(cornerstone, app, "Emits stage activation and action intents to", "output()")
+Rel(cornerstone, cdk, "Observes viewport breakpoints through")
+Rel(cornerstone, browser, "Renders ordered list semantics to")
+Rel(browser, user, "Presents stage state to")
+Rel(user, browser, "Activates a stage in")
+Rel(app, npm, "Installs Cornerstone from")
+@enduml

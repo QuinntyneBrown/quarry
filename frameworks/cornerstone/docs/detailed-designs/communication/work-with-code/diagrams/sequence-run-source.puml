@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Run the edited source
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "LessonSourceService" as vm
+  participant "SourceEvaluationHandler" as runner
+end box
+box "Frontend — Cornerstone code" #D1FADF
+  participant "CodeEditorComponent" as editor
+  participant "CaretPositionDirective" as caret
+  participant "PreviewPaneComponent" as pane
+  participant "ConfirmDialogComponent" as confirm
+end box
+box "Browser — platform" #FFF4E5
+  participant "Textarea, iframe sandbox, and focus" as browser
+end box
+
+vm --> editor : Supply the starting source and the language
+editor -> browser : Render a labelled textarea operable by keyboard per L2-116
+
+user -> editor : Type source and move the caret
+editor -> caret : Recompute the line and column
+caret --> editor : Line, column, and character count
+editor -> editor : Expose the feedback on demand without announcing each keystroke per L2-116
+
+user -> browser : Press Tab
+editor -> browser : Move focus out through the documented escape mechanism per L2-116
+browser --> user : Focus on the next control
+
+user -> editor : Activate run
+editor -> runner : Emit runRequested carrying the current source per L2-116
+editor -> editor : Perform no evaluation
+runner -> runner : Evaluate the source in the application
+
+alt Evaluation produced document output
+  runner --> pane : Supply the document output
+  pane -> browser : Attach the iframe with a required title and the documented sandbox set excluding allow-same-origin per L2-116
+  browser --> user : Rendered output
+else Evaluation produced text output
+  runner --> pane : Supply the text output
+  pane -> browser : Render the output through the code block as text per L2-115
+  browser --> user : Literal output text
+else Evaluation failed
+  runner --> pane : Supply the error message and the failed run state
+  pane -> browser : Render the documented error state with a retry control
+  browser --> user : Stated error
+end
+
+opt Reset activated
+  user -> editor : Activate reset
+  editor -> confirm : Present the confirm step per L2-103
+  confirm --> editor : Confirmation
+  editor -> runner : Emit resetRequested
+  vm --> editor : Supply the starting source again
+end
+@enduml

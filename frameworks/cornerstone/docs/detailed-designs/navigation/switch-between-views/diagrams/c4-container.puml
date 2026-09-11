@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Switch between views
+
+Person(dev, "Application developer", "Places view switches inside a feature page")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies TabGroupComponent, SegmentedControlComponent, AccordionComponent, and PaginatorComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the colour, spacing, radius, and motion tokens the switches read")
+  Container(docs, "Documentation site", "Angular application", "Publishes the selection contract and the keyboard model")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular component", "Frames the page region that holds the switches")
+  Container(page, "Feature page", "Angular routed components", "Supplies tabs, options, sections, and result totals")
+  Container(services, "Application services", "Angular injectables", "Fetches the page of results the paginator selects")
+}
+
+System_Ext(cdk, "Angular CDK", "Roving focus, overlay, and layout observation")
+System_Ext(browser, "Browser platform", "Rendering, focus, and live-region announcement")
+
+Rel(dev, page, "Declares the view switches in")
+Rel(page, lib, "Binds item configuration and selection models to")
+Rel(lib, page, "Emits selection and page changes to")
+Rel(page, services, "Requests the selected page of results from")
+Rel(shell, page, "Renders inside the main landmark")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Manages roving focus and overflow with")
+Rel(lib, browser, "Renders panels and announces the result range in")
+Rel(docs, lib, "Documents the selection contract of")
+@enduml

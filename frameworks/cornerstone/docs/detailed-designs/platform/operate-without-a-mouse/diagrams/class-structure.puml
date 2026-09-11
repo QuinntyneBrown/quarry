@@ -1,0 +1,127 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Operate without a mouse
+
+enum CsAriaPattern {
+  button
+  link
+  checkbox
+  radiogroup
+  switch
+  combobox
+  listbox
+  menu
+  menubutton
+  tabs
+  accordion
+  dialog
+  alertdialog
+  disclosure
+  slider
+  grid
+  treegrid
+  toolbar
+}
+
+class CsKeyBinding {
+  +key: string
+  +action: string
+  +whenOrientation: CsListOrientation | null
+  +mirrorsInRtl: boolean
+}
+
+class CsKeyBindings {
+  +{static} forPattern(pattern: CsAriaPattern): readonly CsKeyBinding[]
+  +{static} patterns(): readonly CsAriaPattern[]
+}
+
+class CsRovingFocusDirective {
+  +pattern: InputSignal<CsAriaPattern>
+  +orientation: InputSignal<CsListOrientation>
+  +wrap: InputSignal<boolean>
+  +useActiveDescendant: InputSignal<boolean>
+  +activeIndex: ModelSignal<number>
+  +onKeydown(event: KeyboardEvent): void
+}
+
+enum CsFocusOrigin {
+  keyboard
+  mouse
+  touch
+  program
+}
+
+class CsFocusVisibleDirective {
+  +origin: Signal<CsFocusOrigin>
+  -stampDataAttribute(origin: CsFocusOrigin): void
+}
+
+enum CsPoliteness {
+  polite
+  assertive
+}
+
+class CsStatusService {
+  -lastByKey: Map<string, string>
+  +announce(message: string, politeness: CsPoliteness): void
+  +announceOnce(key: string, message: string, politeness: CsPoliteness): void
+  +clear(key: string): void
+}
+
+class StatusRegionComponent {
+  +politeness: InputSignal<CsPoliteness>
+  +atomic: InputSignal<boolean>
+  +message: InputSignal<string>
+}
+
+class CsBusyDirective {
+  +busy: InputSignal<boolean>
+  +label: InputSignal<string>
+  +announceAfterMs: InputSignal<number>
+}
+
+class CsSkipLinkDirective {
+  +target: InputSignal<string>
+  +label: InputSignal<string>
+}
+
+class CsVisuallyHiddenDirective {
+  +focusable: InputSignal<boolean>
+}
+
+class CsMenuDirective {
+  +pattern: CsAriaPattern
+  +expanded: ModelSignal<boolean>
+  +closed: OutputEmitterRef<void>
+}
+
+class CsA11yTestHarness <<functions>> {
+  +csExpectNoViolations(fixture: ComponentFixture<unknown>): Promise<void>
+  +csExpectKeyBinding(pattern: CsAriaPattern, key: string): Promise<void>
+}
+
+CsKeyBindings --> "1..*" CsKeyBinding : publishes
+CsKeyBindings --> CsAriaPattern : keys by
+CsRovingFocusDirective ..> CsKeyBindings : reads bindings from
+CsRovingFocusDirective --> CsAriaPattern : declares
+CsFocusVisibleDirective --> CsFocusOrigin : reports
+CsStatusService --> CsPoliteness : announces at
+StatusRegionComponent --> CsPoliteness : declares
+CsBusyDirective ..> CsStatusService : announces through
+CsMenuDirective --> CsAriaPattern : implements
+CsMenuDirective *-- "1" CsRovingFocusDirective : moves the active item with
+CsMenuDirective o-- "0..*" CsFocusVisibleDirective : styles focus through
+CsA11yTestHarness ..> CsKeyBindings : exercises every entry of
+CsA11yTestHarness ..> CsMenuDirective : scans every variant of
+@enduml

@@ -1,0 +1,124 @@
+{
+  "kind": "class",
+  "name": "CardComponent",
+  "sourcePath": "src/cornerstone/card/card.component.ts",
+  "category": "foundations",
+  "description": "Card public API.",
+  "members": [
+    {
+      "name": "tone",
+      "bindingName": "tone",
+      "role": "input",
+      "type": "CardTone",
+      "required": false,
+      "defaultValue": "'paper'",
+      "description": "Tone public API.",
+      "structured": false,
+      "options": ["paper", "greige", "ink", "lime"]
+    },
+    {
+      "name": "presentation",
+      "bindingName": "presentation",
+      "role": "input",
+      "type": "CardPresentation",
+      "required": false,
+      "defaultValue": "'outlined'",
+      "description": "Presentation public API.",
+      "structured": false,
+      "options": ["flat", "raised", "outlined"]
+    },
+    {
+      "name": "interactive",
+      "bindingName": "interactive",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Interactive public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-card",
+  "slug": "card",
+  "label": "Card",
+  "tokens": [],
+  "relatedSymbols": [
+    "CardActionsDirective",
+    "CardContentDirective",
+    "CardFooterDirective",
+    "CardHeaderDirective",
+    "CardMediaDirective",
+    "CardPresentation",
+    "CardTone"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "CardActionsDirective",
+      "sourcePath": "src/cornerstone/card/card-actions.directive.ts",
+      "category": "foundations",
+      "description": "Card Actions public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "CardContentDirective",
+      "sourcePath": "src/cornerstone/card/card-content.directive.ts",
+      "category": "foundations",
+      "description": "Card Content public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "CardFooterDirective",
+      "sourcePath": "src/cornerstone/card/card-footer.directive.ts",
+      "category": "foundations",
+      "description": "Card Footer public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "CardHeaderDirective",
+      "sourcePath": "src/cornerstone/card/card-header.directive.ts",
+      "category": "foundations",
+      "description": "Card Header public API.",
+      "members": []
+    },
+    {
+      "kind": "class",
+      "name": "CardMediaDirective",
+      "sourcePath": "src/cornerstone/card/card-media.directive.ts",
+      "category": "foundations",
+      "description": "Card Media public API.",
+      "members": []
+    },
+    {
+      "kind": "type",
+      "name": "CardPresentation",
+      "sourcePath": "src/cornerstone/card/card-presentation.type.ts",
+      "category": "foundations",
+      "description": "Card Presentation public API.",
+      "declaration": "'flat' | 'raised' | 'outlined'"
+    },
+    {
+      "kind": "type",
+      "name": "CardTone",
+      "sourcePath": "src/cornerstone/card/card-tone.type.ts",
+      "category": "foundations",
+      "description": "Card Tone public API.",
+      "declaration": "'paper' | 'greige' | 'ink' | 'lime'"
+    }
+  ]
+}

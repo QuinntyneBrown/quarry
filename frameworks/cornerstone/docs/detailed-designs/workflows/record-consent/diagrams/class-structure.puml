@@ -1,0 +1,106 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Record consent
+
+enum ConsentStatus {
+  granted
+  revoked
+  not_recorded
+}
+
+interface ConsentPanelViewModel {
+  +subjectName: string
+  +contact: ConsentContactDetail
+  +groups: ConsentGroup[]
+  +history: ConsentHistoryEntry[]
+  +readOnly: boolean
+}
+
+interface ConsentContactDetail {
+  +guardianName: string
+  +relationship: string
+  +lines: CsContactLine[]
+}
+
+interface CsContactLine {
+  +label: string
+  +value: string
+}
+
+interface ConsentGroup {
+  +groupId: string
+  +label: string
+  +choices: ConsentChoice[]
+}
+
+interface ConsentChoice {
+  +scopeId: string
+  +label: string
+  +scopeStatement: string
+  +status: ConsentStatus
+  +locked: boolean
+}
+
+interface ConsentHistoryEntry {
+  +scopeLabel: string
+  +status: ConsentStatus
+  +actorName: string
+  +recordedAt: string
+}
+
+interface ConsentDecisionIntent {
+  +scopeIds: string[]
+  +status: ConsentStatus
+}
+
+interface ConsentRevokeIntent {
+  +scopeIds: string[]
+  +confirmed: true
+}
+
+interface ConsentContactUpdateIntent {
+  +subjectId: string
+}
+
+class ConsentPanelComponent {
+  +consent: InputSignal<ConsentPanelViewModel>
+  +busy: InputSignal<boolean>
+  +decisionRequested: OutputEmitterRef<ConsentDecisionIntent>
+  +revokeRequested: OutputEmitterRef<ConsentRevokeIntent>
+  +contactUpdateRequested: OutputEmitterRef<ConsentContactUpdateIntent>
+  +requestDecision(scopeId: string, status: ConsentStatus): void
+  +requestRevoke(scopeIds: string[]): void
+  -announceDecision(scopeLabel: string, status: ConsentStatus): void
+  -formatTimestamp(value: string): string
+}
+
+class ConfirmDialogComponent {
+  +title: InputSignal<string>
+  +destructive: InputSignal<boolean>
+  +decided: OutputEmitterRef<'confirm' | 'cancel'>
+}
+
+ConsentPanelComponent --> "1" ConsentPanelViewModel : reads
+ConsentPanelViewModel *-- "1" ConsentContactDetail : frames
+ConsentContactDetail o-- "0..*" CsContactLine : lists
+ConsentPanelViewModel o-- "1..*" ConsentGroup : groups
+ConsentGroup o-- "1..*" ConsentChoice : contains
+ConsentPanelViewModel o-- "0..*" ConsentHistoryEntry : records
+ConsentChoice --> "1" ConsentStatus : holds
+ConsentHistoryEntry --> "1" ConsentStatus : states
+ConsentPanelComponent ..> ConsentDecisionIntent : emits
+ConsentPanelComponent ..> ConsentRevokeIntent : emits
+ConsentPanelComponent ..> ConsentContactUpdateIntent : emits
+ConsentPanelComponent ..> ConfirmDialogComponent : opens before revoking
+@enduml

@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Move a card by keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Liturgy Develop board page" as page
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "KanbanBoardComponent" as board
+  participant "WorkItemCardComponent" as card
+end box
+box "Frontend — Cornerstone CDK adapter layer" #ECFDF3
+  participant "CsKeyboardMoveDirective" as kbd
+  participant "CsDragListDirective" as list
+  participant "CsAnnouncerService" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "Angular CDK drag-drop and a11y" as cdk
+end box
+
+user -> card : Focus the card and press the lift key
+card -> kbd : Keydown event
+kbd -> kbd : Enter the lifted state per L2-014
+kbd -> announcer : Announce the lifted position politely
+announcer -> cdk : LiveAnnouncer.announce()
+user -> kbd : Press the move key toward the next column
+kbd -> list : Request a transfer to the connected list
+list -> cdk : Apply the CDK drop list transfer per L2-014
+cdk --> list : New list identifier and index
+alt Target list accepts the item
+  list -> board : Emit CsDragMove with source 'keyboard'
+  board -> page : Surface the typed move intent
+  page --> board : Updated view model
+  list -> announcer : Announce the resulting position per L2-012
+else Target list rejects the item
+  list -> announcer : Announce that the move is not permitted
+  kbd -> kbd : Hold the item at its current position
+end
+user -> kbd : Press the drop key
+kbd -> kbd : Leave the lifted state
+kbd -> cdk : Return focus to the card
+cdk --> user : Focused card in its new column
+@enduml

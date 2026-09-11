@@ -1,0 +1,6 @@
+<cs-badge>{{ submission().status }}</cs-badge>
+@for (version of submission().versions; track version.id) {
+  <button type="button" (click)="versionSelected.emit({ versionId: version.id })">
+    {{ version.label }}
+  </button>
+}

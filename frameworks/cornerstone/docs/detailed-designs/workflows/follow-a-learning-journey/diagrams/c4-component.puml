@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Follow a learning journey
+
+Person(youth, "Youth participant", "Activates a lesson step")
+
+Container_Boundary(page, "Consuming application — feature page and services") {
+  Component(progression, "Progression service", "Angular injectable", "Owns prerequisite rules, completion state, and persistence")
+  Component(router, "Routing service", "Angular injectable", "Resolves a lesson step to a route")
+  Component(vmbuilder, "Journey view model builder", "Application code", "Projects domain records into LearningJourneyView")
+  Component(handler, "Intent handler", "Application code", "Receives LessonStepSelect and ModuleToggle")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(journey, "LearningJourneyComponent", "Standalone component", "Renders modules, progress summary, and the responsive timeline")
+  Component(steplist, "LessonStepListComponent", "Standalone component", "Renders lesson steps with completed, current, available, and locked states")
+  Component(types, "Journey view model and intent types", "TypeScript types", "LearningJourneyView, LessonStepView, LessonStepSelect, ModuleToggle")
+  Component(styles, "Journey styles", "Component-scoped CSS", "Resolve --cs- tokens for the timeline and step states")
+}
+
+System_Ext(cdk, "Angular CDK", "List key manager and layout observer")
+
+Rel(progression, vmbuilder, "Supplies domain records to")
+Rel(vmbuilder, journey, "Supplies the view model to", "LearningJourneyView input")
+Rel(journey, steplist, "Passes the steps of one module to", "LessonStepView[] input")
+Rel(steplist, handler, "Emits the step intent to", "LessonStepSelect output")
+Rel(journey, handler, "Emits the module intent to", "ModuleToggle output")
+Rel(handler, progression, "Calls to record and re-evaluate")
+Rel(handler, router, "Calls to navigate")
+Rel(journey, types, "Declares its input and output shapes in")
+Rel(steplist, types, "Declares its input and output shapes in")
+Rel(steplist, cdk, "Moves the active descendant with")
+Rel(journey, styles, "Renders with")
+Rel(youth, steplist, "Activates a step in")
+@enduml

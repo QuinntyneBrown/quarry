@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Indicate progress
+
+Person(admin, "Administrator", "Watches a roster import complete")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(spinner, "SpinnerComponent", "Standalone component", "Renders inline and full-region indeterminate status with a polite label")
+  Component(skeleton, "SkeletonComponent", "Standalone component", "Renders one preset shape, always aria-hidden")
+  Component(group, "SkeletonGroupComponent", "Standalone component", "Holds the loading state and the aria-busy condition, and swaps in real content")
+  Component(bar, "ProgressBarComponent", "Standalone component", "Renders determinate and indeterminate linear progress with native semantics")
+  Component(ring, "ProgressRingComponent", "Standalone component", "Renders an SVG track and arc with the same value contract as the bar")
+  Component(clamp, "Value helpers", "Pure functions", "Clamp out-of-range values and throttle value announcements")
+  Component(styles, "Indicator styles", "Component-scoped CSS", "Resolves size, tone, and motion from --cs- tokens and honours reduced motion")
+}
+
+Container_Boundary(page, "Consuming feature page") {
+  Component(import, "Import panel", "Angular component", "Binds the completion count to the progress bar")
+  Component(dir, "Directory list", "Angular component", "Wraps its rows in a skeleton group")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus containment")
+System_Ext(browser, "Browser platform", "Media queries and accessibility tree")
+
+Rel(admin, import, "Starts the import in")
+Rel(import, bar, "Binds label, value, min, and max to")
+Rel(dir, group, "Wraps its rows in")
+Rel(group, skeleton, "Projects the preset shapes of")
+Rel(group, spinner, "Renders a decorative spinner alongside")
+Rel(bar, clamp, "Clamps and throttles through")
+Rel(ring, clamp, "Clamps and throttles through")
+Rel(spinner, cdk, "Removes covered contents from the tab order through")
+Rel(bar, styles, "Resolves height, tone, and sweep duration from")
+Rel(ring, styles, "Resolves size, stroke ratio, and forced-colour pairs from")
+Rel(skeleton, styles, "Resolves preset dimensions and shimmer from")
+Rel(bar, browser, "Writes role progressbar and value attributes to")
+Rel(ring, browser, "Writes SVG role progressbar and value attributes to")
+Rel(group, browser, "Writes aria-busy to")
+Rel(browser, styles, "Reports prefers-reduced-motion and forced-colors to")
+@enduml

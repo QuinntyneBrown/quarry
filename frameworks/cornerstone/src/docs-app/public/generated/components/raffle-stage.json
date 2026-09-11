@@ -1,0 +1,224 @@
+{
+  "kind": "class",
+  "name": "RaffleStageComponent",
+  "sourcePath": "src/cornerstone/raffle-stage/raffle-stage.component.ts",
+  "category": "communication",
+  "description": "Presents a consumer-supplied draw; never generates a winner or stores participant data.",
+  "members": [
+    {
+      "name": "result",
+      "bindingName": "result",
+      "role": "input",
+      "type": "RaffleResult | null",
+      "required": false,
+      "defaultValue": "null",
+      "description": "Result public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "now",
+      "bindingName": "now",
+      "role": "input",
+      "type": "number | null",
+      "required": false,
+      "defaultValue": "null",
+      "description": "Now public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "forceFallback",
+      "bindingName": "forceFallback",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Force Fallback public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "text",
+      "bindingName": "text",
+      "role": "input",
+      "type": "Partial<RaffleStageText>",
+      "required": false,
+      "defaultValue": "{}",
+      "description": "Text public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "stopEffects",
+      "role": "method",
+      "type": "void",
+      "parameters": [],
+      "description": "Stop Effects public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-raffle-stage",
+  "slug": "raffle-stage",
+  "label": "Raffle Stage",
+  "tokens": [
+    "--cs-border",
+    "--cs-border-width",
+    "--cs-confetti-duration",
+    "--cs-confetti-fall-distance",
+    "--cs-confetti-piece-width",
+    "--cs-confetti-spin",
+    "--cs-confetti-start",
+    "--cs-font-mono",
+    "--cs-font-weight-bold",
+    "--cs-heading-leading",
+    "--cs-heading-tracking",
+    "--cs-ink-muted",
+    "--cs-lime",
+    "--cs-radius-lg",
+    "--cs-radius-pill",
+    "--cs-raffle-stage-height",
+    "--cs-raffle-winner-size",
+    "--cs-space-3",
+    "--cs-space-5",
+    "--cs-space-8",
+    "--cs-surface",
+    "--cs-text-lg",
+    "--cs-text-xl"
+  ],
+  "relatedSymbols": ["RaffleResult", "RaffleStageText"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "RaffleResult",
+      "sourcePath": "src/cornerstone/raffle-stage/raffle-result.interface.ts",
+      "category": "communication",
+      "description": "Raffle Result public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "winnerName",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Winner Name public API."
+        },
+        {
+          "name": "winnerDetail",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Winner Detail public API."
+        },
+        {
+          "name": "candidates",
+          "role": "property",
+          "type": "string[]",
+          "required": true,
+          "description": "Candidates public API."
+        },
+        {
+          "name": "start",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Start public API."
+        },
+        {
+          "name": "reveal",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Reveal public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "RaffleStageText",
+      "sourcePath": "src/cornerstone/raffle-stage/raffle-stage-text.interface.ts",
+      "category": "communication",
+      "description": "Raffle Stage Text public API.",
+      "members": [
+        {
+          "name": "ariaLabel",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Aria Label public API."
+        },
+        {
+          "name": "waitingTitle",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Waiting Title public API."
+        },
+        {
+          "name": "waitingDescription",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Waiting Description public API."
+        },
+        {
+          "name": "drawingBadge",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Drawing Badge public API."
+        },
+        {
+          "name": "drawingName",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Drawing Name public API."
+        },
+        {
+          "name": "drawingAnnouncement",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Drawing Announcement public API."
+        },
+        {
+          "name": "winnerBadge",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Winner Badge public API."
+        },
+        {
+          "name": "winnerDescription",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Winner Description public API."
+        },
+        {
+          "name": "stopEffects",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Stop Effects public API."
+        }
+      ]
+    }
+  ]
+}

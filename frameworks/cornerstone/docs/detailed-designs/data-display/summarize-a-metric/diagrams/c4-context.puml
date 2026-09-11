@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Summarize a metric
+
+Person(dev, "Application developer", "Composes statistics, matrices, and charts into dashboards and reports")
+Person(admin, "Administrator", "Reads cohort and competency reports and prints them")
+Person(mentor, "Mentor", "Reads progress figures for an assigned cohort")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the statistic, matrix, and chart presentations")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that computes the figures")
+System_Ext(cdk, "Angular CDK", "Layout observation and focus primitives")
+System_Ext(browser, "Browser platform", "Renders the markup, resolves print media, and exposes the accessibility tree")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes metric presentations from")
+Rel(dev, app, "Computes aggregates in")
+Rel(app, cornerstone, "Passes metric view models to")
+Rel(cornerstone, app, "Emits activation intents to")
+Rel(cornerstone, cdk, "Observes viewport size through")
+Rel(cornerstone, browser, "Renders bars, matrices, and value tables to")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(browser, admin, "Presents and prints the report to")
+Rel(browser, mentor, "Presents the cohort figures to")
+Rel(admin, browser, "Selects a statistic or prints in")
+@enduml

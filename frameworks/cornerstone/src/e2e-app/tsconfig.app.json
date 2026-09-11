@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../out-tsc/e2e-app",
+    "types": [],
+    "resolveJsonModule": true
+  },
+  "files": ["main.ts"],
+  "include": ["**/*.d.ts"]
+}

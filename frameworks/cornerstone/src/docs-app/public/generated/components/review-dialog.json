@@ -1,0 +1,79 @@
+{
+  "kind": "class",
+  "name": "ReviewDialogComponent",
+  "sourcePath": "src/cornerstone/review-dialog/review-dialog.component.ts",
+  "category": "overlays",
+  "description": "A controlled native modal dialog. Consumers set open=false after a dismissal request.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "open",
+      "bindingName": "open",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Open public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "closeLabel",
+      "bindingName": "closeLabel",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Close dialog'",
+      "description": "Close Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "closed",
+      "bindingName": "closed",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Closed public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "restoreFocus",
+      "role": "method",
+      "type": "void",
+      "parameters": [],
+      "description": "Restore Focus public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-review-dialog",
+  "slug": "review-dialog",
+  "label": "Review Dialog",
+  "tokens": [
+    "--cs-border",
+    "--cs-border-width",
+    "--cs-dialog-backdrop",
+    "--cs-ink",
+    "--cs-paper",
+    "--cs-radius-lg",
+    "--cs-review-dialog-width",
+    "--cs-shadow-lg",
+    "--cs-space-4",
+    "--cs-space-6",
+    "--cs-text-lg"
+  ],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

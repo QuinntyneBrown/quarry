@@ -1,0 +1,52 @@
+@startuml
+title UML sequence behaviour — Activate a locked movement
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone movement components" #D1FADF
+  participant "MovementListComponent" as list
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Component styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+services -> page : Movement marked locked with a blocking reason
+page -> list : Bind the movements and the adapter
+list -> dom : Render the locked movement with aria-disabled="true"
+list -> dom : Associate the blocking reason through aria-describedby per L2-137
+list -> styles : Resolve the locked state token
+styles --> dom : Lock indication carried by icon and text as well as colour
+
+user -> dom : Activate the locked movement
+dom -> list : Click or Enter
+
+alt Movement state is locked
+  list -> list : Refuse activation and emit no intent per L2-137
+  list -> dom : Restate the blocking reason as the accessible description
+else Movement state is done or current
+  list -> page : Emit MovementActivation
+  page -> services : Resolve the intent into a route change
+  services --> page : Updated movement states
+end
+
+dom --> user : Blocking reason stated with no navigation
+@enduml

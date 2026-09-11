@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "ActionBarComponent",
+  "sourcePath": "src/cornerstone/action-bar/action-bar.component.ts",
+  "category": "foundations",
+  "description": "Action Bar public API.",
+  "members": [
+    {
+      "name": "sticky",
+      "bindingName": "sticky",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Sticky public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-action-bar",
+  "slug": "action-bar",
+  "label": "Action Bar",
+  "tokens": ["--cs-space-3"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

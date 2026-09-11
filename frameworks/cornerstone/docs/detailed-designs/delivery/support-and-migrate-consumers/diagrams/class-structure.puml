@@ -1,0 +1,119 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Support and migrate consumers
+
+enum CsSupportState {
+  supported
+  deprecated
+  unsupported
+}
+
+enum CsMigrationOutcome {
+  applied
+  notApplicable
+  unresolved
+}
+
+class CsSupportMatrix {
+  +angular: CsVersionRange
+  +node: CsVersionRange
+  +browsers: readonly CsSupportedBrowser[]
+  +stateFor(dependency: string, version: string): CsSupportState
+}
+
+class CsVersionRange {
+  +minimum: string
+  +maximum: string | null
+  +range: string
+}
+
+class CsSupportedBrowser {
+  +engine: string
+  +minimumVersion: string
+}
+
+class CsDeprecation {
+  +symbol: string
+  +replacement: string
+  +deprecatedIn: string
+  +removedIn: string
+  +notice: string
+}
+
+class CsDeprecationPolicy {
+  +noticePeriodMinors: number
+  +removalReleaseKind: 'major'
+  +validate(entry: CsDeprecation): boolean
+}
+
+class CsMigrationRule {
+  +appliesFromVersion: string
+  +description: string
+  +relatedDeprecations: readonly CsDeprecation[]
+  +apply(tree: Tree, context: SchematicContext): CsMigrationOutcome
+}
+
+class CsMigrationCollection {
+  +rules: readonly CsMigrationRule[]
+  +rulesFor(installedVersion: string, targetVersion: string): readonly CsMigrationRule[]
+}
+
+class CsUnresolvedEdit {
+  +filePath: string
+  +line: number
+  +intendedChange: string
+}
+
+class CsNgAddOptions {
+  +project: string
+  +theme: 'light' | 'dark' | 'system'
+  +includeCompatibilityStyles: boolean
+}
+
+class CsNgAddSchematic {
+  +options: CsNgAddOptions
+  +checkEnvironment(matrix: CsSupportMatrix): CsSupportState
+  +addDependencies(tree: Tree): void
+  +addThemeStylesheet(tree: Tree): void
+  +addThemeProvider(tree: Tree): void
+  +report(): readonly CsWorkspaceEdit[]
+}
+
+class CsWorkspaceEdit {
+  +filePath: string
+  +summary: string
+}
+
+class CsMatrixConsistencyCheck {
+  +matrix: CsSupportMatrix
+  +peerDependencies: Record<string, string>
+  +enginesNode: string
+  +browserslist: readonly string[]
+  +run(): boolean
+}
+
+CsSupportMatrix *-- "1" CsVersionRange : angular
+CsSupportMatrix *-- "1" CsVersionRange : node
+CsSupportMatrix *-- "1..*" CsSupportedBrowser : declares
+CsSupportMatrix --> CsSupportState : reports
+CsDeprecationPolicy ..> CsDeprecation : validates
+CsMigrationRule --> "0..*" CsDeprecation : discharges
+CsMigrationRule --> CsMigrationOutcome : returns
+CsMigrationRule ..> CsUnresolvedEdit : records
+CsMigrationCollection o-- "0..*" CsMigrationRule : indexes by version
+CsNgAddSchematic --> "1" CsNgAddOptions : reads
+CsNgAddSchematic ..> CsSupportMatrix : checks the workspace against
+CsNgAddSchematic ..> CsWorkspaceEdit : records
+CsMatrixConsistencyCheck ..> CsSupportMatrix : compares the manifest against
+@enduml

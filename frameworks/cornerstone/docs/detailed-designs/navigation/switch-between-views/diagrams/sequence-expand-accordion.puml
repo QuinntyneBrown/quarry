@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Expand an accordion item
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone accordion" #D1FADF
+  participant "AccordionComponent" as acc
+  participant "AccordionItemComponent" as item
+  participant "Deferred body host" as defer
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Motion tokens" as motion
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and focus" as dom
+end box
+
+page -> acc : Bind mode 'single', expandedIds, and lazy true
+acc -> item : Publish the expanded state to each section
+item -> dom : Render each heading button with aria-expanded
+
+user -> dom : Activate a collapsed section heading
+dom -> item : Click or Enter event
+item -> acc : Request expansion of its itemId
+
+alt Item disabled
+  acc -> acc : Ignore the request per L2-073
+else Mode is single
+  acc -> acc : Collapse the currently expanded item per L2-073
+  acc -> acc : Add the requested itemId to expandedIds
+else Mode is multiple
+  acc -> acc : Add the requested itemId to expandedIds per L2-073
+end
+
+acc -> page : Emit the expandedIds model change
+acc -> item : Publish the new expanded state
+item -> defer : Render the body on first reveal per L2-073
+defer -> dom : Attach the section content
+item -> dom : Set aria-expanded to true
+motion -> dom : Apply the expansion duration, collapsed under reduced motion per L2-008
+dom --> user : Section open with focus retained on its heading
+
+opt Keyboard traversal
+  user -> dom : Press ArrowDown on a heading
+  dom -> acc : Keydown event
+  acc -> dom : Move focus to the next enabled heading per L2-073
+end
+@enduml

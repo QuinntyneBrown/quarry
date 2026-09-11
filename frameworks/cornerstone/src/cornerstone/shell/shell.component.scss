@@ -1,0 +1,49 @@
+:host {
+  display: grid;
+  min-block-size: 100dvh;
+  grid-template: 'top top' auto 'side main' 1fr / 16rem 1fr;
+}
+header {
+  grid-area: top;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 30;
+}
+aside {
+  grid-area: side;
+  background: var(--cs-ink);
+  color: var(--cs-paper);
+}
+main {
+  grid-area: main;
+  min-inline-size: 0;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+.scrim {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  :host {
+    display: block;
+  }
+  aside {
+    position: fixed;
+    inset: 3.5rem auto 0 0;
+    z-index: 40;
+    inline-size: min(20rem, 85vw);
+    transform: translateX(-105%);
+    transition: transform var(--cs-duration);
+  }
+  aside.open {
+    transform: none;
+  }
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 3.5rem 0 0;
+    z-index: 35;
+    border: 0;
+    background: #0008;
+    inline-size: 100%;
+  }
+}

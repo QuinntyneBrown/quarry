@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  block-size: 0.5rem;
+  border-radius: 999px;
+  background: var(--cs-border);
+  overflow: hidden;
+}
+span {
+  display: block;
+  block-size: 100%;
+  background: var(--cs-lime-strong);
+}

@@ -1,0 +1,11 @@
+<footer>
+  <ng-content />
+  @for (group of groups(); track group.label) {
+    <section>
+      <h2>{{ group.label }}</h2>
+      @for (link of group.links; track link.href) {
+        <a [href]="link.href">{{ link.label }}</a>
+      }
+    </section>
+  }
+</footer>

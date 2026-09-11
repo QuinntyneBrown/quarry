@@ -1,0 +1,13 @@
+{
+  "overlayP95Ms": 100,
+  "virtualList1000P95Ms": 500,
+  "inputToPaintP95Ms": 50,
+  "loadingReadyCls": 0.02,
+  "profile": {
+    "runner": "github-ubuntu-latest",
+    "browser": "chromium",
+    "cpuThrottle": 4,
+    "warmups": 3,
+    "samples": 20
+  }
+}

@@ -1,0 +1,17 @@
+<ol [class]="'rail ' + orientation()">
+  @for (stage of stages(); track stage.id; let i = $index) {
+    <li
+      [attr.data-state]="stage.state"
+      [attr.aria-current]="stage.state === 'current' ? 'step' : null"
+    >
+      <button
+        type="button"
+        [disabled]="stage.state === 'locked'"
+        (click)="activated.emit({ stageId: stage.id })"
+      >
+        <span>{{ i + 1 }}</span
+        >{{ stage.label }}
+      </button>
+    </li>
+  }
+</ol>

@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show movement progress
+
+Person(user, "Application user", "Reads completion and activates a movement")
+
+Container_Boundary(page, "Consuming application feature page") {
+  Component(vm, "Movement view model", "Movement[]", "Ordered movements with done, current, and locked states")
+  Component(adapter, "Process adapter", "CsProcessAdapter", "Consumer-supplied movement labels and palette per L2-143")
+  Component(handler, "Intent handler", "Component method", "Resolves movement activation into routing")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(dial, "MovementDialComponent", "Standalone component", "Segmented radial completion display with paper and dark variants per L2-136")
+  Component(list, "MovementListComponent", "Standalone component", "Ordered movements with rail and page variants per L2-137")
+  Component(strip, "PipStripComponent", "Standalone component", "Compact card progress with one accessible summary per L2-138")
+  Component(ring, "ProgressRingComponent", "Standalone component", "SVG ring supplying progressbar value semantics per L2-089")
+  Component(styles, "Component styles", "Component-scoped CSS", "Read --cs- custom properties only")
+}
+
+System_Ext(browser, "Browser platform", "SVG rendering, cascade, and accessibility tree")
+
+Rel(vm, list, "Supplies ordered movements to", "input()")
+Rel(vm, dial, "Supplies the segment and completed counts to", "input()")
+Rel(vm, strip, "Supplies the count and current position to", "input()")
+Rel(adapter, dial, "Supplies every visible label to", "input()")
+Rel(adapter, list, "Supplies every visible label to", "input()")
+Rel(adapter, strip, "Supplies the configured label set to", "input()")
+Rel(dial, ring, "Delegates arc rendering and value semantics to")
+Rel(list, strip, "Renders per-movement pips through")
+Rel(list, handler, "Emits MovementActivation to", "output()")
+Rel(dial, styles, "Renders through")
+Rel(strip, styles, "Renders through")
+Rel(styles, browser, "Is resolved by")
+Rel(ring, browser, "Renders role=progressbar to")
+Rel(user, browser, "Activates a movement in")
+@enduml

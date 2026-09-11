@@ -1,0 +1,56 @@
+{
+  "kind": "class",
+  "name": "ProgressMatrixComponent",
+  "sourcePath": "src/cornerstone/progress-matrix/progress-matrix.component.ts",
+  "category": "data-display",
+  "description": "Progress Matrix public API.",
+  "members": [
+    {
+      "name": "rowLabel",
+      "bindingName": "rowLabel",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Name'",
+      "description": "Row Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "columns",
+      "bindingName": "columns",
+      "role": "input",
+      "type": "readonly string[]",
+      "required": true,
+      "description": "Columns public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "rows",
+      "bindingName": "rows",
+      "role": "input",
+      "type": "readonly { label: string; cells: readonly MatrixCellState[] }[]",
+      "required": true,
+      "description": "Rows public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-progress-matrix",
+  "slug": "progress-matrix",
+  "label": "Progress Matrix",
+  "tokens": [],
+  "relatedSymbols": ["MatrixCellState"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "MatrixCellState",
+      "sourcePath": "src/cornerstone/progress-matrix/matrix-cell-state.type.ts",
+      "category": "data-display",
+      "description": "Matrix Cell State public API.",
+      "declaration": "'complete' | 'in-progress' | 'empty' | 'not-applicable'"
+    }
+  ]
+}

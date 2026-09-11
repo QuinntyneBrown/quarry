@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Open the navigation drawer on a narrow viewport
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Angular Router" as router
+end box
+box "Frontend — Cornerstone shell" #D1FADF
+  participant "TopbarComponent" as topbar
+  participant "ShellComponent" as shell
+  participant "SidenavComponent" as sidenav
+  participant "BottomNavComponent" as bottom
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as bp
+  participant "FocusTrap" as trap
+end box
+box "Browser — platform" #FFF4E5
+  participant "Viewport, focus, and DOM" as dom
+end box
+
+dom -> bp : Viewport narrows below the shell breakpoint
+bp --> shell : Narrow viewport
+shell -> shell : Re-resolve mode to 'over' per L2-064
+shell -> sidenav : Switch to the drawer presentation
+shell -> topbar : Show the mobile menu trigger per L2-065
+shell -> bottom : Show primary destinations with safe-area padding per L2-067
+
+user -> topbar : Activate the mobile menu trigger
+topbar -> shell : Emit menuToggled
+shell -> dom : Read the currently focused element
+dom --> shell : Menu trigger element
+shell -> shell : Store the focus restore target
+shell -> shell : Set sidenavOpen to true
+shell -> dom : Activate the scrim over the page per L2-064
+shell -> trap : Create a focus trap on the drawer
+trap -> dom : Move focus to the first drawer control
+dom --> user : Modal drawer with trapped focus
+
+alt Destination activated
+  user -> sidenav : Activate a navigation item
+  sidenav -> router : Navigate through the routerLink binding per L2-076
+  sidenav -> shell : Emit itemActivated
+  shell -> shell : Set sidenavOpen to false
+else Scrim or Escape dismisses the drawer
+  user -> shell : Activate the scrim or press Escape
+  shell -> shell : Set sidenavOpen to false
+end
+
+shell -> trap : Release the focus trap
+shell -> dom : Deactivate the scrim
+shell -> dom : Return focus to the stored restore target per L2-064
+dom --> user : Focus back on the menu trigger
+@enduml

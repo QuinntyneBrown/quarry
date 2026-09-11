@@ -1,0 +1,163 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Report and audit
+
+enum ReportView {
+  overview
+  youth
+  cohort
+  staff
+}
+
+enum PanelState {
+  loading
+  ready
+  empty
+  error
+}
+
+interface ReportFilterState {
+  +fromDate: string | null
+  +toDate: string | null
+  +cohortIds: string[]
+  +trackIds: string[]
+  +mentorIds: string[]
+}
+
+interface CsReportFilterOptions {
+  +cohorts: CsFilterOption[]
+  +tracks: CsFilterOption[]
+  +mentors: CsFilterOption[]
+}
+
+interface CsFilterOption {
+  +id: string
+  +label: string
+}
+
+interface CsKpiPanel {
+  +label: string
+  +value: string
+  +periodLabel: string
+}
+
+interface CsRingPanel {
+  +label: string
+  +completed: number
+  +total: number
+  +dataAlternative: string
+}
+
+interface CsBarPanel {
+  +label: string
+  +series: CsBarDatum[]
+  +dataAlternative: string
+}
+
+interface CsBarDatum {
+  +label: string
+  +value: number
+}
+
+interface ReportViewModel {
+  +kpis: CsKpiPanel[]
+  +rings: CsRingPanel[]
+  +bars: CsBarPanel[]
+  +filterSummary: string
+  +recordCount: number
+}
+
+interface ReportExportIntent {
+  +filters: ReportFilterState
+  +view: ReportView
+}
+
+interface CsAuditFilterState {
+  +fromDate: string | null
+  +toDate: string | null
+  +actorIds: string[]
+  +actionTypes: string[]
+}
+
+interface AuditDetailField {
+  +label: string
+  +value: string
+}
+
+interface AuditEvent {
+  +eventId: string
+  +action: string
+  +actorName: string
+  +sourceLabel: string
+  +targetLabel: string
+  +occurredAt: string
+  +timezone: string
+  +isPrivate: boolean
+  +detail: AuditDetailField[]
+}
+
+interface CsPageState {
+  +pageIndex: number
+  +pageSize: number
+  +totalCount: number
+}
+
+class ReportFiltersComponent {
+  +options: InputSignal<CsReportFilterOptions>
+  +filters: ModelSignal<ReportFilterState>
+  +filtersChanged: OutputEmitterRef<ReportFilterState>
+  +filtersCleared: OutputEmitterRef<void>
+  -emitDebounced(state: ReportFilterState): void
+}
+
+class ReportDashboardComponent {
+  +report: InputSignal<ReportViewModel>
+  +view: ModelSignal<ReportView>
+  +state: InputSignal<PanelState>
+  +exportRequested: OutputEmitterRef<ReportExportIntent>
+  +viewChanged: OutputEmitterRef<ReportView>
+  -announceApplied(summary: string, count: number): void
+}
+
+class AuditLogComponent {
+  +events: InputSignal<AuditEvent[]>
+  +filters: ModelSignal<CsAuditFilterState>
+  +page: ModelSignal<CsPageState>
+  +state: InputSignal<PanelState>
+  +pageChanged: OutputEmitterRef<CsPageState>
+  +filtersChanged: OutputEmitterRef<CsAuditFilterState>
+  +filtersCleared: OutputEmitterRef<void>
+  +detailToggled: OutputEmitterRef<string>
+  -formatTimestamp(value: string, timezone: string): string
+}
+
+ReportFiltersComponent --> "1" CsReportFilterOptions : reads
+CsReportFilterOptions o-- "0..*" CsFilterOption : lists
+ReportFiltersComponent --> "1" ReportFilterState : holds
+ReportFiltersComponent ..> ReportDashboardComponent : supplies the filter state to
+ReportFiltersComponent ..> AuditLogComponent : supplies the filter state to
+ReportDashboardComponent --> "1" ReportViewModel : reads
+ReportViewModel o-- "0..*" CsKpiPanel : composes
+ReportViewModel o-- "0..*" CsRingPanel : composes
+ReportViewModel o-- "0..*" CsBarPanel : composes
+CsBarPanel o-- "1..*" CsBarDatum : plots
+ReportDashboardComponent --> "1" ReportView : presents
+ReportDashboardComponent --> "1" PanelState : reports
+ReportDashboardComponent ..> ReportExportIntent : emits
+AuditLogComponent --> "0..*" AuditEvent : renders
+AuditEvent o-- "0..*" AuditDetailField : renders only the supplied fields
+AuditLogComponent --> "1" CsAuditFilterState : holds
+AuditLogComponent --> "1" CsPageState : pages
+AuditLogComponent --> "1" PanelState : reports
+@enduml

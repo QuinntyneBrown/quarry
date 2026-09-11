@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Frame the application shell
+
+Person(dev, "Application developer", "Composes Liturgy and Word Up authenticated screens from the shell")
+Person(user, "Application user", "Reaches application areas through the navigation chrome")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the shell, top bar, sidenav, and bottom navigation")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning routes and authorization")
+System_Ext(cdk, "Angular CDK", "Focus trap, focus monitor, and breakpoint observation")
+System_Ext(browser, "Browser platform", "Reports viewport width and holds the focused element")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the authenticated frame from")
+Rel(dev, app, "Declares navigation configuration and routes in")
+Rel(app, cornerstone, "Renders routed pages inside the shell of")
+Rel(app, cornerstone, "Supplies navigation groups and the active role set to")
+Rel(cornerstone, cdk, "Traps focus and observes breakpoints with")
+Rel(cornerstone, browser, "Renders the shell and moves focus in")
+Rel(browser, user, "Presents the navigation chrome to")
+Rel(user, browser, "Activates navigation controls in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

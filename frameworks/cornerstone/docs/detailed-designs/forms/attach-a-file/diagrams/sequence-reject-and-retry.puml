@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Reject and retry a file
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone file components" #D1FADF
+  participant "FilePickerComponent" as picker
+  participant "Accept and size validator" as validator
+  participant "FileSummaryComponent" as summary
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "File input" as dom
+  participant "Assistive technology" as at
+end box
+
+user -> dom : Select a roster file above the maximum size
+dom -> picker : change with the selected file
+picker -> validator : validate(file, accept, maxSizeBytes)
+validator --> picker : Rejection naming the file and the reason
+
+picker -> summary : Render the entry in the rejected state
+picker -> announcer : Announce the rejection assertively per L2-058
+announcer -> at : Assertive announcement naming the file and the reason
+picker --> page : No upload intent emitted for the rejected file per L2-058
+
+user -> dom : Select a valid file
+dom -> picker : change with the selected file
+picker -> validator : validate(file, accept, maxSizeBytes)
+validator --> picker : Accepted
+picker -> page : uploadRequested(intent)
+page -> services : Transfer the file
+services --> page : Transfer failed
+page -> picker : Set the upload status to failed
+
+picker -> summary : Render the failed state with the retry action per L2-058
+user -> summary : Activate retry
+summary -> picker : retryRequested(id)
+picker -> page : retryRequested(intent) for that file only per L2-058
+page -> services : Transfer the file again
+services --> page : Transfer complete
+page -> picker : Mark the entry uploaded
+
+opt Rejected entry removed
+  user -> summary : Activate remove
+  summary -> picker : removeRequested(id)
+  picker -> dom : Revoke the entry's object URL per L2-058
+  picker --> page : Remaining queue unchanged
+end
+
+picker --> user : Queue reflects one uploaded entry and no rejected entry
+@enduml

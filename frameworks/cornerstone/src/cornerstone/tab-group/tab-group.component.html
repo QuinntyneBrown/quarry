@@ -1,0 +1,20 @@
+<div role="tablist" tabindex="-1" (keydown)="keydown($event)">
+  @for (tab of tabs(); track tab; let i = $index) {
+    <button
+      type="button"
+      role="tab"
+      [attr.aria-selected]="selectedIndex() === i"
+      [tabIndex]="selectedIndex() === i ? 0 : -1"
+      [disabled]="tab.disabled()"
+      (click)="select(i)"
+    >
+      {{ tab.label() }}
+      @if (tab.badge()) {
+        <small>{{ tab.badge() }}</small>
+      }
+    </button>
+  }
+</div>
+@if (activeTab(); as tab) {
+  <div role="tabpanel"><ng-container [ngTemplateOutlet]="tab.content()" /></div>
+}

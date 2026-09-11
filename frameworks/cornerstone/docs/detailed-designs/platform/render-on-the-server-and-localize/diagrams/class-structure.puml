@@ -1,0 +1,100 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Render on the server and localize
+
+class CsPlatformGuards <<functions>> {
+  +csIsBrowser(): boolean
+  +csOnBrowser(callback: () => void): void
+}
+
+class CsServerDefaults {
+  +theme: CsThemeName
+  +viewportClass: CsViewportClass
+  +direction: CsDirection
+}
+
+enum CsDirection {
+  ltr
+  rtl
+}
+
+interface CsLocalization {
+  +field: CsFieldStrings
+  +validation: CsValidationStrings
+  +pagination: CsPaginationStrings
+  +dialog: CsDialogStrings
+  +feedback: CsFeedbackStrings
+  +table: CsTableStrings
+  +filePicker: CsFilePickerStrings
+  +dragDrop: CsDragDropStrings
+  +iconLabels: CsIconLabelStrings
+}
+
+class CsEnglishLocalization <<constant>> {
+  +{static} defaults: CsLocalization
+}
+
+class ProvideCsLocalization <<function>> {
+  +provideCsLocalization(overrides: DeepPartial<CsLocalization>): EnvironmentProviders
+}
+
+class CsLocalizationService {
+  +resolve(key: CsLocalizationKey): string
+  +interpolate(key: CsLocalizationKey, params: Record<string, unknown>): string
+  +plural(key: CsLocalizationKey, count: number): string
+}
+
+class CsDirectionService {
+  +dir: Signal<CsDirection>
+  +isRtl: Signal<boolean>
+  +resolveArrow(key: string): CsMoveDirection
+}
+
+enum CsMoveDirection {
+  towardStart
+  towardEnd
+}
+
+class CsFormatService {
+  +date(value: Date | string, format: string): string
+  +number(value: number, digits?: string): string
+  +currency(value: number, code: string): string
+  +relative(value: Date | string): string
+  +isoValue(value: Date | string): string
+}
+
+class CsSsrHarness {
+  +renderOnServer(component: Type<unknown>): Promise<string>
+  +hydrate(html: string): Promise<ComponentFixture<unknown>>
+  +assertNoBrowserGlobalAccess(): void
+  +assertNoHydrationMismatch(): void
+}
+
+class CsIdService {
+  +next(prefix: string): string
+}
+
+CsEnglishLocalization ..|> CsLocalization
+ProvideCsLocalization ..> CsLocalization : merges over the defaults of
+ProvideCsLocalization ..> CsEnglishLocalization : falls back to
+CsLocalizationService --> CsLocalization : resolves from
+CsFormatService ..> CsLocalizationService : selects plural forms through
+CsDirectionService --> CsDirection : reports
+CsDirectionService --> CsMoveDirection : resolves arrows to
+CsServerDefaults --> CsDirection : declares
+CsPlatformGuards ..> CsServerDefaults : selects
+CsIdService ..> CsPlatformGuards : generates without a browser global through
+CsSsrHarness ..> CsPlatformGuards : asserts every browser read passes through
+CsSsrHarness ..> CsIdService : asserts identifier parity across passes of
+@enduml

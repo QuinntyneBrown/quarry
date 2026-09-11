@@ -1,0 +1,51 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Submit and review work
+
+Person(youth, "Youth participant", "Submits work")
+Person(mentor, "Mentor", "Records an assessment")
+
+Container_Boundary(page, "Consuming application — feature page and services") {
+  Component(submissions, "Submission service", "Angular injectable", "Owns submission lifecycle, uploads, versions, and persistence")
+  Component(grading, "Assessment service", "Angular injectable", "Owns rubric scoring, approval rules, and authorization")
+  Component(awards, "Achievement service", "Angular injectable", "Owns award criteria and badge state")
+  Component(vmbuilder, "Work view model builder", "Application code", "Projects domain records into the assignment, submission, assessment, and achievement view models")
+  Component(handler, "Intent handler", "Application code", "Receives AssignmentAction, CsSubmissionAction, AssessmentDecision, and AchievementSelect")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(card, "AssignmentCardComponent", "Standalone component", "Renders due date, status, metadata, instructions, and actions")
+  Component(status, "SubmissionStatusComponent", "Standalone component", "Renders submission state, evidence, feedback, and version history")
+  Component(rubric, "RubricComponent", "Standalone component", "Renders criteria, levels, and scores in read-only and editing modes")
+  Component(editor, "AssessmentEditorComponent", "Standalone component", "Composes the rubric with a comment field and the decision actions")
+  Component(badge, "AchievementCardComponent", "Standalone component", "Renders one earned or locked badge with criteria, award date, and progress")
+  Component(collection, "BadgeCollectionComponent", "Standalone component", "Renders achievements in a grid or list layout")
+  Component(types, "Work view model and intent types", "TypeScript types", "AssignmentView, SubmissionView, RubricView, AssessmentDecision, AchievementView")
+}
+
+System_Ext(cdk, "Angular CDK", "Table, focus, and layout observer primitives")
+
+Rel(submissions, vmbuilder, "Supplies assignment and submission records to")
+Rel(grading, vmbuilder, "Supplies rubric and assessment records to")
+Rel(awards, vmbuilder, "Supplies achievement records to")
+Rel(vmbuilder, card, "Supplies the assignment view model to", "AssignmentView input")
+Rel(vmbuilder, status, "Supplies the submission view model to", "SubmissionView input")
+Rel(vmbuilder, editor, "Supplies the assessment view model to", "AssessmentView input")
+Rel(vmbuilder, collection, "Supplies the achievement list to", "AchievementView[] input")
+Rel(editor, rubric, "Passes the rubric and the current selection to", "RubricView input")
+Rel(rubric, editor, "Reports the selected level to", "RubricLevelSelect output")
+Rel(collection, badge, "Passes one achievement to", "AchievementView input")
+Rel(card, handler, "Emits the assignment action to", "AssignmentAction output")
+Rel(status, handler, "Emits the submission and version intents to", "outputs")
+Rel(editor, handler, "Emits the assessment decision to", "AssessmentDecision output")
+Rel(badge, handler, "Emits the achievement intent to", "AchievementSelect output")
+Rel(handler, submissions, "Calls to submit and resubmit")
+Rel(handler, grading, "Calls to record the decision")
+Rel(handler, awards, "Calls to open the badge detail")
+Rel(card, types, "Declares its input and output shapes in")
+Rel(editor, types, "Declares its input and output shapes in")
+Rel(rubric, cdk, "Manages grid focus with")
+Rel(youth, card, "Selects an action in")
+Rel(mentor, rubric, "Selects a level in")
+@enduml

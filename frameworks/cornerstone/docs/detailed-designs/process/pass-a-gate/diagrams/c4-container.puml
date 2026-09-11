@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Pass a gate
+
+Person(user, "Application user", "Satisfies requirements and requests advancement")
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the requirement list, the enforcement result, and the process adapter")
+  Container(services, "Application services", "Angular injectables", "Evaluate the workflow rule, persist toggles, and authorize advancement")
+  Container(shell, "Application shell", "Angular components", "Hosts the page and the theme class")
+}
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "GateComponent, RequirementChecklistComponent, and the Cornerstone checkbox")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Resolves gate and requirement state colour")
+  Container(docs, "Documentation site", "Angular application", "Publishes gate examples driven by a neutral adapter")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and focus utilities")
+System_Ext(browser, "Browser platform", "Cascade, layout, and accessibility tree")
+
+Rel(user, shell, "Toggles requirements in")
+Rel(shell, page, "Renders")
+Rel(services, page, "Supply the enforcement result and persisted requirement states to")
+Rel(page, lib, "Binds requirements, the enforcement result, and the adapter to", "signal inputs")
+Rel(lib, page, "Emits GateAdvanceIntent and CsRequirementToggleIntent to", "output()")
+Rel(page, services, "Resolves intents into persistence and enforcement through")
+Rel(lib, theme, "Resolves state colour from")
+Rel(lib, cdk, "Announces open and error transitions through")
+Rel(lib, browser, "Renders status text and aria-disabled state to")
+Rel(docs, lib, "Documents the neutral defaults of")
+@enduml

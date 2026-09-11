@@ -1,0 +1,16 @@
+<dialog
+  #dialog
+  [attr.aria-labelledby]="headingId"
+  (cancel)="dismiss($event)"
+  (close)="nativeClosed()"
+>
+  <div [cdkTrapFocus]="open()">
+    <header class="dialog-heading">
+      <h2 [id]="headingId">{{ title() }}</h2>
+      <button csButton="ghost" type="button" [attr.aria-label]="closeLabel()" (click)="dismiss()">
+        ✕
+      </button>
+    </header>
+    <ng-content />
+  </div>
+</dialog>

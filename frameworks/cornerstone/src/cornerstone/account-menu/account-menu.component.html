@@ -1,0 +1,14 @@
+<button type="button" [attr.aria-expanded]="open()" (click)="open.update((v) => !v)">
+  <cs-avatar [name]="account().displayName" [src]="account().avatarSrc ?? null" />{{
+    account().displayName
+  }}
+</button>
+@if (open()) {
+  <div role="menu">
+    @for (action of actions(); track action.id) {
+      <button role="menuitem" type="button" [class.danger]="action.danger" (click)="select(action)">
+        {{ action.label }}
+      </button>
+    }
+  </div>
+}

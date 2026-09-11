@@ -1,0 +1,7 @@
+<div
+  [hidden]="!open()"
+  [attr.role]="trapFocus() ? 'dialog' : 'group'"
+  [attr.aria-label]="ariaLabel()"
+>
+  <ng-content />
+</div>

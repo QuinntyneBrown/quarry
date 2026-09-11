@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Operate without a mouse
+
+Person(user, "Application user", "Operates screens by keyboard, switch device, screen reader, or magnifier")
+Person(dev, "Application developer", "Composes screens and supplies accessible names through inputs")
+
+System(cornerstone, "Cornerstone", "Angular UI library publishing roles, names, states, and announcements for every component")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Focus trap, focus monitor, key managers, and live announcer primitives")
+System_Ext(browser, "Browser platform", "Computes the accessibility tree and dispatches keyboard events")
+System_Ext(at, "Assistive technology", "Screen reader or switch device reading the accessibility tree")
+
+Rel(user, browser, "Presses keys and reads output through")
+Rel(browser, at, "Exposes the accessibility tree to")
+Rel(at, user, "Announces role, name, state, and status to")
+Rel(dev, app, "Supplies labels and content in")
+Rel(app, cornerstone, "Renders components from")
+Rel(cornerstone, cdk, "Traps focus, moves the active item, and announces through")
+Rel(cornerstone, browser, "Publishes roles, names, states, and live regions to")
+Rel(browser, cornerstone, "Dispatches keyboard events to")
+@enduml

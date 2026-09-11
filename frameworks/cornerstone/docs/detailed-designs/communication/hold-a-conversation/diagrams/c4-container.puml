@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Hold a conversation
+
+Person(mentor, "Mentor", "Holds conversations with assigned youth")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides the message thread, composer, conversation list, and conversation item")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the messaging surfaces resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes thread, composer, and master-detail examples")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular route component", "Places the conversation list, thread, and composer on the messaging screen")
+  Container(services, "Application services", "Angular injectables", "Builds message and conversation view models, delivers messages, and holds the offline queue")
+}
+
+System_Ext(cdk, "Angular CDK", "Text autosizing, scrolling, focus, and layout observation")
+System_Ext(browser, "Browser platform", "Scroll position, focus, and live regions")
+
+Rel(mentor, shell, "Opens the messaging screen in")
+Rel(shell, page, "Routes to")
+Rel(page, lib, "Binds message and conversation view models into")
+Rel(lib, services, "Emits send, retry, history, and selection intents to")
+Rel(services, page, "Supplies the refreshed view models to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Uses for autosize, virtual scroll, and breakpoint observation")
+Rel(lib, browser, "Reads scroll offsets and announces through", "aria-live polite")
+Rel(docs, lib, "Documents variants of")
+@enduml

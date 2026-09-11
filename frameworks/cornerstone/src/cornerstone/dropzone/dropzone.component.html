@@ -1,0 +1,8 @@
+<div (dragover)="$event.preventDefault()" (drop)="drop($event)">
+  <cs-file-picker
+    [multiple]="multiple()"
+    [accept]="accept()"
+    (filesSelected)="filesSelected.emit($event)"
+    ><ng-content
+  /></cs-file-picker>
+</div>

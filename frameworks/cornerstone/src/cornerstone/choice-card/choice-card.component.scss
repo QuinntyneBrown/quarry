@@ -1,0 +1,13 @@
+button {
+  inline-size: 100%;
+  min-block-size: 88px;
+  border: 2px solid var(--cs-border);
+  border-radius: var(--cs-radius-md);
+  padding: var(--cs-space-4);
+  background: var(--cs-paper);
+  text-align: start;
+}
+button[aria-pressed='true'] {
+  border-color: var(--cs-ink);
+  background: color-mix(in srgb, var(--cs-lime) 20%, var(--cs-paper));
+}

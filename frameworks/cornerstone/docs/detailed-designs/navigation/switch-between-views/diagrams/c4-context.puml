@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Switch between views
+
+Person(dev, "Application developer", "Divides page content across tabs, segments, sections, and pages")
+Person(user, "Application user", "Moves between divisions with a pointer or the keyboard")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the tab group, segmented control, accordion, and paginator")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning content and data fetching")
+System_Ext(cdk, "Angular CDK", "Roving focus management, overlay, and layout observation")
+System_Ext(browser, "Browser platform", "Renders panels, moves focus, and announces live regions")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes in-page view switches from")
+Rel(dev, app, "Declares the content of each division in")
+Rel(app, cornerstone, "Supplies tabs, options, sections, and totals to")
+Rel(cornerstone, app, "Reports selection and page changes to")
+Rel(cornerstone, cdk, "Manages roving focus and overflow with")
+Rel(cornerstone, browser, "Renders divisions and announcements in")
+Rel(browser, user, "Presents the selected division to")
+Rel(user, browser, "Selects a division in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

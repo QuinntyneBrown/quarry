@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Copy an example source
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Documentation site" #E0F2FE
+  participant "CsDocsPageComponent" as page
+end box
+box "Frontend — Cornerstone documentation components" #D1FADF
+  participant "CsDocsExampleComponent" as example
+  participant "CsDocsSourceViewerComponent" as viewer
+  participant "CsDocsExampleRegistry" as registry
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Documentation styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Clipboard and selection" as browser
+end box
+
+dev -> example : Switch the example to the source view
+example -> registry : Read the source text of the example
+registry --> example : Full source of the rendered component per L2-151
+example -> viewer : Show the source with the copy action
+viewer -> styles : Resolve code presentation from tokens
+styles --> viewer : Monospace scale and surface
+viewer --> dev : Source with a labelled copy button
+
+dev -> viewer : Activate the copy action
+viewer -> browser : Write the source to the clipboard
+alt Clipboard write succeeds
+  browser --> viewer : Resolved
+  viewer -> example : Report the copied source
+  example -> page : Emit copied per L2-151
+  viewer --> dev : Confirmation announced in a live region
+else Clipboard write refused
+  browser --> viewer : Rejected
+  viewer -> browser : Select the source text range
+  browser --> viewer : Selection applied
+  viewer --> dev : Selected source and a keyboard copy hint
+end
+
+dev -> example : Return to the preview view
+example -> example : Reuse the instantiated example component
+example --> dev : Preview matching the copied source per L2-151
+@enduml

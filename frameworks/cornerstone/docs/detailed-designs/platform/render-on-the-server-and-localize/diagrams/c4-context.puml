@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Render on the server and localize
+
+Person(dev, "Application developer", "Configures the locale and supplies a translated token set")
+Person(user, "Application user", "Reads the public site in a chosen language and writing direction")
+
+System(cornerstone, "Cornerstone", "Angular UI library rendering on the server and resolving every default string from an injectable token set")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application with server-side rendering enabled")
+System_Ext(server, "Node server renderer", "Produces server HTML before any browser global exists")
+System_Ext(cdk, "Angular CDK", "Directionality and overlay primitives")
+System_Ext(browser, "Browser platform", "Hydrates the server HTML and applies locale formatting")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Provides the locale and the localization token set in")
+Rel(app, cornerstone, "Renders components from")
+Rel(app, server, "Server-renders its routes through")
+Rel(server, cornerstone, "Executes the server pass of")
+Rel(cornerstone, cdk, "Reads the ambient text direction from")
+Rel(cornerstone, browser, "Hydrates against the server HTML in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(server, browser, "Sends complete HTML to")
+Rel(browser, user, "Presents localized, mirrored screens to")
+@enduml

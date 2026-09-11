@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "AccordionComponent",
+  "sourcePath": "src/cornerstone/accordion/accordion.component.ts",
+  "category": "navigation",
+  "description": "Accordion public API.",
+  "members": [
+    {
+      "name": "multiple",
+      "bindingName": "multiple",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Multiple public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-accordion",
+  "slug": "accordion",
+  "label": "Accordion",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

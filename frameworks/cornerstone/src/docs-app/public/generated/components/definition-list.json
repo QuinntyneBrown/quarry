@@ -1,0 +1,50 @@
+{
+  "kind": "class",
+  "name": "DefinitionListComponent",
+  "sourcePath": "src/cornerstone/definition-list/definition-list.component.ts",
+  "category": "data-display",
+  "description": "Definition List public API.",
+  "members": [
+    {
+      "name": "items",
+      "bindingName": "items",
+      "role": "input",
+      "type": "readonly DefinitionItem[]",
+      "required": true,
+      "description": "Items public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-definition-list",
+  "slug": "definition-list",
+  "label": "Definition List",
+  "tokens": ["--cs-space-3", "--cs-space-4"],
+  "relatedSymbols": ["DefinitionItem"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "DefinitionItem",
+      "sourcePath": "src/cornerstone/definition-list/definition-item.interface.ts",
+      "category": "data-display",
+      "description": "Definition Item public API.",
+      "members": [
+        {
+          "name": "term",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Term public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Description public API."
+        }
+      ]
+    }
+  ]
+}

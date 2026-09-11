@@ -1,0 +1,135 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Honour the component contract
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+interface CsFieldControl {
+  +id: Signal<string>
+  +describedBy: WritableSignal<string[]>
+  +invalid: Signal<boolean>
+  +disabled: Signal<boolean>
+  +required: Signal<boolean>
+  +focus(): void
+}
+
+abstract class CsControlBase<T> {
+  +value: ModelSignal<T>
+  +disabled: WritableSignal<boolean>
+  +touched: WritableSignal<boolean>
+  +invalid: Signal<boolean>
+  +id: Signal<string>
+  #onChange: (value: T) => void
+  #onTouched: () => void
+  +writeValue(value: T): void
+  +setDisabledState(isDisabled: boolean): void
+  +onBlur(): void
+}
+
+class FieldComponent {
+  +label: InputSignal<string>
+  +hint: InputSignal<string | undefined>
+  +error: InputSignal<string | undefined>
+  +optionalMarker: InputSignal<boolean>
+  +characterCount: InputSignal<number | undefined>
+  -labelId: string
+  -hintId: string
+  -errorId: string
+  -composeDescribedBy(): string[]
+}
+
+class CsIdService {
+  +next(prefix: string): string
+}
+
+class CsInputDirective {
+  +type: InputSignal<CsInputType>
+  +placeholder: InputSignal<string>
+}
+
+class CheckboxComponent {
+  +indeterminate: ModelSignal<boolean>
+  +description: InputSignal<string | undefined>
+}
+
+abstract class CsSlotDirective {
+  #owner: CsSlotHost
+  +ngOnInit(): void
+  +ngOnDestroy(): void
+}
+
+interface CsSlotHost {
+  +registerSlot(name: string): void
+  +releaseSlot(name: string): void
+  +hasSlot(name: string): Signal<boolean>
+}
+
+class CardHeaderDirective {
+  +{static} slotName: string
+}
+
+class PageActionsDirective {
+  +{static} slotName: string
+}
+
+class CardComponent {
+  +tone: InputSignal<CardTone>
+  +raised: InputSignal<boolean>
+  +hasSlot(name: string): Signal<boolean>
+}
+
+class InputTransforms <<functions>> {
+  +csBooleanAttribute(value: unknown): boolean
+  +csNumberAttribute(value: unknown, fallback: number): number
+  +csEnumAttribute<T>(value: unknown, allowed: T[], fallback: T, inputName: string): T
+}
+
+class CsIntent<TKind, TPayload> {
+  +kind: TKind
+  +payload: TPayload
+}
+
+class AttendanceRosterComponent {
+  +viewModel: InputSignal<AttendanceRosterViewModel>
+  +intent: OutputEmitterRef<CsAttendanceIntent>
+}
+
+class AttendanceRosterViewModel <<readonly>> {
+  +sessionId: string
+  +entries: readonly CsRosterEntry[]
+  +unsavedCount: number
+}
+
+CsControlBase ..|> ControlValueAccessor
+CsControlBase ..|> CsFieldControl
+CsInputDirective --|> CsControlBase
+CheckboxComponent --|> CsControlBase
+CsControlBase ..> CsIdService : generates its id from
+FieldComponent ..> CsIdService : generates label, hint, and error ids from
+FieldComponent o-- "1" CsFieldControl : wires
+CardHeaderDirective --|> CsSlotDirective
+PageActionsDirective --|> CsSlotDirective
+CsSlotDirective --> CsSlotHost : registers with
+CardComponent ..|> CsSlotHost
+CardComponent *-- "0..*" CsSlotDirective : projects
+CsInputDirective ..> InputTransforms : coerces inputs with
+CardComponent ..> InputTransforms : coerces inputs with
+AttendanceRosterComponent --> AttendanceRosterViewModel : reads
+AttendanceRosterComponent --> CsIntent : emits
+@enduml

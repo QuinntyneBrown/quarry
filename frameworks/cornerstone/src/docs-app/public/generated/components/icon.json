@@ -1,0 +1,193 @@
+{
+  "kind": "class",
+  "name": "IconComponent",
+  "sourcePath": "src/cornerstone/icon/icon.component.ts",
+  "category": "foundations",
+  "description": "Icon public API.",
+  "members": [
+    {
+      "name": "name",
+      "bindingName": "name",
+      "role": "input",
+      "type": "IconName",
+      "required": true,
+      "description": "Name public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "size",
+      "bindingName": "size",
+      "role": "input",
+      "type": "IconSize",
+      "required": false,
+      "defaultValue": "'medium'",
+      "description": "Size public API.",
+      "structured": false,
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "fill",
+      "bindingName": "fill",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Fill public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-icon",
+  "slug": "icon",
+  "label": "Icon",
+  "tokens": ["--cs-icon-size"],
+  "relatedSymbols": [
+    "IconDefinition",
+    "IconName",
+    "IconRegistry",
+    "ICONS",
+    "IconSet",
+    "IconSize",
+    "provideCsIcons"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "IconDefinition",
+      "sourcePath": "src/cornerstone/icon/icon-definition.interface.ts",
+      "category": "foundations",
+      "description": "Icon Definition public API.",
+      "members": [
+        {
+          "name": "name",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Name public API."
+        },
+        {
+          "name": "viewBox",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "View Box public API."
+        },
+        {
+          "name": "path",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Path public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "IconName",
+      "sourcePath": "src/cornerstone/icon/icon-name.type.ts",
+      "category": "foundations",
+      "description": "Icon Name public API.",
+      "declaration": "string"
+    },
+    {
+      "kind": "class",
+      "name": "IconRegistry",
+      "sourcePath": "src/cornerstone/icon/icon-registry.class.ts",
+      "category": "foundations",
+      "description": "Icon Registry public API.",
+      "members": [
+        {
+          "name": "register",
+          "role": "method",
+          "type": "void",
+          "parameters": [
+            {
+              "name": "icon",
+              "type": "IconDefinition",
+              "optional": false
+            }
+          ],
+          "description": "Register public API."
+        },
+        {
+          "name": "registerSet",
+          "role": "method",
+          "type": "void",
+          "parameters": [
+            {
+              "name": "set",
+              "type": "IconSet",
+              "optional": false
+            }
+          ],
+          "description": "Register Set public API."
+        },
+        {
+          "name": "get",
+          "role": "method",
+          "type": "IconDefinition | undefined",
+          "parameters": [
+            {
+              "name": "name",
+              "type": "string",
+              "optional": false
+            }
+          ],
+          "description": "Get public API."
+        }
+      ]
+    },
+    {
+      "kind": "const",
+      "name": "ICONS",
+      "sourcePath": "src/cornerstone/icon/icons.token.ts",
+      "category": "foundations",
+      "description": "icons.token.ts public API.",
+      "declaration": "unknown"
+    },
+    {
+      "kind": "interface",
+      "name": "IconSet",
+      "sourcePath": "src/cornerstone/icon/icon-set.interface.ts",
+      "category": "foundations",
+      "description": "Icon Set public API.",
+      "members": [
+        {
+          "name": "icons",
+          "role": "property",
+          "type": "readonly IconDefinition[]",
+          "required": true,
+          "description": "Icons public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "IconSize",
+      "sourcePath": "src/cornerstone/icon/icon-size.type.ts",
+      "category": "foundations",
+      "description": "Icon Size public API.",
+      "declaration": "'small' | 'medium' | 'large'"
+    },
+    {
+      "kind": "function",
+      "name": "provideCsIcons",
+      "sourcePath": "src/cornerstone/icon/provide-cs-icons.function.ts",
+      "category": "foundations",
+      "description": "Provide Cs Icons public API."
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — Render a component documentation page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Documentation site" #E0F2FE
+  participant "CsDocsShellComponent" as shell
+  participant "CsDocsPageComponent" as page
+  participant "CsDocsApiService" as api
+end box
+box "Frontend — Cornerstone documentation components" #D1FADF
+  participant "CsDocsExampleComponent" as example
+  participant "CsDocsExampleRegistry" as registry
+  participant "CsDocsVariantGalleryComponent" as gallery
+  participant "CsDocsApiTableComponent" as table
+end box
+box "Frontend — Cornerstone library and styles" #ECFDF3
+  participant "Component library" as lib
+  participant "Theme stylesheet" as theme
+end box
+box "Browser — platform" #FFF4E5
+  participant "Router and fetch" as browser
+end box
+
+dev -> shell : Select a component in the navigation rail
+shell -> browser : Navigate to the component route
+browser -> page : Activate with the symbol name
+page -> api : Request the API entry for the symbol
+api -> browser : Fetch the generated manifest
+browser --> api : api.json
+api --> page : CsDocsApiEntry with selector and members
+
+page -> example : Render the live example section per L2-149
+example -> registry : Resolve the example by identifier
+registry --> example : Component type and source text per L2-151
+example -> lib : Instantiate the example component
+lib -> theme : Resolve --cs- custom properties
+theme --> lib : Light theme values
+lib --> example : Rendered preview
+
+page -> gallery : Render every documented variant per L2-149
+gallery -> lib : Instantiate each variant
+gallery -> theme : Render the matrix under .cs-theme-light and .cs-theme-dark
+theme --> gallery : Both theme resolutions
+gallery --> page : Variant matrix
+
+page -> table : Render inputs, outputs, methods, and tokens per L2-150
+table --> page : Grouped member tables
+page -> page : Project accessibility, responsive, and theming notes per L2-149
+page --> shell : Complete component page
+shell --> dev : Page with example, gallery, reference, and notes
+@enduml

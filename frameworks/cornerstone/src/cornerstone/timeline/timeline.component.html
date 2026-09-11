@@ -1,0 +1,11 @@
+<ol>
+  @for (entry of entries(); track entry.id) {
+    <li>
+      <time [attr.datetime]="entry.date">{{ entry.date }}</time
+      ><strong>{{ entry.title }}</strong>
+      @if (entry.body) {
+        <p>{{ entry.body }}</p>
+      }
+    </li>
+  }
+</ol>

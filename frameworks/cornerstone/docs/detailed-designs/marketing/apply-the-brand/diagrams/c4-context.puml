@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Apply the brand
+
+Person(dev, "Application developer", "Places the brand in the chrome of Liturgy and Word Up")
+Person(user, "Application user", "Sees the organisation and product identity on every screen")
+
+System(cornerstone, "Cornerstone", "Angular UI library carrying the FaithTech and product marks, wordmarks, and lockups")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(browser, "Browser platform", "Renders inline SVG and reports the colour-scheme and forced-colours preferences")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Places cs-brand-lockup in the chrome of")
+Rel(dev, cornerstone, "Provides a further product brand to", "CsBrandAssets token")
+Rel(app, cornerstone, "Renders the mark and lockup from")
+Rel(cornerstone, browser, "Renders the inline SVG in")
+Rel(cornerstone, browser, "Reads the colour-scheme and forced-colours preferences from")
+Rel(browser, user, "Presents the brand to")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

@@ -1,0 +1,11 @@
+<ul>
+  @for (requirement of requirements(); track requirement.id) {
+    <li>
+      <cs-checkbox
+        [indeterminate]="false"
+        (click)="toggled.emit({ requirementId: requirement.id, complete: !requirement.complete })"
+        >{{ requirement.label }}</cs-checkbox
+      >
+    </li>
+  }
+</ul>

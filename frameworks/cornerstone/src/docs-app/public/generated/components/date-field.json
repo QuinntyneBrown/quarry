@@ -1,0 +1,51 @@
+{
+  "kind": "class",
+  "name": "DateFieldComponent",
+  "sourcePath": "src/cornerstone/date-field/date-field.component.ts",
+  "category": "forms",
+  "description": "Date Field public API.",
+  "members": [
+    {
+      "name": "bounds",
+      "bindingName": "bounds",
+      "role": "input",
+      "type": "DateBounds",
+      "required": false,
+      "defaultValue": "{}",
+      "description": "Bounds public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-date-field",
+  "slug": "date-field",
+  "label": "Date Field",
+  "tokens": [],
+  "relatedSymbols": ["DateBounds"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "DateBounds",
+      "sourcePath": "src/cornerstone/date-field/date-bounds.interface.ts",
+      "category": "forms",
+      "description": "Date Bounds public API.",
+      "members": [
+        {
+          "name": "min",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Min public API."
+        },
+        {
+          "name": "max",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Max public API."
+        }
+      ]
+    }
+  ]
+}

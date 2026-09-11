@@ -1,0 +1,12 @@
+footer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--cs-space-6);
+  padding: var(--cs-space-8);
+  background: var(--cs-ink);
+  color: var(--cs-paper);
+}
+section {
+  display: grid;
+  gap: var(--cs-space-2);
+}

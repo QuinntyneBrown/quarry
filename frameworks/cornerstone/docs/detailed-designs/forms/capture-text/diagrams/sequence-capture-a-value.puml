@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Capture a typed value
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+end box
+box "Frontend — Cornerstone text controls" #D1FADF
+  participant "FieldComponent" as field
+  participant "InputGroupComponent" as group
+  participant "CsInputDirective" as input
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "cdkTextareaAutosize" as autosize
+end box
+box "Browser — platform" #FFF4E5
+  participant "Native input element" as native
+end box
+
+page -> field : Bind label, hint, requirement, and maxLength
+field -> field : Generate the control identifier per L2-047
+field -> input : Set the identifier and aria-describedby per L2-047
+field -> native : Point the label 'for' at the control identifier
+input -> native : Preserve the native type and validation per L2-048
+
+page -> group : Project a prefix addon and a trailing action per L2-054
+group -> input : Bound the input and share one focus ring per L2-054
+
+control -> input : registerOnChange(fn)
+control -> input : registerOnTouched(fn)
+control -> input : writeValue('Cohort 12')
+input -> native : Assign the native value
+
+user -> native : Type a character
+native -> input : input event
+input -> control : onChange(nextValue)
+control -> control : Run validators
+input -> field : Report the current length
+field -> field : Update the count and hold the announcement below the threshold per L2-047
+
+opt Autosized textarea
+  input -> autosize : resizeToFitContent per L2-049
+  autosize --> input : Height between minRows and maxRows
+end
+
+user -> native : Blur the control
+native -> input : blur event
+input -> control : onTouched()
+control --> field : Validity and touched state
+field --> user : Label, hint, and count reflect the captured value
+@enduml

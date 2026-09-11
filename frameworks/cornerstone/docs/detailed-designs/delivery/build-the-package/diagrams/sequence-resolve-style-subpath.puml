@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Resolve a stylesheet subpath from the tarball
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Developer workstation" #E0F2FE
+  participant "Consuming application" as app
+  participant "angular.json styles array" as anglejson
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "@quinntyne/cornerstone tarball" as tarball
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Node module resolver" as resolver
+  participant "Sass compiler" as sass
+  participant "Application bundle" as bundle
+end box
+
+dev -> app : Run npm install @quinntyne/cornerstone
+app -> tarball : Request the published version
+tarball --> app : Package contents and built manifest
+dev -> anglejson : Add @quinntyne/cornerstone/styles/theme.scss to the styles array
+anglejson -> resolver : Request the subpath
+
+alt Subpath is declared in the exports map
+  resolver -> tarball : Read the exports entry per L2-003
+  tarball --> resolver : styles/theme.scss inside the tarball
+  resolver --> sass : Resolved file path
+  sass -> sass : Compile the token declarations
+  sass -> bundle : Emit the --cs- custom properties on :root
+  bundle --> dev : Application build carrying the FaithTech tokens
+else Subpath is undeclared
+  resolver --> dev : Fail with ERR_PACKAGE_PATH_NOT_EXPORTED per L2-003
+end
+
+opt Consumer imports a public symbol under strict mode
+  app -> resolver : Resolve the root entry point
+  resolver -> tarball : Read the declaration files
+  tarball --> app : Strict-mode-clean types per L2-004
+  app --> dev : Type error on a wrong input value at compile time
+end
+@enduml

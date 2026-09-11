@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Render phase lanes from an adapter
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+  participant "CsProcessAdapter" as adapter
+end box
+box "Frontend — Cornerstone portfolio components" #D1FADF
+  participant "PhaseLaneComponent" as lane
+  participant "ProjectCardComponent" as card
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Theme stylesheet" as theme
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+services -> adapter : Supply phase names, palette keys, ordering, and enforcement results
+page -> page : Call provideCsProcessAdapter() for the route subtree
+page -> lane : Bind the phase, its projects, and the layout
+lane -> adapter : Read the phase label and the palette key per L2-143
+
+alt The adapter supplies the optional label
+  adapter --> lane : Consumer-supplied label
+else The adapter omits the optional label
+  adapter --> lane : Documented neutral default with no runtime error per L2-143
+end
+
+lane -> dom : Expose the region name with the phase name and project count per L2-141
+lane -> theme : Resolve the token named by the palette key
+theme --> dom : Lane colour resolved from consumer-supplied tokens
+
+lane -> card : Render each project
+card -> adapter : Read the gate label and the state label
+card -> dom : State the project state and metadata in text
+card -> dom : State the gate state in text beside the indicator per L2-141
+
+alt Viewport XS
+  lane -> dom : Stack lanes vertically and render cards full width per L2-141
+else Viewport LG
+  lane -> dom : Lay lanes out in the card, grid, or board layout
+end
+
+user -> dom : Activate a project card
+dom -> card : Click or Enter
+card -> page : Emit ProjectOpenIntent and perform no navigation per L2-141
+page -> services : Resolve the intent into a route change
+services --> page : Project detail route
+page --> user : Project opened by the application
+@enduml

@@ -1,0 +1,5 @@
+{
+  "ts": "import { NgTemplateOutlet } from '@angular/common';\nimport {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  ElementRef,\n  EnvironmentProviders,\n  InjectionToken,\n  Injectable,\n  booleanAttribute,\n  computed,\n  inject,\n  input,\n  makeEnvironmentProviders,\n  output,\n} from '@angular/core';\nimport { CsIdService } from '../core/platform/cs-id.service';\nimport { CsMessageTone } from '../core/platform/cs-message-tone.type';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-button-group',\n  templateUrl: './button-group.component.html',\n  host: { class: 'cs-button-group', role: 'group' },\n  styleUrl: './button-group.component.scss',\n})\nexport class ButtonGroupComponent {\n  readonly mode = input<'related' | 'split'>('related');\n}\n",
+  "html": "<ng-content />\n",
+  "scss": ":host {\n  display: inline-flex;\n  gap: var(--cs-space-2);\n  flex-wrap: wrap;\n}\n"
+}

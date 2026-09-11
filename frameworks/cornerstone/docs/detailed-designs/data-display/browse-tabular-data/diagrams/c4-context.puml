@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Browse tabular data
+
+Person(dev, "Application developer", "Composes directories, rosters, and audit views from the table and toolbar")
+Person(admin, "Administrator", "Searches, filters, sorts, selects, and exports records")
+Person(volunteer, "Volunteer", "Reads a roster on a narrow-screen device")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the table, the reflow, and the data toolbar")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns the query, the sort, and the export file")
+System_Ext(cdk, "Angular CDK", "Layout observation, live announcement, and overlay primitives")
+System_Ext(browser, "Browser platform", "Renders the markup and exposes the table semantics")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes tabular presentations from")
+Rel(dev, app, "Owns the query and the sort in")
+Rel(app, cornerstone, "Passes rows, filters, and a result count to")
+Rel(cornerstone, app, "Emits search, sort, selection, and export intents to")
+Rel(cornerstone, cdk, "Observes breakpoints and announces counts through")
+Rel(cornerstone, browser, "Renders table semantics and the card reflow to")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(browser, admin, "Presents the table to")
+Rel(browser, volunteer, "Presents the reflowed cards to")
+Rel(admin, browser, "Searches, sorts, and selects in")
+@enduml

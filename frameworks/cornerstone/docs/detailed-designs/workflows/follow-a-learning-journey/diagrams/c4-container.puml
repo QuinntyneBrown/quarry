@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Follow a learning journey
+
+Person(youth, "Youth participant", "Follows the journey")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Renders LearningJourneyComponent and LessonStepListComponent from a view model")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the journey styles resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular components", "Binds the journey view model and handles emitted intents")
+  Container(services, "Application services", "Angular injectables", "Own progression rules, prerequisites, persistence, and authorization")
+}
+
+System_Ext(cdk, "Angular CDK", "List key manager and layout observer")
+System_Ext(browser, "Browser platform", "Rendering and media query engine")
+
+Rel(youth, shell, "Opens the journey screen in")
+Rel(shell, page, "Routes to")
+Rel(services, page, "Computes LearningJourneyView for")
+Rel(page, lib, "Binds the journey view model to")
+Rel(lib, page, "Emits LessonStepSelect and ModuleToggle to")
+Rel(page, services, "Forwards intents to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Manages roving focus with")
+Rel(lib, browser, "Renders into")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the public API of")
+@enduml

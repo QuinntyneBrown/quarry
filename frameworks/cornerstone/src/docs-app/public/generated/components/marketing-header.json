@@ -1,0 +1,59 @@
+{
+  "kind": "class",
+  "name": "MarketingHeaderComponent",
+  "sourcePath": "src/cornerstone/marketing-header/marketing-header.component.ts",
+  "category": "navigation",
+  "description": "Marketing Header public API.",
+  "members": [
+    {
+      "name": "links",
+      "bindingName": "links",
+      "role": "input",
+      "type": "readonly CsMarketingLink[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Links public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-marketing-header",
+  "slug": "marketing-header",
+  "label": "Marketing Header",
+  "tokens": ["--cs-space-4", "--cs-space-5"],
+  "relatedSymbols": ["CsMarketingLink", "MarketingCta"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsMarketingLink",
+      "sourcePath": "src/cornerstone/core/navigation/cs-marketing-link.interface.ts",
+      "category": "navigation",
+      "description": "Cs Marketing Link public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "href",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Href public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "MarketingCta",
+      "sourcePath": "src/cornerstone/marketing-header/marketing-cta.interface.ts",
+      "category": "navigation",
+      "description": "Marketing Cta public API.",
+      "members": []
+    }
+  ]
+}

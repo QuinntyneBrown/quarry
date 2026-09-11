@@ -1,0 +1,14 @@
+<h2>{{ view().title }}</h2>
+<cs-badge>{{ view().status }}</cs-badge>
+@for (group of view().groups; track group.id) {
+  <cs-choice-group [label]="group.label">
+    @for (choice of group.choices; track choice.id) {
+      <cs-choice-card
+        [selected]="group.selected === choice.id"
+        (selectedChange)="decision.emit({ groupId: group.id, choiceId: choice.id })"
+        >{{ choice.label }}</cs-choice-card
+      >
+    }
+  </cs-choice-group>
+}
+<button type="button" (click)="revoke.emit({ consentId: view().id })">Revoke</button>

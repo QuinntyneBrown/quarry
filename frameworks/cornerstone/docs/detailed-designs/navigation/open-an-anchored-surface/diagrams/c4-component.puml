@@ -1,0 +1,43 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Open an anchored surface
+
+Person(user, "Application user", "Activates a trigger and selects an action")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(menu, "CsMenuDirective", "Attribute directive", "Owns the overlay lifetime, the open model, and the focus restore target")
+  Component(item, "CsMenuItemDirective", "Attribute directive", "Applies menuitem, checkbox, or radio semantics and the danger tone")
+  Component(popover, "PopoverComponent", "Standalone component", "Anchored panel projecting arbitrary content, optionally focus trapped")
+  Component(account, "AccountMenuComponent", "Standalone component", "Avatar and name trigger over a fixed profile, settings, support, and sign-out set")
+  Component(sep, "Separator element", "Component-scoped template", "Divides the action list with role=separator")
+}
+
+Container_Boundary(appb, "Consuming application") {
+  Component(trigger, "Application trigger", "Angular template", "Button or avatar carrying the csMenu binding")
+  Component(handler, "Action handler", "Angular component or service", "Executes the selected action and ends the session")
+  Component(router, "Angular Router", "Application routing", "Resolves routerLink bindings on route-bearing actions")
+}
+
+Container_Boundary(cdkb, "Angular CDK") {
+  Component(overlay, "Overlay", "CDK service", "Attaches the panel to the overlay container")
+  Component(pos, "FlexibleConnectedPositionStrategy", "CDK strategy", "Applies the preferred position and its fallbacks")
+  Component(keys, "FocusKeyManager", "CDK utility", "Moves focus between enabled items")
+  Component(trap, "FocusTrap", "CDK utility", "Confines focus inside a trapping popover")
+}
+
+Rel(user, trigger, "Activates")
+Rel(trigger, menu, "Opens the surface through")
+Rel(menu, overlay, "Attaches the panel with")
+Rel(overlay, pos, "Places the panel using")
+Rel(menu, keys, "Moves focus between items with")
+Rel(popover, trap, "Confines focus with")
+Rel(account, menu, "Composes its trigger and panel over")
+Rel(account, item, "Renders each action as")
+Rel(account, sep, "Divides sign-out from the rest with")
+Rel(menu, item, "Reads the disabled, danger, and checkable state of")
+Rel(item, handler, "Emits the triggered action to")
+Rel(account, handler, "Emits actionSelected and signOut to")
+Rel(item, router, "Renders anchors resolved by", "routerLink supplied by the application")
+Rel(menu, trigger, "Returns focus to on dismissal")
+@enduml

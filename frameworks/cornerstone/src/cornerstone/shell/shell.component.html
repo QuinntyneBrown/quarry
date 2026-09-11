@@ -1,0 +1,7 @@
+<header><ng-content select="cs-topbar,[csTopbar]" /></header>
+<aside [class.open]="opened()"><ng-content select="cs-sidenav,[csSidenav]" /></aside>
+@if (compact() && opened()) {
+  <button class="scrim" aria-label="Close navigation" (click)="opened.set(false)"></button>
+}
+<main><ng-content /></main>
+<ng-content select="cs-bottom-nav" />

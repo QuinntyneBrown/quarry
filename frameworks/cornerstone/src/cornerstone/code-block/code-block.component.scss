@@ -1,0 +1,11 @@
+:host {
+  position: relative;
+  display: block;
+}
+pre {
+  overflow: auto;
+  padding: var(--cs-space-4);
+  background: var(--cs-ink);
+  color: var(--cs-paper);
+  border-radius: var(--cs-radius-md);
+}

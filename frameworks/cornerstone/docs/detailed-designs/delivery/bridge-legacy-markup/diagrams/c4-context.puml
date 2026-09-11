@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Bridge legacy markup
+
+Person(dev, "Application developer", "Migrates Liturgy or Word Up templates one screen at a time")
+Person(maintainer, "Library maintainer", "Maintains the mapping document and the removal criteria")
+Person(user, "Application user", "Sees screens that render unchanged across the migration")
+
+System(cornerstone, "Cornerstone", "Angular UI library shipping the opt-in compatibility stylesheet and the mapping document")
+System_Ext(liturgy, "Liturgy", "Angular application carrying unprefixed legacy class families")
+System_Ext(wordup, "Word Up", "Angular application carrying the wu- class vocabulary")
+System_Ext(npm, "npm registry", "Distributes the package and its styles export subpaths")
+System_Ext(actions, "GitHub Actions", "Runs the isolation and mapping completeness checks")
+System_Ext(browser, "Browser platform", "Resolves the cascade for legacy and cs- markup alike")
+
+Rel(maintainer, cornerstone, "Maintains the bridge, the mapping, and the criteria in")
+Rel(cornerstone, npm, "Is published to")
+Rel(liturgy, npm, "Installs the package and opts in to the compatibility subpath from")
+Rel(wordup, npm, "Installs the package and opts in to the compatibility subpath from")
+Rel(dev, liturgy, "Moves templates to cs- components in")
+Rel(dev, wordup, "Moves templates to cs- components in")
+Rel(dev, cornerstone, "Reads the migration mapping of")
+Rel(cornerstone, actions, "Is checked for isolation and mapping completeness by")
+Rel(liturgy, browser, "Renders legacy and cs- markup in")
+Rel(wordup, browser, "Renders legacy and cs- markup in")
+Rel(browser, user, "Presents unchanged screens to")
+@enduml

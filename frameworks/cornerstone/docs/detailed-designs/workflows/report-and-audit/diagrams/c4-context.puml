@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Report and audit
+
+Person(admin, "Administrator", "Narrows a reporting period, reads the figures, and inspects the audit trail")
+Person(dev, "Application developer", "Builds the Word Up reporting screens from Cornerstone components")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the report filters, dashboard, and audit log composites")
+System_Ext(app, "Consuming application", "Word Up portal; owns aggregation, authorization, redaction, and export generation")
+System_Ext(cdk, "Angular CDK", "Focus, live announcement, and layout observation primitives")
+System_Ext(browser, "Browser platform", "Renders the dashboard, applies the print stylesheet, and reports input")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(admin, browser, "Filters, reads, exports, and prints reports in")
+Rel(dev, cornerstone, "Composes the reporting screens from")
+Rel(dev, app, "Implements aggregation and redaction in")
+Rel(app, cornerstone, "Supplies the report and audit view models to")
+Rel(cornerstone, app, "Emits typed filter, page, export, and detail intents to")
+Rel(cornerstone, cdk, "Builds behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders only the audit fields it received, omitting redacted fields from the markup")
+@enduml

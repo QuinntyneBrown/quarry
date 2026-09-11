@@ -1,0 +1,36 @@
+{
+  "kind": "class",
+  "name": "BadgeComponent",
+  "sourcePath": "src/cornerstone/badge/badge.component.ts",
+  "category": "foundations",
+  "description": "Badge public API.",
+  "members": [
+    {
+      "name": "tone",
+      "bindingName": "tone",
+      "role": "input",
+      "type": "CsMessageTone",
+      "required": false,
+      "defaultValue": "'neutral'",
+      "description": "Tone public API.",
+      "structured": false,
+      "options": ["neutral", "success", "warning", "error", "info", "lime"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-badge",
+  "slug": "badge",
+  "label": "Badge",
+  "tokens": [],
+  "relatedSymbols": ["CsMessageTone"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsMessageTone",
+      "sourcePath": "src/cornerstone/core/platform/cs-message-tone.type.ts",
+      "category": "platform",
+      "description": "Cs Message Tone public API.",
+      "declaration": "'neutral' | 'success' | 'warning' | 'error' | 'info' | 'lime'"
+    }
+  ]
+}

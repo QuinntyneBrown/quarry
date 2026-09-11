@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Open a modal drawer
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as appsvc
+end box
+box "Frontend — Cornerstone drawer runtime" #D1FADF
+  participant "DrawerService" as service
+  participant "DrawerComponent" as drawer
+  participant "DrawerRef" as ref
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and BlockScroll" as overlay
+  participant "FocusTrap and Directionality" as trap
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and focus" as browser
+end box
+
+user -> page : Activate the filter control
+page -> service : open<CsFilterSelection>({ position: 'end', mode: 'modal' })
+service -> browser : Read document.activeElement
+browser --> service : Trigger element
+service -> trap : Resolve 'end' against the writing direction per L2-104
+trap --> service : Physical edge
+service -> overlay : Attach the panel with a dismissing backdrop
+overlay -> browser : Block page scrolling
+overlay -> drawer : Instantiate at the resolved edge
+drawer -> drawer : Set role dialog and aria-modal true per L2-104
+drawer -> browser : Slide the panel in, honouring reduced motion per L2-008
+drawer -> trap : Create the focus trap around the panel
+trap -> browser : Move focus to the first tabbable element per L2-104
+service --> ref : Return the typed handle
+ref --> page : closed observable of CsFilterSelection
+
+user -> drawer : Scroll the content region
+drawer -> browser : Scroll the content region only, header and footer pinned
+
+user -> drawer : Activate the apply action
+drawer -> ref : close(selection)
+ref -> overlay : Detach the panel and release the scroll block
+trap -> trap : Destroy the trap
+drawer -> browser : Restore focus to the trigger element per L2-104
+ref --> page : Emit CsFilterSelection on closed
+page -> appsvc : Apply the returned selection
+appsvc --> user : Filtered results on the page
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Reject a hand-written mechanic
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library contributor" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Pull request" as pr
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "Component source" as src
+end box
+box "Frontend — Cornerstone verification gate" #ECFDF3
+  participant "cdk-policy lint rules" as lint
+  participant "CDK adapter layer" as adapters
+end box
+box "Browser — platform" #FFF4E5
+  participant "Build runner" as build
+end box
+
+dev -> src : Add a hand-written focus trap to a drawer
+dev -> pr : Open the pull request
+pr -> build : Start the verification run
+build -> lint : Scan the library source per L2-015
+lint -> src : Read imports, listeners, and style mutations
+alt Mechanic comes from an adapter
+  lint -> adapters : Confirm the CDK entry point is imported here only
+  lint --> build : No finding
+  build --> pr : Verification passes
+else Mechanic is hand-written
+  lint -> lint : Match the hand-written focus trap rule
+  lint --> build : Finding with file, rule, and CDK primitive
+  build --> pr : Fail the build and name FocusTrapFactory per L2-015
+  pr --> dev : Replace the trap with CsFocusTrapDirective per L2-012
+end
+@enduml

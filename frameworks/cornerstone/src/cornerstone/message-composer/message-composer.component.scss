@@ -1,0 +1,8 @@
+form {
+  display: flex;
+  align-items: end;
+  gap: var(--cs-space-3);
+}
+textarea {
+  flex: 1;
+}

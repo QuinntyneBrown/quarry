@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Trigger an action
+
+Person(dev, "Application developer", "Binds the action inputs")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(button, "CsButtonDirective", "Angular attribute directive", "Applies appearance, size, block width, and the loading, disabled, and locked states to a native host")
+  Component(iconbutton, "CsIconButtonDirective", "Angular attribute directive", "Square icon-only action with a required label and an optional badge indicator")
+  Component(group, "ButtonGroupComponent", "Angular standalone component", "Projects related or split actions with role=group semantics and safe wrapping")
+  Component(tooltip, "CsTooltipDirective", "Angular attribute directive", "Describes an icon-only action without duplicating its accessible name")
+  Component(icon, "IconComponent", "Angular standalone component", "Renders the leading, trailing, or only icon")
+  Component(assert, "Label assertion", "Development-mode check", "Throws when an icon-only action carries no accessible name")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Action tokens", "CSS custom properties", "Declares appearance colours, size padding, radius, focus ring, and motion duration")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus monitor and overlay positioning")
+System_Ext(browser, "Browser platform", "Activation events and cascade")
+
+Rel(dev, button, "Binds appearance, size, and state on")
+Rel(dev, group, "Wraps related actions in")
+Rel(group, button, "Projects and collapses interior radii of")
+Rel(iconbutton, button, "Extends the state and size contract of")
+Rel(iconbutton, icon, "Renders its glyph through")
+Rel(iconbutton, tooltip, "Integrates its description with")
+Rel(iconbutton, assert, "Is checked by")
+Rel(button, tokens, "Resolves colour, padding, and radius from")
+Rel(button, cdk, "Reads focus origin from")
+Rel(tooltip, cdk, "Positions its panel through", "Overlay")
+Rel(button, browser, "Suppresses activation in the loading and locked states on")
+Rel(tokens, browser, "Is resolved by", "CSS cascade")
+@enduml

@@ -1,0 +1,71 @@
+{
+  "name": "@quinntyne/cornerstone",
+  "version": "0.1.0",
+  "description": "FaithTech's accessible Angular CDK component library.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuinntyneBrown/Cornerstone.git",
+    "directory": "src/cornerstone"
+  },
+  "homepage": "https://github.com/QuinntyneBrown/Cornerstone#readme",
+  "bugs": {
+    "url": "https://github.com/QuinntyneBrown/Cornerstone/issues"
+  },
+  "schematics": "./schematics/collection.json",
+  "ng-update": {
+    "migrations": "./migrations/migration-collection.json",
+    "packageGroup": [
+      "@quinntyne/cornerstone",
+      "@angular/cdk"
+    ]
+  },
+  "keywords": [
+    "angular",
+    "cdk",
+    "faithtech",
+    "design-system",
+    "components"
+  ],
+  "exports": {
+    "./styles/theme": {
+      "sass": "./styles/theme.scss",
+      "default": "./styles/theme.scss"
+    },
+    "./styles/theme.scss": {
+      "sass": "./styles/theme.scss",
+      "default": "./styles/theme.scss"
+    },
+    "./styles/tokens": {
+      "sass": "./styles/tokens.scss",
+      "default": "./styles/tokens.scss"
+    },
+    "./styles/tokens.scss": {
+      "sass": "./styles/tokens.scss",
+      "default": "./styles/tokens.scss"
+    },
+    "./styles/compat": {
+      "sass": "./styles/compat.scss",
+      "default": "./styles/compat.scss"
+    },
+    "./styles/compat.scss": {
+      "sass": "./styles/compat.scss",
+      "default": "./styles/compat.scss"
+    }
+  },
+  "peerDependencies": {
+    "@angular/cdk": ">=21.0.0 <22.0.0",
+    "@angular/common": ">=21.0.0 <22.0.0",
+    "@angular/core": ">=21.0.0 <22.0.0",
+    "@angular/forms": ">=21.0.0 <22.0.0",
+    "@angular/router": ">=21.0.0 <22.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

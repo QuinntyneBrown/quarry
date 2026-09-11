@@ -1,0 +1,10 @@
+<button
+  type="button"
+  role="switch"
+  [attr.aria-checked]="value()"
+  [disabled]="disabled()"
+  (click)="toggle()"
+  (blur)="markTouched()"
+>
+  <span class="track" aria-hidden="true"></span><span class="label"><ng-content /></span>
+</button>

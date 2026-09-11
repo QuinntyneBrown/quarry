@@ -1,0 +1,104 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Build the package
+
+class CsPackageManifest {
+  +name: '@quinntyne/cornerstone'
+  +version: string
+  +description: string
+  +license: string
+  +repository: CsRepositoryRef
+  +homepage: string
+  +bugs: string
+  +keywords: string[]
+  +sideEffects: false
+  +exports: CsExportsMap
+  +peerDependencies: CsPeerContract
+  +dependencies: CsRuntimeDependencies
+}
+
+class CsRepositoryRef {
+  +type: 'git'
+  +url: string
+  +directory: 'src/cornerstone'
+}
+
+class CsExportsMap {
+  +root: CsExportSubpath
+  +styles: CsExportSubpath[]
+  +resolve(specifier: string): string
+}
+
+class CsExportSubpath {
+  +specifier: string
+  +sass: string
+  +types: string
+  +default: string
+  +includedInTarball: boolean
+}
+
+class CsPeerContract {
+  +angularCore: string
+  +angularCommon: string
+  +angularCdk: string
+  +angularForms: string
+  +angularRouter: string
+  +admitsCurrentMajor(): boolean
+}
+
+class CsRuntimeDependencies {
+  +tslib: string
+}
+
+class CsNgPackageConfig {
+  +dest: '../../dist/cornerstone'
+  +entryFile: 'src/public-api.ts'
+  +assets: CsAssetGlob[]
+}
+
+class CsAssetGlob {
+  +glob: string
+  +input: string
+  +output: string
+}
+
+class CsBuiltArtifact {
+  +fesm2022: string[]
+  +declarations: string[]
+  +sourceMaps: string[]
+  +manifest: CsPackageManifest
+  +styleAssets: string[]
+  +containsSourceFiles(): false
+}
+
+interface CsPublicApi {
+  +primitives
+  +forms
+  +disclosure
+  +navigation
+  +overlays
+}
+
+CsPackageManifest *-- CsExportsMap
+CsPackageManifest *-- CsPeerContract
+CsPackageManifest *-- CsRuntimeDependencies
+CsPackageManifest --> CsRepositoryRef
+CsExportsMap "1" *-- "4" CsExportSubpath
+CsNgPackageConfig "1" o-- "2" CsAssetGlob
+CsNgPackageConfig ..> CsPublicApi : compiles
+CsNgPackageConfig ..> CsBuiltArtifact : emits
+CsBuiltArtifact *-- CsPackageManifest
+CsBuiltArtifact ..> CsPublicApi : declares types of
+CsExportSubpath ..> CsBuiltArtifact : resolves within
+@enduml

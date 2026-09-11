@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Label with a badge
+
+Person(user, "Application user", "Reads a status label and toggles a filter pill")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(badge, "BadgeComponent", "Standalone component", "Renders text, dot, count, and locked presentations over nine tones; carries no interactive role")
+  Component(pill, "PillComponent", "Standalone component", "Renders a removable or selectable label and emits removed and selectedChange")
+  Component(list, "ChipListComponent", "Standalone component", "Holds the single tab stop, drives roving focus, and emits the typed list intents")
+  Component(types, "Label types", "TypeScript types", "CsBadgeTone, CsBadgePresentation, ChipRemoveEvent, ChipSelectionChange")
+  Component(styles, "Badge and chip styles", "Component-scoped CSS", "Resolves tone, radius, spacing, and focus ring from --cs- tokens")
+}
+
+Container_Boundary(page, "Consuming feature page") {
+  Component(filter, "Filter panel", "Angular component", "Declares the chip list and applies the reported selection set")
+  Component(row, "Record row", "Angular component", "Declares a status badge beside each record")
+}
+
+System_Ext(cdk, "Angular CDK", "FocusKeyManager")
+System_Ext(browser, "Browser platform", "DOM and accessibility tree")
+
+Rel(user, filter, "Toggles a pill in")
+Rel(filter, list, "Projects pills into")
+Rel(row, badge, "Renders a status label with")
+Rel(list, pill, "Manages the tab index of")
+Rel(list, cdk, "Delegates arrow, Home, and End keys to")
+Rel(pill, list, "Reports remove and toggle intents to")
+Rel(list, filter, "Emits ChipSelectionChange to")
+Rel(badge, types, "Reads tone and presentation unions from")
+Rel(pill, types, "Reads tone and intent shapes from")
+Rel(badge, styles, "Resolves visual values from")
+Rel(pill, styles, "Resolves visual values from")
+Rel(list, browser, "Writes role, aria-label, and tab index to")
+Rel(badge, browser, "Writes aria-hidden and hidden exact-value text to")
+@enduml

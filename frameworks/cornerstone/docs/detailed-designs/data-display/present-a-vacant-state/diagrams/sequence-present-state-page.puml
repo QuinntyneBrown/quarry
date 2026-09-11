@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — Present a state page
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application shell" as shell
+  participant "State route" as route
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone state-page runtime" #D1FADF
+  participant "StatePageComponent" as statepage
+  participant "EmptyStateComponent" as empty
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusMonitor" as focus
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+user -> shell : Request a record the account cannot read
+shell -> services : Resolve the route
+services --> shell : Authorization denied
+shell -> route : Activate the state route
+route -> statepage : Bind condition 'forbidden' per L2-087
+statepage -> statepage : Resolve the default icon, tone, and actions
+statepage -> empty : Render the full-page variant per L2-086
+empty -> dom : Render icon, title, description, and actions
+statepage -> focus : Move focus to the page heading
+focus -> dom : Set focus on the heading element
+dom --> user : Explanation and recovery actions
+
+user -> statepage : Activate the recovery action
+statepage -> route : Emit CsStatePageAction { id, condition }
+route -> services : Perform the navigation the identifier names
+services --> shell : Navigate to the permitted route
+
+opt Connection is lost while the page is open
+  services -> route : Report the offline condition
+  route -> statepage : Bind condition 'offline' per L2-087
+  statepage -> dom : Replace the copy and the action set
+end
+@enduml

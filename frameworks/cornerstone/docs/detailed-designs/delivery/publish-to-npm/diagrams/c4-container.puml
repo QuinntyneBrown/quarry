@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Publish to npm
+
+Person(maintainer, "Library maintainer", "Pushes to main and reads the job summary")
+
+System_Boundary(cornerstone, "Cornerstone workspace") {
+  Container(lib, "cornerstone library", "Angular library", "Source of the published @quinntyne/cornerstone artifact")
+  Container(artifact, "dist/cornerstone", "Angular Package Format output", "The tarball the run packs and publishes")
+  Container(docs, "design-system docs app", "Angular application", "Documents the released surface")
+  Container(site, "marketing site", "Angular application", "Consumes the released version")
+  Container(changelog, "CHANGELOG.md", "Markdown", "One section per released version, grouped by commit type")
+  Container(guide, "CONTRIBUTING.md", "Markdown", "Documents each conventional commit type and its version bump")
+}
+
+System_Boundary(ci, "GitHub Actions") {
+  Container(verify, "CI workflow", ".github/workflows/ci.yml", "Runs npm ci, npm test, npm run build, npm run format:check, and the commit-lint job")
+  Container(release, "Release workflow", ".github/workflows/release.yml", "Derives, probes, publishes, tags, verifies, and summarizes under the release-main concurrency group")
+}
+
+System_Ext(github, "GitHub repository", "Holds main, the tags, and the GitHub releases")
+System_Ext(npm, "npm registry", "Serves the latest and next distribution tags")
+System_Ext(probe, "Clean Angular application", "Post-publish smoke test installed from the registry")
+
+Rel(maintainer, github, "Pushes a conventional commit to")
+Rel(github, verify, "Triggers")
+Rel(github, release, "Triggers on a push to main")
+Rel(verify, release, "Gates")
+Rel(lib, artifact, "Is built into")
+Rel(release, artifact, "Packs and publishes")
+Rel(release, npm, "Publishes the derived version to")
+Rel(release, changelog, "Prepends the released section to")
+Rel(release, github, "Creates the annotated tag and the GitHub release in")
+Rel(release, probe, "Installs the published version into")
+Rel(probe, npm, "Resolves @quinntyne/cornerstone from")
+Rel(guide, verify, "Documents the convention enforced by")
+Rel(docs, npm, "Documents the version served by")
+Rel(site, npm, "Installs the released version from")
+@enduml

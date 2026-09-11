@@ -1,0 +1,10 @@
+<cs-progress-ring [value]="complete()" [max]="movements().length" />
+@for (movement of movements(); track movement.id) {
+  <button
+    type="button"
+    [disabled]="movement.state === 'locked'"
+    (click)="activated.emit({ movementId: movement.id })"
+  >
+    {{ movement.label }}
+  </button>
+}

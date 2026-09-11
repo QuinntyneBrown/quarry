@@ -1,0 +1,71 @@
+@startuml
+title UML sequence behaviour — Select rows and export
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Directory page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone table components" #D1FADF
+  participant "TableDirective" as table
+  participant "TableRowDirective" as row
+  participant "CsTableSelectAllDirective" as selectall
+  participant "DataToolbarComponent" as toolbar
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+page -> table : Bind selectionMode 'multiple' per L2-093
+table -> row : Collect the row key of each row
+row --> table : Row keys
+
+admin -> row : Activate the checkbox on one row
+row -> table : Toggle the row key
+table -> table : Update the selection set
+table -> row : Reflect aria-selected="true"
+row -> dom : Apply the selected row styling
+table -> selectall : Publish the partial selection condition
+selectall -> dom : Set indeterminate on the header checkbox
+table -> page : Emit selectionChange with one key
+
+admin -> selectall : Activate the header checkbox
+selectall -> table : Request toggleAll()
+table -> table : Add every enabled row key to the selection set
+table -> page : Emit selectionChange with every key
+page -> toolbar : Bind the selected count into the toolbar copy
+
+admin -> row : Open the row action overflow
+row -> overlay : Anchor the row action menu
+overlay -> dom : Render the menu named for the row per L2-093
+admin -> row : Choose an action
+row -> page : Emit the row action intent
+page -> services : Perform the action
+
+admin -> toolbar : Activate export
+toolbar -> page : Emit ExportRequest { format, scope: 'selected' } per L2-095
+page -> services : Produce the export file
+services --> admin : Downloaded file
+
+opt Selection is cleared
+  page -> table : Set selection to an empty set
+  table -> selectall : Publish the none-selected condition
+  selectall -> dom : Clear indeterminate and checked
+end
+@enduml

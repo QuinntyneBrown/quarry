@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Frame a page
+
+Person(dev, "Application developer", "Frames Liturgy and Word Up routed screens")
+Person(user, "Application user", "Reads framed screens and acts on the page actions")
+Person(kbd, "Keyboard and screen reader user", "Navigates by landmark, heading, and skip link")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the page frame, section frame, and action grouping")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Focus management, overlay, and layout observation primitives")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Renders landmarks, manages focus, and exposes the accessibility tree")
+
+Rel(dev, cornerstone, "Frames screens with")
+Rel(dev, app, "Composes routed pages in")
+Rel(app, cornerstone, "Renders page and section frames from")
+Rel(cornerstone, cdk, "Manages focus and overflow measurement through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders landmarks and headings into")
+Rel(browser, user, "Presents the framed screen to")
+Rel(browser, kbd, "Exposes landmarks, headings, and the skip link to")
+Rel(kbd, browser, "Moves focus through")
+@enduml

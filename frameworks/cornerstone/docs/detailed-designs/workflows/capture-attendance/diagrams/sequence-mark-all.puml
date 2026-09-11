@@ -1,0 +1,62 @@
+@startuml
+title UML sequence behaviour — Mark every unset attendance row
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Volunteer" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Attendance page component" as page
+  participant "Attendance store" as store
+  participant "Application router" as router
+end box
+box "Frontend — Cornerstone attendance composite" #D1FADF
+  participant "AttendanceRosterComponent" as roster
+  participant "AttendanceChoiceComponent" as choice
+  participant "UnsavedChangesDialogComponent" as unsaved
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and input" as browser
+end box
+
+page -> roster : Bind AttendanceRosterViewModel
+roster -> choice : Render one radio group per row per L2-125
+choice -> browser : Name the group with the person's name per L2-125
+browser --> user : Roster of 40 rows, targets at least 44x44 CSS pixels
+
+user -> browser : Activate the mark-all action with 'present'
+browser -> roster : Mark-all activation
+roster -> roster : Select the rows whose state is null
+roster -> choice : Set 'present' on each unset row per L2-125
+roster -> announcer : Announce politely how many rows changed per L2-125
+announcer --> browser : Polite live region update
+roster -> page : Emit one AttendanceBulkChange for all changes per L2-125
+roster -> roster : Recompute the unsaved summary per L2-125
+
+page -> store : Write the bulk change
+store --> page : Accepted
+page -> roster : Bind the next view model with status 'clean'
+roster --> user : Rows show the saved state in text
+
+opt Unsaved rows remain and the user leaves
+  user -> router : Navigate away
+  router -> unsaved : Present the unsaved-changes dialog per L2-105
+  unsaved --> user : Stay or discard choice
+  user -> unsaved : Choose 'stay'
+  unsaved --> router : Cancel the navigation
+  router --> roster : Keep the roster mounted
+end
+@enduml

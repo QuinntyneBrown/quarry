@@ -1,0 +1,22 @@
+<div class="cs-table-container">
+  <table class="cs-table">
+    <thead>
+      <tr>
+        <th>{{ rowLabel() }}</th>
+        @for (column of columns(); track column) {
+          <th>{{ column }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.label) {
+        <tr>
+          <th>{{ row.label }}</th>
+          @for (cell of row.cells; track $index) {
+            <td [attr.data-state]="cell">{{ cell }}</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

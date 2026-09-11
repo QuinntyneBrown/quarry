@@ -1,0 +1,135 @@
+{
+  "kind": "class",
+  "name": "QuizResultComponent",
+  "sourcePath": "src/cornerstone/quiz-result/quiz-result.component.ts",
+  "category": "workflows",
+  "description": "Quiz Result public API.",
+  "members": [
+    {
+      "name": "result",
+      "bindingName": "result",
+      "role": "input",
+      "type": "QuizResultView",
+      "required": true,
+      "description": "Result public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "QuizResultAction",
+      "required": false,
+      "description": "Action public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-quiz-result",
+  "slug": "quiz-result",
+  "label": "Quiz Result",
+  "tokens": [],
+  "relatedSymbols": ["QuizOutcome", "QuizQuestionResult", "QuizResultAction", "QuizResultView"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "QuizOutcome",
+      "sourcePath": "src/cornerstone/quiz-result/quiz-outcome.type.ts",
+      "category": "workflows",
+      "description": "Quiz Outcome public API.",
+      "declaration": "'passed' | 'failed' | 'complete'"
+    },
+    {
+      "kind": "interface",
+      "name": "QuizQuestionResult",
+      "sourcePath": "src/cornerstone/quiz-result/quiz-question-result.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Question Result public API.",
+      "members": [
+        {
+          "name": "questionId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Question Id public API."
+        },
+        {
+          "name": "correct",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Correct public API."
+        },
+        {
+          "name": "feedback",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Feedback public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "QuizResultAction",
+      "sourcePath": "src/cornerstone/quiz-result/quiz-result-action.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Result Action public API.",
+      "members": [
+        {
+          "name": "action",
+          "role": "property",
+          "type": "'retry' | 'continue' | 'review'",
+          "required": true,
+          "description": "Action public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "QuizResultView",
+      "sourcePath": "src/cornerstone/quiz-result/quiz-result-view.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Result View public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "score",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Score public API."
+        },
+        {
+          "name": "max",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Max public API."
+        },
+        {
+          "name": "outcome",
+          "role": "property",
+          "type": "QuizOutcome",
+          "required": true,
+          "description": "Outcome public API."
+        },
+        {
+          "name": "questions",
+          "role": "property",
+          "type": "readonly QuizQuestionResult[]",
+          "required": true,
+          "description": "Questions public API."
+        }
+      ]
+    }
+  ]
+}

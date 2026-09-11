@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "SpinnerComponent",
+  "sourcePath": "src/cornerstone/spinner/spinner.component.ts",
+  "category": "foundations",
+  "description": "Spinner public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Loading'",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-spinner",
+  "slug": "spinner",
+  "label": "Spinner",
+  "tokens": ["--cs-border", "--cs-ink"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

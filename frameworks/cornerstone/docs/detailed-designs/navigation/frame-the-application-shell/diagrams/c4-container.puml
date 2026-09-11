@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Frame the application shell
+
+Person(dev, "Application developer", "Places the shell at the root of the authenticated route tree")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies ShellComponent, TopbarComponent, SidenavComponent, and BottomNavComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the spacing, colour, elevation, and motion tokens the shell reads")
+  Container(docs, "Documentation site", "Angular application", "Publishes the shell content-region and configuration guide")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell route", "Angular component", "Hosts cs-shell and binds navigation configuration")
+  Container(page, "Feature page", "Angular routed components", "Renders into the shell default slot")
+  Container(services, "Application services", "Angular injectables", "Owns routing, session, and the active role set")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus trap, focus monitor, breakpoint observer")
+System_Ext(browser, "Browser platform", "Viewport, focus, and safe-area insets")
+
+Rel(dev, shell, "Declares cs-shell and its content regions in")
+Rel(services, shell, "Supplies navigation groups and the active role set to")
+Rel(shell, lib, "Renders the shell components of")
+Rel(page, shell, "Is projected into the main landmark of", "router-outlet")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Traps focus and observes breakpoints with")
+Rel(lib, browser, "Reads safe-area insets and viewport width from")
+Rel(docs, lib, "Documents the content regions of")
+@enduml

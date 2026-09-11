@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Publish a prerelease to the next tag
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+actor "Application developer" as dev
+box "Developer workstation" #E0F2FE
+  participant "Prerelease commit" as commit
+  participant "Consuming application" as app
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "Release workflow (release.yml)" as release
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Version derivation" as derive
+  participant "Packed tarball" as tarball
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "npm registry" as npm
+  participant "Distribution tags" as tags
+end box
+
+maintainer -> commit : Push a commit marked as a prerelease
+commit -> release : Trigger the workflow
+release -> derive : Derive the version from the commit range per L2-175
+derive --> release : Prerelease version and the next distribution tag
+release -> tarball : Pack the artifact built in this run
+tarball --> release : Tarball file list
+release -> npm : npm publish --provenance --access public --tag next per L2-179
+npm -> tags : Point next at the prerelease version
+tags --> npm : latest left unchanged per L2-179
+npm --> release : Published prerelease and attestation identifier
+release -> release : Record the version and the distribution tag in the job summary per L2-181
+release --> maintainer : Report the prerelease
+
+dev -> app : Run npm install @quinntyne/cornerstone
+app -> tags : Resolve the latest distribution tag
+tags --> app : Most recent stable version per L2-179
+app --> dev : Stable version installed with no prerelease selected
+
+opt Developer opts into the prerelease
+  dev -> app : Run npm install @quinntyne/cornerstone@next
+  app -> tags : Resolve the next distribution tag
+  tags --> app : Prerelease version
+  app --> dev : Prerelease installed without changing latest
+end
+@enduml

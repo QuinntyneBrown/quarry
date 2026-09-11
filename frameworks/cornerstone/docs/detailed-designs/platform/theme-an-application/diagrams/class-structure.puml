@@ -1,0 +1,76 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Theme an application
+
+enum CsThemeName {
+  light
+  dark
+}
+
+enum CsThemePreference {
+  light
+  dark
+  system
+}
+
+class CsThemeService {
+  +preference: WritableSignal<CsThemePreference>
+  +resolved: Signal<CsThemeName>
+  +setPreference(value: CsThemePreference): void
+  -readSystemScheme(): CsThemeName
+}
+
+class CsTokenSet {
+  +color: ColorTokens
+  +typography: TypographyTokens
+  +spacing: SpacingTokens
+  +radius: RadiusTokens
+  +shadow: ShadowTokens
+  +motion: MotionTokens
+  +focus: FocusTokens
+  +layout: LayoutTokens
+}
+
+class CsTypographyDirective {
+  +level: InputSignal<CsTypographyLevel>
+  +truncate: InputSignal<boolean>
+}
+
+enum CsTypographyLevel {
+  display
+  heading
+  body
+  meta
+  eyebrow
+  code
+  accent
+}
+
+class ProvideCsTheme <<function>> {
+  +provideCsTheme(options?: CsThemeOptions): EnvironmentProviders
+}
+
+class CsThemeOptions {
+  +defaultPreference: CsThemePreference
+  +serverDefault: CsThemeName
+}
+
+ProvideCsTheme ..> CsThemeService : registers
+ProvideCsTheme ..> CsThemeOptions : reads
+CsThemeService --> CsThemePreference : holds
+CsThemeService --> CsThemeName : resolves to
+CsThemeName "1" --> "1" CsTokenSet : selects resolution of
+CsTypographyDirective ..> CsTokenSet : reads
+CsTypographyDirective --> CsTypographyLevel : has
+@enduml

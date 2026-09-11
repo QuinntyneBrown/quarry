@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Measure interaction latency under zoneless change detection
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Feature branch" as branch
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "budgets job" as job
+  participant "Pull request check" as check
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Latency suite" as latency
+  participant "Lifecycle suite" as leak
+  participant "design-system gallery" as gallery
+  participant "latency-budgets.json" as budgets
+  participant "Budget report" as report
+end box
+maintainer -> branch : Push a component change
+branch -> job : Trigger the budgets job
+job -> latency : Start the suite on the reference hardware profile
+latency -> gallery : Bootstrap with provideZonelessChangeDetection() per L2-162
+gallery --> latency : Gallery ready with no Zone.js present
+
+latency -> gallery : Activate an overlay
+gallery --> latency : First paint timestamp
+latency -> budgets : Compare to the 100 ms overlay budget per L2-161
+latency -> gallery : Render a virtualized list of 1,000 rows
+gallery --> latency : First meaningful paint timestamp
+latency -> budgets : Compare to the 500 ms list budget per L2-161
+latency -> gallery : Type into a text control
+gallery --> latency : Input-to-paint timestamp
+latency -> budgets : Compare to the 50 ms input budget per L2-161
+latency -> gallery : Move a component from loading to ready
+gallery --> latency : Cumulative layout shift of 0.02 or less per L2-161
+budgets --> latency : Verdict per budget
+latency -> report : Record the 95th-percentile measurements
+
+job -> leak : Run 100 create-destroy cycles per component
+leak -> gallery : Create and destroy each component
+gallery --> leak : Retained listeners, timers, observers, and subscriptions
+leak -> gallery : Assert no timer or animation frame while idle per L2-162
+leak -> report : Record leak findings per L2-162
+
+alt A budget is exceeded or a leak is found
+  report --> job : Verdict exceeded
+  job -> check : Fail the run naming the component and the measurement per L2-161
+  check --> maintainer : Failing check with the measurement table
+else Every measurement is within budget
+  report --> job : Verdict within budget
+  job -> check : Pass with the latency table in the job summary
+  check --> maintainer : Passing check
+end
+@enduml

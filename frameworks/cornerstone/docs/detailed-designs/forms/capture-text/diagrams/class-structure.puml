@@ -1,0 +1,121 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Capture text
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+enum FieldState {
+  default
+  error
+  success
+  disabled
+  readonly
+}
+
+enum CsInputType {
+  text
+  email
+  password
+  number
+  url
+  tel
+  search
+  date
+  time
+  datetime-local
+}
+
+enum AddonPosition {
+  prefix
+  suffix
+}
+
+class FieldComponent {
+  +label: InputSignal<string>
+  +hint: InputSignal<string | null>
+  +error: InputSignal<string | null>
+  +success: InputSignal<string | null>
+  +requirement: InputSignal<'required' | 'optional'>
+  +maxLength: InputSignal<number | null>
+  +showCount: InputSignal<boolean>
+  +state: Signal<FieldState>
+  +controlId: Signal<string>
+  #describedBy(): string
+  #announceCount(length: number): void
+}
+
+class CsInputDirective {
+  +type: InputSignal<CsInputType>
+  +readonly: InputSignal<boolean>
+  +disabled: InputSignal<boolean>
+  -onChange: (value: string) => void
+  -onTouched: () => void
+  +writeValue(value: string | null): void
+  +registerOnChange(fn: (value: string) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+class CsTextareaDirective {
+  +autosize: InputSignal<boolean>
+  +minRows: InputSignal<number>
+  +maxRows: InputSignal<number>
+  +resizable: InputSignal<boolean>
+  +writeValue(value: string | null): void
+  +registerOnChange(fn: (value: string) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+  #recalculateHeight(): void
+}
+
+class InputGroupComponent {
+  +label: InputSignal<string>
+  +minInputWidth: InputSignal<string>
+  #hasFocusWithin: Signal<boolean>
+}
+
+class InputAddonDirective {
+  +position: InputSignal<AddonPosition>
+  +meaning: InputSignal<string | null>
+  #isDecorative: Signal<boolean>
+}
+
+class CdkTextareaAutosize {
+  +minRows: number
+  +maxRows: number
+  +resizeToFitContent(force: boolean): void
+}
+
+class CsControlIdGenerator {
+  +next(prefix: string): string
+}
+
+CsInputDirective ..|> ControlValueAccessor
+CsTextareaDirective ..|> ControlValueAccessor
+FieldComponent --> FieldState : reports
+FieldComponent ..> CsControlIdGenerator : requests an identifier from
+FieldComponent o-- "1" CsInputDirective : frames and wires
+FieldComponent o-- "0..1" CsTextareaDirective : frames and wires
+CsInputDirective --> CsInputType : has
+CsTextareaDirective ..> CdkTextareaAutosize : delegates measurement to
+InputGroupComponent *-- "1" CsInputDirective : bounds
+InputGroupComponent o-- "0..2" InputAddonDirective : projects
+InputAddonDirective --> AddonPosition : has
+InputAddonDirective ..> CsInputDirective : describes when meaningful
+@enduml

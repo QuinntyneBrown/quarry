@@ -1,0 +1,38 @@
+{
+  "kind": "class",
+  "name": "ProgressRingComponent",
+  "sourcePath": "src/cornerstone/progress-ring/progress-ring.component.ts",
+  "category": "foundations",
+  "description": "Progress Ring public API.",
+  "members": [
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Value public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "max",
+      "bindingName": "max",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "100",
+      "description": "Max public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-progress-ring",
+  "slug": "progress-ring",
+  "label": "Progress Ring",
+  "tokens": ["--cs-border", "--cs-lime-strong"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

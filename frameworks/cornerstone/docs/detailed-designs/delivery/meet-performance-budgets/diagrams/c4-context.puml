@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Meet performance budgets
+
+Person(maintainer, "Library maintainer", "Pushes a change and reads the budget report")
+Person(dev, "Application developer", "Ships Liturgy or Word Up bundles built on the library")
+Person(user, "Application user", "Waits for overlays, lists, and text input to paint")
+
+System(cornerstone, "Cornerstone", "Angular UI library measured against recorded bundle and latency budgets")
+System_Ext(actions, "GitHub Actions", "Runs the budgets job on every push and pull request")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(browser, "Browser platform", "Paints the components and reports timing and layout shift")
+System_Ext(npm, "npm registry", "Receives only artifacts that passed the budgets job")
+
+Rel(maintainer, cornerstone, "Changes the component surface of")
+Rel(cornerstone, actions, "Is measured by")
+Rel(actions, maintainer, "Reports entry point size, latency, and verdict to")
+Rel(actions, npm, "Publishes the artifact only after budgets pass")
+Rel(dev, npm, "Installs the measured package from")
+Rel(app, cornerstone, "Imports only the components it uses from")
+Rel(app, browser, "Renders in")
+Rel(browser, user, "Presents the painted screen to")
+Rel(actions, browser, "Drives the latency suite in", "headless browser")
+@enduml

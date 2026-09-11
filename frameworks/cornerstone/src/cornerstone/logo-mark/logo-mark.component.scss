@@ -1,0 +1,13 @@
+:host {
+  display: inline-grid;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+  color: var(--cs-lime-strong);
+}
+svg {
+  inline-size: 100%;
+  block-size: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}

@@ -1,0 +1,20 @@
+section {
+  padding-block: var(--cs-space-8);
+}
+header {
+  max-inline-size: 60rem;
+}
+.cards,
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--cs-space-4);
+}
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--cs-space-8);
+}
+strong {
+  font-size: var(--cs-text-xl);
+}

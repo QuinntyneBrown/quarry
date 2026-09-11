@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Emit an intent from a composite
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Volunteer" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up attendance page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "AttendanceRosterComponent" as roster
+  participant "CardComponent" as card
+end box
+box "Frontend — Cornerstone contract layer" #ECFDF3
+  participant "CsSlotDirective registry" as slots
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM" as dom
+end box
+
+page -> roster : Bind a frozen AttendanceRosterViewModel per L2-022
+roster -> card : Render one card per roster entry
+card -> slots : Query registered slots
+alt Actions slot has content
+  slots --> card : csCardActions present per L2-020
+  card -> dom : Render the actions chrome
+else Actions slot is empty
+  slots --> card : No registered actions slot
+  card -> dom : Omit the actions wrapper element per L2-020
+end
+dom --> user : Roster with present, late, absent, and excused choices
+
+user -> dom : Mark an entry absent
+dom -> roster : Choice change event
+roster -> roster : Read the view model without writing to it per L2-022
+roster -> page : Emit CsAttendanceIntent { kind: 'mark', payload }
+page -> services : Apply the workflow rule and persist
+services --> page : Persisted result
+page -> roster : Bind a new view model
+roster -> dom : Re-render the changed entry
+dom --> user : Updated roster state
+
+opt Composite attempts a forbidden dependency
+  roster -> roster : Injecting HttpClient or Router is rejected by lint per L2-022
+end
+@enduml

@@ -1,0 +1,119 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Announce a system message
+
+enum CsMessageTone {
+  success
+  warning
+  error
+  info
+  lime
+}
+
+enum CsLivePoliteness {
+  auto
+  polite
+  assertive
+  off
+}
+
+enum ConnectivityState {
+  online
+  offline
+  reconnecting
+  queued
+  restored
+}
+
+enum ToastResult {
+  timeout
+  dismissed
+  action
+}
+
+class CsAnnouncementPolicy <<function>> {
+  +csAnnouncementPolitenessFor(tone: CsMessageTone, insertedAfterFirstRender: boolean): CsLivePoliteness
+}
+
+class AlertComponent {
+  +tone: InputSignal<CsMessageTone>
+  +heading: InputSignal<string>
+  +icon: InputSignal<string>
+  +dismissible: InputSignal<boolean>
+  +live: InputSignal<CsLivePoliteness>
+  +dismissFocusTarget: InputSignal<HTMLElement | null>
+  +dismissed: OutputEmitterRef<void>
+  #role: Signal<'status' | 'alert'>
+  #onDismiss(): void
+}
+
+class OfflineBannerComponent {
+  +state: InputSignal<ConnectivityState>
+  +pendingCount: InputSignal<number>
+  +restoredDismissAfter: InputSignal<number>
+  +heightChanged: OutputEmitterRef<number>
+  -debouncedState: Signal<ConnectivityState>
+  -announceOnce(message: string, politeness: CsLivePoliteness): void
+}
+
+class ToastConfig {
+  +tone: CsMessageTone
+  +title: string
+  +body?: string
+  +action?: string
+  +timeoutMs?: number
+  +id?: string
+}
+
+class ToastRef {
+  +id: string
+  +afterDismissed: Promise<ToastResult>
+  +dismiss(): void
+}
+
+class ToastService {
+  +open(config: ToastConfig): ToastRef
+  +dismiss(id: string): void
+  +dismissAll(): void
+  -queue: Signal<readonly ToastConfig[]>
+  -visible: Signal<readonly ToastConfig[]>
+  -assertOutletPresent(): void
+}
+
+class ToastOutletComponent {
+  +maxVisible: InputSignal<number>
+  #politeText: Signal<string>
+  #assertiveText: Signal<string>
+  -pauseTimeout(id: string): void
+  -resumeTimeout(id: string): void
+}
+
+class LiveAnnouncer <<CDK>> {
+  +announce(message: string, politeness: string): Promise<void>
+}
+
+ToastService ..> ToastConfig : accepts
+ToastService ..> ToastRef : returns
+ToastRef --> ToastResult : resolves to
+ToastService --> "1" ToastOutletComponent : releases visible messages to
+ToastOutletComponent ..> CsAnnouncementPolicy : calls
+AlertComponent ..> CsAnnouncementPolicy : calls
+OfflineBannerComponent ..> CsAnnouncementPolicy : calls
+CsAnnouncementPolicy --> CsLivePoliteness : returns
+CsAnnouncementPolicy ..> CsMessageTone : reads
+OfflineBannerComponent --> ConnectivityState : holds
+AlertComponent --> CsMessageTone : has
+ToastOutletComponent ..> LiveAnnouncer : announces through
+OfflineBannerComponent ..> LiveAnnouncer : announces through
+@enduml

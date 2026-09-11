@@ -1,0 +1,17 @@
+<ol>
+  @for (event of events(); track event.id) {
+    <li>
+      <time [attr.datetime]="event.instant">{{ event.instant }}</time
+      ><strong>{{ event.action }}</strong
+      ><span>{{ event.actor }}</span>
+      @if (!event.private) {
+        @for (field of event.details; track field.label) {
+          <dl>
+            <dt>{{ field.label }}</dt>
+            <dd>{{ field.value }}</dd>
+          </dl>
+        }
+      }
+    </li>
+  }
+</ol>

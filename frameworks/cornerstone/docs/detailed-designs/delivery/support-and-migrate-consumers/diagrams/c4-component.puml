@@ -1,0 +1,56 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Support and migrate consumers
+
+Person(dev, "Application developer", "Runs the schematics and reads their report")
+
+Container_Boundary(ngadd, "Setup schematic collection") {
+  Component(addentry, "ng-add factory", "Schematic rule", "Entry point named by the schematics field of the manifest")
+  Component(prompts, "CsNgAddOptions prompts", "Schematic schema", "Target project, theme, and compatibility stylesheet choice")
+  Component(matrixcheck, "Environment check", "Schematic rule", "Refuses to run outside the declared Angular and Node ranges")
+  Component(styleedit, "Styles array editor", "Workspace edit", "Inserts the theme stylesheet ahead of the application stylesheet")
+  Component(configedit, "Application config editor", "Source edit", "Adds provideCsTheme() to the provider array")
+  Component(depedit, "Dependency editor", "Manifest edit", "Adds the peer dependencies at the matrix version")
+}
+
+Container_Boundary(ngupdate, "Migration collection") {
+  Component(index, "migration-collection.json", "Version-keyed index", "Maps a release to the migrations it introduces")
+  Component(rule, "CsMigrationRule transforms", "Schematic rules", "Rewrite imports, symbol names, and template references")
+  Component(unresolved, "Unresolved edit report", "Schematic output", "Names every location a transform could not rewrite")
+}
+
+Container_Boundary(shared, "Shared workspace layer") {
+  Component(reader, "Workspace reader", "Angular workspace API", "Resolves the target project and its build target")
+  Component(writer, "Edit recorder", "Schematic tree", "Records every file edit for the run report")
+  Component(guard, "Clean tree guard", "Schematic rule", "Refuses to run against uncommitted changes to the touched files")
+}
+
+ContainerDb_Ext(matrix, "Support matrix", "support-matrix.json", "Angular range, Node range, and browsers")
+Container_Ext(policy, "Deprecation policy", "Document and JSDoc tags", "Notice period and removal release")
+Container_Ext(workspace, "Consuming workspace", "angular.json, package.json, sources", "The files the schematics edit")
+
+Rel(dev, addentry, "Runs through ng add")
+Rel(dev, index, "Runs through ng update")
+Rel(addentry, prompts, "Reads")
+Rel(addentry, matrixcheck, "Runs first")
+Rel(matrixcheck, matrix, "Reads the supported ranges from")
+Rel(addentry, styleedit, "Runs")
+Rel(addentry, configedit, "Runs")
+Rel(addentry, depedit, "Runs")
+Rel(depedit, matrix, "Pins peer dependencies to")
+Rel(index, rule, "Selects by installed version")
+Rel(rule, policy, "Removes the usages announced by")
+Rel(rule, unresolved, "Reports unrewritable locations to")
+Rel(styleedit, reader, "Resolves the target project through")
+Rel(configedit, reader, "Resolves the application config through")
+Rel(rule, reader, "Enumerates source files through")
+Rel(styleedit, writer, "Records edits in")
+Rel(configedit, writer, "Records edits in")
+Rel(depedit, writer, "Records edits in")
+Rel(rule, writer, "Records edits in")
+Rel(guard, workspace, "Inspects")
+Rel(writer, workspace, "Applies the recorded edits to")
+Rel(writer, dev, "Reports every edit to")
+Rel(unresolved, dev, "Reports remaining work to")
+@enduml

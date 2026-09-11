@@ -1,0 +1,110 @@
+<section class="playground" aria-label="Interactive component playground">
+  <header class="example-toolbar">
+    <div>
+      <strong>Interactive playground</strong><small>Rendered from the public package</small>
+    </div>
+    <div role="group" aria-label="Example view">
+      <button type="button" [class.active]="view() === 'preview'" (click)="view.set('preview')">
+        Preview
+      </button>
+      <button type="button" [class.active]="view() === 'source'" (click)="openSource()">
+        Source
+      </button>
+    </div>
+  </header>
+  @if (view() === 'preview') {
+    <div class="playground-body">
+      <div class="preview-column">
+        <div class="preview-stage">
+          <div csDocsPreviewHost></div>
+          @if (renderError()) {
+            <p class="render-error" role="alert">{{ renderError() }}</p>
+          }
+        </div>
+        <div class="event-log" aria-live="polite">
+          <div>
+            <strong>Event log</strong><button type="button" (click)="events.set([])">Clear</button>
+          </div>
+          @for (event of events(); track $index) {
+            <code>{{ event }}</code>
+          } @empty {
+            <p>Interact with the preview to see emitted output and model events.</p>
+          }
+        </div>
+      </div>
+      <aside class="controls" aria-label="Component inputs">
+        <div class="controls-heading">
+          <strong>Inputs</strong><button type="button" (click)="reset()">Reset</button>
+        </div>
+        @for (member of inputMembers(); track member.name) {
+          <div class="control">
+            <label [for]="'playground-' + member.name">
+              <span
+                ><code>{{ member.bindingName ?? member.name }}</code
+                ><small>{{ member.type }}</small></span
+              >
+            </label>
+            @if (controlKind(member) === 'boolean') {
+              <input
+                [id]="'playground-' + member.name"
+                type="checkbox"
+                [checked]="value(member.name)"
+                (change)="setBoolean(member, $event)"
+              />
+            } @else if (controlKind(member) === 'number') {
+              <input
+                [id]="'playground-' + member.name"
+                type="number"
+                [value]="value(member.name)"
+                (input)="setNumber(member, $event)"
+              />
+            } @else if (controlKind(member) === 'select') {
+              <select
+                [id]="'playground-' + member.name"
+                [value]="value(member.name)"
+                (change)="setText(member, $event)"
+              >
+                @for (option of options(member); track option) {
+                  <option [value]="option">{{ option }}</option>
+                }
+              </select>
+            } @else if (controlKind(member) === 'json') {
+              <textarea
+                [id]="'playground-' + member.name"
+                rows="4"
+                [value]="jsonValue(member.name)"
+                (change)="setJson(member, $event)"
+              ></textarea>
+            } @else {
+              <input
+                [id]="'playground-' + member.name"
+                type="text"
+                [value]="value(member.name)"
+                (input)="setText(member, $event)"
+              />
+            }
+          </div>
+        } @empty {
+          <p>This component has no public inputs. Its projected content remains interactive.</p>
+        }
+      </aside>
+    </div>
+  } @else {
+    <div class="source-view">
+      <div class="source-tabs" role="tablist" aria-label="Example source files">
+        @for (language of languages; track language) {
+          <button
+            type="button"
+            role="tab"
+            [attr.aria-selected]="sourceLanguage() === language"
+            (click)="sourceLanguage.set(language)"
+          >
+            {{ language.toUpperCase() }}
+          </button>
+        }
+        <button type="button" class="copy-source" (click)="copySource()">{{ copyLabel() }}</button>
+      </div>
+      <pre><code>{{ currentSource() }}</code></pre>
+    </div>
+  }
+</section>

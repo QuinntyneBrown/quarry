@@ -1,0 +1,127 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Frame a page
+
+enum CsPageState {
+  ready
+  loading
+  error
+}
+
+enum CsHeadingLevel {
+  two
+  three
+  four
+  five
+  six
+}
+
+enum CsToolbarDensity {
+  compact
+  default
+}
+
+enum CsActionAlign {
+  start
+  center
+  end
+  between
+}
+
+interface CsHeadingHost {
+  +title: InputSignal<string>
+  +headingId: InputSignal<string | undefined>
+}
+
+class PageComponent {
+  +title: InputSignal<string>
+  +eyebrow: InputSignal<string | undefined>
+  +subtitle: InputSignal<string | undefined>
+  +headingId: InputSignal<string | undefined>
+  +state: InputSignal<CsPageState>
+  +errorMessage: InputSignal<string | undefined>
+  +retry: OutputEmitterRef<void>
+  -busy: Signal<boolean>
+}
+
+class SectionComponent {
+  +title: InputSignal<string>
+  +label: InputSignal<string | undefined>
+  +description: InputSignal<string | undefined>
+  +headingLevel: InputSignal<CsHeadingLevel>
+  +headingId: InputSignal<string | undefined>
+  -labelledBy: Signal<string>
+}
+
+class SectionHeaderComponent {
+  +title: InputSignal<string>
+  +label: InputSignal<string | undefined>
+  +description: InputSignal<string | undefined>
+  +headingLevel: InputSignal<CsHeadingLevel>
+  +headingId: InputSignal<string | undefined>
+}
+
+abstract class CsActionGroupBase {
+  +sticky: InputSignal<boolean>
+  +overflowLabel: InputSignal<string>
+  +overflowed: Signal<readonly CsActionRef[]>
+  -measure(inlineSize: number): void
+}
+
+class ToolbarComponent {
+  +density: InputSignal<CsToolbarDensity>
+}
+
+class ActionBarComponent {
+  +align: InputSignal<CsActionAlign>
+}
+
+class CsActionRef {
+  +label: string
+  +disabled: boolean
+  +order: number
+}
+
+class CsSkipLinkDirective {
+  +target: InputSignal<string>
+  +activated: OutputEmitterRef<void>
+  -moveFocus(): void
+}
+
+class CsVisuallyHiddenDirective {
+  +focusable: InputSignal<boolean>
+}
+
+class CsResponsiveRegionDirective {
+  +pattern: InputSignal<CsRegionPattern>
+  +state: Signal<CsRegionState>
+}
+
+CsHeadingHost <|.. PageComponent
+CsHeadingHost <|.. SectionComponent
+CsHeadingHost <|.. SectionHeaderComponent
+CsActionGroupBase <|-- ToolbarComponent
+CsActionGroupBase <|-- ActionBarComponent
+PageComponent --> CsPageState : has
+SectionComponent --> CsHeadingLevel : has
+SectionComponent *-- "1" SectionHeaderComponent : renders
+PageComponent o-- "0..*" SectionComponent : contains
+PageComponent o-- "0..1" ToolbarComponent : places in the actions slot
+CsActionGroupBase o-- "0..*" CsActionRef : overflows
+CsActionGroupBase ..> CsResponsiveRegionDirective : measures through
+PageComponent ..> CsResponsiveRegionDirective : reflows its header through
+ToolbarComponent --> CsToolbarDensity : has
+ActionBarComponent --> CsActionAlign : has
+CsSkipLinkDirective ..> CsVisuallyHiddenDirective : hides itself with
+@enduml

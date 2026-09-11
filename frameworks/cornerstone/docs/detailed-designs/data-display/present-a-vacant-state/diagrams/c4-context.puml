@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Present a vacant state
+
+Person(dev, "Application developer", "Composes empty states and state pages into Liturgy and Word Up screens")
+Person(user, "Application user", "Reads a screen that has no records, is loading, or has failed")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the data-state contract, the empty state, and the state page")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns the query and the copy")
+System_Ext(cdk, "Angular CDK", "Live announcer and focus management primitives")
+System_Ext(browser, "Browser platform", "Renders the markup and exposes the accessibility tree")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes vacant-state presentations from")
+Rel(dev, app, "Maps query results to a typed data state in")
+Rel(app, cornerstone, "Passes CsDataState and copy to")
+Rel(cornerstone, app, "Emits retry and state-page action intents to")
+Rel(cornerstone, cdk, "Announces state transitions through")
+Rel(cornerstone, browser, "Renders slots and live regions to")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(browser, user, "Presents the vacant state to")
+Rel(user, browser, "Activates retry and recovery actions in")
+@enduml

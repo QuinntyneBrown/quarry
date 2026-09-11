@@ -1,0 +1,146 @@
+{
+  "kind": "class",
+  "name": "ContentSectionComponent",
+  "sourcePath": "src/cornerstone/content-section/content-section.component.ts",
+  "category": "marketing",
+  "description": "Content Section public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "summary",
+      "bindingName": "summary",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Summary public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "variant",
+      "bindingName": "variant",
+      "role": "input",
+      "type": "ContentSectionVariant",
+      "required": false,
+      "defaultValue": "'plain'",
+      "description": "Variant public API.",
+      "structured": false,
+      "options": ["plain", "cards", "split", "stats"]
+    },
+    {
+      "name": "cards",
+      "bindingName": "cards",
+      "role": "input",
+      "type": "readonly SectionCard[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Cards public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "stats",
+      "bindingName": "stats",
+      "role": "input",
+      "type": "readonly SectionStat[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Stats public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-content-section",
+  "slug": "content-section",
+  "label": "Content Section",
+  "tokens": ["--cs-space-4", "--cs-space-8", "--cs-text-xl"],
+  "relatedSymbols": ["ContentSectionVariant", "SectionCard", "SectionStat"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "ContentSectionVariant",
+      "sourcePath": "src/cornerstone/content-section/content-section-variant.type.ts",
+      "category": "marketing",
+      "description": "Content Section Variant public API.",
+      "declaration": "'plain' | 'cards' | 'split' | 'stats'"
+    },
+    {
+      "kind": "interface",
+      "name": "SectionCard",
+      "sourcePath": "src/cornerstone/content-section/section-card.interface.ts",
+      "category": "marketing",
+      "description": "Section Card public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "href",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Href public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "SectionStat",
+      "sourcePath": "src/cornerstone/content-section/section-stat.interface.ts",
+      "category": "marketing",
+      "description": "Section Stat public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Value public API."
+        }
+      ]
+    }
+  ]
+}

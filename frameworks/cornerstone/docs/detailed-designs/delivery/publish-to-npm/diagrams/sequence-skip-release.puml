@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Skip a run that has nothing to release
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Push to main" as push
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "Release workflow (release.yml)" as release
+  participant "GitHub repository" as repo
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Version derivation" as derive
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "npm registry" as npm
+end box
+
+maintainer -> push : Push "docs: expand the theming guide"
+push -> release : Trigger the workflow
+release -> release : Acquire the release-main concurrency group per L2-177
+release -> derive : Read the commits since the previous release tag
+
+alt Range holds only chore, docs, test, ci, or style commits
+  derive --> release : No releasable commit per L2-175
+  release -> release : Record the reason in the job summary per L2-181
+  release --> maintainer : Exit successfully without publishing per L2-175
+else Range holds a releasable commit
+  derive --> release : Derived version and bump kind
+  release -> npm : Query the derived version
+
+  alt Derived version already exists
+    npm --> release : Version found
+    release -> release : Log the skip reason per L2-177
+    release -> repo : Create no tag and no GitHub release per L2-177
+    release --> maintainer : Exit successfully with the reason in the job summary per L2-181
+  else Version is new
+    npm --> release : Version not found
+    release -> npm : Upload the packed tarball
+
+    opt Publish fails part-way
+      npm --> release : Publish error
+      release -> repo : Create no tag and no GitHub release for the unpublished version per L2-177
+      release --> maintainer : Fail the run and notify the configured channel per L2-181
+    end
+  end
+end
+
+opt A second push arrives during the run
+  push -> release : Queue behind the concurrency group
+  release -> release : Serialize the second run and cancel no publish in flight per L2-177
+end
+@enduml

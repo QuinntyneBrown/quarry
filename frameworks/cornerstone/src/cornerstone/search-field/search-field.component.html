@@ -1,0 +1,14 @@
+<form role="search" (submit)="submit($event)">
+  <input
+    class="cs-input"
+    type="search"
+    [value]="value() ?? ''"
+    [placeholder]="placeholder()"
+    [disabled]="disabled()"
+    (input)="change($event)"
+    (blur)="markTouched()"
+  />
+  @if (value()) {
+    <button csButton="ghost" type="button" (click)="clear()">{{ strings.strings.clear }}</button>
+  }
+</form>

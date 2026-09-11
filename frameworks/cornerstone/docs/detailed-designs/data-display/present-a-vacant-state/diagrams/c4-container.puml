@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Present a vacant state
+
+Person(dev, "Application developer", "Binds a query result to a vacant-state presentation")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Holds CsDataStateOutlet, CsEmptyState, and CsStatePage")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the icon frame, surface, spacing, and text tokens the presentations resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the five data states and the eight state-page conditions")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Maps a query result to CsDataState and supplies the copy")
+  Container(services, "Application services", "Angular injectables", "Runs the query and owns retry and navigation")
+  Container(shell, "Application shell", "Angular components", "Hosts the route outlet a state page replaces")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and focus utilities")
+System_Ext(browser, "Browser platform", "Rendering and accessibility tree")
+
+Rel(dev, page, "Binds a typed data state in")
+Rel(services, page, "Publishes query results to")
+Rel(page, lib, "Passes CsDataState and copy to")
+Rel(lib, page, "Emits retry and action intents to")
+Rel(page, services, "Calls retry and navigation on")
+Rel(shell, lib, "Renders a state page in place of route content from")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Announces transitions through", "LiveAnnouncer")
+Rel(lib, browser, "Renders slots and live regions to")
+Rel(docs, lib, "Documents the state contract of")
+@enduml

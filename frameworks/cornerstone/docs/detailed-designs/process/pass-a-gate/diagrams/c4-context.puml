@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Pass a gate
+
+Person(dev, "Application developer", "Places a gate on a process screen")
+Person(user, "Application user", "Satisfies requirements and requests advancement")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the domain-neutral gate and requirement checklist")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning workflow rules and persistence")
+System_Ext(cdk, "Angular CDK", "Focus management and live-region announcement primitives")
+System_Ext(browser, "Browser platform", "Renders the gate and exposes the accessibility tree")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the gate from")
+Rel(dev, app, "Writes the enforcement result and adapter in")
+Rel(app, cornerstone, "Supplies the enforcement result and requirements to", "signal inputs")
+Rel(cornerstone, app, "Emits advance and requirement toggle intents to", "output()")
+Rel(app, app, "Decides whether the gate opens")
+Rel(cornerstone, cdk, "Announces state changes through")
+Rel(cornerstone, browser, "Renders gate state and status text to")
+Rel(browser, user, "Presents open and blocked state to")
+Rel(user, browser, "Toggles requirements and activates the advance action in")
+Rel(app, npm, "Installs Cornerstone from")
+@enduml

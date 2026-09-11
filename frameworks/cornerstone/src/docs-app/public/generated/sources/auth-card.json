@@ -1,0 +1,5 @@
+{
+  "ts": "import {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  InjectionToken,\n  booleanAttribute,\n  input,\n  output,\n} from '@angular/core';\nimport { CsButtonDirective } from '../core/foundations/cs-button.directive';\nimport { CardComponent } from '../card/card.component';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-auth-card',\n  imports: [CardComponent],\n  templateUrl: './auth-card.component.html',\n  styleUrl: './auth-card.component.scss',\n})\nexport class AuthCardComponent {}\n",
+  "html": "<cs-card presentation=\"raised\"><ng-content /></cs-card>\n",
+  "scss": ""
+}

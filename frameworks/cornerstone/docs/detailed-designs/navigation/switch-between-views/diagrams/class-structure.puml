@@ -1,0 +1,123 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Switch between views
+
+enum CsTabOverflow {
+  scroll
+  menu
+}
+
+enum CsAccordionMode {
+  single
+  multiple
+}
+
+class TabGroupComponent {
+  +tabs: InputSignal<readonly CsTab[]>
+  +selectedId: ModelSignal<string>
+  +lazy: InputSignal<boolean>
+  +overflow: InputSignal<CsTabOverflow>
+  +renderedIds: Signal<ReadonlySet<string>>
+  +selectionChange: OutputEmitterRef<CsSelectionChange>
+  +selectTab(id: string): void
+  -moveFocus(delta: number): void
+}
+
+class TabComponent {
+  +label: InputSignal<string>
+  +badge: InputSignal<string | number | null>
+  +disabled: InputSignal<boolean>
+  +panel: TemplateRef<unknown>
+}
+
+class SegmentedControlComponent {
+  +options: InputSignal<readonly SegmentOption[]>
+  +value: ModelSignal<string>
+  +size: InputSignal<CsSize>
+  +ariaLabel: InputSignal<string>
+  +writeValue(value: string): void
+  +registerOnChange(fn: (v: string) => void): void
+}
+
+class AccordionComponent {
+  +mode: InputSignal<CsAccordionMode>
+  +expandedIds: ModelSignal<readonly string[]>
+  +lazy: InputSignal<boolean>
+  +toggle(itemId: string): void
+  -collapseOthers(itemId: string): void
+}
+
+class AccordionItemComponent {
+  +itemId: InputSignal<string>
+  +heading: InputSignal<string>
+  +disabled: InputSignal<boolean>
+  +expanded: Signal<boolean>
+  +body: TemplateRef<unknown>
+}
+
+class PaginatorComponent {
+  +totalItems: InputSignal<number>
+  +pageIndex: ModelSignal<number>
+  +pageSize: ModelSignal<number>
+  +pageSizeOptions: InputSignal<readonly number[]>
+  +compact: InputSignal<boolean>
+  +pageCount: Signal<number>
+  +rangeLabel: Signal<string>
+  +pageChange: OutputEmitterRef<PageChange>
+}
+
+class CsTab {
+  +id: string
+  +label: string
+  +badge?: string | number
+  +disabled?: boolean
+  +routerLink?: unknown
+}
+
+class SegmentOption {
+  +value: string
+  +label: string
+  +icon?: string
+  +disabled?: boolean
+}
+
+class CsSelectionChange {
+  +previousId: string | null
+  +selectedId: string
+  +source: 'pointer' | 'keyboard'
+}
+
+class PageChange {
+  +pageIndex: number
+  +pageSize: number
+  +totalItems: number
+}
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (v: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+SegmentedControlComponent ..|> ControlValueAccessor
+TabGroupComponent o-- "0..*" TabComponent : projects
+TabGroupComponent ..> CsTab : reads
+TabGroupComponent --> CsTabOverflow : resolves
+TabGroupComponent ..> CsSelectionChange : emits
+SegmentedControlComponent ..> SegmentOption : reads
+AccordionComponent *-- "1..*" AccordionItemComponent : coordinates
+AccordionComponent --> CsAccordionMode : applies
+PaginatorComponent ..> PageChange : emits
+@enduml

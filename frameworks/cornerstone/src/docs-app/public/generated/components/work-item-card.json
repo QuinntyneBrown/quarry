@@ -1,0 +1,130 @@
+{
+  "kind": "class",
+  "name": "WorkItemCardComponent",
+  "sourcePath": "src/cornerstone/work-item-card/work-item-card.component.ts",
+  "category": "process",
+  "description": "Work Item Card public API.",
+  "members": [
+    {
+      "name": "item",
+      "bindingName": "item",
+      "role": "input",
+      "type": "WorkItem",
+      "required": true,
+      "description": "Item public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "output",
+      "type": "WorkItemOpenIntent",
+      "required": false,
+      "description": "Opened public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "WorkItemActionIntent",
+      "required": false,
+      "description": "Action public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-work-item-card",
+  "slug": "work-item-card",
+  "label": "Work Item Card",
+  "tokens": [],
+  "relatedSymbols": ["WorkItem", "WorkItemActionIntent", "WorkItemOpenIntent"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "WorkItem",
+      "sourcePath": "src/cornerstone/work-item-card/work-item.interface.ts",
+      "category": "process",
+      "description": "Work Item public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Status public API."
+        },
+        {
+          "name": "assignee",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Assignee public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "WorkItemActionIntent",
+      "sourcePath": "src/cornerstone/work-item-card/work-item-action-intent.interface.ts",
+      "category": "process",
+      "description": "Work Item Action Intent public API.",
+      "members": [
+        {
+          "name": "itemId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Item Id public API."
+        },
+        {
+          "name": "action",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Action public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "WorkItemOpenIntent",
+      "sourcePath": "src/cornerstone/work-item-card/work-item-open-intent.interface.ts",
+      "category": "process",
+      "description": "Work Item Open Intent public API.",
+      "members": [
+        {
+          "name": "itemId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Item Id public API."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Select a tab from the keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone tab group" #D1FADF
+  participant "TabGroupComponent" as tabs
+  participant "Deferred panel host" as defer
+  participant "SegmentedControlComponent" as segment
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusKeyManager" as fkm
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and focus" as dom
+end box
+
+page -> tabs : Bind tabs, selectedId, and lazy true
+tabs -> dom : Render the tablist with roving tabindex per L2-070
+tabs -> defer : Render the selected panel only
+defer -> dom : Attach the first panel
+
+user -> dom : Press ArrowRight on the selected tab
+dom -> tabs : Keydown event
+tabs -> fkm : Advance the active item
+fkm -> fkm : Skip the disabled tab per L2-070
+fkm --> tabs : Next enabled tab index
+tabs -> dom : Move tabindex="0" to the new tab and focus it
+tabs -> tabs : Update the selectedId model per L2-070
+
+alt Panel not yet rendered
+  tabs -> defer : Render the panel on first reveal per L2-070
+  defer -> dom : Attach the panel content
+else Panel already rendered
+  tabs -> dom : Show the existing panel
+end
+
+tabs -> page : Emit selectionChange with the previous and new identifiers
+page -> page : Record the selected view
+dom --> user : New panel visible with focus on its tab
+
+opt Panel carries a filter switcher
+  page -> segment : Bind the option list and the selected value
+  user -> dom : Press ArrowRight inside the switcher
+  dom -> segment : Keydown event
+  segment -> segment : Move roving focus and selection together per L2-071
+  segment -> page : Publish the new value through the model
+  page -> dom : Re-render the panel content under the new filter
+end
+
+opt Tab list wider than its container
+  tabs -> tabs : Resolve overflow to scroll or menu per L2-070
+  tabs -> dom : Keep the selected tab in view
+end
+@enduml

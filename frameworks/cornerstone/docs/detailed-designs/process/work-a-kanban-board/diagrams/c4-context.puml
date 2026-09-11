@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Work a kanban board
+
+Person(dev, "Application developer", "Composes a board screen from Cornerstone components")
+Person(user, "Application user", "Moves work items between columns by pointer or keyboard")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the domain-neutral kanban board, column, and work item card")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning move legality and persistence")
+System_Ext(cdk, "Angular CDK", "Drag-and-drop, live announcement, and layout observation")
+System_Ext(browser, "Browser platform", "Pointer and keyboard events, layout, and the accessibility tree")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the board from")
+Rel(dev, app, "Writes the column view model and adapter in")
+Rel(app, cornerstone, "Supplies columns, accepted kinds, and a typed adapter to", "signal inputs")
+Rel(cornerstone, app, "Emits move, open, and action intents to", "output()")
+Rel(app, app, "Decides whether a move is applied")
+Rel(cornerstone, cdk, "Builds pointer dragging and announcement on")
+Rel(cornerstone, browser, "Renders columns and drop feedback to")
+Rel(browser, user, "Presents allowed and blocked feedback to")
+Rel(user, browser, "Drags a card or performs the keyboard move sequence in")
+Rel(app, npm, "Installs Cornerstone from")
+@enduml

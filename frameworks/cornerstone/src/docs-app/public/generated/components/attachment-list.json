@@ -1,0 +1,89 @@
+{
+  "kind": "class",
+  "name": "AttachmentListComponent",
+  "sourcePath": "src/cornerstone/attachment-list/attachment-list.component.ts",
+  "category": "communication",
+  "description": "Attachment List public API.",
+  "members": [
+    {
+      "name": "items",
+      "bindingName": "items",
+      "role": "input",
+      "type": "readonly AttachmentViewModel[]",
+      "required": true,
+      "description": "Items public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Opened public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-attachment-list",
+  "slug": "attachment-list",
+  "label": "Attachment List",
+  "tokens": [],
+  "relatedSymbols": ["AttachmentViewModel", "MiddleTruncateDirective"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AttachmentViewModel",
+      "sourcePath": "src/cornerstone/attachment-list/attachment-view-model.interface.ts",
+      "category": "communication",
+      "description": "Attachment View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "name",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Name public API."
+        },
+        {
+          "name": "size",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Size public API."
+        },
+        {
+          "name": "type",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Type public API."
+        },
+        {
+          "name": "url",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Url public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "MiddleTruncateDirective",
+      "sourcePath": "src/cornerstone/attachment-list/middle-truncate.directive.ts",
+      "category": "communication",
+      "description": "Middle Truncate public API.",
+      "members": []
+    }
+  ]
+}

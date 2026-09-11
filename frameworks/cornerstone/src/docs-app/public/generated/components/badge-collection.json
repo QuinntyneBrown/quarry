@@ -1,0 +1,109 @@
+{
+  "kind": "class",
+  "name": "BadgeCollectionComponent",
+  "sourcePath": "src/cornerstone/badge-collection/badge-collection.component.ts",
+  "category": "workflows",
+  "description": "Badge Collection public API.",
+  "members": [
+    {
+      "name": "items",
+      "bindingName": "items",
+      "role": "input",
+      "type": "readonly AchievementView[]",
+      "required": true,
+      "description": "Items public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "layout",
+      "bindingName": "layout",
+      "role": "input",
+      "type": "CollectionLayout",
+      "required": false,
+      "defaultValue": "'grid'",
+      "description": "Layout public API.",
+      "structured": false,
+      "options": ["grid", "list"]
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "output",
+      "type": "AchievementSelect",
+      "required": false,
+      "description": "Selected public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-badge-collection",
+  "slug": "badge-collection",
+  "label": "Badge Collection",
+  "tokens": ["--cs-space-4"],
+  "relatedSymbols": ["AchievementSelect", "AchievementView", "CollectionLayout"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AchievementSelect",
+      "sourcePath": "src/cornerstone/achievement-card/achievement-select.interface.ts",
+      "category": "workflows",
+      "description": "Achievement Select public API.",
+      "members": [
+        {
+          "name": "achievementId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Achievement Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "AchievementView",
+      "sourcePath": "src/cornerstone/achievement-card/achievement-view.interface.ts",
+      "category": "workflows",
+      "description": "Achievement View public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        },
+        {
+          "name": "earned",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Earned public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "AchievementProgress",
+          "required": false,
+          "description": "Progress public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "CollectionLayout",
+      "sourcePath": "src/cornerstone/badge-collection/collection-layout.type.ts",
+      "category": "workflows",
+      "description": "Collection Layout public API.",
+      "declaration": "'grid' | 'list'"
+    }
+  ]
+}

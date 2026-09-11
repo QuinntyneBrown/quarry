@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Honour the component contract
+
+Person(dev, "Application developer", "Consumes the package root and reviews surface diffs")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(root, "Package root", "public-api.ts", "Re-exports every public Cs-prefixed symbol")
+  Container(lib, "Component library", "Angular standalone components and directives", "Primitives, patterns, and composites that satisfy the contract")
+  Container(contract, "Contract layer", "Base classes, interfaces, and input transforms", "CsControlBase, FieldComponent, slot directives, coercion helpers, intent types")
+  Container(report, "Surface report", "Generated Markdown and lint rules", "Regenerates api-surface.md and fails on an unreviewed signature change")
+  Container(docs, "Documentation site", "Angular application", "Publishes the contract rules and every slot, input, and intent")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Binds a reactive form and a view model to Cornerstone components")
+  Container(services, "Application services", "Angular services", "Owns HTTP, authorization, persistence, and navigation")
+}
+
+System_Ext(forms, "Angular forms", "Reactive and template-driven form model")
+
+Rel(dev, page, "Writes screens in")
+Rel(page, root, "Imports every symbol from")
+Rel(root, lib, "Re-exports")
+Rel(lib, contract, "Extends and applies")
+Rel(contract, forms, "Implements ControlValueAccessor against")
+Rel(page, forms, "Declares FormControl and FormGroup with")
+Rel(page, services, "Handles emitted intents through")
+Rel(report, root, "Reads every exported signature from")
+Rel(report, lib, "Scans for decorator inputs, selectors, and injected HttpClient in")
+Rel(docs, contract, "Documents the rules of")
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Block a locked action
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone action components" #D1FADF
+  participant "CsIconButtonDirective" as iconbutton
+  participant "CsButtonDirective" as button
+  participant "CsTooltipDirective" as tooltip
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "Activation and assistive technology" as browser
+end box
+
+page -> button : Bind lockedReason 'Gate requirements outstanding'
+button -> browser : Keep the host focusable and render the locked treatment per L2-044
+button -> browser : Point aria-describedby at the reason element
+
+page -> iconbutton : Bind the required label input per L2-045
+iconbutton -> iconbutton : Compose the accessible name from label and badge count
+iconbutton -> browser : Render the square target at the size token per L2-045
+
+user -> browser : Focus the locked action
+browser -> tooltip : Focus event
+tooltip -> overlay : Open the description panel
+overlay --> browser : Positioned panel
+tooltip -> browser : Announce the reason once without duplicating the name per L2-045
+browser --> user : Reason stated by assistive technology
+
+user -> browser : Activate the locked action
+browser -> button : click event
+button -> button : Read lockedReason as present
+button -> browser : Suppress activation per L2-044
+button --> page : No command emitted
+button --> user : Control remains focused with the reason available
+@enduml

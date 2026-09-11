@@ -1,0 +1,17 @@
+<ol>
+  @for (step of steps(); track step.id) {
+    <li [attr.data-state]="step.state">
+      <button
+        type="button"
+        [disabled]="step.state === 'locked'"
+        (click)="selected.emit({ stepId: step.id })"
+      >
+        <strong>{{ step.title }}</strong>
+        @if (step.duration) {
+          <small>{{ step.duration }}</small>
+        }
+        <cs-badge>{{ step.state }}</cs-badge>
+      </button>
+    </li>
+  }
+</ol>

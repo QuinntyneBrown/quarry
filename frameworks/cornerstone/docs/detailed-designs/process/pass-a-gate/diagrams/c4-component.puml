@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Pass a gate
+
+Person(user, "Application user", "Toggles a requirement and requests advancement")
+
+Container_Boundary(page, "Consuming application feature page") {
+  Component(enforce, "Enforcement result", "GateSummary", "Consumer-computed open flag, outstanding count, and blocked reason per L2-143")
+  Component(reqvm, "Requirement view model", "CsRequirement[]", "Done, busy, and error state per requirement")
+  Component(adapter, "Process adapter", "CsProcessAdapter", "Consumer-supplied labels and colours; no vocabulary inside the components")
+  Component(handler, "Intent handler", "Component method", "Persists toggles and recomputes the enforcement result")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(gate, "GateComponent", "Standalone component", "Open and blocked states, title and status, advance action, and helper text per L2-134")
+  Component(checklist, "RequirementChecklistComponent", "Standalone component", "Interactive and read-only requirement lists with busy and error states per L2-135")
+  Component(checkbox, "CheckboxComponent", "Standalone component", "Requirement control in the interactive mode per L2-051")
+  Component(announcer, "GateAnnouncer", "Injectable helper", "Announces the open transition politely and a toggle error assertively")
+  Component(styles, "Component styles", "Component-scoped CSS", "Read --cs- custom properties only")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and focus utilities")
+System_Ext(browser, "Browser platform", "Layout, cascade, and accessibility tree")
+
+Rel(enforce, gate, "Supplies the open flag and outstanding count to", "input()")
+Rel(reqvm, checklist, "Supplies requirement state to", "input()")
+Rel(adapter, gate, "Supplies every visible label to", "input()")
+Rel(adapter, checklist, "Supplies every visible label to", "input()")
+Rel(gate, checklist, "Renders the requirement list through")
+Rel(checklist, checkbox, "Renders each interactive requirement as")
+Rel(gate, handler, "Emits GateAdvanceIntent to", "output()")
+Rel(checklist, handler, "Emits CsRequirementToggleIntent to", "output()")
+Rel(gate, announcer, "Announces the blocked to open transition through")
+Rel(checklist, announcer, "Announces a toggle error through")
+Rel(announcer, cdk, "Delegates announcement to")
+Rel(gate, styles, "Renders through")
+Rel(styles, browser, "Is resolved by")
+Rel(user, browser, "Activates the checkbox and the advance action in")
+@enduml

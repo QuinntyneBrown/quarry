@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Meet performance budgets
+
+Person(maintainer, "Library maintainer", "Receives the budget verdict")
+
+Container_Boundary(job, "budgets job") {
+  Component(probe, "Entry point probe builder", "Node script", "Builds one minimal application per public entry point")
+  Component(sizer, "Size reporter", "npm run size:report", "Measures minified and gzipped output and compares it to the recorded budget")
+  Component(latency, "Latency suite", "npm run perf:latency", "Records 95th-percentile overlay, list, and input measurements")
+  Component(leak, "Lifecycle suite", "npm run perf:leak", "Runs 100 create-destroy cycles per component and asserts full teardown")
+  Component(report, "Budget report", "JSON and Markdown", "Holds every measurement, budget, and verdict")
+  Component(publisher, "Report publisher", "Workflow step", "Uploads the artifact and writes the pull request summary")
+}
+
+Container_Boundary(budgets, "Budget files") {
+  Component(sizeb, "size-budgets.json", "Recorded bounds", "Per-entry-point and theme stylesheet budgets in kilobytes")
+  Component(latb, "latency-budgets.json", "Recorded bounds", "Overlay, list, input, and layout-shift budgets and the reference profile")
+}
+
+Container_Boundary(lib, "cornerstone library") {
+  Component(api, "public-api.ts", "Barrel entry file", "Re-exports five modules and holds no runtime statement")
+  Component(cd, "Change-detection rules", "OnPush components and signal inputs", "Throttle high-frequency sources and schedule nothing while idle")
+}
+
+System_Ext(browser, "Browser platform", "Headless browser under the reference profile")
+
+Rel(probe, api, "Imports one entry point of")
+Rel(sizer, probe, "Measures the output of")
+Rel(sizer, sizeb, "Compares each measurement to")
+Rel(latency, latb, "Compares each percentile to")
+Rel(latency, browser, "Drives the gallery in")
+Rel(leak, cd, "Asserts the teardown of")
+Rel(browser, latency, "Reports paint timing and layout shift to")
+Rel(sizer, report, "Writes entry point measurements to")
+Rel(latency, report, "Writes latency measurements to")
+Rel(leak, report, "Writes leak findings to")
+Rel(publisher, report, "Uploads and summarizes")
+Rel(publisher, maintainer, "Reports the verdict to")
+@enduml

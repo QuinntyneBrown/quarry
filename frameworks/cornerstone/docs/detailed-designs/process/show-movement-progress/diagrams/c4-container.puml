@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show movement progress
+
+Person(user, "Application user", "Reads movement completion")
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the movement view model and the process adapter")
+  Container(services, "Application services", "Angular injectables", "Own movement state, ordering, and routes")
+  Container(shell, "Application shell", "Angular components", "Hosts the page and the theme class")
+}
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "MovementDialComponent, MovementListComponent, PipStripComponent, and ProgressRingComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Resolves the paper and dark surfaces and the state colours")
+  Container(docs, "Documentation site", "Angular application", "Publishes dial, list, and strip examples with a neutral adapter")
+}
+
+System_Ext(browser, "Browser platform", "Cascade, SVG rendering, and accessibility tree")
+
+Rel(user, shell, "Reads progress in")
+Rel(shell, page, "Renders")
+Rel(services, page, "Supply movement states and counts to")
+Rel(page, lib, "Binds counts, movements, and the adapter to", "signal inputs")
+Rel(lib, page, "Emits MovementActivation to", "output()")
+Rel(lib, theme, "Resolves track, arc, and pip colour from")
+Rel(lib, browser, "Renders progressbar and ordered list semantics to")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the variants and neutral defaults of")
+@enduml

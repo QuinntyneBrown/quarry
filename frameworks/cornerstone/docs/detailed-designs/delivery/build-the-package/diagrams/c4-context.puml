@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Build the package
+
+Person(maintainer, "Library maintainer", "Pushes Cornerstone source and runs the library build")
+Person(dev, "Application developer", "Installs the package into Liturgy or Word Up")
+
+System(cornerstone, "Cornerstone", "Angular UI library built to the Angular Package Format as @quinntyne/cornerstone")
+System_Ext(actions, "GitHub Actions", "Runs the verification and release workflows")
+System_Ext(npm, "npm registry", "Distributes the published tarball")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Peer dependency supplying behaviour primitives")
+
+Rel(maintainer, cornerstone, "Edits the library source and manifest of")
+Rel(cornerstone, actions, "Is built and verified by")
+Rel(actions, npm, "Publishes the tarball to")
+Rel(dev, npm, "Installs @quinntyne/cornerstone from")
+Rel(dev, app, "Adds the package and its peer dependencies to")
+Rel(app, cornerstone, "Imports components and stylesheet subpaths from")
+Rel(app, cdk, "Supplies the peer version of", "npm install")
+Rel(cornerstone, cdk, "Declares as a peer dependency", "peerDependencies")
+@enduml

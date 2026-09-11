@@ -1,0 +1,12 @@
+<ol aria-live="polite">
+  @for (message of messages(); track message.id) {
+    <li [class.own]="message.own">
+      <cs-avatar [name]="message.author" [src]="message.avatarSrc ?? null" />
+      <article>
+        <strong>{{ message.author }}</strong>
+        <p>{{ message.body }}</p>
+        <time [attr.datetime]="message.instant">{{ message.instant }}</time>
+      </article>
+    </li>
+  }
+</ol>

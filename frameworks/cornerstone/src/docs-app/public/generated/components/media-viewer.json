@@ -1,0 +1,53 @@
+{
+  "kind": "class",
+  "name": "MediaViewerComponent",
+  "sourcePath": "src/cornerstone/media-viewer/media-viewer.component.ts",
+  "category": "communication",
+  "description": "Media Viewer public API.",
+  "members": [
+    {
+      "name": "media",
+      "bindingName": "media",
+      "role": "input",
+      "type": "CsMediaViewModel",
+      "required": true,
+      "description": "Media public API.",
+      "structured": false,
+      "options": ["image", "video", "audio", "iframe"]
+    },
+    {
+      "name": "failed",
+      "bindingName": "failed",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Failed public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-media-viewer",
+  "slug": "media-viewer",
+  "label": "Media Viewer",
+  "tokens": [],
+  "relatedSymbols": ["CsMediaViewModel", "MediaFrameDirective"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsMediaViewModel",
+      "sourcePath": "src/cornerstone/core/communication/cs-media-view-model.type.ts",
+      "category": "communication",
+      "description": "Cs Media View Model public API.",
+      "declaration": "{\n  readonly kind: 'image' | 'video' | 'audio' | 'iframe';\n  readonly src: string;\n  readonly title: string;\n  readonly poster?: string;\n  readonly alt?: string;\n}"
+    },
+    {
+      "kind": "class",
+      "name": "MediaFrameDirective",
+      "sourcePath": "src/cornerstone/media-viewer/media-frame.directive.ts",
+      "category": "communication",
+      "description": "Media Frame public API.",
+      "members": []
+    }
+  ]
+}

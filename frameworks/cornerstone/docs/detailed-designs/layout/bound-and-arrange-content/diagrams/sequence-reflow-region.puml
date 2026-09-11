@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Reflow a region on a narrow container
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up feature page" as page
+  participant "Results table region" as region
+end box
+box "Frontend — Cornerstone layout runtime" #D1FADF
+  participant "CsResponsiveRegionDirective" as directive
+  participant "CsGridDirective" as grid
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Layout engine" as browser
+end box
+
+page -> directive : Bind pattern='table' on the results region per L2-043
+directive -> cdk : Subscribe to the documented breakpoint
+
+alt Server-side render
+  directive -> directive : Report the documented expanded default per L2-043
+else Client render
+  directive -> cdk : Request the current match
+  cdk --> directive : Container width above the breakpoint
+  directive -> region : Set state 'expanded'
+end
+
+user -> browser : Narrow the window
+browser -> cdk : Report the element size change
+cdk --> directive : Container width below the breakpoint
+directive -> directive : Evaluate the table pattern per L2-043
+directive -> region : Set state 'collapsed'
+directive -> grid : Collapse the column configuration per L2-036
+grid -> browser : Declare a single-track template
+directive -> browser : Restack the columns as labelled rows in reading order
+directive -> page : Emit stateChange('collapsed')
+browser --> user : Stacked results readable at the narrow width
+@enduml

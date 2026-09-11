@@ -1,0 +1,47 @@
+{
+  "kind": "class",
+  "name": "OfflineBannerComponent",
+  "sourcePath": "src/cornerstone/offline-banner/offline-banner.component.ts",
+  "category": "data-display",
+  "description": "Offline Banner public API.",
+  "members": [
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "ConnectivityState",
+      "required": false,
+      "defaultValue": "'online'",
+      "description": "State public API.",
+      "structured": false,
+      "options": ["online", "offline", "reconnecting", "queued", "syncing"]
+    },
+    {
+      "name": "queued",
+      "bindingName": "queued",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Queued public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-offline-banner",
+  "slug": "offline-banner",
+  "label": "Offline Banner",
+  "tokens": ["--cs-ink", "--cs-paper", "--cs-space-2", "--cs-space-4"],
+  "relatedSymbols": ["ConnectivityState"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "ConnectivityState",
+      "sourcePath": "src/cornerstone/offline-banner/connectivity-state.type.ts",
+      "category": "data-display",
+      "description": "Connectivity State public API.",
+      "declaration": "'online' | 'offline' | 'reconnecting' | 'queued' | 'syncing'"
+    }
+  ]
+}

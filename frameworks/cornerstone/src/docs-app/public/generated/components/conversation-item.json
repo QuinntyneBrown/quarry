@@ -1,0 +1,81 @@
+{
+  "kind": "class",
+  "name": "ConversationItemComponent",
+  "sourcePath": "src/cornerstone/conversation-item/conversation-item.component.ts",
+  "category": "communication",
+  "description": "Conversation Item public API.",
+  "members": [
+    {
+      "name": "conversation",
+      "bindingName": "conversation",
+      "role": "input",
+      "type": "ConversationItem",
+      "required": true,
+      "description": "Conversation public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-conversation-item",
+  "slug": "conversation-item",
+  "label": "Conversation Item",
+  "tokens": [],
+  "relatedSymbols": ["ConversationItem"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ConversationItem",
+      "sourcePath": "src/cornerstone/conversation-item/conversation-item.interface.ts",
+      "category": "communication",
+      "description": "Conversation Item public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "preview",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Preview public API."
+        },
+        {
+          "name": "unread",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Unread public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Instant public API."
+        }
+      ]
+    }
+  ]
+}

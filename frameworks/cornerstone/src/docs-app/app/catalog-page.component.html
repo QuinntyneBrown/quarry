@@ -1,0 +1,39 @@
+<article class="catalog-page">
+  <header class="catalog-hero">
+    <p class="eyebrow">@quinntyne/cornerstone</p>
+    <h1>Components</h1>
+    <p>
+      Explore every shipped Cornerstone component. Open a component to use the live playground,
+      change its public inputs, observe outputs, inspect source, and read its generated API.
+    </p>
+    <dl>
+      <div>
+        <dt>Components</dt>
+        <dd>{{ componentCount }}</dd>
+      </div>
+      <div>
+        <dt>Public APIs</dt>
+        <dd>{{ symbolCount }}</dd>
+      </div>
+      <div>
+        <dt>Categories</dt>
+        <dd>{{ categoryCount }}</dd>
+      </div>
+    </dl>
+  </header>
+  @for (category of categories; track category.key) {
+    <section class="catalog-category" [id]="category.key">
+      <h2>{{ category.label }}</h2>
+      <div class="component-grid">
+        @for (component of category.components; track component.name) {
+          <a [routerLink]="['/components', component.slug, 'overview']">
+            <span class="component-icon" aria-hidden="true">{{ component.label?.charAt(0) }}</span>
+            <strong>{{ component.label }}</strong>
+            <code>{{ component.selector }}</code>
+            <p>{{ description(component) }}</p>
+          </a>
+        }
+      </div>
+    </section>
+  }
+</article>

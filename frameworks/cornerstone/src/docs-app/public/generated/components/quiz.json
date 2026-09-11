@@ -1,0 +1,208 @@
+{
+  "kind": "class",
+  "name": "QuizComponent",
+  "sourcePath": "src/cornerstone/quiz/quiz.component.ts",
+  "category": "workflows",
+  "description": "Quiz public API.",
+  "members": [
+    {
+      "name": "view",
+      "bindingName": "view",
+      "role": "input",
+      "type": "QuizView",
+      "required": true,
+      "description": "View public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "QuizMode",
+      "required": false,
+      "defaultValue": "'take'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": ["take", "review"]
+    },
+    {
+      "name": "answerChanged",
+      "bindingName": "answerChanged",
+      "role": "output",
+      "type": "QuizAnswerChange",
+      "required": false,
+      "description": "Answer Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "navigate",
+      "bindingName": "navigate",
+      "role": "output",
+      "type": "QuizNavigate",
+      "required": false,
+      "description": "Navigate public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "submitted",
+      "bindingName": "submitted",
+      "role": "output",
+      "type": "QuizSubmit",
+      "required": false,
+      "description": "Submitted public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-quiz",
+  "slug": "quiz",
+  "label": "Quiz",
+  "tokens": [],
+  "relatedSymbols": [
+    "QuizAnswerChange",
+    "QuizAnswerMap",
+    "QuizAnswerType",
+    "QuizAnswerValue",
+    "QuizMode",
+    "QuizNavigate",
+    "QuizSubmit",
+    "QuizView"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "QuizAnswerChange",
+      "sourcePath": "src/cornerstone/quiz/quiz-answer-change.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Answer Change public API.",
+      "members": [
+        {
+          "name": "questionId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Question Id public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "QuizAnswerValue",
+          "required": true,
+          "description": "Value public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "QuizAnswerMap",
+      "sourcePath": "src/cornerstone/quiz/quiz-answer-map.type.ts",
+      "category": "workflows",
+      "description": "Quiz Answer Map public API.",
+      "declaration": "Readonly<Record<string, QuizAnswerValue>>"
+    },
+    {
+      "kind": "type",
+      "name": "QuizAnswerType",
+      "sourcePath": "src/cornerstone/quiz/quiz-answer-type.type.ts",
+      "category": "workflows",
+      "description": "Quiz Answer Type public API.",
+      "declaration": "'single' | 'multiple' | 'text'"
+    },
+    {
+      "kind": "type",
+      "name": "QuizAnswerValue",
+      "sourcePath": "src/cornerstone/quiz/quiz-answer-value.type.ts",
+      "category": "workflows",
+      "description": "Quiz Answer Value public API.",
+      "declaration": "string | readonly string[]"
+    },
+    {
+      "kind": "type",
+      "name": "QuizMode",
+      "sourcePath": "src/cornerstone/quiz/quiz-mode.type.ts",
+      "category": "workflows",
+      "description": "Quiz Mode public API.",
+      "declaration": "'take' | 'review'"
+    },
+    {
+      "kind": "interface",
+      "name": "QuizNavigate",
+      "sourcePath": "src/cornerstone/quiz/quiz-navigate.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Navigate public API.",
+      "members": [
+        {
+          "name": "index",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Index public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "QuizSubmit",
+      "sourcePath": "src/cornerstone/quiz/quiz-submit.interface.ts",
+      "category": "workflows",
+      "description": "Quiz Submit public API.",
+      "members": [
+        {
+          "name": "answers",
+          "role": "property",
+          "type": "QuizAnswerMap",
+          "required": true,
+          "description": "Answers public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "QuizView",
+      "sourcePath": "src/cornerstone/quiz/quiz-view.interface.ts",
+      "category": "workflows",
+      "description": "Quiz View public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "questions",
+          "role": "property",
+          "type": "readonly QuizQuestionView[]",
+          "required": true,
+          "description": "Questions public API."
+        },
+        {
+          "name": "answers",
+          "role": "property",
+          "type": "QuizAnswerMap",
+          "required": true,
+          "description": "Answers public API."
+        },
+        {
+          "name": "activeIndex",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Active Index public API."
+        },
+        {
+          "name": "submitting",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Submitting public API."
+        }
+      ]
+    }
+  ]
+}

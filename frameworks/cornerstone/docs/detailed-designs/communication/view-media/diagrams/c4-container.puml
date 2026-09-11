@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — View media
+
+Person(youth, "Youth", "Views lesson media and manages attachments")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides the media viewer, attachment list, evidence preview, and the safe URL pipe")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the media surfaces resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes media kind and attachment status examples")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular route component", "Places the media viewer and the attachment list on a lesson or submission screen")
+  Container(services, "Application services", "Angular injectables", "Builds media and attachment view models, supplies URLs, and owns upload and transfer")
+}
+
+System_Ext(cdk, "Angular CDK", "Layout observation and focus")
+System_Ext(browser, "Browser platform", "Media loading, sandbox enforcement, and object URL lifetime")
+
+Rel(youth, shell, "Opens a lesson or submission screen in")
+Rel(shell, page, "Routes to")
+Rel(page, lib, "Binds media and attachment view models into")
+Rel(lib, services, "Emits retry, remove, and download intents to")
+Rel(services, page, "Supplies the refreshed view models to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Uses for breakpoint observation and focus")
+Rel(lib, browser, "Renders media elements and revokes object URLs in")
+Rel(docs, lib, "Documents variants of")
+@enduml

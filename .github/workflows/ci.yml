@@ -78,3 +78,25 @@ jobs:
           name: frontend-acceptance-results
           path: frontend/apps/quarry/test-results
           if-no-files-found: error
+
+  cornerstone:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: frameworks/cornerstone
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frameworks/cornerstone/package-lock.json
+      - run: npm ci
+      - run: npm run architecture:check
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm run test:coverage
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e

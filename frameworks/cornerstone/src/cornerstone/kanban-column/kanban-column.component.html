@@ -1,0 +1,6 @@
+<section>
+  <h2>{{ column().label }}</h2>
+  @for (item of column().items; track item.id) {
+    <cs-work-item-card [item]="item" (opened)="opened.emit($event)" />
+  }
+</section>

@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — View media
+
+Person(dev, "Application developer", "Places media and attachment surfaces on Word Up screens")
+Person(youth, "Youth", "Watches lesson media and attaches evidence to an assignment")
+Person(mentor, "Mentor", "Reviews submitted evidence")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the media viewer, attachment list, and evidence preview")
+System_Ext(app, "Consuming application", "Word Up Angular application owning upload, storage, and every media URL")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for layout observation and focus")
+System_Ext(browser, "Browser platform", "Loads media, enforces the sandbox, and manages object URLs")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes media screens from")
+Rel(dev, app, "Binds the media view model in")
+Rel(app, cornerstone, "Supplies media and attachment view models with validated URLs to")
+Rel(cornerstone, app, "Emits retry, remove, and download intents to")
+Rel(cornerstone, cdk, "Builds layout and focus behaviour on")
+Rel(cornerstone, browser, "Renders media elements and revokes object URLs in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(youth, browser, "Views lesson media in")
+Rel(mentor, browser, "Reviews evidence previews in")
+@enduml

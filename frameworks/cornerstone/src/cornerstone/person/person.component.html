@@ -1,0 +1,9 @@
+<cs-avatar [name]="person().name" [src]="person().avatarSrc ?? null" /><span
+  ><strong>{{ person().name }}</strong>
+  @if (person().secondary) {
+    <small>{{ person().secondary }}</small>
+  }
+</span>
+@if (person().status) {
+  <cs-badge>{{ person().status }}</cs-badge>
+}

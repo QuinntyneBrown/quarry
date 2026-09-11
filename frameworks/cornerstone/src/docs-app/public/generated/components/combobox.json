@@ -1,0 +1,46 @@
+{
+  "kind": "class",
+  "name": "ComboboxComponent",
+  "sourcePath": "src/cornerstone/combobox/combobox.component.ts",
+  "category": "forms",
+  "description": "Combobox public API.",
+  "members": [
+    {
+      "name": "options",
+      "bindingName": "options",
+      "role": "input",
+      "type": "readonly { label: string; value: string }[]",
+      "required": true,
+      "description": "Options public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "ComboboxMode",
+      "required": false,
+      "defaultValue": "'single'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": ["single", "multiple"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-combobox",
+  "slug": "combobox",
+  "label": "Combobox",
+  "tokens": ["--cs-border", "--cs-paper", "--cs-shadow-md", "--cs-space-3"],
+  "relatedSymbols": ["ComboboxMode"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "ComboboxMode",
+      "sourcePath": "src/cornerstone/combobox/combobox-mode.type.ts",
+      "category": "forms",
+      "description": "Combobox Mode public API.",
+      "declaration": "'single' | 'multiple'"
+    }
+  ]
+}

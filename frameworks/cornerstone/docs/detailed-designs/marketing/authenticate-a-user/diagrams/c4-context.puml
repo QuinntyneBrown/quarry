@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Authenticate a user
+
+Person(dev, "Application developer", "Composes the authentication screens of Liturgy and Word Up")
+Person(user, "Application user", "Signs in, recovers a password, or accepts an invitation")
+Person_Ext(guardian, "Guardian", "Accepts an invitation to a young person's account in Word Up")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the authentication layout and card")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(identity, "Identity service", "Verifies credentials and issues the session, owned by the application")
+System_Ext(browser, "Browser platform", "Renders the screen and reports the viewport width")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Composes the authentication routes of")
+Rel(app, cornerstone, "Renders the layout, card, and error area from")
+Rel(app, identity, "Submits credentials to", "HTTPS")
+Rel(identity, app, "Returns the session or the failure to")
+Rel(cornerstone, browser, "Renders the screen and moves focus in")
+Rel(browser, user, "Presents the authentication screen to")
+Rel(browser, guardian, "Presents the invitation screen to")
+Rel(user, browser, "Enters credentials in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

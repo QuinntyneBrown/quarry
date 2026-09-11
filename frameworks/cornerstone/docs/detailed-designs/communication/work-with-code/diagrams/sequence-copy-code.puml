@@ -1,0 +1,60 @@
+@startuml
+title UML sequence behaviour — Copy a code block
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "LessonSourceService" as vm
+end box
+box "Frontend — Cornerstone code" #D1FADF
+  participant "CodeBlockComponent" as block
+  participant "CsCopyToClipboardDirective" as copy
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Clipboard" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Clipboard and live region" as browser
+end box
+
+vm --> block : Supply the worked-example source and the language label
+block -> browser : Place the source in pre and code as a text node per L2-115
+block -> block : Include the language label in the accessible name per L2-115
+
+alt Source contains HTML markup or a script tag
+  block -> browser : Render every character literally and insert no element per L2-115
+  browser --> user : Visible markup as text
+else Source is plain text
+  browser --> user : Formatted source with whitespace preserved
+end
+
+alt Wrap mode is scroll and a line is long
+  block -> browser : Apply tabindex="0" and an accessible name to the scroll container per L2-115
+  user -> browser : Scroll the block by keyboard
+  browser --> user : Remainder of the long line
+else Wrap mode is wrap
+  block -> browser : Wrap the long line inside the container width
+end
+
+user -> block : Activate the copy control
+block -> copy : Copy the exact source characters
+copy -> cdk : Write the text to the clipboard
+cdk -> browser : Perform the clipboard write
+browser --> copy : Write complete
+copy -> browser : Announce the copy politely per L2-115
+copy -> browser : Leave focus on the copy control
+browser --> user : Confirmed copy without a focus move
+block -> vm : Emit copied
+@enduml

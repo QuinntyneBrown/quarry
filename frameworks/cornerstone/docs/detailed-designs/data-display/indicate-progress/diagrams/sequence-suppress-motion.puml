@@ -1,0 +1,54 @@
+@startuml
+title UML sequence behaviour — Suppress motion under a reduced-motion preference
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "SpinnerComponent" as spinner
+  participant "SkeletonGroupComponent" as group
+  participant "ProgressBarComponent" as bar
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Indicator styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Media queries and assistive technology" as dom
+end box
+
+user -> dom : Set the operating system reduced-motion preference
+page -> spinner : Render with a label in region mode
+spinner -> styles : Resolve the rotation duration from tokens
+styles -> dom : Query prefers-reduced-motion
+dom --> styles : reduce
+
+styles -> spinner : Suppress the rotation per L2-084
+spinner -> dom : Keep role status and announce the label politely once per L2-084
+spinner -> dom : Mark the covered region aria-busy and withhold its tab stops per L2-084
+
+page -> group : Set loading true
+group -> styles : Resolve the shimmer animation
+styles -> group : Suppress the shimmer per L2-085
+group -> dom : Render static shapes with aria-busy retained per L2-085
+
+page -> bar : Render in indeterminate mode
+bar -> dom : Omit aria-valuenow and expose the indeterminate state per L2-088
+bar -> styles : Resolve the sweep animation
+styles -> bar : Suppress the sweep per L2-088
+bar -> dom : Retain a static busy indication per L2-088
+dom --> user : Every busy condition reported with no moving element
+@enduml

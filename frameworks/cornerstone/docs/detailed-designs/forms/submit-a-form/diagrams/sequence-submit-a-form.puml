@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Submit a valid form
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormGroup" as form
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone submission components" #D1FADF
+  participant "FormActionsComponent" as actions
+  participant "Duplicate submission guard" as guard
+end box
+box "Browser — platform" #FFF4E5
+  participant "Native form element" as native
+end box
+
+page -> actions : Bind label, sticky, and submitting false
+actions -> native : Expose role=group with the accessible name per L2-060
+actions -> native : Place the submit control first in DOM order per L2-060
+
+opt Viewport XS with sticky enabled
+  actions -> native : Hold the bar above the fold and respect safe-area insets per L2-060
+  user -> native : Focus the last form control
+  actions -> native : Keep the bar clear of the focused control per L2-060
+end
+
+user -> native : Press Enter in a single-line text control
+native -> native : Trigger the default submit control exactly once per L2-063
+native -> page : submit event
+page -> form : Read the form status
+form --> page : status VALID
+
+page -> actions : Set submitting true
+actions -> guard : Arm the guard
+actions -> native : Put the primary action in the loading state per L2-060
+actions -> native : Disable the secondary actions per L2-060
+
+user -> native : Activate the submit control again
+native -> guard : Repeat activation
+guard --> actions : Suppressed
+actions --> page : No second submission per L2-060
+
+native -> native : Assemble FormData from every participating control per L2-063
+page -> services : Persist the submitted value
+services --> page : Submission accepted
+page -> actions : Set submitting false
+actions -> native : Restore the primary action and re-enable the secondary actions
+actions --> user : Single tab sequence over the action bar per L2-060
+@enduml

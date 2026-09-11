@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — View media
+
+Person(youth, "Youth", "Views media and manages attachments")
+
+Container_Boundary(appsvc, "Consuming application services") {
+  Component(mediavm, "MediaViewModelService", "Angular injectable", "Builds CsMediaViewModel and AttachmentViewModel and supplies every source URL")
+  Component(transfer, "AttachmentTransferHandler", "Angular injectable", "Receives retry, remove, and download intents and owns upload and storage")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(viewer, "MediaViewerComponent", "Standalone component", "Image, video, iframe, and document presentation with poster, caption, and error state")
+  Component(frame, "MediaFrameDirective", "Directive", "Reserves the declared aspect ratio before the source loads")
+  Component(safeurl, "CsSafeUrlPipe", "Angular pipe", "Applies the scheme, target, and rel contract in L2-164")
+  Component(attach, "AttachmentListComponent", "Standalone component", "File type, size, status, remove, download, and retry")
+  Component(preview, "EvidencePreviewComponent", "Standalone component", "Image preview named from the file name")
+  Component(truncate, "MiddleTruncateDirective", "Directive", "Truncates a long file name in the middle preserving the extension")
+}
+
+System_Ext(cdk, "Angular CDK", "Breakpoint observation and focus")
+System_Ext(browser, "Browser platform", "Media loading, sandbox enforcement, and object URL lifetime")
+
+Rel(mediavm, viewer, "Supplies the media view model to")
+Rel(mediavm, attach, "Supplies the attachment view model to")
+Rel(viewer, transfer, "Emits retryRequested and actionInvoked to")
+Rel(attach, transfer, "Emits removeRequested, retryRequested, and downloadRequested to")
+Rel(attach, preview, "Renders for an image attachment")
+Rel(attach, truncate, "Truncates the file name with")
+Rel(viewer, frame, "Reserves the aspect ratio with")
+Rel(viewer, safeurl, "Validates every source URL through")
+Rel(attach, safeurl, "Validates every download URL through")
+Rel(preview, safeurl, "Validates the preview URL through")
+Rel(viewer, browser, "Attaches the media element with the documented sandbox set to")
+Rel(preview, browser, "Revokes the generated object URL in")
+Rel(viewer, cdk, "Observes the XS breakpoint with")
+Rel(youth, viewer, "Plays and opens media in")
+@enduml

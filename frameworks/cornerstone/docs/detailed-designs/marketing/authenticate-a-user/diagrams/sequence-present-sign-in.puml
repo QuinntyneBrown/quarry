@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Present a sign-in screen
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Sign-in route" as route
+  participant "Credential form" as form
+  participant "Application services" as appsvc
+end box
+box "Frontend — Cornerstone marketing components" #D1FADF
+  participant "AuthLayoutComponent" as layout
+  participant "AuthCardComponent" as card
+  participant "BrandLockupComponent" as lockup
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Auth layout styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and cascade" as browser
+end box
+
+user -> browser : Request the sign-in route
+browser -> route : Render the routed component
+route -> layout : Render with variant 'split' and tone 'brand' per L2-144
+layout -> lockup : Project the brand lockup per L2-148
+layout -> styles : Resolve the two-column grid and panel tone
+styles --> layout : Computed layout
+layout -> card : Position the card in the form column
+card -> card : Render the title as the single h1 per L2-144
+card -> browser : Render the lede beneath the title
+card -> form : Project the credential form as default content
+card -> browser : Render the alternate-action links per L2-144
+browser --> user : Sign-in screen
+
+user -> form : Enter credentials and submit
+form -> route : Emit the submitted values
+route -> card : Set pending true
+card -> browser : Mark the submit region busy
+route -> appsvc : Request a session
+appsvc --> route : Session established
+route -> card : Set pending false
+route -> browser : Navigate to the workspace
+browser --> user : Authenticated workspace
+@enduml

@@ -1,0 +1,70 @@
+@startuml
+title UML sequence behaviour — Open a person record
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as mentor
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Person service" as personsvc
+  participant "Authorization service" as authz
+end box
+box "Frontend — Cornerstone people composites" #D1FADF
+  participant "PersonRowComponent" as row
+  participant "PersonSummaryComponent" as summary
+  participant "RecordTabsComponent" as tabs
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Key manager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendering and input" as browser
+end box
+
+mentor -> browser : Open a directory row
+browser -> row : Activation event
+row -> page : Emit CsPersonOpen with the person identifier only
+page -> authz : Ask which record and contacts the viewer may see
+authz --> page : Permitted record scope
+page -> personsvc : Load the record within that scope
+personsvc --> page : Person record and section list
+
+page -> summary : Bind PersonSummaryView per L2-124
+summary -> summary : Render avatar, name, role, cohort, status, and contacts per L2-124
+summary -> summary : Log nothing and persist nothing
+summary --> browser : Profile header presented
+
+page -> tabs : Bind the overview, progress, attendance, and history sections per L2-124
+tabs -> tabs : Render role tablist with the overview tab selected per L2-124
+tabs --> browser : Section set presented
+
+mentor -> browser : Press ArrowRight then Enter
+browser -> keys : Key events
+keys -> tabs : Move the active tab, then select it
+tabs -> page : Emit RecordSectionChange
+
+alt Section content already loaded
+  page -> tabs : Project the attendance content into the panel
+  tabs --> browser : Panel labelled by its tab
+else Section content pending
+  page -> tabs : Mark the section loading
+  tabs -> tabs : Render the section-loading state per L2-124
+  page -> personsvc : Load the attendance section
+  personsvc --> page : Section content
+  page -> tabs : Project the loaded content
+  tabs --> browser : Panel repainted
+end
+
+browser --> mentor : Record section presented
+@enduml

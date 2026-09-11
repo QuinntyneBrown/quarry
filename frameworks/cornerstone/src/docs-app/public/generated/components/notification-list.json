@@ -1,0 +1,168 @@
+{
+  "kind": "class",
+  "name": "NotificationListComponent",
+  "sourcePath": "src/cornerstone/notification-list/notification-list.component.ts",
+  "category": "communication",
+  "description": "Notification List public API.",
+  "members": [
+    {
+      "name": "notifications",
+      "bindingName": "notifications",
+      "role": "input",
+      "type": "readonly CsNotificationViewModel[]",
+      "required": true,
+      "description": "Notifications public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "CsDataState",
+      "required": false,
+      "defaultValue": "{ status: 'ready', data: undefined }",
+      "description": "State public API.",
+      "structured": false,
+      "options": ["idle", "loading", "empty", "error", "ready"]
+    },
+    {
+      "name": "unreadCount",
+      "bindingName": "unreadCount",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Unread Count public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "markRead",
+      "bindingName": "markRead",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Mark Read public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "markAllRead",
+      "bindingName": "markAllRead",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Mark All Read public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "navigate",
+      "bindingName": "navigate",
+      "role": "output",
+      "type": "CsNotificationNavigateIntent",
+      "required": false,
+      "description": "Navigate public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-notification-list",
+  "slug": "notification-list",
+  "label": "Notification List",
+  "tokens": [],
+  "relatedSymbols": ["CsDataState", "CsNotificationNavigateIntent", "CsNotificationViewModel"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsDataState",
+      "sourcePath": "src/cornerstone/core/platform/cs-data-state.type.ts",
+      "category": "platform",
+      "description": "Cs Data State public API.",
+      "declaration": "| { readonly status: 'idle' | 'loading' | 'empty' }\n  | { readonly status: 'error'; readonly error: CsDataStateError }\n  | { readonly status: 'ready'; readonly data: T }"
+    },
+    {
+      "kind": "interface",
+      "name": "CsNotificationNavigateIntent",
+      "sourcePath": "src/cornerstone/core/communication/cs-notification-navigate-intent.interface.ts",
+      "category": "communication",
+      "description": "Cs Notification Navigate Intent public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "target",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Target public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsNotificationViewModel",
+      "sourcePath": "src/cornerstone/core/communication/cs-notification-view-model.interface.ts",
+      "category": "communication",
+      "description": "Cs Notification View Model public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "category",
+          "role": "property",
+          "type": "CsNotificationCategory",
+          "required": true,
+          "description": "Category public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Instant public API."
+        },
+        {
+          "name": "read",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Read public API."
+        },
+        {
+          "name": "target",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Target public API."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Submit a form
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+enum CsFormParticipation {
+  native
+  angular-only
+}
+
+enum WizardStepState {
+  pending
+  current
+  complete
+  skipped
+}
+
+class FormActionsComponent {
+  +label: InputSignal<string>
+  +submitting: InputSignal<boolean>
+  +sticky: InputSignal<boolean>
+  +secondaryPlacement: InputSignal<'leading' | 'trailing'>
+  +cancelled: OutputEmitterRef<void>
+  #role: 'group'
+  #isDuplicateActivation: Signal<boolean>
+}
+
+class ValidationSummaryComponent {
+  +errors: InputSignal<readonly ValidationEntry[]>
+  +heading: InputSignal<string>
+  +entryActivated: OutputEmitterRef<string>
+  #focusHeading(): void
+  #announceOnce(): void
+}
+
+class ValidationEntry {
+  +controlId: string
+  +label: string
+  +message: string
+}
+
+class WizardComponent {
+  +steps: InputSignal<readonly WizardStep[]>
+  +currentStep: ModelSignal<string>
+  +resumeState: InputSignal<CsWizardResumeState | null>
+  +finishing: InputSignal<boolean>
+  +stepChanged: OutputEmitterRef<string>
+  +finished: OutputEmitterRef<unknown>
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+  #next(): void
+  #back(): void
+  #skip(): void
+  #finish(): void
+}
+
+class WizardStep {
+  +id: string
+  +title: string
+  +optional: boolean
+  +valid: boolean
+  +state: WizardStepState
+}
+
+class CsWizardResumeState {
+  +stepId: string
+  +values: Record<string, unknown>
+}
+
+class CsStepper {
+  +steps: InputSignal<readonly WizardStep[]>
+  +current: InputSignal<string>
+  +compact: InputSignal<boolean>
+}
+
+class CsValidationGate <<function>> {
+  +canAdvance(step: WizardStep): boolean
+}
+
+class CsFocusRouter {
+  +focusHeading(element: HTMLElement): void
+  +focusControl(controlId: string): void
+}
+
+class CsControlParticipation {
+  +control: string
+  +participation: CsFormParticipation
+  +name: string | null
+}
+
+WizardComponent ..|> ControlValueAccessor
+WizardComponent o-- "1..*" WizardStep : sequences
+WizardComponent --> CsWizardResumeState : restores from
+WizardComponent *-- CsStepper : renders its header as
+WizardComponent *-- FormActionsComponent : renders its actions as
+WizardComponent ..> CsValidationGate : gates advancement through
+WizardComponent o-- ValidationSummaryComponent : announces step errors through
+WizardStep --> WizardStepState : has
+ValidationSummaryComponent o-- "0..*" ValidationEntry : lists
+ValidationSummaryComponent ..> CsFocusRouter : moves focus through
+CsControlParticipation --> CsFormParticipation : records
+FormActionsComponent ..> CsControlParticipation : submits controls declaring
+@enduml

@@ -1,0 +1,111 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Open a drawer
+
+enum DrawerPosition {
+  start
+  end
+  bottom
+}
+
+enum DrawerMode {
+  modal
+  nonModal
+}
+
+class DrawerComponent {
+  +opened: ModelSignal<boolean>
+  +position: InputSignal<DrawerPosition>
+  +mode: InputSignal<DrawerMode>
+  +size: InputSignal<string>
+  +responsiveFullScreen: InputSignal<boolean>
+  +dismissible: InputSignal<boolean>
+  +openedChange: OutputEmitterRef<boolean>
+  +closed: OutputEmitterRef<void>
+  -effectiveMode: Signal<DrawerMode>
+  -previouslyFocused: HTMLElement
+  +open(): void
+  +close(): void
+  -engageTrap(): void
+  -releaseTrap(): void
+}
+
+class DrawerContainerComponent {
+  +drawer: Signal<DrawerComponent>
+  +contentInset: Signal<string>
+}
+
+class DrawerConfig<D> {
+  +data: D
+  +position: DrawerPosition
+  +mode: DrawerMode
+  +size: string
+  +responsiveFullScreen: boolean
+  +dismissible: boolean
+  +restoreFocus: boolean
+  +ariaLabelledBy: string
+}
+
+class DrawerService {
+  -overlay: Overlay
+  +open<R, D, C>(component: ComponentType<C>, config?: DrawerConfig<D>): DrawerRef<R, C>
+  +closeAll(): void
+}
+
+class DrawerRef<R, C> {
+  +componentInstance: C
+  +closed: Observable<R | undefined>
+  +backdropClick: Observable<MouseEvent>
+  +close(result?: R): void
+}
+
+class DrawerHeaderDirective {
+  +title: InputSignal<string>
+  +showClose: InputSignal<boolean>
+}
+
+class DrawerFooterDirective {
+  +align: InputSignal<CsDrawerFooterAlign>
+}
+
+enum CsDrawerFooterAlign {
+  start
+  end
+  between
+}
+
+class FocusTrap <<CDK>> {
+  +focusInitialElement(): boolean
+  +destroy(): void
+}
+
+class BreakpointObserver <<CDK>> {
+  +observe(query: string): Observable<BreakpointState>
+}
+
+DrawerComponent --> DrawerPosition : has
+DrawerComponent --> DrawerMode : has
+DrawerComponent *-- "0..1" FocusTrap : owns while modal
+DrawerComponent ..> BreakpointObserver : reads
+DrawerComponent o-- "0..1" DrawerHeaderDirective : projects
+DrawerComponent o-- "0..1" DrawerFooterDirective : projects
+DrawerContainerComponent o-- "1" DrawerComponent : reflows around
+DrawerService ..> DrawerConfig : reads
+DrawerService --> "0..*" DrawerRef : returns
+DrawerService ..> DrawerComponent : attaches
+DrawerConfig --> DrawerPosition : has
+DrawerConfig --> DrawerMode : has
+DrawerFooterDirective --> CsDrawerFooterAlign : has
+DrawerRef ..> DrawerComponent : closes
+@enduml

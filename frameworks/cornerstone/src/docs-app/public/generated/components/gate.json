@@ -1,0 +1,214 @@
+{
+  "kind": "class",
+  "name": "GateComponent",
+  "sourcePath": "src/cornerstone/gate/gate.component.ts",
+  "category": "process",
+  "description": "Gate public API.",
+  "members": [
+    {
+      "name": "id",
+      "bindingName": "id",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Id public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "requirements",
+      "bindingName": "requirements",
+      "role": "input",
+      "type": "readonly CsRequirement[]",
+      "required": true,
+      "description": "Requirements public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "GateMode",
+      "required": false,
+      "defaultValue": "'read'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": ["read", "edit"]
+    },
+    {
+      "name": "requirementToggle",
+      "bindingName": "requirementToggle",
+      "role": "output",
+      "type": "CsRequirementToggleIntent",
+      "required": false,
+      "description": "Requirement Toggle public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "advance",
+      "bindingName": "advance",
+      "role": "output",
+      "type": "GateAdvanceIntent",
+      "required": false,
+      "description": "Advance public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-gate",
+  "slug": "gate",
+  "label": "Gate",
+  "tokens": [],
+  "relatedSymbols": [
+    "CsRequirement",
+    "CsRequirementToggleIntent",
+    "GateAdvanceIntent",
+    "GateAnnouncer",
+    "GateMode",
+    "GateSummary"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "CsRequirement",
+      "sourcePath": "src/cornerstone/core/process/cs-requirement.interface.ts",
+      "category": "process",
+      "description": "Cs Requirement public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "complete",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Complete public API."
+        },
+        {
+          "name": "required",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Required public API."
+        },
+        {
+          "name": "disabled",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Disabled public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "CsRequirementToggleIntent",
+      "sourcePath": "src/cornerstone/core/process/cs-requirement-toggle-intent.interface.ts",
+      "category": "process",
+      "description": "Cs Requirement Toggle Intent public API.",
+      "members": [
+        {
+          "name": "requirementId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Requirement Id public API."
+        },
+        {
+          "name": "complete",
+          "role": "property",
+          "type": "boolean",
+          "required": true,
+          "description": "Complete public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "GateAdvanceIntent",
+      "sourcePath": "src/cornerstone/gate/gate-advance-intent.interface.ts",
+      "category": "process",
+      "description": "Gate Advance Intent public API.",
+      "members": [
+        {
+          "name": "gateId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Gate Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "class",
+      "name": "GateAnnouncer",
+      "sourcePath": "src/cornerstone/gate/gate-announcer.class.ts",
+      "category": "process",
+      "description": "Gate Announcer public API.",
+      "members": []
+    },
+    {
+      "kind": "type",
+      "name": "GateMode",
+      "sourcePath": "src/cornerstone/gate/gate-mode.type.ts",
+      "category": "process",
+      "description": "Gate Mode public API.",
+      "declaration": "'read' | 'edit'"
+    },
+    {
+      "kind": "interface",
+      "name": "GateSummary",
+      "sourcePath": "src/cornerstone/gate/gate-summary.interface.ts",
+      "category": "process",
+      "description": "Gate Summary public API.",
+      "members": [
+        {
+          "name": "complete",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Complete public API."
+        },
+        {
+          "name": "total",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Total public API."
+        },
+        {
+          "name": "blocking",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Blocking public API."
+        }
+      ]
+    }
+  ]
+}

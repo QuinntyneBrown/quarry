@@ -1,0 +1,48 @@
+@startuml
+title UML sequence behaviour — Resolve an unregistered icon name
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone icon runtime" #D1FADF
+  participant "IconRegistry" as registry
+  participant "IconComponent" as icon
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Icon styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and console" as browser
+end box
+
+page -> icon : Bind name='sundial' from a set that was never registered
+icon -> registry : resolve('sundial')
+registry --> icon : undefined
+
+alt Development build
+  icon -> browser : Report a diagnostic naming the missing icon
+else Production build
+  icon -> icon : Suppress the diagnostic
+end
+
+icon -> styles : Apply the requested size step per L2-034
+styles -> browser : Reserve the layout box at the size edge length
+icon -> browser : Render no fallback glyph and no path content
+icon -> browser : Set aria-hidden='true' so the empty box is not announced
+browser --> page : Stable layout with an empty icon box
+page --> dev : Missing registration surfaced without a network request per L2-034
+@enduml

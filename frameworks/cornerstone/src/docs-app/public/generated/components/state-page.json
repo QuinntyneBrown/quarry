@@ -1,0 +1,67 @@
+{
+  "kind": "class",
+  "name": "StatePageComponent",
+  "sourcePath": "src/cornerstone/state-page/state-page.component.ts",
+  "category": "data-display",
+  "description": "State Page public API.",
+  "members": [
+    {
+      "name": "condition",
+      "bindingName": "condition",
+      "role": "input",
+      "type": "StatePageCondition",
+      "required": false,
+      "defaultValue": "'error'",
+      "description": "Condition public API.",
+      "structured": false,
+      "options": ["not-found", "forbidden", "offline", "error", "maintenance"]
+    },
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "message",
+      "bindingName": "message",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Message public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Action public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-state-page",
+  "slug": "state-page",
+  "label": "State Page",
+  "tokens": [],
+  "relatedSymbols": ["StatePageCondition"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "StatePageCondition",
+      "sourcePath": "src/cornerstone/state-page/state-page-condition.type.ts",
+      "category": "data-display",
+      "description": "State Page Condition public API.",
+      "declaration": "'not-found' | 'forbidden' | 'offline' | 'error' | 'maintenance'"
+    }
+  ]
+}

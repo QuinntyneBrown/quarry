@@ -1,0 +1,68 @@
+@startuml
+title UML sequence behaviour — Queued save and reported conflict
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Attendance page component" as page
+  participant "Attendance store" as store
+  participant "Attendance policy service" as rules
+end box
+box "Frontend — Cornerstone attendance composite" #D1FADF
+  participant "AttendanceRosterComponent" as roster
+  participant "AttendanceChoiceComponent" as choice
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and connectivity" as browser
+end box
+
+user -> browser : Select 'late' for one person
+browser -> choice : Radio selection
+choice -> roster : Value change for the row
+roster -> page : Emit AttendanceChange per L2-125
+
+page -> store : Write the change
+store -> browser : Attempt the request
+browser --> store : Offline
+store --> page : Queued, not yet confirmed
+page -> roster : Bind the row with status 'queued'
+roster -> roster : State the queued status in row text per L2-125
+roster -> announcer : Announce the queued state politely once per L2-125
+announcer --> browser : Polite live region update
+
+... connectivity returns ...
+
+store -> rules : Replay the queued change
+rules --> store : Stored state differs from the emitted state
+store --> page : Conflict for the row
+page -> roster : Bind the row with status 'conflict' and a reason
+roster -> roster : State the conflict reason in row text per L2-125
+roster --> user : Resolve action offered on the row
+
+alt Mentor resolves the conflict
+  user -> roster : Activate the resolve action
+  roster -> page : Emit AttendanceConflictIntent per L2-125
+  page -> rules : Decide the resolution
+  rules --> page : Resolved state
+  page -> roster : Bind the row with status 'clean'
+  roster --> user : Row shows the resolved state in text
+else Mentor leaves the conflict open
+  roster -> roster : Keep the conflict count in the unsaved summary
+  roster --> user : Row remains marked as conflicting
+end
+@enduml

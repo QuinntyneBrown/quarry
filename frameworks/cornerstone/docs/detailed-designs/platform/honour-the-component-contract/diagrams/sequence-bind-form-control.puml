@@ -1,0 +1,71 @@
+@startuml
+title UML sequence behaviour — Bind a control to a reactive form
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up onboarding page" as page
+  participant "FormControl" as control
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "FieldComponent" as field
+  participant "CsInputDirective" as input
+end box
+box "Frontend — Cornerstone contract layer" #ECFDF3
+  participant "CsControlBase" as base
+  participant "CsIdService" as ids
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+page -> field : Bind label, hint, and formControlName
+field -> ids : Request label, hint, and error identifiers
+ids --> field : Document-unique cs- prefixed ids per L2-019
+field -> input : Wire id, for, and aria-describedby per L2-019
+input -> base : Register the control value accessor per L2-018
+base -> control : registerOnChange and registerOnTouched
+control --> base : Initial value and disabled state
+base -> dom : Render the value and the disabled attribute
+
+user -> dom : Type a new value
+dom -> input : Input event
+input -> base : Update the value model signal
+base -> control : Propagate the value per L2-018
+control -> control : Mark dirty and run validators
+
+user -> dom : Move focus away from the control
+dom -> base : Blur event
+base -> control : Mark touched exactly once per L2-018
+
+alt Control is invalid and touched
+  control --> field : Status INVALID
+  field -> field : Render the error element
+  field -> input : Append the error id to aria-describedby per L2-019
+  input -> dom : Set aria-invalid="true" and aria-errormessage
+  dom --> user : Announced error and invalid state
+else Control is valid
+  control --> field : Status VALID
+  field -> field : Remove the error element
+  field -> input : Drop the error id from aria-describedby per L2-019
+  dom --> user : Control without an error relationship
+end
+
+opt Application disables the control
+  page -> control : control.disable()
+  control -> base : setDisabledState(true)
+  base -> dom : Set the disabled state for assistive technology per L2-018
+end
+@enduml

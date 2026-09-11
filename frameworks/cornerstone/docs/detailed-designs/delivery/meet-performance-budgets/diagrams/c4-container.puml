@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Meet performance budgets
+
+Person(maintainer, "Library maintainer", "Reads the budget report on the pull request")
+
+System_Boundary(cornerstone, "Cornerstone workspace") {
+  Container(lib, "cornerstone library", "Angular library", "Declares sideEffects false and OnPush components under zoneless change detection")
+  Container(artifact, "dist/cornerstone", "Angular Package Format output", "The measured artifact")
+  Container(docs, "design-system docs app", "Angular application", "Hosts the component gallery the latency and lifecycle suites drive")
+  Container(site, "marketing site", "Angular application", "Declares the initial and component-style budgets in angular.json")
+  Container(budgets, "Budget files", "perf/size-budgets.json and perf/latency-budgets.json", "Recorded bounds and the reference hardware profile")
+}
+
+System_Boundary(ci, "GitHub Actions") {
+  Container(verify, "CI workflow", ".github/workflows/ci.yml", "Runs npm ci, npm test, npm run build, and npm run format:check")
+  Container(job, "budgets job", "Workflow job", "Runs size:report, perf:latency, and perf:leak and publishes the report")
+}
+
+System_Ext(browser, "Browser platform", "Headless browser reporting paint timing and layout shift")
+System_Ext(npm, "npm registry", "Receives the artifact after the budgets job passes")
+
+Rel(maintainer, job, "Reads the pull request summary from")
+Rel(lib, artifact, "Is built into")
+Rel(verify, job, "Runs after the build step of")
+Rel(job, artifact, "Measures the gzipped size of each entry point in")
+Rel(job, budgets, "Compares measurements to")
+Rel(job, docs, "Drives the component gallery of")
+Rel(docs, browser, "Renders under the reference profile in")
+Rel(browser, job, "Reports paint timing and layout shift to")
+Rel(job, npm, "Gates publication to")
+Rel(site, artifact, "Consumes the entry points measured in")
+@enduml

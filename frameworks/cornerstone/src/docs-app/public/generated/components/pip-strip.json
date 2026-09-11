@@ -1,0 +1,75 @@
+{
+  "kind": "class",
+  "name": "PipStripComponent",
+  "sourcePath": "src/cornerstone/pip-strip/pip-strip.component.ts",
+  "category": "process",
+  "description": "Pip Strip public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Progress'",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "items",
+      "bindingName": "items",
+      "role": "input",
+      "type": "readonly Movement[]",
+      "required": true,
+      "description": "Items public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-pip-strip",
+  "slug": "pip-strip",
+  "label": "Pip Strip",
+  "tokens": ["--cs-border", "--cs-lime-strong", "--cs-space-1"],
+  "relatedSymbols": ["Movement"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "Movement",
+      "sourcePath": "src/cornerstone/movement-list/movement.interface.ts",
+      "category": "process",
+      "description": "Movement public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "MovementState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Progress public API."
+        }
+      ]
+    }
+  ]
+}

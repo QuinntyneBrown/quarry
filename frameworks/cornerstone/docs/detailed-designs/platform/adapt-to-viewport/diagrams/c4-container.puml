@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Adapt to viewport
+
+Person(dev, "Application developer", "Consumes the breakpoint mixins and the responsive directives")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(bp, "Breakpoint source", "TypeScript constant and Sass partial", "Declares XS, SM, MD, LG, and XL once and publishes them in three forms")
+  Container(lib, "Component library", "Angular standalone components and directives", "Tables, filter bars, shells, and boards that change structure by class")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Publishes the thresholds as --cs-bp- properties alongside spacing and container tokens")
+  Container(adapters, "CDK adapter layer", "Angular services", "CsBreakpointService over BreakpointObserver")
+  Container(harness, "Responsive verification harness", "Automated tests and coverage gate", "Renders every UI-facing component at all five classes")
+  Container(docs, "Documentation site", "Angular application", "Publishes the threshold table and the transform documented for each component")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(styles, "Application stylesheet", "Sass", "Calls cs-from, cs-until, and cs-between")
+  Container(page, "Feature page", "Angular components", "Composes responsive components")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver")
+
+Rel(dev, styles, "Writes breakpoint mixin calls in")
+Rel(styles, bp, "Imports the mixins from", "@quinntyne/cornerstone/styles/breakpoints")
+Rel(page, lib, "Composes responsive components from")
+Rel(lib, adapters, "Reads the active viewport class from")
+Rel(adapters, bp, "Builds its media queries from")
+Rel(adapters, cdk, "Observes through")
+Rel(theme, bp, "Republishes the thresholds from")
+Rel(lib, theme, "Resolves spacing and container bounds from")
+Rel(harness, lib, "Renders and asserts every documented transform of")
+Rel(harness, bp, "Iterates the five classes of")
+Rel(docs, bp, "Documents the threshold table of")
+@enduml

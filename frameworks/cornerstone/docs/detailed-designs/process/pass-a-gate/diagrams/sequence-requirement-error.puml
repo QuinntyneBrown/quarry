@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — A requirement toggle fails
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone gate components" #D1FADF
+  participant "RequirementChecklistComponent" as list
+  participant "GateComponent" as gate
+  participant "GateAnnouncer" as announcer
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+user -> dom : Toggle a to-do requirement
+dom -> list : Checkbox change
+list -> page : Emit CsRequirementToggleIntent
+page -> list : Rebind the item with busy set
+list -> dom : Render the busy state per L2-135
+list -> dom : Keep the remaining requirements interactive
+
+page -> services : Persist the toggle
+services --> page : Operation rejected
+
+alt The application reports an error
+  page -> list : Rebind the item with the prior done value and an error message
+  list -> dom : Revert the item to its prior state per L2-135
+  list -> dom : State the error in text beneath the item
+  list -> announcer : Report the error
+  announcer -> cdk : Announce assertively once
+  cdk --> dom : Assertive live-region update
+else The application reports success
+  page -> list : Rebind the item with the new done value
+  list -> dom : Clear the busy state
+end
+
+gate -> dom : Keep the advance action disabled while the gate is blocked per L2-134
+gate -> dom : Restate the outstanding count on the advance action
+dom --> user : Reverted requirement with the error stated
+@enduml

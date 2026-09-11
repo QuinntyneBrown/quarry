@@ -1,0 +1,14 @@
+@if (output().html) {
+  <iframe
+    [srcdoc]="output().html"
+    title="Code preview"
+    sandbox="allow-scripts"
+    referrerpolicy="no-referrer"
+  ></iframe>
+}
+@if (output().stdout) {
+  <pre>{{ output().stdout }}</pre>
+}
+@if (output().stderr) {
+  <pre role="alert">{{ output().stderr }}</pre>
+}

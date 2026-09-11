@@ -1,0 +1,81 @@
+{
+  "kind": "class",
+  "name": "PersonComponent",
+  "sourcePath": "src/cornerstone/person/person.component.ts",
+  "category": "data-display",
+  "description": "Person public API.",
+  "members": [
+    {
+      "name": "person",
+      "bindingName": "person",
+      "role": "input",
+      "type": "PersonSummary",
+      "required": true,
+      "description": "Person public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-person",
+  "slug": "person",
+  "label": "Person",
+  "tokens": ["--cs-ink-muted", "--cs-space-3"],
+  "relatedSymbols": ["PersonSummary"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "PersonSummary",
+      "sourcePath": "src/cornerstone/person/person-summary.interface.ts",
+      "category": "data-display",
+      "description": "Person Summary public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "name",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Name public API."
+        },
+        {
+          "name": "secondary",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Secondary public API."
+        },
+        {
+          "name": "avatarSrc",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Avatar Src public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Status public API."
+        }
+      ]
+    }
+  ]
+}

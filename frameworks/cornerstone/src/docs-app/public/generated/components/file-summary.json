@@ -1,0 +1,67 @@
+{
+  "kind": "class",
+  "name": "FileSummaryComponent",
+  "sourcePath": "src/cornerstone/file-summary/file-summary.component.ts",
+  "category": "forms",
+  "description": "File Summary public API.",
+  "members": [
+    {
+      "name": "files",
+      "bindingName": "files",
+      "role": "input",
+      "type": "readonly FileEntry[]",
+      "required": true,
+      "description": "Files public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "removed",
+      "bindingName": "removed",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Removed public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-file-summary",
+  "slug": "file-summary",
+  "label": "File Summary",
+  "tokens": [],
+  "relatedSymbols": ["FileEntry"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "FileEntry",
+      "sourcePath": "src/cornerstone/file-summary/file-entry.interface.ts",
+      "category": "forms",
+      "description": "File Entry public API.",
+      "members": [
+        {
+          "name": "file",
+          "role": "property",
+          "type": "File",
+          "required": true,
+          "description": "File public API."
+        },
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "progress",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Progress public API."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "kind": "class",
+  "name": "CodeBlockComponent",
+  "sourcePath": "src/cornerstone/code-block/code-block.component.ts",
+  "category": "communication",
+  "description": "Code Block public API.",
+  "members": [
+    {
+      "name": "code",
+      "bindingName": "code",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Code public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "language",
+      "bindingName": "language",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'text'",
+      "description": "Language public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "copied",
+      "bindingName": "copied",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Copied public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-code-block",
+  "slug": "code-block",
+  "label": "Code Block",
+  "tokens": ["--cs-ink", "--cs-paper", "--cs-radius-md", "--cs-space-4"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

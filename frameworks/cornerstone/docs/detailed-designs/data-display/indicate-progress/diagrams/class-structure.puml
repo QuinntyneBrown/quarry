@@ -1,0 +1,113 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Indicate progress
+
+enum CsProgressMode {
+  determinate
+  indeterminate
+}
+
+enum CsSkeletonPreset {
+  text
+  title
+  circle
+  block
+  button
+  tableRow
+}
+
+enum CsSpinnerMode {
+  inline
+  region
+}
+
+enum CsIndicatorSize {
+  xs
+  sm
+  md
+  lg
+  xl
+}
+
+enum CsProgressTone {
+  default
+  ink
+}
+
+interface CsProgressValue {
+  +label: InputSignal<string>
+  +value: InputSignal<number>
+  +min: InputSignal<number>
+  +max: InputSignal<number>
+  +mode: InputSignal<CsProgressMode>
+}
+
+class CsValueHelpers <<functions>> {
+  +csClampProgress(value: number, min: number, max: number): number
+  +csWarnOutOfRange(component: string, value: number): void
+  +csThrottleAnnouncement(text: string, intervalMs: number): void
+}
+
+class SpinnerComponent {
+  +label: InputSignal<string>
+  +size: InputSignal<CsIndicatorSize>
+  +mode: InputSignal<CsSpinnerMode>
+  +decorative: InputSignal<boolean>
+  #role: Signal<'status' | null>
+  #reducedMotion: Signal<boolean>
+}
+
+class SkeletonComponent {
+  +preset: InputSignal<CsSkeletonPreset>
+  +lines: InputSignal<number>
+  +width: InputSignal<string>
+  +height: InputSignal<string>
+}
+
+class SkeletonGroupComponent {
+  +loading: InputSignal<boolean>
+  +label: InputSignal<string>
+  #busy: Signal<boolean>
+}
+
+class ProgressBarComponent {
+  +height: InputSignal<'thin' | 'standard'>
+  +tone: InputSignal<CsProgressTone>
+  +showValue: InputSignal<boolean>
+  #clamped: Signal<number>
+  #percentage: Signal<number>
+}
+
+class ProgressRingComponent {
+  +size: InputSignal<CsIndicatorSize>
+  +tone: InputSignal<CsProgressTone>
+  #clamped: Signal<number>
+  #strokeWidth: Signal<number>
+  #dashOffset: Signal<number>
+}
+
+ProgressBarComponent ..|> CsProgressValue
+ProgressRingComponent ..|> CsProgressValue
+CsProgressValue --> CsProgressMode : has
+ProgressBarComponent ..> CsValueHelpers : clamps and throttles through
+ProgressRingComponent ..> CsValueHelpers : clamps and throttles through
+ProgressBarComponent --> CsProgressTone : has
+ProgressRingComponent --> CsProgressTone : has
+ProgressRingComponent --> CsIndicatorSize : has
+SpinnerComponent --> CsIndicatorSize : has
+SpinnerComponent --> CsSpinnerMode : has
+SkeletonGroupComponent o-- "0..*" SkeletonComponent : projects
+SkeletonGroupComponent ..> SpinnerComponent : may render decoratively
+SkeletonComponent --> CsSkeletonPreset : has
+@enduml

@@ -1,0 +1,14 @@
+<section>
+  <h2>{{ title() }}</h2>
+  <cs-requirement-checklist
+    [requirements]="requirements()"
+    (toggled)="requirementToggle.emit($event)"
+  /><button
+    csButton
+    type="button"
+    [disabled]="summary().blocking > 0"
+    (click)="advance.emit({ gateId: id() })"
+  >
+    Continue
+  </button>
+</section>

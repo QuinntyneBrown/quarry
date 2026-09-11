@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Open an anchored surface
+
+Person(dev, "Application developer", "Places the account menu in the top bar actions region")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Supplies CsMenuDirective, CsMenuItemDirective, PopoverComponent, and AccountMenuComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the elevation, radius, tone, and motion tokens the surfaces read")
+  Container(docs, "Documentation site", "Angular application", "Publishes the positioning, dismissal, and focus contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular component", "Hosts the top bar that carries the account menu trigger")
+  Container(page, "Feature page", "Angular routed components", "Carries row and toolbar action triggers")
+  Container(services, "Application services", "Angular injectables", "Ends the session and executes each selected action")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay container, position strategy, focus trap")
+System_Ext(browser, "Browser platform", "Viewport bounds, pointer events, focus")
+
+Rel(dev, shell, "Declares cs-account-menu in")
+Rel(dev, page, "Applies csMenu to action triggers in")
+Rel(shell, lib, "Renders the account menu of")
+Rel(page, lib, "Opens the anchored surfaces of")
+Rel(lib, services, "Emits action and sign-out intents to")
+Rel(lib, cdk, "Attaches and positions the overlay through")
+Rel(lib, theme, "Resolves visual values from")
+Rel(cdk, browser, "Renders the overlay container in")
+Rel(lib, browser, "Restores focus to the trigger in")
+Rel(docs, lib, "Documents the dismissal contract of")
+@enduml

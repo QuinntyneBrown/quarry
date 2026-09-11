@@ -1,0 +1,15 @@
+{
+  "kind": "class",
+  "name": "DrawerContainerComponent",
+  "sourcePath": "src/cornerstone/drawer-container/drawer-container.component.ts",
+  "category": "overlays",
+  "description": "Drawer Container public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-drawer-container",
+  "slug": "drawer-container",
+  "label": "Drawer Container",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

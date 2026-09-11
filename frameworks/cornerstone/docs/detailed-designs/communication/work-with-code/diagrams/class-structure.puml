@@ -1,0 +1,124 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Work with code
+
+enum CsCodeWrapMode {
+  wrap
+  scroll
+}
+
+enum RunState {
+  idle
+  running
+  succeeded
+  failed
+}
+
+enum CsPreviewKind {
+  text
+  document
+}
+
+enum CsDataState {
+  idle
+  loading
+  ready
+  empty
+  error
+}
+
+class CodeBlockComponent {
+  +source: InputSignal<string>
+  +language: InputSignal<string | null>
+  +wrap: InputSignal<CsCodeWrapMode>
+  +copyable: InputSignal<boolean>
+  +copied: OutputEmitterRef<void>
+  +accessibleName: Signal<string>
+  +scrollable: Signal<boolean>
+}
+
+class CsCopyToClipboardDirective {
+  +text: InputSignal<string>
+  +copy(): Promise<void>
+  -announce(message: string): void
+}
+
+class CsCaretPosition {
+  +line: number
+  +column: number
+  +characters: number
+}
+
+class CaretPositionDirective {
+  +position: Signal<CsCaretPosition>
+  -recompute(value: string, selectionStart: number): CsCaretPosition
+}
+
+class RunIntent {
+  +source: string
+  +language: string | null
+}
+
+class CodeEditorComponent {
+  +value: ModelSignal<string>
+  +label: InputSignal<string>
+  +language: InputSignal<string | null>
+  +readOnly: InputSignal<boolean>
+  +runState: InputSignal<RunState>
+  +runRequested: OutputEmitterRef<RunIntent>
+  +resetRequested: OutputEmitterRef<void>
+  +position: Signal<CsCaretPosition>
+  +writeValue(value: string): void
+  -escapeTabFocus(event: KeyboardEvent): void
+}
+
+class PreviewOutput {
+  +kind: CsPreviewKind
+  +content: string
+  +frameTitle: string | null
+  +errorMessage: string | null
+}
+
+class PreviewPaneComponent {
+  +output: InputSignal<PreviewOutput>
+  +state: InputSignal<CsDataState>
+  +retryRequested: OutputEmitterRef<void>
+  -sandboxTokens(): string
+}
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+class ConfirmDialogComponent {
+  +title: InputSignal<string>
+  +destructive: InputSignal<boolean>
+  +confirmed: OutputEmitterRef<void>
+}
+
+CodeEditorComponent ..|> ControlValueAccessor
+CodeEditorComponent *-- CaretPositionDirective
+CodeEditorComponent --> RunState : has
+CodeEditorComponent --> RunIntent : emits
+CodeEditorComponent ..> ConfirmDialogComponent : presents before reset
+CaretPositionDirective --> CsCaretPosition : exposes
+CodeBlockComponent *-- CsCopyToClipboardDirective
+CodeBlockComponent --> CsCodeWrapMode : has
+PreviewPaneComponent ..> CodeBlockComponent : renders text output through
+PreviewPaneComponent --> PreviewOutput : renders
+PreviewPaneComponent --> CsDataState : has
+PreviewOutput --> CsPreviewKind : has
+@enduml

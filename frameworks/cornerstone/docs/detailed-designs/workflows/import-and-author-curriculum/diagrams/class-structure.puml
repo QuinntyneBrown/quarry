@@ -1,0 +1,212 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Import and author curriculum
+
+enum CsCurriculumNodeKind {
+  track
+  module
+  lesson
+  question
+}
+
+enum CsCurriculumNodeState {
+  draft
+  dirty
+  published
+}
+
+interface CsCurriculumNode {
+  +nodeId: string
+  +parentId: string | null
+  +kind: CsCurriculumNodeKind
+  +title: string
+  +state: CsCurriculumNodeState
+  +children: CsCurriculumNode[]
+}
+
+interface ImportTargetColumn {
+  +field: string
+  +label: string
+  +required: boolean
+}
+
+interface CsColumnMapping {
+  +sourceColumn: string
+  +field: string
+}
+
+interface CsImportRowError {
+  +rowNumber: number
+  +reason: string
+}
+
+interface CsImportValidation {
+  +validCount: number
+  +invalidCount: number
+  +duplicateCount: number
+  +errors: CsImportRowError[]
+  +previewRows: string[][]
+}
+
+interface CsImportProgress {
+  +processed: number
+  +total: number
+}
+
+interface CsImportResult {
+  +importedCount: number
+  +skippedCount: number
+  +summary: string
+}
+
+interface CsImportIntent {
+  +mapping: CsColumnMapping[]
+  +rows: string[][]
+}
+
+interface CsCurriculumReorderIntent {
+  +nodeId: string
+  +newParentId: string | null
+  +newIndex: number
+}
+
+interface CsCurriculumDeleteIntent {
+  +nodeId: string
+  +confirmed: true
+}
+
+interface CsCurriculumSaveIntent {
+  +nodeId: string
+  +title: string
+  +fields: Record<string, unknown>
+}
+
+interface CsProgressionStage {
+  +stageId: string
+  +label: string
+  +position: number
+  +terms: string[]
+  +competencyIds: string[]
+}
+
+interface CsTransitionRule {
+  +fromStageId: string
+  +toStageId: string
+  +permitted: boolean
+  +reason: string | null
+}
+
+interface CsProgressionViewModel {
+  +stages: CsProgressionStage[]
+  +competencies: CsCompetency[]
+}
+
+interface CsCompetency {
+  +competencyId: string
+  +label: string
+}
+
+interface CsCompetencyGridViewModel {
+  +stages: CsProgressionStage[]
+  +competencies: CsCompetency[]
+  +cells: CsCompetencyCell[]
+}
+
+interface CsCompetencyCell {
+  +stageId: string
+  +competencyId: string
+  +expected: boolean
+}
+
+interface CsProgressionReorderIntent {
+  +stageId: string
+  +newIndex: number
+}
+
+interface CsTransitionIntent {
+  +fromStageId: string
+  +toStageId: string
+}
+
+class CsvImportWizardComponent {
+  +targets: InputSignal<ImportTargetColumn[]>
+  +validation: InputSignal<CsImportValidation | null>
+  +progress: InputSignal<CsImportProgress | null>
+  +result: InputSignal<CsImportResult | null>
+  +fileSelected: OutputEmitterRef<File>
+  +mappingChanged: OutputEmitterRef<CsColumnMapping[]>
+  +importRequested: OutputEmitterRef<CsImportIntent>
+  +canAdvance(): boolean
+  -renderCellAsText(value: string): string
+}
+
+class CurriculumTreeComponent {
+  +nodes: InputSignal<CsCurriculumNode[]>
+  +selectedId: ModelSignal<string | null>
+  +addRequested: OutputEmitterRef<CsCurriculumNodeKind>
+  +deleteRequested: OutputEmitterRef<CsCurriculumDeleteIntent>
+  +reorderRequested: OutputEmitterRef<CsCurriculumReorderIntent>
+  +selectionChanged: OutputEmitterRef<string>
+  -announcePosition(nodeId: string, index: number): void
+}
+
+class CurriculumEditorComponent {
+  +node: InputSignal<CsCurriculumNode | null>
+  +dirty: Signal<boolean>
+  +saveRequested: OutputEmitterRef<CsCurriculumSaveIntent>
+  +cancelRequested: OutputEmitterRef<void>
+}
+
+class ProgressionBuilderComponent {
+  +progression: InputSignal<CsProgressionViewModel>
+  +transitions: InputSignal<CsTransitionRule[]>
+  +rowChanged: OutputEmitterRef<CsProgressionStage>
+  +reorderRequested: OutputEmitterRef<CsProgressionReorderIntent>
+  +transitionRequested: OutputEmitterRef<CsTransitionIntent>
+  +canSave(): boolean
+}
+
+class CompetencyGridComponent {
+  +grid: InputSignal<CsCompetencyGridViewModel>
+  +cellActivated: OutputEmitterRef<CsCompetencyCell>
+}
+
+CsvImportWizardComponent --> "0..*" ImportTargetColumn : maps to
+CsvImportWizardComponent --> "0..1" CsImportValidation : reads
+CsImportValidation o-- "0..*" CsImportRowError : lists
+CsvImportWizardComponent --> "0..1" CsImportProgress : reports
+CsvImportWizardComponent --> "0..1" CsImportResult : summarizes
+CsvImportWizardComponent ..> CsImportIntent : emits
+CsvImportWizardComponent ..> CsColumnMapping : emits
+
+CurriculumTreeComponent --> "1..*" CsCurriculumNode : renders
+CsCurriculumNode *-- "0..*" CsCurriculumNode : contains
+CsCurriculumNode --> "1" CsCurriculumNodeKind : has
+CsCurriculumNode --> "1" CsCurriculumNodeState : reports
+CurriculumTreeComponent ..> CsCurriculumReorderIntent : emits
+CurriculumTreeComponent ..> CsCurriculumDeleteIntent : emits
+CurriculumEditorComponent --> "0..1" CsCurriculumNode : edits
+CurriculumEditorComponent ..> CsCurriculumSaveIntent : emits
+CurriculumTreeComponent --> CurriculumEditorComponent : publishes selection to
+
+ProgressionBuilderComponent --> "1" CsProgressionViewModel : reads
+CsProgressionViewModel o-- "1..*" CsProgressionStage : orders
+CsProgressionViewModel o-- "0..*" CsCompetency : names
+ProgressionBuilderComponent --> "0..*" CsTransitionRule : consults
+ProgressionBuilderComponent ..> CsProgressionReorderIntent : emits
+ProgressionBuilderComponent ..> CsTransitionIntent : emits
+ProgressionBuilderComponent o-- "1" CompetencyGridComponent : composes
+CompetencyGridComponent --> "1" CsCompetencyGridViewModel : reads
+CsCompetencyGridViewModel o-- "0..*" CsCompetencyCell : holds
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Present a landing page
+
+Person_Ext(visitor, "Application user", "Reads the public page before signing in")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies HeroComponent, ContentSectionComponent, and CtaSectionComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the light, dark, brand, and lime tones and the container bound")
+  Container(docs, "Documentation site", "Angular application", "Publishes the section variant gallery and composition guidance")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular routed component", "Composes the section sequence and supplies the copy and images")
+  Container(shell, "Application shell", "Angular components", "Carries the sticky public header and the in-page navigation")
+  Container(services, "Application services", "Angular injectables", "Handles the emitted intents and routes to sign-up")
+}
+
+System_Ext(browser, "Browser platform", "Rendering, cascade, scrolling, and viewport width")
+
+Rel(visitor, page, "Reads and selects an action in")
+Rel(page, lib, "Renders the hero, content sections, and call to action from")
+Rel(lib, theme, "Resolves tone, spacing, and container bound from")
+Rel(lib, page, "Emits HeroAction and CtaAction to")
+Rel(page, services, "Passes the emitted intent to")
+Rel(shell, lib, "Supplies the sticky header offset to")
+Rel(lib, browser, "Scrolls anchored sections into view in")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the public API of")
+@enduml

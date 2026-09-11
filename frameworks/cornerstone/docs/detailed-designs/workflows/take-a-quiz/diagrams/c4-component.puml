@@ -1,0 +1,40 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Take a quiz
+
+Person(youth, "Youth participant", "Answers and submits")
+
+Container_Boundary(page, "Consuming application — feature page and services") {
+  Component(assessment, "Assessment service", "Angular injectable", "Owns the answer key, the pass threshold, and marking")
+  Component(attempts, "Attempt service", "Angular injectable", "Persists answers and attempt lifecycle")
+  Component(vmbuilder, "Quiz view model builder", "Application code", "Projects domain records into QuizView and QuizResultView")
+  Component(handler, "Intent handler", "Application code", "Receives QuizAnswerChange, QuizNavigate, QuizSubmit, and QuizResultAction")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(quiz, "QuizComponent", "Standalone component", "Sequences questions, indicates progress, and runs the submit and confirm flow")
+  Component(question, "QuizQuestionComponent", "Standalone component", "Renders single-choice, multiple-choice, and text answers; implements ControlValueAccessor")
+  Component(result, "QuizResultComponent", "Standalone component", "Renders score, pass state, per-question feedback, explanations, and actions")
+  Component(types, "Quiz view model and intent types", "TypeScript types", "QuizView, QuizQuestionView, QuizSubmit, QuizResultView, QuizResultAction")
+  Component(styles, "Quiz styles", "Component-scoped CSS", "Resolve --cs- tokens for question, progress, and outcome surfaces")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay, focus trap, and key manager")
+
+Rel(assessment, vmbuilder, "Supplies quiz definitions and marks to")
+Rel(attempts, vmbuilder, "Supplies recorded answers to")
+Rel(vmbuilder, quiz, "Supplies the attempt view model to", "QuizView input")
+Rel(vmbuilder, result, "Supplies the marked view model to", "QuizResultView input")
+Rel(quiz, question, "Passes one question and its recorded value to", "QuizQuestionView input")
+Rel(question, quiz, "Reports the edited value to", "QuizAnswerChange output")
+Rel(quiz, handler, "Emits the answer, navigation, and submit intents to", "outputs")
+Rel(result, handler, "Emits the follow-on action to", "QuizResultAction output")
+Rel(handler, attempts, "Calls to persist the attempt")
+Rel(handler, assessment, "Calls to mark the attempt")
+Rel(quiz, cdk, "Opens the confirm dialog with")
+Rel(quiz, types, "Declares its input and output shapes in")
+Rel(result, types, "Declares its input and output shapes in")
+Rel(quiz, styles, "Renders with")
+Rel(youth, question, "Enters an answer in")
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+title UML sequence behaviour — Localize and mirror a screen
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application config" as config
+  participant "Application shell" as shell
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "PaginatorComponent" as paginator
+  participant "TabGroupComponent" as tabs
+end box
+box "Frontend — Cornerstone localization layer" #ECFDF3
+  participant "CsLocalizationService" as i18n
+  participant "CsDirectionService" as dir
+  participant "CsFormatService" as fmt
+end box
+box "Browser — platform" #FFF4E5
+  participant "Cascade and layout" as browser
+end box
+
+config -> i18n : provideCsLocalization(partial override) per L2-170
+i18n -> i18n : Merge the override over the English defaults
+shell -> browser : Set dir="rtl" on the document element
+browser -> dir : Publish the ambient direction
+dir --> tabs : isRtl() = true
+
+paginator -> i18n : Resolve the result-count key with a count parameter
+alt Key present in the override
+  i18n --> paginator : Translated string per L2-170
+else Key absent from the override
+  i18n --> paginator : English default per L2-170
+end
+paginator -> fmt : Format the page numbers and the total
+fmt --> paginator : Locale-formatted separators per L2-172
+paginator -> i18n : Select the plural form for the count per L2-172
+i18n --> paginator : Plural string chosen by locale rules
+paginator -> browser : Render with logical spacing per L2-171
+browser -> browser : Mirror the layout and flip the chevron icons per L2-171
+browser --> user : Mirrored, translated pagination
+
+user -> tabs : Press ArrowRight
+tabs -> dir : resolveArrow('ArrowRight')
+dir --> tabs : towardStart per L2-171
+tabs -> browser : Move the active tab toward the visual start
+browser --> user : Active tab moved as the direction prescribes
+
+opt Translated label at 200 percent of the English length
+  i18n --> tabs : Long translated tab label
+  tabs -> browser : Render the label with the expansion rules per L2-173
+  browser -> browser : Wrap the label and add no horizontal page scrolling
+  browser --> user : Full label readable, with the complete text exposed to assistive technology
+end
+@enduml

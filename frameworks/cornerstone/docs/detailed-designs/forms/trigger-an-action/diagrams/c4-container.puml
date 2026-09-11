@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Trigger an action
+
+Person(dev, "Application developer", "Places actions on a page")
+Person(user, "Application user", "Activates the action")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone directives and components", "Supplies CsButtonDirective, CsIconButtonDirective, and ButtonGroupComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the appearance, size, focus, and motion tokens the actions resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the appearance matrix and the label rules")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Binds appearance, size, loading, and locked inputs")
+  Container(services, "Application services", "Angular injectables", "Executes the command and reports its pending state")
+}
+
+System_Ext(cdk, "Angular CDK", "Focus monitor and overlay")
+System_Ext(browser, "Browser platform", "Activation events and cascade")
+
+Rel(dev, page, "Places actions in")
+Rel(page, lib, "Binds action directives from")
+Rel(lib, theme, "Resolves appearance and size values from")
+Rel(lib, cdk, "Reads focus origin and positions tooltips through")
+Rel(lib, browser, "Renders native button and anchor hosts to")
+Rel(user, browser, "Activates the rendered action in")
+Rel(browser, page, "Dispatches the activation event to")
+Rel(page, services, "Calls the command handler in")
+Rel(services, page, "Reports the pending state to")
+Rel(docs, lib, "Documents every appearance of")
+@enduml

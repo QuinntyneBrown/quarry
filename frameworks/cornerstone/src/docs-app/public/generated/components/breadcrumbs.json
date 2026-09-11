@@ -1,0 +1,80 @@
+{
+  "kind": "class",
+  "name": "BreadcrumbsComponent",
+  "sourcePath": "src/cornerstone/breadcrumbs/breadcrumbs.component.ts",
+  "category": "navigation",
+  "description": "Breadcrumbs public API.",
+  "members": [
+    {
+      "name": "crumbs",
+      "bindingName": "crumbs",
+      "role": "input",
+      "type": "readonly Crumb[]",
+      "required": true,
+      "description": "Crumbs public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "maxVisible",
+      "bindingName": "maxVisible",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "4",
+      "description": "Max Visible public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "separator",
+      "bindingName": "separator",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'/'",
+      "description": "Separator public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-breadcrumbs",
+  "slug": "breadcrumbs",
+  "label": "Breadcrumbs",
+  "tokens": ["--cs-space-2"],
+  "relatedSymbols": ["Crumb", "CrumbOverflow"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "Crumb",
+      "sourcePath": "src/cornerstone/breadcrumbs/crumb.interface.ts",
+      "category": "navigation",
+      "description": "Crumb public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "href",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Href public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "CrumbOverflow",
+      "sourcePath": "src/cornerstone/breadcrumbs/crumb-overflow.type.ts",
+      "category": "navigation",
+      "description": "Crumb Overflow public API.",
+      "declaration": "'menu' | 'ellipsis'"
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "kind": "class",
+  "name": "PeopleDirectoryComponent",
+  "sourcePath": "src/cornerstone/people-directory/people-directory.component.ts",
+  "category": "workflows",
+  "description": "People Directory public API.",
+  "members": [
+    {
+      "name": "people",
+      "bindingName": "people",
+      "role": "input",
+      "type": "readonly PersonRowView[]",
+      "required": true,
+      "description": "People public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "query",
+      "bindingName": "query",
+      "role": "input",
+      "type": "PeopleQuery",
+      "required": true,
+      "description": "Query public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "state",
+      "bindingName": "state",
+      "role": "input",
+      "type": "CsDataState",
+      "required": false,
+      "defaultValue": "{ status: 'ready', data: undefined }",
+      "description": "State public API.",
+      "structured": false,
+      "options": ["idle", "loading", "empty", "error", "ready"]
+    },
+    {
+      "name": "layout",
+      "bindingName": "layout",
+      "role": "input",
+      "type": "DirectoryLayout",
+      "required": false,
+      "defaultValue": "'auto'",
+      "description": "Layout public API.",
+      "structured": false,
+      "options": ["table", "list", "auto"]
+    },
+    {
+      "name": "queryChanged",
+      "bindingName": "queryChanged",
+      "role": "output",
+      "type": "PeopleQuery",
+      "required": false,
+      "description": "Query Changed public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "output",
+      "type": "CsPersonOpen",
+      "required": false,
+      "description": "Opened public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selectionChanged",
+      "bindingName": "selectionChanged",
+      "role": "output",
+      "type": "PeopleSelectionChange",
+      "required": false,
+      "description": "Selection Changed public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-people-directory",
+  "slug": "people-directory",
+  "label": "People Directory",
+  "tokens": [],
+  "relatedSymbols": [
+    "CsDataState",
+    "CsPersonOpen",
+    "DirectoryLayout",
+    "PeopleFacet",
+    "PeopleQuery",
+    "PeopleSelectionChange",
+    "PersonRowView"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsDataState",
+      "sourcePath": "src/cornerstone/core/platform/cs-data-state.type.ts",
+      "category": "platform",
+      "description": "Cs Data State public API.",
+      "declaration": "| { readonly status: 'idle' | 'loading' | 'empty' }\n  | { readonly status: 'error'; readonly error: CsDataStateError }\n  | { readonly status: 'ready'; readonly data: T }"
+    },
+    {
+      "kind": "interface",
+      "name": "CsPersonOpen",
+      "sourcePath": "src/cornerstone/core/workflows/cs-person-open.interface.ts",
+      "category": "workflows",
+      "description": "Cs Person Open public API.",
+      "members": [
+        {
+          "name": "personId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Person Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "DirectoryLayout",
+      "sourcePath": "src/cornerstone/people-directory/directory-layout.type.ts",
+      "category": "workflows",
+      "description": "Directory Layout public API.",
+      "declaration": "'table' | 'list' | 'auto'"
+    },
+    {
+      "kind": "interface",
+      "name": "PeopleFacet",
+      "sourcePath": "src/cornerstone/people-directory/people-facet.interface.ts",
+      "category": "workflows",
+      "description": "People Facet public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "options",
+          "role": "property",
+          "type": "readonly { id: string; label: string; count: number }[]",
+          "required": true,
+          "description": "Options public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "PeopleQuery",
+      "sourcePath": "src/cornerstone/people-directory/people-query.interface.ts",
+      "category": "workflows",
+      "description": "People Query public API.",
+      "members": [
+        {
+          "name": "search",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Search public API."
+        },
+        {
+          "name": "facets",
+          "role": "property",
+          "type": "Readonly<Record<string, readonly string[]>>",
+          "required": false,
+          "description": "Facets public API."
+        },
+        {
+          "name": "page",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Page public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "PeopleSelectionChange",
+      "sourcePath": "src/cornerstone/people-directory/people-selection-change.interface.ts",
+      "category": "workflows",
+      "description": "People Selection Change public API.",
+      "members": [
+        {
+          "name": "ids",
+          "role": "property",
+          "type": "readonly string[]",
+          "required": true,
+          "description": "Ids public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "PersonRowView",
+      "sourcePath": "src/cornerstone/person-row/person-row-view.interface.ts",
+      "category": "workflows",
+      "description": "Person Row View public API.",
+      "members": [
+        {
+          "name": "status",
+          "role": "property",
+          "type": "PersonStatus",
+          "required": true,
+          "description": "Status public API."
+        },
+        {
+          "name": "role",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Role public API."
+        },
+        {
+          "name": "selected",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Selected public API."
+        }
+      ]
+    }
+  ]
+}

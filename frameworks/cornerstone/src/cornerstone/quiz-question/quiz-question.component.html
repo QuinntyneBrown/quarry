@@ -1,0 +1,23 @@
+<fieldset>
+  <legend>{{ question().prompt }}</legend>
+  @if (question().type === 'text') {
+    <textarea
+      csTextarea
+      [value]="$any(value())"
+      (input)="change($any($event.target).value)"
+    ></textarea>
+  } @else {
+    <cs-choice-group
+      [label]="question().prompt"
+      [mode]="question().type === 'multiple' ? 'multiple' : 'single'"
+    >
+      @for (option of question().options ?? []; track option.id) {
+        <cs-choice-card
+          [selected]="selected(option.id)"
+          (selectedChange)="choose(option.id, $event)"
+          >{{ option.label }}</cs-choice-card
+        >
+      }
+    </cs-choice-group>
+  }
+</fieldset>

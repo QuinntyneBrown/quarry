@@ -1,0 +1,79 @@
+@startuml
+title UML sequence behaviour — Send a message
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "MessageDeliveryHandler" as delivery
+  participant "MessagingViewModelService" as vm
+end box
+box "Frontend — Cornerstone messaging" #D1FADF
+  participant "ConversationListComponent" as list
+  participant "MessageComposerComponent" as composer
+  participant "MessageThreadComponent" as thread
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "cdkTextareaAutosize" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live region and focus" as browser
+end box
+
+vm --> list : Supply the conversation view model with unread counts
+user -> list : Select a conversation
+list -> delivery : Emit conversationSelected with the conversation id per L2-110
+list -> browser : Move focus to the thread heading per L2-110
+vm --> thread : Supply the messages of the selected conversation
+
+user -> composer : Type a multi-line message
+composer -> cdk : Grow the input to the documented maximum per L2-109
+cdk --> composer : Applied row height
+composer -> composer : Update the character count against maxLength
+
+user -> composer : Press the documented send shortcut
+
+alt Value is empty or whitespace only
+  composer -> composer : Emit no intent and set aria-disabled on send per L2-109
+  composer --> user : Disabled send control
+else Application is offline
+  composer -> composer : Enter the queued state
+  composer -> delivery : Emit send with the queued flag per L2-109
+  composer -> browser : Announce the queued status politely
+  browser --> user : Queued confirmation
+else Value is sendable
+  composer -> delivery : Emit send once with the conversation id and body per L2-109
+  composer -> composer : Retain the drafted content until the caller reports success
+  delivery -> vm : Persist the message through application services
+
+  alt Application reports success
+    vm --> composer : Supply an empty value
+    composer -> composer : Clear the input and reset the character count
+    vm --> thread : Append the delivered message per L2-108
+    thread -> browser : Scroll to the new message and announce it once
+    browser --> user : Delivered message in the log
+  else Application reports failure
+    vm --> composer : Supply the error send state
+    composer -> browser : Announce the error assertively and offer retry per L2-109
+    vm --> thread : Mark the message failed
+    thread -> thread : State the failure in text and expose a retry intent per L2-108
+    browser --> user : Retained draft and stated failure
+  end
+end
+
+opt Attachment removed
+  user -> composer : Activate the remove control on an attachment
+  composer -> delivery : Emit attachmentRemoved with the attachment id per L2-109
+end
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Trigger an action
+
+Person(dev, "Application developer", "Composes Liturgy and Word Up screens from Cornerstone actions")
+Person(user, "Application user", "Activates actions with pointer, keyboard, or assistive technology")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the action directives and grouping component")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns the command handler")
+System_Ext(cdk, "Angular CDK", "Focus monitoring and overlay positioning for tooltips and split menus")
+System_Ext(browser, "Browser platform", "Dispatches activation events and resolves the cascade")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Binds action directives from")
+Rel(dev, app, "Writes the command handler in")
+Rel(app, cornerstone, "Renders actions from")
+Rel(cornerstone, cdk, "Builds focus and tooltip behaviour on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders native button and anchor elements to")
+Rel(user, browser, "Activates an action in")
+Rel(browser, app, "Delivers the activation event to")
+@enduml

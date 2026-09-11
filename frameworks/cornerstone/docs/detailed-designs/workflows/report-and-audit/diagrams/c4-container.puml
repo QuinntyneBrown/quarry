@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Report and audit
+
+Person(admin, "Administrator", "Filters, reads, exports, and prints reports")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies the report filters, dashboard, and audit log; holds no store and writes no log")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the FaithTech token set and the print rules the report resolves")
+  Container(docs, "Documentation site", "Angular application", "Publishes the report and audit view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(reportpage, "Reporting page", "Angular feature page", "Builds the report view model and handles the filter and export intents")
+  Container(auditpage, "Audit page", "Angular feature page", "Builds the audit view model and handles the filter, page, and detail intents")
+  Container(services, "Application services", "Angular services", "Owns aggregation, authorization, redaction, paging, and export generation")
+  ContainerDb(warehouse, "Reporting and audit store", "Application data store", "Holds aggregated figures and recorded audit events")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and BreakpointObserver")
+System_Ext(browser, "Browser platform", "Rendering, input, and print")
+
+Rel(admin, browser, "Filters, reads, and prints in")
+Rel(browser, lib, "Delivers pointer, keyboard, and print events to")
+Rel(reportpage, lib, "Supplies ReportViewModel and the panel state to")
+Rel(lib, reportpage, "Emits filtersChanged, viewChanged, and exportRequested to")
+Rel(auditpage, lib, "Supplies the redacted AuditEvent list and the page state to")
+Rel(lib, auditpage, "Emits pageChanged, filtersChanged, and detailToggled to")
+Rel(reportpage, services, "Delegates aggregation and export generation to")
+Rel(auditpage, services, "Delegates paging, authorization, and redaction to")
+Rel(services, warehouse, "Reads")
+Rel(shell, reportpage, "Routes to")
+Rel(shell, auditpage, "Routes to")
+Rel(lib, theme, "Resolves screen and print values from")
+Rel(lib, cdk, "Announces the applied filters and record count through")
+Rel(docs, lib, "Documents the public surface of")
+@enduml

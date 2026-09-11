@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Verify safe rendering of untrusted content
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Pull request branch" as branch
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "security-scan job" as job
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Bypass lint rules" as lint
+  participant "Injection suite" as suite
+  participant "Component under test" as component
+  participant "csSafeUrl()" as safeurl
+  participant "Angular sanitizer" as sanitizer
+end box
+
+maintainer -> branch : Open a pull request touching a component template
+branch -> job : Trigger the security scan
+job -> lint : Scan the library source
+lint -> lint : Reject bypassSecurityTrust* on consumer values per L2-163
+lint -> lint : Reject innerHTML and outerHTML assignment per L2-163
+
+alt Lint finds a forbidden call
+  lint --> job : Blocking finding with file and line
+  job --> maintainer : Fail the check naming the rule
+else Lint is clean
+  lint --> job : No forbidden call
+  job -> suite : Run the injection suite
+  suite -> component : Bind "<script>alert(1)</script>" to every string input
+  component -> sanitizer : Render through interpolation
+  sanitizer --> component : Literal text with no script executed per L2-163
+  suite -> component : Bind a javascript: URL to a link, image, and download input
+  component -> safeurl : Validate the scheme against the allowlist per L2-164
+  safeurl --> component : Null for the rejected scheme
+  component --> suite : Non-navigable element
+  suite -> component : Render a new-tab link and an iframe
+  component --> suite : rel noopener noreferrer, sandbox, title, and referrerpolicy per L2-164
+  suite -> component : Bind a value containing url( to a CSS custom property
+  component --> suite : Rejected before reaching the style attribute per L2-163
+  suite --> job : All payloads rendered inert
+  job --> maintainer : Pass the check with the payload matrix in the job summary
+end
+@enduml

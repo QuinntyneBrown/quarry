@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Enforce the requirement traceability gate
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Acceptance test file" as spec
+  participant "docs/specs/L2.md" as specs
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI verify job" as job
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Traces header parser" as parser
+  participant "Coverage comparer" as comparer
+  participant "Verification report" as report
+end box
+
+maintainer -> spec : Write the header line "// Traces to: L2-154, L2-157"
+maintainer -> job : Push the branch
+
+job -> parser : Scan every *.spec.ts under the library project
+parser -> spec : Read the first comment line
+spec --> parser : "// Traces to: L2-154, L2-157"
+parser -> parser : Split on commas and normalise each identifier
+parser -> parser : Build one CsTraceRecord per spec file per L2-157
+parser --> comparer : Covered identifier set
+
+comparer -> specs : Read every declared L2 identifier
+specs --> comparer : Declared identifier set
+comparer -> comparer : Subtract covered from declared
+comparer -> comparer : Subtract declared from covered
+
+alt A spec file carries no Traces to header
+  parser -> report : Name the file and the missing header per L2-157
+  report --> job : Fail the gate
+else A declared identifier is covered by no test
+  comparer -> report : Name each uncovered identifier per L2-157
+  report --> job : Fail the gate
+else A header cites an identifier the specification does not declare
+  comparer -> report : Name each unknown identifier per L2-157
+  report --> job : Fail the gate
+else Every declared identifier is covered
+  comparer -> report : Record the covered count and the spec files per identifier
+  report --> job : Pass the gate
+end
+
+job --> maintainer : Gate outcome naming identifiers rather than a count per L2-158
+@enduml

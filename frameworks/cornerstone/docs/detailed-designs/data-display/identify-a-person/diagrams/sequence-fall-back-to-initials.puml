@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Fall back from a failed image
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Cohort card" as page
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "AvatarStackComponent" as stack
+  participant "AvatarComponent" as avatar
+  participant "csAvatarPalette()" as palette
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Avatar styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "Image loader and accessibility tree" as dom
+end box
+
+page -> stack : Bind people, max 4, size 'sm'
+stack -> stack : Split the list into drawn participants and a hidden count
+stack -> dom : Write the group name listing every participant per L2-080
+stack -> dom : Withhold a tab stop from each drawn avatar per L2-080
+stack -> avatar : Bind name, src, personId for each drawn participant
+
+avatar -> dom : Request the profile image
+dom --> avatar : Load error
+
+avatar -> avatar : Enter the initials state per L2-079
+avatar -> avatar : Derive two graphemes from the name
+avatar -> palette : Request the entry for personId
+palette --> avatar : Same entry as every other render of this person per L2-079
+avatar -> styles : Resolve the sm box and initials size from tokens per L2-079
+avatar -> dom : Render initials and remove the image element per L2-079
+dom --> user : Initials mark with no broken image and an unchanged group name
+@enduml

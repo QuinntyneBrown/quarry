@@ -1,0 +1,8 @@
+<section>
+  <h2>{{ title() }}</h2>
+  <input type="file" accept=".csv,text/csv" (change)="fileSelected.emit($event)" /><progress
+    [value]="progress()"
+    max="100"
+  ></progress
+  ><ng-content />
+</section>

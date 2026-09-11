@@ -1,0 +1,195 @@
+{
+  "kind": "class",
+  "name": "SubmissionStatusComponent",
+  "sourcePath": "src/cornerstone/submission-status/submission-status.component.ts",
+  "category": "workflows",
+  "description": "Submission Status public API.",
+  "members": [
+    {
+      "name": "submission",
+      "bindingName": "submission",
+      "role": "input",
+      "type": "SubmissionView",
+      "required": true,
+      "description": "Submission public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "versionSelected",
+      "bindingName": "versionSelected",
+      "role": "output",
+      "type": "SubmissionVersionSelect",
+      "required": false,
+      "description": "Version Selected public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-submission-status",
+  "slug": "submission-status",
+  "label": "Submission Status",
+  "tokens": [],
+  "relatedSymbols": [
+    "EvidenceItem",
+    "ReviewFeedback",
+    "SubmissionStatus",
+    "SubmissionVersion",
+    "SubmissionVersionSelect",
+    "SubmissionView"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "EvidenceItem",
+      "sourcePath": "src/cornerstone/submission-status/evidence-item.interface.ts",
+      "category": "workflows",
+      "description": "Evidence Item public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "url",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Url public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ReviewFeedback",
+      "sourcePath": "src/cornerstone/submission-status/review-feedback.interface.ts",
+      "category": "workflows",
+      "description": "Review Feedback public API.",
+      "members": [
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "author",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Author public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Instant public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "SubmissionStatus",
+      "sourcePath": "src/cornerstone/submission-status/submission-status.type.ts",
+      "category": "workflows",
+      "description": "Submission Status public API.",
+      "declaration": "'draft' | 'submitted' | 'returned' | 'approved'"
+    },
+    {
+      "kind": "interface",
+      "name": "SubmissionVersion",
+      "sourcePath": "src/cornerstone/submission-status/submission-version.interface.ts",
+      "category": "workflows",
+      "description": "Submission Version public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "submittedAt",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Submitted At public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "SubmissionVersionSelect",
+      "sourcePath": "src/cornerstone/submission-status/submission-version-select.interface.ts",
+      "category": "workflows",
+      "description": "Submission Version Select public API.",
+      "members": [
+        {
+          "name": "versionId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Version Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "SubmissionView",
+      "sourcePath": "src/cornerstone/submission-status/submission-view.interface.ts",
+      "category": "workflows",
+      "description": "Submission View public API.",
+      "members": [
+        {
+          "name": "status",
+          "role": "property",
+          "type": "SubmissionStatus",
+          "required": true,
+          "description": "Status public API."
+        },
+        {
+          "name": "versions",
+          "role": "property",
+          "type": "readonly SubmissionVersion[]",
+          "required": true,
+          "description": "Versions public API."
+        },
+        {
+          "name": "evidence",
+          "role": "property",
+          "type": "readonly EvidenceItem[]",
+          "required": true,
+          "description": "Evidence public API."
+        },
+        {
+          "name": "feedback",
+          "role": "property",
+          "type": "ReviewFeedback",
+          "required": false,
+          "description": "Feedback public API."
+        }
+      ]
+    }
+  ]
+}

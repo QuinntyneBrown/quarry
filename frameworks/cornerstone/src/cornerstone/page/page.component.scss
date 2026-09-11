@@ -1,0 +1,19 @@
+:host {
+  display: grid;
+  gap: var(--cs-space-6);
+}
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--cs-space-3);
+}
+h1 {
+  font: 700 var(--cs-text-xl)/1.05 var(--cs-font-display);
+  margin: 0;
+}
+p {
+  flex-basis: 100%;
+  color: var(--cs-ink-muted);
+  margin: 0;
+}

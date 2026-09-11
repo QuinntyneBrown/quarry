@@ -1,0 +1,47 @@
+{
+  "kind": "class",
+  "name": "AlertComponent",
+  "sourcePath": "src/cornerstone/alert/alert.component.ts",
+  "category": "foundations",
+  "description": "Alert public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "tone",
+      "bindingName": "tone",
+      "role": "input",
+      "type": "CsMessageTone",
+      "required": false,
+      "defaultValue": "'info'",
+      "description": "Tone public API.",
+      "structured": false,
+      "options": ["neutral", "success", "warning", "error", "info", "lime"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-alert",
+  "slug": "alert",
+  "label": "Alert",
+  "tokens": [],
+  "relatedSymbols": ["CsMessageTone"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsMessageTone",
+      "sourcePath": "src/cornerstone/core/platform/cs-message-tone.type.ts",
+      "category": "platform",
+      "description": "Cs Message Tone public API.",
+      "declaration": "'neutral' | 'success' | 'warning' | 'error' | 'info' | 'lime'"
+    }
+  ]
+}

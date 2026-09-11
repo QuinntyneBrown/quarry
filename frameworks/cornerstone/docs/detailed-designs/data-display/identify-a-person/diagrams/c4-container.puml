@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Identify a person
+
+Person(mentor, "Mentor", "Scans a directory and opens one person record")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies AvatarComponent, AvatarStackComponent, and PersonComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the avatar palette, size scale, and row spacing tokens")
+  Container(docs, "Documentation site", "Angular application", "Publishes the size table and the person row slot contract")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular components", "Maps domain records to PersonSummary values")
+  Container(svc, "Application services", "Angular services", "Fetches person records and owns profile routing")
+}
+
+System_Ext(cdk, "Angular CDK", "Breakpoint observer")
+System_Ext(browser, "Browser platform", "Image loader, cascade, and accessibility tree")
+
+Rel(mentor, page, "Reads and activates rows in")
+Rel(svc, page, "Supplies person records to")
+Rel(page, lib, "Passes PersonSummary values to")
+Rel(lib, theme, "Resolves palette entries and size steps from")
+Rel(lib, cdk, "Reads the XS breakpoint state from")
+Rel(lib, browser, "Requests the profile image through")
+Rel(browser, lib, "Reports image load or error to")
+Rel(lib, page, "Emits CsPersonActivated to")
+Rel(page, svc, "Navigates to the person record through")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the sizes and slots of")
+@enduml

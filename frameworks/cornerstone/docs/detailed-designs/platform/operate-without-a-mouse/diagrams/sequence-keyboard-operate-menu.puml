@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Operate a menu by keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Keyboard user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Word Up account menu host" as page
+end box
+box "Frontend — Cornerstone component library" #D1FADF
+  participant "CsMenuDirective" as menu
+  participant "CsMenuItemDirective" as item
+end box
+box "Frontend — Cornerstone accessibility layer" #ECFDF3
+  participant "CsKeyBindings" as bindings
+  participant "CsRovingFocusDirective" as roving
+  participant "CsFocusVisibleDirective" as visible
+end box
+box "Browser — platform" #FFF4E5
+  participant "Accessibility tree and DOM" as dom
+end box
+
+user -> dom : Tab to the menu button
+dom -> visible : Focus event with a keyboard origin
+visible -> dom : Stamp data-cs-focus-origin="keyboard"
+dom -> dom : Render the --cs-focus indicator per L2-025
+dom --> user : Visible focus on the menu button
+
+user -> dom : Press ArrowDown
+dom -> menu : Keydown event
+menu -> bindings : forPattern('menubutton')
+bindings --> menu : Documented bindings per L2-024
+menu -> menu : Set expanded to true
+menu -> dom : Publish aria-expanded and aria-haspopup per L2-026
+menu -> roving : Attach the item list and focus the first item
+
+user -> roving : Press ArrowDown again
+roving -> roving : Resolve direction against the ambient text direction
+roving -> item : Move the active item per L2-024
+item -> dom : Update tabindex and aria-current state per L2-026
+dom --> user : Focus indicator on the next item
+
+alt User activates an item
+  user -> item : Press Enter
+  item -> menu : Emit the item activation
+  menu -> menu : Set expanded to false
+else User dismisses the menu
+  user -> menu : Press Escape
+  menu -> menu : Set expanded to false per L2-024
+end
+
+menu -> dom : Return focus to the menu button
+dom -> dom : Render the indicator at 3:1 contrast in the dark theme per L2-025
+dom --> user : Focus returns to the trigger with no keyboard trap
+@enduml

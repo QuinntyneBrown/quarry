@@ -1,0 +1,5 @@
+{
+  "ts": "import {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  InjectionToken,\n  Provider,\n  computed,\n  input,\n  output,\n} from '@angular/core';\nimport { BadgeComponent } from '../badge/badge.component';\nimport { CsButtonDirective } from '../core/foundations/cs-button.directive';\nimport { CardComponent } from '../card/card.component';\nimport { ProgressRingComponent } from '../progress-ring/progress-ring.component';\nimport { CheckboxComponent } from '../checkbox/checkbox.component';\nimport { GratitudeNote } from './gratitude-note.interface';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-gratitude-note',\n  imports: [CardComponent],\n  templateUrl: './gratitude-note.component.html',\n  styleUrl: './gratitude-note.component.scss',\n})\nexport class GratitudeNoteComponent {\n  readonly note = input.required<GratitudeNote>();\n}\n",
+  "html": "<cs-card\n  ><blockquote>{{ note().body }}</blockquote>\n  @if (note().author) {\n    <cite>{{ note().author }}</cite>\n  }\n</cs-card>\n",
+  "scss": ""
+}

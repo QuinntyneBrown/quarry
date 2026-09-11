@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Expand a private audit event
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Audit page component" as page
+  participant "Authorization service" as authz
+end box
+box "Frontend — Cornerstone audit composite" #D1FADF
+  participant "AuditLogComponent" as audit
+  participant "Audit detail region" as detail
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Audit log styles" as styles
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM" as dom
+  participant "Console and web storage" as sinks
+end box
+
+page -> authz : Ask which fields this reader may see
+authz --> page : Event marked private, with the withheld fields removed from the list
+page -> audit : Bind AuditEvent carrying only the permitted detail fields
+
+audit -> dom : Render the paged table per L2-093 and the paginator per L2-074
+audit -> dom : State the private indicator in text per L2-131
+audit -> dom : Render the timestamp with a machine-readable value and its timezone per L2-131
+audit -> sinks : No write of actor, target, or detail values per L2-131
+dom --> user : Row showing action, actor, source, target, and the private indicator
+
+user -> dom : Activate the expand control
+dom -> audit : Expand activation
+audit -> dom : Update aria-expanded on the control per L2-131
+audit -> detail : Render the supplied detail fields
+detail -> dom : Emit one element per supplied field per L2-131
+detail -> dom : Emit no element for a withheld field per L2-131
+audit -> dom : Associate the detail region to its row and place it next in keyboard order per L2-131
+dom --> user : Permitted detail, reachable immediately after the row
+
+opt Reader disables the stylesheet
+  user -> styles : Disable the audit log styles
+  styles --> dom : No declarations applied
+  dom --> user : Withheld fields remain absent, because no element was ever rendered per L2-131
+end
+@enduml

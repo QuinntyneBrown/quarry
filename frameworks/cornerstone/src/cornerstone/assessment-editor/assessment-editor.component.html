@@ -1,0 +1,10 @@
+<cs-rubric
+  [rubric]="assessment().rubric"
+  (selected)="changed.emit({ selection: $event })"
+/><textarea
+  csTextarea
+  [value]="assessment().comment"
+  (input)="changed.emit({ comment: $any($event.target).value })"
+></textarea
+><button csButton="secondary" (click)="decided.emit({ decision: 'return' })">Return</button
+><button csButton (click)="decided.emit({ decision: 'approve' })">Approve</button>

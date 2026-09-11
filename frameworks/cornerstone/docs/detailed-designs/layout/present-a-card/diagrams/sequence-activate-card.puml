@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Activate a link card
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone card" #D1FADF
+  participant "CardComponent" as card
+  participant "CsCardHeaderComponent" as header
+  participant "CsCardActionsComponent" as actions
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusMonitor" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as browser
+end box
+
+page -> card : Bind tone='paper', presentation='link'
+card -> browser : Render one anchor as the activation target per L2-039
+card -> header : Project the title into the activation target's accessible name
+header -> browser : Render the heading at the bound level
+card -> actions : Project the trailing controls
+card -> browser : Extend the target hit area across the surface
+card -> browser : Render a divider above the footer per L2-040
+
+user -> browser : Press Tab
+browser -> cdk : Report focus on the activation target
+cdk --> card : Focus origin 'keyboard'
+card -> browser : Render the focus indicator on the single target per L2-039
+browser --> user : One card reached in one tab stop
+
+user -> browser : Press Enter
+browser -> card : Activation event on the target
+card -> card : Confirm the card is not disabled
+card -> page : Emit activated
+page -> services : Navigate to the record
+services --> page : Route activated
+browser --> user : Destination screen
+@enduml

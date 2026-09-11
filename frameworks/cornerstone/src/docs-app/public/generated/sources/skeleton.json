@@ -1,0 +1,5 @@
+{
+  "ts": "import { NgTemplateOutlet } from '@angular/common';\nimport {\n  ChangeDetectionStrategy,\n  Component,\n  Directive,\n  ElementRef,\n  EnvironmentProviders,\n  InjectionToken,\n  Injectable,\n  booleanAttribute,\n  computed,\n  inject,\n  input,\n  makeEnvironmentProviders,\n  output,\n} from '@angular/core';\nimport { CsIdService } from '../core/platform/cs-id.service';\nimport { CsMessageTone } from '../core/platform/cs-message-tone.type';\n\n@Component({\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  selector: 'cs-skeleton',\n  templateUrl: './skeleton.component.html',\n  styleUrl: './skeleton.component.scss',\n  host: { class: 'cs-skeleton', '[attr.aria-hidden]': 'true' },\n})\nexport class SkeletonComponent {\n  readonly preset = input<'text' | 'title' | 'circle' | 'block' | 'button' | 'table-row'>('text');\n}\n",
+  "html": "",
+  "scss": ""
+}

@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Frame the application shell
+
+Person(user, "Application user", "Opens the drawer and activates navigation items")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(shell, "ShellComponent", "Standalone component", "Resolves the sidenav mode, owns the open state, renders the scrim and the main landmark")
+  Component(topbar, "TopbarComponent", "Standalone component", "Sticky bar with brand, heading, pills, notifications, actions, and the menu trigger")
+  Component(sidenav, "SidenavComponent", "Standalone component", "Filters groups by role and renders them as a column or a drawer")
+  Component(group, "NavGroupComponent", "Standalone component", "Labelled and optionally collapsible section of the sidenav")
+  Component(item, "CsNavItemDirective", "Attribute directive", "Applies icon, badge, active, and disabled semantics to an anchor")
+  Component(bottom, "BottomNavComponent", "Standalone component", "Phone primary navigation with safe-area padding")
+  Component(scrim, "Scrim element", "Component-scoped template", "Dims the page and dismisses the drawer on activation")
+}
+
+Container_Boundary(appb, "Consuming application") {
+  Component(config, "Navigation configuration", "Plain data", "NavGroup and CsNavItem values with role lists")
+  Component(router, "Angular Router", "Application routing", "Resolves routerLink bindings and sets routerLinkActive")
+}
+
+System_Ext(cdk, "Angular CDK", "FocusTrap, FocusMonitor, BreakpointObserver")
+
+Rel(user, topbar, "Activates the mobile menu trigger in")
+Rel(user, bottom, "Activates a primary destination in")
+Rel(topbar, shell, "Emits menuToggled to")
+Rel(shell, sidenav, "Passes the resolved mode to")
+Rel(shell, scrim, "Activates when the drawer is open")
+Rel(scrim, shell, "Requests dismissal of")
+Rel(shell, cdk, "Observes the viewport breakpoint through", "BreakpointObserver")
+Rel(shell, cdk, "Traps and restores focus through", "FocusTrap and FocusMonitor")
+Rel(config, sidenav, "Supplies groups, items, and role lists to")
+Rel(sidenav, group, "Renders each visible group as")
+Rel(group, item, "Marks each destination anchor with")
+Rel(router, item, "Sets the active state read by", "routerLinkActive")
+Rel(item, router, "Navigates through", "routerLink")
+@enduml

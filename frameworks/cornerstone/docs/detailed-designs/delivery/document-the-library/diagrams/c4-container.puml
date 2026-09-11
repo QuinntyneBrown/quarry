@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Document the library
+
+Person(dev, "Application developer", "Reads the documentation site")
+Person(maintainer, "Library maintainer", "Authors pages and examples")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(docsite, "Documentation site", "Angular application (design-system)", "Presents one page per public API, the generated reference, and seven guides")
+  Container(lib, "Component library", "Angular standalone components", "Supplies the components the live examples render")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Loaded ahead of the site stylesheet so examples resolve library tokens")
+  Container(extractor, "API extractor", "Node script over the TypeScript compiler API", "Walks public-api.ts and emits one record per exported symbol")
+  ContainerDb(manifest, "API manifest", "Generated JSON asset", "Selectors, inputs, outputs, methods, and injection tokens")
+}
+
+System_Ext(actions, "GitHub Actions", "Deploy design system workflow on push to main")
+System_Ext(swa, "Azure Static Web Apps", "Static host for dist/design-system/browser")
+System_Ext(browser, "Browser platform", "Renders the site and serves the clipboard")
+
+Rel(maintainer, docsite, "Authors pages, examples, and guides in")
+Rel(extractor, lib, "Reads the public entry point of")
+Rel(extractor, manifest, "Writes")
+Rel(docsite, manifest, "Loads the API reference from", "HTTP fetch of a build asset")
+Rel(docsite, lib, "Imports and renders live examples from")
+Rel(docsite, theme, "Resolves example presentation from", "CSS custom properties")
+Rel(actions, extractor, "Runs before the site build")
+Rel(actions, docsite, "Builds with npm run build:docs")
+Rel(actions, swa, "Uploads dist/design-system/browser to")
+Rel(swa, browser, "Serves the site to")
+Rel(browser, dev, "Presents pages and copyable source to")
+@enduml

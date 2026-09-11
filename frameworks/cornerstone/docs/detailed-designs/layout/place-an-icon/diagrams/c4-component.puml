@@ -1,0 +1,30 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Place an icon
+
+Person(dev, "Application developer", "Registers sets and names icons")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(provider, "provideCsIcons()", "Angular provider function", "Registers the registry and seeds it with the supplied sets")
+  Component(registry, "IconRegistry", "Injectable service", "Indexes icon definitions by name and resolves lookups")
+  Component(icon, "IconComponent", "Standalone component", "Renders one named icon in decorative or labelled mode")
+  Component(styles, "Icon styles", "Component-scoped CSS", "Resolve the size step and inherit currentColor")
+}
+
+Container_Boundary(setsc, "Icon sets") {
+  Component(defs, "IconDefinition constants", "TypeScript constants", "Carry the viewBox, path content, and fill variants")
+}
+
+System_Ext(browser, "Browser platform", "SVG renderer and accessibility tree")
+
+Rel(dev, provider, "Calls in the application config")
+Rel(provider, registry, "Registers and seeds")
+Rel(provider, defs, "Reads the supplied sets from")
+Rel(icon, registry, "Resolves the named definition from")
+Rel(registry, defs, "Indexes")
+Rel(icon, styles, "Applies the size and fill variant through")
+Rel(styles, browser, "Is resolved by", "CSS cascade")
+Rel(icon, browser, "Inlines SVG paths into", "DOM")
+Rel(icon, browser, "Sets aria-hidden or role and aria-label on", "ARIA")
+@enduml

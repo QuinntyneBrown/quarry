@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Work with code
+
+Person(dev, "Application developer", "Places coding-lesson surfaces on Word Up screens")
+Person(youth, "Youth", "Reads a worked example, edits source, and runs it")
+Person(mentor, "Mentor", "Reviews the submitted source and its output")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the code block, code editor, and preview pane")
+System_Ext(app, "Consuming application", "Word Up Angular application owning source storage and every evaluation")
+System_Ext(cdk, "Angular CDK", "Behaviour primitives for clipboard, text autosizing, and focus")
+System_Ext(browser, "Browser platform", "Renders text nodes, enforces the iframe sandbox, and holds the clipboard")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes coding-lesson screens from")
+Rel(dev, app, "Binds the source and output view models in")
+Rel(app, cornerstone, "Supplies source, run state, and evaluated output to")
+Rel(cornerstone, app, "Emits run and reset intents to")
+Rel(cornerstone, cdk, "Builds clipboard and focus behaviour on")
+Rel(cornerstone, browser, "Renders source as text and attaches the sandboxed frame in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(youth, browser, "Edits and runs source in")
+Rel(mentor, browser, "Reviews the submitted source in")
+@enduml

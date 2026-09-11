@@ -1,0 +1,95 @@
+<div class="board" cdkDropListGroup>
+  @for (group of groups(); track group.id; let groupIndex = $index) {
+    <cs-card class="team" [class.unassigned]="!group.id">
+      <header>
+        <h2>{{ group.name }}</h2>
+        <cs-badge>{{ people(group.id).length }} {{ labels().people }}</cs-badge>
+      </header>
+      <p class="project">{{ group.id ? project(group.projectId) : labels().unassigned }}</p>
+      <div
+        class="members"
+        cdkDropList
+        [cdkDropListData]="group.id"
+        [cdkDropListDisabled]="!editable() || disabled()"
+        [cdkDropListSortingDisabled]="true"
+        (cdkDropListDropped)="drop($event)"
+      >
+        @for (member of people(group.id); track member.id; let memberIndex = $index) {
+          <div
+            class="member"
+            cdkDrag
+            [cdkDragData]="member.id"
+            [cdkDragDisabled]="!editable() || disabled()"
+            [class.is-you]="member.id === currentMember()"
+          >
+            <div class="member-heading">
+              @if (editable()) {
+                <button
+                  csButton="ghost"
+                  type="button"
+                  cdkDragHandle
+                  [disabled]="disabled()"
+                  [attr.aria-label]="labels().dragMember + ': ' + (member.name || member.label)"
+                >
+                  ⠿
+                </button>
+              }
+              <div>
+                <strong>{{ member.name || member.label }}</strong
+                ><small
+                  >{{ member.label
+                  }}{{ member.id === currentMember() ? ' · ' + labels().currentMember : '' }}</small
+                >
+              </div>
+            </div>
+            @if (editable()) {
+              <label class="move-label" [for]="controlId('move-' + groupIndex, memberIndex)">{{
+                labels().moveTo
+              }}</label>
+              <select
+                csSelect
+                #moveControl="csSelect"
+                [id]="controlId('move-' + groupIndex, memberIndex)"
+                [value]="member.groupId"
+                [disabled]="disabled()"
+                (change)="move(member, $event, moveControl)"
+              >
+                @for (target of groups(); track target.id) {
+                  <option [value]="target.id">{{ target.name }}</option>
+                }
+              </select>
+              <button
+                csButton="ghost"
+                type="button"
+                [disabled]="disabled()"
+                (click)="requestNewTeam(member.id)"
+              >
+                {{ labels().newTeam }}
+              </button>
+            }
+          </div>
+        } @empty {
+          <p class="empty">{{ editable() ? labels().emptyEditable : labels().emptyReadonly }}</p>
+        }
+      </div>
+      @if (group.id && editable()) {
+        <div class="assignment">
+          <label [for]="controlId('project', groupIndex)">{{ labels().teamProject }}</label>
+          <select
+            csSelect
+            #projectControl="csSelect"
+            [id]="controlId('project', groupIndex)"
+            [value]="group.projectId"
+            [disabled]="disabled()"
+            (change)="assign(group, $event, projectControl)"
+          >
+            <option value="">{{ labels().noProject }}</option>
+            @for (project of projects(); track project.id) {
+              <option [value]="project.id">{{ project.title }}</option>
+            }
+          </select>
+        </div>
+      }
+    </cs-card>
+  }
+</div>

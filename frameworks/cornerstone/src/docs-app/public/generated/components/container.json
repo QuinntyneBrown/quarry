@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "ContainerComponent",
+  "sourcePath": "src/cornerstone/container/container.component.ts",
+  "category": "foundations",
+  "description": "Container public API.",
+  "members": [
+    {
+      "name": "width",
+      "bindingName": "width",
+      "role": "input",
+      "type": "'default' | 'wide' | 'narrow'",
+      "required": false,
+      "defaultValue": "'default'",
+      "description": "Width public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-container",
+  "slug": "container",
+  "label": "Container",
+  "tokens": ["--cs-container", "--cs-container-narrow", "--cs-container-wide"],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

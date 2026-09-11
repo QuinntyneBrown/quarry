@@ -1,0 +1,79 @@
+{
+  "kind": "class",
+  "name": "FieldComponent",
+  "sourcePath": "src/cornerstone/field/field.component.ts",
+  "category": "forms",
+  "description": "Field public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "forId",
+      "bindingName": "forId",
+      "role": "input",
+      "type": "unknown",
+      "required": false,
+      "defaultValue": "this.ids.next('control')",
+      "description": "For Id public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "hint",
+      "bindingName": "hint",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Hint public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "error",
+      "bindingName": "error",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Error public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "required",
+      "bindingName": "required",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Required public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-field",
+  "slug": "field",
+  "label": "Field",
+  "tokens": [],
+  "relatedSymbols": ["FieldState"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "FieldState",
+      "sourcePath": "src/cornerstone/field/field-state.type.ts",
+      "category": "forms",
+      "description": "Field State public API.",
+      "declaration": "'default' | 'valid' | 'invalid'"
+    }
+  ]
+}

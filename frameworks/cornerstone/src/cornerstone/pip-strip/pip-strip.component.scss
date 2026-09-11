@@ -1,0 +1,13 @@
+div {
+  display: flex;
+  gap: var(--cs-space-1);
+}
+span {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: 50%;
+  background: var(--cs-border);
+}
+span[data-state='complete'] {
+  background: var(--cs-lime-strong);
+}

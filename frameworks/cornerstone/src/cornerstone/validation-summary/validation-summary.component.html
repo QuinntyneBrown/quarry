@@ -1,0 +1,12 @@
+@if (errors().length) {
+  <div role="alert" tabindex="-1">
+    <h2>{{ title() }}</h2>
+    <ul>
+      @for (error of errors(); track error.controlId) {
+        <li>
+          <a [href]="'#' + error.controlId">{{ error.message }}</a>
+        </li>
+      }
+    </ul>
+  </div>
+}

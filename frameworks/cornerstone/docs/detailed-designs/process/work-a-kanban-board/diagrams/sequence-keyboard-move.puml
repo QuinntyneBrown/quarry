@@ -1,0 +1,78 @@
+@startuml
+title UML sequence behaviour — Move a card by keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone kanban components" #D1FADF
+  participant "WorkItemCardComponent" as card
+  participant "KanbanBoardComponent" as board
+  participant "KanbanKeyboardMove" as keyboard
+  participant "KanbanAnnouncer" as announcer
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Keyboard events and DOM" as dom
+end box
+
+user -> dom : Move focus to a work item card
+dom -> card : Focus
+card -> dom : Expose the item code and title as the accessible name per L2-140
+
+user -> dom : Press the documented grab key
+dom -> board : Key event
+board -> keyboard : Grab the focused item per L2-139
+keyboard -> announcer : Report the grabbed item and its current position
+announcer -> cdk : Announce politely
+cdk --> dom : Polite live-region update
+
+user -> dom : Press the documented move keys
+dom -> board : Key event
+board -> keyboard : Move the grabbed item to the next column and index
+keyboard -> keyboard : Test the target column accepts the item kind
+
+alt Target column accepts the item
+  keyboard -> announcer : Report the candidate column and position
+  announcer -> cdk : Announce politely
+else Target column is locked or refuses the kind
+  keyboard -> announcer : Report the lock reason once per move sequence per L2-139
+  announcer -> cdk : Announce politely
+  keyboard -> keyboard : Hold the item at its last accepted position
+end
+
+user -> dom : Press the documented confirm key
+dom -> board : Key event
+board -> keyboard : Confirm the move
+keyboard --> board : WorkItemMoveIntent identical to a pointer drop
+board -> page : Emit exactly one WorkItemMoveIntent per L2-139
+keyboard -> announcer : Report the landing column and position
+announcer -> cdk : Announce politely
+page -> services : Apply the move and persist it
+services --> page : Updated columns
+page -> board : Rebind the columns
+board -> card : Restore focus to the moved card
+dom --> user : Card in the target column with its position announced
+
+opt The user presses the documented cancel key
+  board -> keyboard : Cancel the move
+  keyboard -> board : Emit no intent
+  board -> card : Restore focus and the original position
+end
+@enduml

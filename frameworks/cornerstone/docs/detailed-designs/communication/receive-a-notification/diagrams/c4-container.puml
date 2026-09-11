@@ -1,0 +1,35 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Receive a notification
+
+Person(youth, "Youth", "Reads notifications")
+Person(admin, "Administrator", "Sends announcements")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Provides the notification list, notification item, announcement composer, and the field components it composes")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the notification surfaces resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes notification panel and announcement examples")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts the notification trigger, the panel outlet, and routing")
+  Container(page, "Feature page", "Angular route component", "Places the announcement composer on the administrator screen")
+  Container(services, "Application services", "Angular injectables", "Builds notification and audience view models, persists read state, routes deep links, and delivers announcements")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay, focus trapping, and layout observation")
+System_Ext(browser, "Browser platform", "Rendering, focus, and live regions")
+
+Rel(youth, shell, "Opens the notification panel in")
+Rel(admin, page, "Composes an announcement on")
+Rel(shell, lib, "Binds the notification view model into")
+Rel(page, lib, "Binds the audience and draft view models into")
+Rel(lib, services, "Emits mark-read, navigate, preview, and submit intents to")
+Rel(services, shell, "Supplies the refreshed notification view model to")
+Rel(services, page, "Supplies the audience options and submit state to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Uses for overlay panels, focus traps, and breakpoint observation")
+Rel(lib, browser, "Announces counts and validation through", "aria-live polite")
+Rel(docs, lib, "Documents variants of")
+@enduml

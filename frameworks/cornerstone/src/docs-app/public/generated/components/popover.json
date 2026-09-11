@@ -1,0 +1,87 @@
+{
+  "kind": "class",
+  "name": "PopoverComponent",
+  "sourcePath": "src/cornerstone/popover/popover.component.ts",
+  "category": "navigation",
+  "description": "Popover public API.",
+  "members": [
+    {
+      "name": "open",
+      "bindingName": "open",
+      "role": "model",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Open public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "position",
+      "bindingName": "position",
+      "role": "input",
+      "type": "CsAnchorPosition",
+      "required": false,
+      "defaultValue": "'below-start'",
+      "description": "Position public API.",
+      "structured": false,
+      "options": ["below-start", "below-end", "above-start", "above-end", "right", "left"]
+    },
+    {
+      "name": "trapFocus",
+      "bindingName": "trapFocus",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Trap Focus public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "ariaLabel",
+      "bindingName": "ariaLabel",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Aria Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "closed",
+      "bindingName": "closed",
+      "role": "output",
+      "type": "CsDismissReason",
+      "required": false,
+      "description": "Closed public API.",
+      "structured": false,
+      "options": ["select", "escape", "outside-click", "trigger", "detach"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-popover",
+  "slug": "popover",
+  "label": "Popover",
+  "tokens": ["--cs-border", "--cs-paper", "--cs-radius-md", "--cs-shadow-md", "--cs-space-4"],
+  "relatedSymbols": ["CsAnchorPosition", "CsDismissReason"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsAnchorPosition",
+      "sourcePath": "src/cornerstone/core/navigation/cs-anchor-position.type.ts",
+      "category": "navigation",
+      "description": "Cs Anchor Position public API.",
+      "declaration": "'below-start' | 'below-end' | 'above-start' | 'above-end' | 'right' | 'left'"
+    },
+    {
+      "kind": "type",
+      "name": "CsDismissReason",
+      "sourcePath": "src/cornerstone/core/navigation/cs-dismiss-reason.type.ts",
+      "category": "navigation",
+      "description": "Cs Dismiss Reason public API.",
+      "declaration": "'select' | 'escape' | 'outside-click' | 'trigger' | 'detach'"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Revoke a consent scope
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Guardian" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Consent page component" as page
+  participant "Consent policy service" as rules
+  participant "Consent store" as store
+end box
+box "Frontend — Cornerstone consent composite" #D1FADF
+  participant "ConsentPanelComponent" as panel
+  participant "ConfirmDialogComponent" as confirm
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer and focus trap" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM" as browser
+end box
+
+page -> panel : Bind ConsentPanelViewModel
+panel -> browser : Render each group as a fieldset with a legend per L2-126
+panel -> browser : State each scope in text beside its control per L2-126
+panel -> browser : Render each history entry with actor and locale timestamp per L2-126
+browser --> user : Current consent status and history
+
+user -> browser : Activate the revoke action on a media scope
+browser -> panel : Revoke activation
+panel -> confirm : Open with destructive presentation per L2-103
+confirm -> cdk : Trap focus in the dialog
+confirm --> user : Confirm or cancel choice
+
+alt Guardian confirms
+  user -> confirm : Confirm
+  confirm -> cdk : Restore focus to the revoke action
+  confirm --> panel : Confirmed
+  panel -> page : Emit exactly one ConsentRevokeIntent per L2-126
+  panel -> panel : Leave the supplied view model unmutated per L2-126
+  page -> rules : Decide whether the revocation is permitted
+  rules --> page : Permitted
+  page -> store : Persist the revocation and append the history entry
+  store --> page : Next consent view model
+  page -> panel : Bind the next view model
+  panel -> cdk : Announce the scope and decision, naming no person, per L2-126
+  cdk --> browser : Polite live region update
+  panel --> user : Scope shows 'revoked' with a new history entry
+else Guardian cancels
+  user -> confirm : Cancel
+  confirm --> panel : Cancelled
+  panel -> panel : Emit no intent and change no state per L2-126
+  panel --> user : Panel unchanged
+end
+@enduml

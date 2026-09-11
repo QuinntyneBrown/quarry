@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Find and pick a value
+
+Person(dev, "Application developer", "Wires the query handler and the option source")
+Person(mentor, "Mentor", "Finds a youth in a Word Up roster and schedules a session")
+Person(administrator, "Administrator", "Filters directories and report date ranges in Word Up")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the search field, combobox, and date controls")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application resolving queries and owning the option data")
+System_Ext(cdk, "Angular CDK", "Overlay positioning and virtual scrolling for the listbox")
+System_Ext(browser, "Browser platform", "Native search and date inputs, the platform picker, and the local timezone")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes search and selection controls from")
+Rel(dev, app, "Implements the query handler in")
+Rel(app, cornerstone, "Supplies resolved options to")
+Rel(cornerstone, app, "Emits the query and the selection to")
+Rel(cornerstone, cdk, "Positions and virtualizes the listbox through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders native search and date hosts to")
+Rel(mentor, browser, "Types a query and picks a result in")
+Rel(administrator, browser, "Selects a date range in")
+@enduml

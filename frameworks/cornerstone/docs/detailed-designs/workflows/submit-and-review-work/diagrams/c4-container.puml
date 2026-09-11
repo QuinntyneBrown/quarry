@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Submit and review work
+
+Person(youth, "Youth participant", "Submits work")
+Person(mentor, "Mentor", "Assesses a submission")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Renders the assignment, submission status, rubric, assessment editor, achievement card, and badge collection")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the tokens the assignment, rubric, and badge styles resolve")
+  Container(docs, "Documentation site", "Angular application", "Publishes the view model and intent contracts")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(shell, "Application shell", "Angular components", "Hosts routing and the theme class")
+  Container(page, "Feature page", "Angular components", "Binds the view models and handles emitted intents")
+  Container(services, "Application services", "Angular injectables", "Own grading rules, award rules, uploads, persistence, and authorization")
+}
+
+System_Ext(cdk, "Angular CDK", "Table, focus, and layout observer primitives")
+System_Ext(browser, "Browser platform", "Rendering and input engine")
+
+Rel(youth, shell, "Opens the assignment screen in")
+Rel(mentor, shell, "Opens the review screen in")
+Rel(shell, page, "Routes to")
+Rel(services, page, "Computes AssignmentView, SubmissionView, AssessmentView, and AchievementView for")
+Rel(page, lib, "Binds the view models to")
+Rel(lib, page, "Emits CsSubmissionAction, AssessmentDecision, and AchievementSelect to")
+Rel(page, services, "Forwards intents to")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, cdk, "Manages the rubric grid and focus with")
+Rel(lib, browser, "Renders into")
+Rel(theme, browser, "Is resolved by", "CSS cascade")
+Rel(docs, lib, "Documents the public API of")
+@enduml

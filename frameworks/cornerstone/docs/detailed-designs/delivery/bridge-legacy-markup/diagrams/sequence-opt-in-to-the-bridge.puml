@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Opt in to the compatibility layer
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Developer workstation" #E0F2FE
+  participant "angular.json styles array" as styles
+  participant "Application templates" as templates
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI verify job" as job
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Sass compiler" as sass
+  participant "compat.scss" as compat
+  participant "Bundle isolation check" as isolation
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Published styles subpaths" as npm
+end box
+
+dev -> npm : Install the package
+npm --> dev : ./styles/theme.scss and ./styles/compat.scss
+dev -> styles : Add the compatibility subpath after the theme subpath per L2-186
+
+dev -> job : Push the change
+job -> sass : Build the application stylesheets
+sass -> compat : Resolve the compatibility entry point
+compat -> compat : Use tokens, then word-up-compat, then liturgy-compat
+compat --> sass : Both legacy vocabularies over the --cs- token layer
+sass --> job : Stylesheet including the bridge
+
+job -> isolation : Build the reference application without the subpath
+isolation -> sass : Compile theme.scss alone
+sass -> sass : Reach tokens and components only, referencing no compatibility partial
+sass --> isolation : Baseline stylesheet bytes
+isolation -> isolation : Compare against the previous baseline per L2-188
+alt Baseline bytes unchanged
+  isolation --> job : Isolation satisfied
+else Baseline bytes increased
+  isolation --> job : Fail the build, naming the leaked partial per L2-188
+end
+
+job --> dev : Build result
+dev -> templates : Render existing screens unchanged under the bridge per L2-186
+templates --> dev : Legacy appearance preserved without cs- component semantics
+@enduml

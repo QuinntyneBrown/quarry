@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — Render a media item
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "MediaViewModelService" as vm
+end box
+box "Frontend — Cornerstone media" #D1FADF
+  participant "MediaViewerComponent" as viewer
+  participant "MediaFrameDirective" as frame
+  participant "CsSafeUrlPipe" as safe
+end box
+box "Browser — platform" #FFF4E5
+  participant "Media loader and sandbox" as browser
+end box
+
+vm --> viewer : Supply the media view model with the declared aspect ratio
+viewer -> frame : Reserve the aspect ratio box before loading per L2-113
+frame -> browser : Apply the reserved height
+viewer -> safe : Validate the source URL for the media context per L2-164
+safe --> viewer : Accepted URL or null
+
+alt Kind is image
+  viewer -> viewer : Require alt, or render alt="" when decorative per L2-113
+  viewer -> browser : Attach the image element
+else Kind is video
+  viewer -> browser : Attach the video element with native controls and the poster
+  viewer -> browser : Preserve the consumer caption tracks per L2-113
+else Kind is iframe or document
+  viewer -> safe : Validate the URL for the frame context per L2-164
+  safe --> viewer : Accepted URL or null
+  viewer -> browser : Attach the iframe with a required title, the documented sandbox set, and referrerpolicy per L2-113
+end
+
+browser -> browser : Load the source into the reserved box
+browser --> viewer : Load complete
+viewer -> viewer : Leave the loading state with no shift beyond the documented threshold
+viewer --> user : Media in the reserved container
+
+opt Viewport XS
+  viewer -> browser : Scale to the container width and keep the ratio per L2-113
+  browser --> user : No horizontal overflow
+end
+
+opt An open-external or download action is activated
+  user -> viewer : Activate the action
+  viewer -> safe : Validate the action URL for the external context per L2-164
+  viewer -> browser : Apply the documented download and rel attributes per L2-114
+  viewer -> vm : Emit actionInvoked with the media and action keys
+end
+@enduml

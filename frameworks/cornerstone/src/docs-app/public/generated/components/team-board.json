@@ -1,0 +1,436 @@
+{
+  "kind": "class",
+  "name": "TeamBoardComponent",
+  "sourcePath": "src/cornerstone/team-board/team-board.component.ts",
+  "category": "workflows",
+  "description": "Controlled team membership and project assignment; emits intent without persistence.",
+  "members": [
+    {
+      "name": "groups",
+      "bindingName": "groups",
+      "role": "input",
+      "type": "readonly BoardGroup[]",
+      "required": true,
+      "description": "Groups public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "members",
+      "bindingName": "members",
+      "role": "input",
+      "type": "readonly BoardMember[]",
+      "required": true,
+      "description": "Members public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "projects",
+      "bindingName": "projects",
+      "role": "input",
+      "type": "readonly BoardProject[]",
+      "required": false,
+      "defaultValue": "[]",
+      "description": "Projects public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "editable",
+      "bindingName": "editable",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Editable public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "bindingName": "disabled",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Disabled public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "currentMember",
+      "bindingName": "currentMember",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Current Member public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "text",
+      "bindingName": "text",
+      "role": "input",
+      "type": "Partial<TeamBoardText>",
+      "required": false,
+      "defaultValue": "{}",
+      "description": "Text public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "moved",
+      "bindingName": "moved",
+      "role": "output",
+      "type": "MemberMove",
+      "required": false,
+      "description": "Moved public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "assigned",
+      "bindingName": "assigned",
+      "role": "output",
+      "type": "ProjectAssignment",
+      "required": false,
+      "description": "Assigned public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "newTeamRequested",
+      "bindingName": "newTeamRequested",
+      "role": "output",
+      "type": "NewTeamRequest",
+      "required": false,
+      "description": "New Team Requested public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "moveMember",
+      "role": "method",
+      "type": "void",
+      "parameters": [
+        {
+          "name": "memberId",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "groupId",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "description": "Move Member public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "assignProject",
+      "role": "method",
+      "type": "void",
+      "parameters": [
+        {
+          "name": "groupId",
+          "type": "string",
+          "optional": false
+        },
+        {
+          "name": "projectId",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "description": "Assign Project public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "requestNewTeam",
+      "role": "method",
+      "type": "void",
+      "parameters": [
+        {
+          "name": "memberId",
+          "type": "string",
+          "optional": false
+        }
+      ],
+      "description": "Request New Team public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-team-board",
+  "slug": "team-board",
+  "label": "Team Board",
+  "tokens": [
+    "--cs-border",
+    "--cs-border-width",
+    "--cs-drag-placeholder-opacity",
+    "--cs-ink-muted",
+    "--cs-lime-strong",
+    "--cs-paper",
+    "--cs-radius-sm",
+    "--cs-shadow-lg",
+    "--cs-space-1",
+    "--cs-space-2",
+    "--cs-space-3",
+    "--cs-space-4",
+    "--cs-space-5",
+    "--cs-space-8",
+    "--cs-surface",
+    "--cs-team-board-column-width",
+    "--cs-text-lg",
+    "--cs-text-sm",
+    "--cs-text-xs"
+  ],
+  "relatedSymbols": [
+    "BoardGroup",
+    "BoardMember",
+    "BoardProject",
+    "MemberMove",
+    "NewTeamRequest",
+    "ProjectAssignment",
+    "TeamBoardText"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "BoardGroup",
+      "sourcePath": "src/cornerstone/team-board/board-group.interface.ts",
+      "category": "workflows",
+      "description": "Board Group public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "name",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Name public API."
+        },
+        {
+          "name": "projectId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Project Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "BoardMember",
+      "sourcePath": "src/cornerstone/team-board/board-member.interface.ts",
+      "category": "workflows",
+      "description": "Board Member public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "name",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Name public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "groupId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Group Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "BoardProject",
+      "sourcePath": "src/cornerstone/team-board/board-project.interface.ts",
+      "category": "workflows",
+      "description": "Board Project public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "MemberMove",
+      "sourcePath": "src/cornerstone/team-board/member-move.interface.ts",
+      "category": "workflows",
+      "description": "Member Move public API.",
+      "members": [
+        {
+          "name": "memberId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Member Id public API."
+        },
+        {
+          "name": "groupId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Group Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "NewTeamRequest",
+      "sourcePath": "src/cornerstone/team-board/new-team-request.interface.ts",
+      "category": "workflows",
+      "description": "New Team Request public API.",
+      "members": [
+        {
+          "name": "memberId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Member Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ProjectAssignment",
+      "sourcePath": "src/cornerstone/team-board/project-assignment.interface.ts",
+      "category": "workflows",
+      "description": "Project Assignment public API.",
+      "members": [
+        {
+          "name": "groupId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Group Id public API."
+        },
+        {
+          "name": "projectId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Project Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "TeamBoardText",
+      "sourcePath": "src/cornerstone/team-board/team-board-text.interface.ts",
+      "category": "workflows",
+      "description": "Team Board Text public API.",
+      "members": [
+        {
+          "name": "people",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "People public API."
+        },
+        {
+          "name": "noProject",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "No Project public API."
+        },
+        {
+          "name": "unassigned",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Unassigned public API."
+        },
+        {
+          "name": "currentMember",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Current Member public API."
+        },
+        {
+          "name": "moveTo",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Move To public API."
+        },
+        {
+          "name": "newTeam",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "New Team public API."
+        },
+        {
+          "name": "teamProject",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Team Project public API."
+        },
+        {
+          "name": "emptyEditable",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Empty Editable public API."
+        },
+        {
+          "name": "emptyReadonly",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Empty Readonly public API."
+        },
+        {
+          "name": "dragMember",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Drag Member public API."
+        }
+      ]
+    }
+  ]
+}

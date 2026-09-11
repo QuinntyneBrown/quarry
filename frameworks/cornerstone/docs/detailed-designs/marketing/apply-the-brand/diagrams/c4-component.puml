@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Apply the brand
+
+Person(user, "Application user", "Reads the brand and follows its link to the home route")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(lockup, "BrandLockupComponent", "Standalone component", "Composes the mark, wordmark, and descriptor in compact and full variants")
+  Component(mark, "LogoMarkComponent", "Standalone component", "Renders the graphic symbol as inline SVG at a fixed size step")
+  Component(assets, "CsBrandAssets", "Injection token", "Holds the SVG path data and viewBox for each brand")
+  Component(themesvc, "CsThemeService", "Injectable service", "Reports the resolved theme per L2-033")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(colors, "Brand colour styles", "Component-scoped CSS", "Map the light, dark, and mono treatments to --cs- tokens")
+  Component(metrics, "Brand metric styles", "Component-scoped CSS", "Declare the mark height steps and the clear-space padding")
+  Component(forced, "Forced-colours block", "Media query block", "Selects the mono treatment under forced-colors per L2-007")
+}
+
+System_Ext(shell, "Application shell", "Places the lockup in the header and the footer")
+System_Ext(browser, "Browser platform", "Inline SVG rendering and preference media queries")
+
+Rel(user, lockup, "Follows the home link of")
+Rel(shell, lockup, "Renders")
+Rel(lockup, mark, "Composes")
+Rel(lockup, assets, "Reads the wordmark artwork from")
+Rel(mark, assets, "Reads the mark artwork from")
+Rel(lockup, themesvc, "Resolves the default treatment from")
+Rel(mark, themesvc, "Resolves the default treatment from")
+Rel(lockup, colors, "Resolves the treatment palette from")
+Rel(lockup, metrics, "Resolves the size step and clear space from")
+Rel(forced, colors, "Overrides for forced colours")
+Rel(mark, browser, "Renders the inline SVG in")
+Rel(themesvc, browser, "Queries prefers-color-scheme in", "matchMedia")
+@enduml

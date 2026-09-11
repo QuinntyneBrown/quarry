@@ -1,0 +1,8 @@
+<div>
+  <ng-content select="[csSectionLabel]" />
+  <h2>{{ title() }}</h2>
+  @if (description()) {
+    <p>{{ description() }}</p>
+  }
+</div>
+<ng-content select="[csSectionActions]" />

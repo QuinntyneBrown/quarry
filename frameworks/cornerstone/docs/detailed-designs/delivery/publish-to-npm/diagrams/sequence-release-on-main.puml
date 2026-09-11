@@ -1,0 +1,77 @@
+@startuml
+title UML sequence behaviour — Release on a push to main
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Conventional commit" as commit
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "CI workflow (ci.yml)" as ci
+  participant "Release workflow (release.yml)" as release
+  participant "GitHub repository" as repo
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "Version derivation" as derive
+  participant "Packed tarball" as tarball
+  participant "Clean Angular application" as smoke
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "npm registry" as npm
+end box
+
+maintainer -> commit : Write "feat(overlays): add drawer"
+commit -> ci : Open a pull request
+ci -> ci : Run the commit-lint job against the title and subjects per L2-174
+ci -> derive : Run the dry run for the pull request
+derive --> ci : Version that would be released per L2-176
+ci --> maintainer : Report the dry-run version
+maintainer -> repo : Merge to main
+repo -> release : Trigger under the concurrency group release-main per L2-177
+release -> release : Run the full verification suite before deriving per L2-176
+release -> derive : Derive the version from the commits since the previous tag
+derive -> derive : Classify each subject and apply the highest bump per L2-175
+derive --> release : Version, bump kind, and reason
+release -> npm : Query whether the derived version already exists
+
+alt Version already published
+  npm --> release : Version found
+  release -> release : Log the reason and skip the publish per L2-177
+else Version is new
+  npm --> release : Version not found
+  release -> tarball : Pack the artifact built in this run from this commit SHA
+  tarball --> release : Tarball file list
+  release -> npm : npm publish --provenance --access public --tag latest per L2-176
+  npm --> release : Published version and attestation identifier
+  release -> repo : Create the annotated tag v<version> per L2-178
+  release -> repo : Prepend the CHANGELOG.md section grouped by type per L2-178
+  release -> repo : Open the GitHub release carrying that section per L2-178
+  release -> repo : Push chore(release) with skip-ci so no second run starts per L2-178
+  release -> smoke : Install the exact published version from the registry
+  smoke -> npm : Resolve @quinntyne/cornerstone at the published version
+  npm --> smoke : Installed package
+  smoke -> smoke : Compile a smoke-test component and resolve every exports subpath per L2-180
+
+  alt Post-publish check fails
+    smoke --> release : Failure detail
+    release -> repo : Record the verification failure on the release notes per L2-180
+    release --> maintainer : Fail the run and notify the configured channel per L2-181
+  else Post-publish check passes
+    smoke --> release : Installable and functional
+    release -> release : Write the version, tarball contents, and attestation identifier to the job summary per L2-181
+    release --> maintainer : Report the published version
+  end
+end
+@enduml

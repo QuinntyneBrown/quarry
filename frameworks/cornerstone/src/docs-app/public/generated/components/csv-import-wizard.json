@@ -1,0 +1,107 @@
+{
+  "kind": "class",
+  "name": "CsvImportWizardComponent",
+  "sourcePath": "src/cornerstone/csv-import-wizard/csv-import-wizard.component.ts",
+  "category": "workflows",
+  "description": "Csv Import Wizard public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Import CSV'",
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "columns",
+      "bindingName": "columns",
+      "role": "input",
+      "type": "readonly ImportTargetColumn[]",
+      "required": true,
+      "description": "Columns public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "progress",
+      "bindingName": "progress",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Progress public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "fileSelected",
+      "bindingName": "fileSelected",
+      "role": "output",
+      "type": "Event",
+      "required": false,
+      "description": "File Selected public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "submitted",
+      "bindingName": "submitted",
+      "role": "output",
+      "type": "readonly Record<string, string>[]",
+      "required": false,
+      "description": "Submitted public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-csv-import-wizard",
+  "slug": "csv-import-wizard",
+  "label": "Csv Import Wizard",
+  "tokens": [],
+  "relatedSymbols": ["ImportCellText", "ImportTargetColumn"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "ImportCellText",
+      "sourcePath": "src/cornerstone/csv-import-wizard/import-cell-text.type.ts",
+      "category": "workflows",
+      "description": "Import Cell Text public API.",
+      "declaration": "string"
+    },
+    {
+      "kind": "interface",
+      "name": "ImportTargetColumn",
+      "sourcePath": "src/cornerstone/csv-import-wizard/import-target-column.interface.ts",
+      "category": "workflows",
+      "description": "Import Target Column public API.",
+      "members": [
+        {
+          "name": "field",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Field public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "required",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Required public API."
+        }
+      ]
+    }
+  ]
+}

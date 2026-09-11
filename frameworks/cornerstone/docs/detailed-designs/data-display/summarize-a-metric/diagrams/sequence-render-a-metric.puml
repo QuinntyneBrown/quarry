@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Render a metric with a delta
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as admin
+box "Frontend — Consuming application" #E0F2FE
+  participant "Dashboard page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone metric components" #D1FADF
+  participant "StatCardComponent" as stat
+  participant "KpiComponent" as kpi
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Tone and fill tokens" as tokens
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+admin -> page : Open the term dashboard
+page -> stat : Bind state { kind: 'loading' } per L2-101
+stat -> dom : Render the skeleton and set aria-busy="true"
+
+page -> services : Request the term aggregates
+services --> page : Attendance 412, prior term 468
+page -> page : Compute MetricDelta { value: -56, direction: 'down', sentiment: 'negative' }
+page -> stat : Bind label, value, unit, delta, and tone per L2-090
+page -> stat : Bind state { kind: 'ready' }
+stat -> stat : Select the glyph from direction
+stat -> stat : Select the tone from sentiment
+stat -> tokens : Resolve the negative tone surface, border, and text
+tokens --> stat : Token values
+stat -> dom : Render value, unit, delta text, and supporting text
+stat -> dom : Clear aria-busy
+dom --> admin : Statistic with a labelled delta
+
+page -> kpi : Bind the same delta in the page header per L2-090
+kpi -> dom : Render the unframed statistic
+
+alt Interaction mode is 'selectable'
+  admin -> stat : Activate the card with the keyboard
+  stat -> dom : Set aria-pressed="true"
+  stat -> page : Emit selectedChange(true)
+  page -> services : Filter the report by the selected metric
+else Interaction mode is 'link'
+  admin -> stat : Activate the single anchor covering the card
+  stat -> page : Emit activated()
+  page -> services : Navigate to the detail route
+else Interaction mode is 'static'
+  stat -> dom : Render no interactive element
+end
+@enduml

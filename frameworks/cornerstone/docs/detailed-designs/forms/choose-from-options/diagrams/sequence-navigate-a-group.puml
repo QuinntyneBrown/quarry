@@ -1,0 +1,69 @@
+@startuml
+title UML sequence behaviour — Navigate a group by keyboard
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+end box
+box "Frontend — Cornerstone choice controls" #D1FADF
+  participant "ChoiceGroupComponent" as group
+  participant "ChoiceCardComponent" as card
+  participant "RadioGroupComponent" as radiogroup
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusKeyManager" as keymgr
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendered group" as dom
+  participant "Assistive technology" as at
+end box
+
+page -> group : Bind label, mode 'single', and the required validator
+group -> dom : Expose radiogroup semantics with the group name per L2-059
+group -> card : Project four choices and set one roving tab stop per L2-052
+card -> dom : Render the card target with a non-colour selection mark per L2-059
+
+user -> dom : Tab into the group
+dom -> keymgr : Focus enters
+keymgr --> group : Active index 0
+group -> dom : Focus the first enabled choice per L2-052
+
+user -> dom : Press ArrowDown
+dom -> keymgr : keydown
+keymgr -> keymgr : Skip disabled members per L2-052
+keymgr --> group : Active index 2
+group -> card : Move focus and select the active choice
+group -> control : onChange(choiceValue)
+control -> control : Run the required validator
+group -> dom : Update aria-checked on the members
+dom -> at : Announce the newly selected choice
+
+user -> dom : Press ArrowDown at the last member
+keymgr --> group : Wrap to the first enabled member per L2-052
+
+alt Group is touched with no selection
+  group -> control : onTouched()
+  control --> group : status INVALID
+  group -> dom : Associate the error with the group rather than a member per L2-052
+  dom -> at : Announce the group-level error per L2-059
+else Viewport XS
+  group -> dom : Stack the choices in one column with full-width targets per L2-059
+end
+
+radiogroup -> keymgr : Reuse the same roving contract for the inline presentation
+group --> page : Group value and validity
+@enduml

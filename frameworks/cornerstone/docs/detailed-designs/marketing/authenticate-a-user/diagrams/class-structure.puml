@@ -1,0 +1,86 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Authenticate a user
+
+enum AuthLayoutVariant {
+  centered
+  split
+}
+
+enum CsAuthPanelSide {
+  start
+  end
+}
+
+enum CsAuthPanelTone {
+  light
+  dark
+  brand
+}
+
+class AuthLayoutComponent {
+  +variant: InputSignal<AuthLayoutVariant>
+  +panelSide: InputSignal<CsAuthPanelSide>
+  +tone: InputSignal<CsAuthPanelTone>
+  -collapsed: Signal<boolean>
+}
+
+class AuthCardComponent {
+  +title: InputSignal<string>
+  +lede: InputSignal<string>
+  +error: InputSignal<string | null>
+  +pending: InputSignal<boolean>
+  -errorId: Signal<string>
+  +focusError(): void
+}
+
+class AuthBrandDirective {
+  +size: InputSignal<CsBrandLockupSize>
+}
+
+class AuthPanelDirective {
+  +tone: InputSignal<CsAuthPanelTone>
+}
+
+class AuthAlternateDirective {
+  +align: InputSignal<CsAuthAlternateAlign>
+}
+
+enum CsAuthAlternateAlign {
+  start
+  center
+  between
+}
+
+class AuthFooterDirective {
+  +compact: InputSignal<boolean>
+}
+
+class BrandLockupComponent {
+  +variant: InputSignal<BrandLockupVariant>
+  +treatment: InputSignal<CsBrandTreatment>
+}
+
+AuthLayoutComponent --> AuthLayoutVariant : has
+AuthLayoutComponent --> CsAuthPanelSide : has
+AuthLayoutComponent --> CsAuthPanelTone : has
+AuthLayoutComponent *-- "1" AuthCardComponent : positions
+AuthLayoutComponent o-- "0..1" AuthBrandDirective : projects
+AuthLayoutComponent o-- "0..1" AuthPanelDirective : projects
+AuthLayoutComponent o-- "0..1" AuthFooterDirective : projects
+AuthCardComponent o-- "0..1" AuthAlternateDirective : projects
+AuthBrandDirective --> "1" BrandLockupComponent : sizes
+AuthPanelDirective --> CsAuthPanelTone : has
+AuthAlternateDirective --> CsAuthAlternateAlign : has
+@enduml

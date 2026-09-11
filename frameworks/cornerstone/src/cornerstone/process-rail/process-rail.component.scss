@@ -1,0 +1,22 @@
+ol {
+  display: flex;
+  gap: var(--cs-space-4);
+  list-style: none;
+  padding: 0;
+  overflow: auto;
+}
+ol.vertical {
+  display: grid;
+}
+li {
+  min-inline-size: 10rem;
+}
+li[data-state='current'] span,
+li[data-state='complete'] span {
+  background: var(--cs-lime);
+}
+button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+}

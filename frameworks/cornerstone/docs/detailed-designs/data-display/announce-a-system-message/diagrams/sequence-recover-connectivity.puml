@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Recover connectivity
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Volunteer" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Application services" as svc
+  participant "Application shell" as shell
+end box
+box "Frontend — Cornerstone message runtime" #D1FADF
+  participant "OfflineBannerComponent" as banner
+  participant "csAnnouncementPolitenessFor()" as policy
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "LiveAnnouncer" as announcer
+end box
+box "Browser — platform" #FFF4E5
+  participant "Live regions and layout" as dom
+end box
+
+svc -> banner : Set state 'offline'
+banner -> banner : Debounce the incoming state per L2-082
+banner -> policy : Request politeness for the offline condition
+policy --> banner : assertive
+banner -> announcer : Announce the offline state once per L2-082
+announcer -> dom : Write to the assertive region
+banner -> shell : Emit heightChanged
+shell -> dom : Offset content by the banner height per L2-082
+dom --> user : Banner visible with no content obscured
+
+opt Connectivity flaps inside the debounce window
+  svc -> banner : Set state 'online', then 'offline'
+  banner -> banner : Collapse the toggles to at most one announcement per L2-082
+end
+
+svc -> banner : Set state 'queued' with a pending count
+loop Pending count changes
+  banner -> banner : Throttle to at most one announcement per documented interval per L2-082
+  banner -> announcer : Announce the pending count politely
+  announcer -> dom : Write to the polite region
+  banner -> dom : Update the visible banner text
+end
+
+svc -> banner : Set state 'restored'
+banner -> policy : Request politeness for the restored condition
+policy --> banner : polite
+banner -> announcer : Announce that the connection was restored per L2-082
+announcer -> dom : Write to the polite region
+banner -> banner : Start the documented auto-dismiss interval per L2-082
+banner -> shell : Emit heightChanged with zero
+shell -> dom : Remove the content offset
+dom --> user : Work resumed with the banner cleared
+@enduml

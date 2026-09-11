@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Preview an attachment
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Youth" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "MediaViewModelService" as vm
+  participant "AttachmentTransferHandler" as transfer
+end box
+box "Frontend — Cornerstone media" #D1FADF
+  participant "AttachmentListComponent" as attach
+  participant "EvidencePreviewComponent" as preview
+  participant "MiddleTruncateDirective" as truncate
+  participant "CsSafeUrlPipe" as safe
+end box
+box "Browser — platform" #FFF4E5
+  participant "Object URL store" as browser
+end box
+
+vm --> attach : Supply the attachment view model with a generated preview URL
+attach -> attach : Build the accessible name from file name, type, and readable size per L2-114
+attach -> truncate : Truncate the long file name in the middle
+truncate --> attach : Head, ellipsis, and preserved extension
+attach -> attach : Keep the complete name available to assistive technology per L2-114
+
+attach -> preview : Render the image attachment
+preview -> safe : Validate the preview URL per L2-164
+safe --> preview : Accepted URL
+preview -> preview : Derive the preview accessible name from the file name per L2-114
+preview -> browser : Attach the image element
+browser --> user : Named image preview
+
+user -> attach : Activate download
+attach -> safe : Validate the download URL per L2-164
+safe --> attach : Accepted URL
+attach -> browser : Render the link with the documented download and rel attributes per L2-114
+attach -> transfer : Emit downloadRequested with the attachment id
+
+opt The attachment is removed
+  user -> attach : Activate remove
+  attach -> transfer : Emit removeRequested with the attachment id per L2-114
+  vm --> attach : Supply the attachment list without that item
+end
+
+preview -> browser : Revoke the generated object URL on destroy per L2-114
+browser --> preview : Object URL released
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Overflow toolbar actions
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone page frame" #D1FADF
+  participant "ToolbarComponent" as toolbar
+  participant "Overflow strategy" as overflow
+  participant "CsResponsiveRegionDirective" as region
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "BreakpointObserver" as cdk
+  participant "Overlay" as overlay
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as browser
+end box
+
+page -> toolbar : Project six controls into the end slot
+toolbar -> region : Observe the toolbar inline size in the 'actions' pattern per L2-043
+region -> cdk : Subscribe to the documented breakpoint
+
+user -> browser : Narrow the window
+browser -> cdk : Report the element size change
+cdk --> region : Inline size below the required width
+region --> overflow : Report state 'collapsed'
+overflow -> overflow : Keep controls in declaration order per L2-041
+overflow -> toolbar : Move the trailing controls out of the row
+toolbar -> browser : Render one overflow trigger with its accessible label per L2-041
+
+user -> browser : Activate the overflow trigger
+browser -> toolbar : Click event
+toolbar -> overlay : Open the overflow menu
+overlay -> browser : Render the moved controls with their labels and disabled state
+browser --> user : Every action reachable at the narrow width
+
+opt Window widened again
+  cdk --> region : Inline size above the required width
+  region --> overflow : Report state 'expanded'
+  overflow -> toolbar : Return the controls to the row in declaration order
+  toolbar -> browser : Remove the overflow trigger
+end
+@enduml

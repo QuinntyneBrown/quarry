@@ -1,0 +1,21 @@
+<section>
+  <div>
+    <ng-content select="[csHeroEyebrow]" />
+    <h1>{{ title() }}</h1>
+    @if (summary()) {
+      <p>{{ summary() }}</p>
+    }
+    <div>
+      <ng-content select="[csHeroActions]" />
+      @for (action of actions(); track action.id) {
+        <a
+          [href]="action.href ?? '#'"
+          [csButton]="action.appearance ?? 'primary'"
+          (click)="activated.emit(action.id)"
+          >{{ action.label }}</a
+        >
+      }
+    </div>
+  </div>
+  <ng-content select="[csHeroMedia]" />
+</section>

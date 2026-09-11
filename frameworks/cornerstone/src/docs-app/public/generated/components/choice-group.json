@@ -1,0 +1,46 @@
+{
+  "kind": "class",
+  "name": "ChoiceGroupComponent",
+  "sourcePath": "src/cornerstone/choice-group/choice-group.component.ts",
+  "category": "forms",
+  "description": "Choice Group public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "ChoiceMode",
+      "required": false,
+      "defaultValue": "'single'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": ["single", "multiple"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-choice-group",
+  "slug": "choice-group",
+  "label": "Choice Group",
+  "tokens": ["--cs-space-3"],
+  "relatedSymbols": ["ChoiceMode"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "ChoiceMode",
+      "sourcePath": "src/cornerstone/choice-group/choice-mode.type.ts",
+      "category": "forms",
+      "description": "Choice Mode public API.",
+      "declaration": "'single' | 'multiple'"
+    }
+  ]
+}

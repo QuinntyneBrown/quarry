@@ -1,0 +1,55 @@
+{
+  "kind": "class",
+  "name": "ChoiceCardComponent",
+  "sourcePath": "src/cornerstone/choice-card/choice-card.component.ts",
+  "category": "forms",
+  "description": "Choice Card public API.",
+  "members": [
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Selected public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "disabled",
+      "bindingName": "disabled",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Disabled public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "selectedChange",
+      "bindingName": "selectedChange",
+      "role": "output",
+      "type": "boolean",
+      "required": false,
+      "description": "Selected Change public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-choice-card",
+  "slug": "choice-card",
+  "label": "Choice Card",
+  "tokens": [
+    "--cs-border",
+    "--cs-ink",
+    "--cs-lime",
+    "--cs-paper",
+    "--cs-radius-md",
+    "--cs-space-4"
+  ],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

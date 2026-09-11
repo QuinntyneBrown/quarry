@@ -1,0 +1,99 @@
+{
+  "kind": "class",
+  "name": "DialogShellComponent",
+  "sourcePath": "src/cornerstone/dialog-shell/dialog-shell.component.ts",
+  "category": "overlays",
+  "description": "Dialog Shell public API.",
+  "members": [],
+  "component": true,
+  "selector": "cs-dialog-shell",
+  "slug": "dialog-shell",
+  "label": "Dialog Shell",
+  "tokens": ["--cs-paper", "--cs-radius-lg", "--cs-shadow-lg", "--cs-space-3", "--cs-space-5"],
+  "relatedSymbols": [
+    "DialogActionsDirective",
+    "DialogConfig",
+    "DialogDescriptionDirective",
+    "DialogRef",
+    "DialogService",
+    "DialogSize",
+    "DialogTitleDirective"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "DialogActionsDirective",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog-actions.directive.ts",
+      "category": "overlays",
+      "description": "Dialog Actions public API.",
+      "members": []
+    },
+    {
+      "kind": "type",
+      "name": "DialogConfig",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog-config.type.ts",
+      "category": "overlays",
+      "description": "Dialog Config public API.",
+      "declaration": "CdkDialogConfig<\n  D,\n  CdkDialogRef<R, C>\n> & { readonly size?: DialogSize; readonly fullScreenOnMobile?: boolean }"
+    },
+    {
+      "kind": "class",
+      "name": "DialogDescriptionDirective",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog-description.directive.ts",
+      "category": "overlays",
+      "description": "Dialog Description public API.",
+      "members": []
+    },
+    {
+      "kind": "type",
+      "name": "DialogRef",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog-ref.type.ts",
+      "category": "overlays",
+      "description": "Dialog Ref public API.",
+      "declaration": "CdkDialogRef<R, C>"
+    },
+    {
+      "kind": "class",
+      "name": "DialogService",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog.service.ts",
+      "category": "overlays",
+      "description": "Dialog Service public API.",
+      "members": [
+        {
+          "name": "open",
+          "role": "method",
+          "type": "DialogRef<R, C>",
+          "parameters": [
+            {
+              "name": "component",
+              "type": "ComponentType<C>",
+              "optional": false
+            },
+            {
+              "name": "config",
+              "type": "DialogConfig<D, R, C>",
+              "optional": true
+            }
+          ],
+          "description": "Open public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "DialogSize",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog-size.type.ts",
+      "category": "overlays",
+      "description": "Dialog Size public API.",
+      "declaration": "'small' | 'medium' | 'large' | 'full'"
+    },
+    {
+      "kind": "class",
+      "name": "DialogTitleDirective",
+      "sourcePath": "src/cornerstone/dialog-shell/dialog-title.directive.ts",
+      "category": "overlays",
+      "description": "Dialog Title public API.",
+      "members": []
+    }
+  ]
+}

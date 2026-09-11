@@ -1,0 +1,63 @@
+@startuml
+title UML sequence behaviour — Activate an action
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone action components" #D1FADF
+  participant "ButtonGroupComponent" as group
+  participant "CsButtonDirective" as button
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusMonitor" as focus
+end box
+box "Browser — platform" #FFF4E5
+  participant "Activation and cascade" as browser
+end box
+
+page -> group : Bind label and mode 'related' per L2-046
+group -> group : Expose role=group with the accessible name
+group -> button : Project members and collapse interior radii per L2-046
+button -> browser : Render native button host with token styles per L2-044
+user -> browser : Focus the primary action
+browser -> focus : Report focus origin
+focus --> button : Origin 'keyboard'
+button -> browser : Apply the visible focus ring per L2-044
+
+user -> browser : Activate the action
+browser -> button : click event
+button -> button : Read loading, disabled, and locked state
+
+alt Action is available
+  button --> browser : Allow native activation
+  browser -> page : Deliver the click to the handler
+  page -> services : Execute the command
+  page -> button : Set loading true
+  button -> browser : Set aria-busy=true and hold the rendered width per L2-044
+  user -> browser : Activate again
+  browser -> button : click event
+  button -> browser : Suppress the repeated activation per L2-044
+  services --> page : Command settled
+  page -> button : Set loading false
+else Action is suppressed
+  button -> browser : preventDefault and stopPropagation per L2-044
+  button --> user : No command reaches the application
+end
+
+button --> user : Action state reflected in the rendered control
+@enduml

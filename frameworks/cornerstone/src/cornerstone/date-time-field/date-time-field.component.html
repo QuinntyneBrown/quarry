@@ -1,0 +1,8 @@
+<input
+  class="cs-input"
+  type="datetime-local"
+  [value]="value() ?? ''"
+  [disabled]="disabled()"
+  (input)="change($event)"
+  (blur)="markTouched()"
+/>

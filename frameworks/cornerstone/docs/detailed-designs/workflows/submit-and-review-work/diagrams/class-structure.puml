@@ -1,0 +1,214 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Submit and review work
+
+interface ControlValueAccessor {
+  +writeValue(value: unknown): void
+  +registerOnChange(fn: (value: unknown) => void): void
+  +registerOnTouched(fn: () => void): void
+  +setDisabledState(isDisabled: boolean): void
+}
+
+class AssignmentCardComponent {
+  +assignment: InputSignal<AssignmentView>
+  +expanded: ModelSignal<boolean>
+  +busy: InputSignal<boolean>
+  +actionSelected: OutputEmitterRef<AssignmentAction>
+}
+
+class SubmissionStatusComponent {
+  +submission: InputSignal<SubmissionView>
+  +history: InputSignal<readonly SubmissionVersion[]>
+  +showHistory: ModelSignal<boolean>
+  +versionSelected: OutputEmitterRef<SubmissionVersionSelect>
+  +actionSelected: OutputEmitterRef<CsSubmissionAction>
+}
+
+class RubricComponent {
+  +rubric: InputSignal<RubricView>
+  +selection: ModelSignal<RubricSelection>
+  +readOnly: InputSignal<boolean>
+  +levelSelected: OutputEmitterRef<RubricLevelSelect>
+}
+
+class AssessmentEditorComponent {
+  +assessment: InputSignal<AssessmentView>
+  +readOnly: InputSignal<boolean>
+  +saving: InputSignal<boolean>
+  +assessmentChanged: OutputEmitterRef<AssessmentChange>
+  +decisionSubmitted: OutputEmitterRef<AssessmentDecision>
+  -dirty: Signal<boolean>
+  +writeValue(value: string): void
+}
+
+class AchievementCardComponent {
+  +achievement: InputSignal<AchievementView>
+  +size: InputSignal<CsAchievementSize>
+  +achievementSelected: OutputEmitterRef<AchievementSelect>
+}
+
+class BadgeCollectionComponent {
+  +achievements: InputSignal<readonly AchievementView[]>
+  +layout: InputSignal<CollectionLayout>
+  +emptyLabel: InputSignal<string>
+  +achievementSelected: OutputEmitterRef<AchievementSelect>
+}
+
+class AssignmentView {
+  +assignmentId: string
+  +title: string
+  +dueLabel: string
+  +dueState: AssignmentDueState
+  +status: SubmissionStatus
+  +instructions: string
+  +metadata: readonly CsMetadataItem[]
+  +actions: readonly AssignmentAction[]
+}
+
+enum AssignmentDueState {
+  upcoming
+  dueSoon
+  overdue
+  closed
+}
+
+class SubmissionView {
+  +submissionId: string
+  +assignmentId: string
+  +status: SubmissionStatus
+  +submittedAtLabel: string | null
+  +evidence: readonly EvidenceItem[]
+  +feedback: ReviewFeedback | null
+  +versionCount: number
+}
+
+enum SubmissionStatus {
+  draft
+  submitted
+  inReview
+  changesRequested
+  approved
+}
+
+class SubmissionVersion {
+  +versionId: string
+  +ordinal: number
+  +submittedAtLabel: string
+  +status: SubmissionStatus
+  +isCurrent: boolean
+}
+
+class EvidenceItem {
+  +evidenceId: string
+  +kind: string
+  +label: string
+  +sizeLabel: string | null
+  +previewUrl: string | null
+}
+
+class ReviewFeedback {
+  +authorLabel: string
+  +postedAtLabel: string
+  +body: string
+  +decision: string
+}
+
+class RubricView {
+  +rubricId: string
+  +title: string
+  +criteria: readonly RubricCriterion[]
+  +totalLabel: string
+}
+
+class RubricCriterion {
+  +criterionId: string
+  +label: string
+  +description: string
+  +weight: number
+  +levels: readonly RubricLevel[]
+}
+
+class RubricLevel {
+  +levelId: string
+  +label: string
+  +descriptor: string
+  +score: number
+}
+
+class AssessmentView {
+  +assessmentId: string
+  +submissionId: string
+  +rubric: RubricView
+  +selection: RubricSelection
+  +comment: string
+  +decision: string | null
+}
+
+class AssessmentDecision {
+  +assessmentId: string
+  +outcome: string
+  +selection: RubricSelection
+  +comment: string
+}
+
+class AchievementView {
+  +achievementId: string
+  +name: string
+  +artUrl: string | null
+  +iconName: string | null
+  +criteriaLabel: string
+  +earned: boolean
+  +awardedAtLabel: string | null
+  +progress: AchievementProgress | null
+}
+
+class AchievementProgress {
+  +current: number
+  +target: number
+  +percent: number
+  +label: string
+}
+
+class AchievementSelect {
+  +achievementId: string
+  +earned: boolean
+}
+
+enum CollectionLayout {
+  grid
+  list
+}
+
+AssessmentEditorComponent ..|> ControlValueAccessor
+AssessmentEditorComponent *-- "1" RubricComponent : composes
+BadgeCollectionComponent *-- "0..*" AchievementCardComponent : renders one per achievement
+AssignmentCardComponent --> "1" AssignmentView : reads
+AssignmentView --> AssignmentDueState : has
+AssignmentView --> SubmissionStatus : reports
+SubmissionStatusComponent --> "1" SubmissionView : reads
+SubmissionStatusComponent --> "0..*" SubmissionVersion : lists
+SubmissionView *-- "0..*" EvidenceItem : carries
+SubmissionView o-- "0..1" ReviewFeedback : carries
+SubmissionView --> SubmissionStatus : has
+RubricComponent --> "1" RubricView : reads
+RubricView *-- "1..*" RubricCriterion : contains
+RubricCriterion *-- "1..*" RubricLevel : offers
+AssessmentEditorComponent --> "1" AssessmentView : reads
+AssessmentView o-- "1" RubricView : assesses against
+AssessmentEditorComponent ..> AssessmentDecision : emits
+AchievementCardComponent --> "1" AchievementView : reads
+AchievementView o-- "0..1" AchievementProgress : reports
+AchievementCardComponent ..> AchievementSelect : emits
+BadgeCollectionComponent --> CollectionLayout : has
+@enduml

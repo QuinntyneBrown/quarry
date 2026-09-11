@@ -1,0 +1,11 @@
+<cs-card
+  ><time [attr.datetime]="event().start">{{ event().start }}</time>
+  <h3>{{ event().title }}</h3>
+  @if (event().location) {
+    <p>{{ event().location }}</p>
+  }
+  @if (event().status) {
+    <cs-badge>{{ event().status }}</cs-badge>
+  }
+  <ng-content
+/></cs-card>

@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Support and migrate consumers
+
+Person(dev, "Application developer", "Installs, configures, and upgrades the library in Liturgy or Word Up")
+Person(maintainer, "Library maintainer", "Declares the support matrix, deprecations, and migrations")
+
+System(cornerstone, "Cornerstone", "Angular UI library publishing a support matrix, a deprecation policy, and schematics")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular workspace edited by the schematics")
+System_Ext(cli, "Angular CLI", "Runs ng add and ng update against the workspace")
+System_Ext(cdk, "Angular CDK", "Peer dependency installed at the matrix version")
+System_Ext(npm, "npm registry", "Distributes the package, its manifest, and its schematics")
+System_Ext(actions, "GitHub Actions", "Runs the support matrix consistency check")
+System_Ext(browser, "Browser platform", "Engines named in the published support matrix")
+
+Rel(maintainer, cornerstone, "Declares the matrix, deprecations, and migrations in")
+Rel(cornerstone, npm, "Is published to")
+Rel(dev, cli, "Runs ng add and ng update through")
+Rel(cli, npm, "Resolves the package and its schematics from")
+Rel(cli, cornerstone, "Executes the setup and migration schematics of")
+Rel(cli, app, "Edits the workspace configuration and sources of")
+Rel(app, cdk, "Installs at the version the matrix declares")
+Rel(cornerstone, actions, "Is checked for matrix drift by")
+Rel(app, browser, "Targets the engines the matrix declares")
+Rel(cornerstone, dev, "Announces deprecations and removals to")
+@enduml

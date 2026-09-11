@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Capture text
+
+Person(dev, "Application developer", "Binds label, hint, and error text")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(field, "FieldComponent", "Angular standalone component", "Generates the control ID, renders label, hint, error, success, and count, and assembles aria-describedby")
+  Component(input, "CsInputDirective", "Angular attribute directive", "Styles and wires the ten native input types and implements ControlValueAccessor")
+  Component(textarea, "CsTextareaDirective", "Angular attribute directive", "Resizable, fixed-height, and autosize textareas with an optional character count")
+  Component(group, "InputGroupComponent", "Angular standalone component", "Renders an input and its addons as one bounded control with a single focus ring")
+  Component(addon, "InputAddonDirective", "Angular attribute directive", "Prefix or suffix text, icon, or action segment with documented description semantics")
+  Component(idgen, "Control ID generator", "Injectable counter", "Issues stable unique identifiers for label and description association")
+  Component(count, "Character count", "Live region", "Announces politely at the warning threshold and at the limit")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Field and control tokens", "CSS custom properties", "Declares control height, inset padding, boundary contrast, focus ring, and validation colours")
+}
+
+System_Ext(cdk, "Angular CDK", "Text-field autosize measurement")
+System_Ext(browser, "Browser platform", "Native input behaviour and validation")
+
+Rel(dev, field, "Supplies label, hint, and error text to")
+Rel(field, idgen, "Requests an identifier from")
+Rel(field, input, "Wires the identifier and describedby onto")
+Rel(field, textarea, "Wires the identifier and describedby onto")
+Rel(field, count, "Renders and updates")
+Rel(group, input, "Bounds and shares its focus ring with")
+Rel(group, addon, "Projects")
+Rel(addon, input, "Joins the describedby chain of when meaningful")
+Rel(textarea, cdk, "Recalculates its height through", "cdkTextareaAutosize")
+Rel(input, browser, "Reads and writes the native value of")
+Rel(field, tokens, "Resolves state colours from")
+Rel(input, tokens, "Resolves height, inset, and boundary contrast from")
+@enduml

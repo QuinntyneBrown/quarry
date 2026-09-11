@@ -1,0 +1,105 @@
+{
+  "kind": "class",
+  "name": "LessonStepListComponent",
+  "sourcePath": "src/cornerstone/lesson-step-list/lesson-step-list.component.ts",
+  "category": "workflows",
+  "description": "Lesson Step List public API.",
+  "members": [
+    {
+      "name": "steps",
+      "bindingName": "steps",
+      "role": "input",
+      "type": "readonly LessonStepView[]",
+      "required": true,
+      "description": "Steps public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "selected",
+      "bindingName": "selected",
+      "role": "output",
+      "type": "LessonStepSelect",
+      "required": false,
+      "description": "Selected public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-lesson-step-list",
+  "slug": "lesson-step-list",
+  "label": "Lesson Step List",
+  "tokens": [],
+  "relatedSymbols": ["LessonStepSelect", "LessonStepState", "LessonStepView"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "LessonStepSelect",
+      "sourcePath": "src/cornerstone/lesson-step-list/lesson-step-select.interface.ts",
+      "category": "workflows",
+      "description": "Lesson Step Select public API.",
+      "members": [
+        {
+          "name": "stepId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Step Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "LessonStepState",
+      "sourcePath": "src/cornerstone/lesson-step-list/lesson-step-state.type.ts",
+      "category": "workflows",
+      "description": "Lesson Step State public API.",
+      "declaration": "'complete' | 'current' | 'available' | 'locked'"
+    },
+    {
+      "kind": "interface",
+      "name": "LessonStepView",
+      "sourcePath": "src/cornerstone/lesson-step-list/lesson-step-view.interface.ts",
+      "category": "workflows",
+      "description": "Lesson Step View public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "LessonStepState",
+          "required": true,
+          "description": "State public API."
+        },
+        {
+          "name": "duration",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Duration public API."
+        }
+      ]
+    }
+  ]
+}

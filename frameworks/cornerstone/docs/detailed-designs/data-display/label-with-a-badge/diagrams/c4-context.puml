@@ -1,0 +1,23 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Label with a badge
+
+Person(dev, "Application developer", "Places badges, pills, and chip lists on Liturgy and Word Up screens")
+Person(user, "Application user", "Reads status labels and filters lists with keyboard or pointer")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the badge, pill, and chip list surfaces")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns filter state")
+System_Ext(cdk, "Angular CDK", "Focus key manager behind chip list roving focus")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Renders the labels and exposes the accessibility tree")
+
+Rel(dev, app, "Declares badges and chip lists in")
+Rel(app, cornerstone, "Composes label surfaces from")
+Rel(cornerstone, cdk, "Builds roving focus on")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders tone, presentation, and ARIA state to")
+Rel(user, browser, "Reads labels and toggles filter pills in")
+Rel(browser, app, "Delivers keyboard and pointer events to")
+@enduml

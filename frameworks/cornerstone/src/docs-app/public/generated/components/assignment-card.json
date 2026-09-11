@@ -1,0 +1,112 @@
+{
+  "kind": "class",
+  "name": "AssignmentCardComponent",
+  "sourcePath": "src/cornerstone/assignment-card/assignment-card.component.ts",
+  "category": "workflows",
+  "description": "Assignment Card public API.",
+  "members": [
+    {
+      "name": "assignment",
+      "bindingName": "assignment",
+      "role": "input",
+      "type": "AssignmentView",
+      "required": true,
+      "description": "Assignment public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "action",
+      "bindingName": "action",
+      "role": "output",
+      "type": "AssignmentAction",
+      "required": false,
+      "description": "Action public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-assignment-card",
+  "slug": "assignment-card",
+  "label": "Assignment Card",
+  "tokens": [],
+  "relatedSymbols": ["AssignmentAction", "AssignmentDueState", "AssignmentView"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "AssignmentAction",
+      "sourcePath": "src/cornerstone/assignment-card/assignment-action.interface.ts",
+      "category": "workflows",
+      "description": "Assignment Action public API.",
+      "members": [
+        {
+          "name": "assignmentId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Assignment Id public API."
+        },
+        {
+          "name": "action",
+          "role": "property",
+          "type": "'open' | 'submit' | 'review'",
+          "required": true,
+          "description": "Action public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "AssignmentDueState",
+      "sourcePath": "src/cornerstone/assignment-card/assignment-due-state.type.ts",
+      "category": "workflows",
+      "description": "Assignment Due State public API.",
+      "declaration": "'upcoming' | 'due' | 'overdue' | 'closed'"
+    },
+    {
+      "kind": "interface",
+      "name": "AssignmentView",
+      "sourcePath": "src/cornerstone/assignment-card/assignment-view.interface.ts",
+      "category": "workflows",
+      "description": "Assignment View public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "summary",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Summary public API."
+        },
+        {
+          "name": "due",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Due public API."
+        },
+        {
+          "name": "dueState",
+          "role": "property",
+          "type": "AssignmentDueState",
+          "required": false,
+          "description": "Due State public API."
+        },
+        {
+          "name": "metadata",
+          "role": "property",
+          "type": "readonly CsMetadataItem[]",
+          "required": false,
+          "description": "Metadata public API."
+        }
+      ]
+    }
+  ]
+}

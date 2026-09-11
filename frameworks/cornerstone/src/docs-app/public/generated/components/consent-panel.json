@@ -1,0 +1,301 @@
+{
+  "kind": "class",
+  "name": "ConsentPanelComponent",
+  "sourcePath": "src/cornerstone/consent-panel/consent-panel.component.ts",
+  "category": "workflows",
+  "description": "Consent Panel public API.",
+  "members": [
+    {
+      "name": "view",
+      "bindingName": "view",
+      "role": "input",
+      "type": "ConsentPanelViewModel",
+      "required": true,
+      "description": "View public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "decision",
+      "bindingName": "decision",
+      "role": "output",
+      "type": "ConsentDecisionIntent",
+      "required": false,
+      "description": "Decision public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "revoke",
+      "bindingName": "revoke",
+      "role": "output",
+      "type": "ConsentRevokeIntent",
+      "required": false,
+      "description": "Revoke public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "contactUpdate",
+      "bindingName": "contactUpdate",
+      "role": "output",
+      "type": "ConsentContactUpdateIntent",
+      "required": false,
+      "description": "Contact Update public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-consent-panel",
+  "slug": "consent-panel",
+  "label": "Consent Panel",
+  "tokens": [],
+  "relatedSymbols": [
+    "ConsentChoice",
+    "ConsentContactDetail",
+    "ConsentContactUpdateIntent",
+    "ConsentDecisionIntent",
+    "ConsentGroup",
+    "ConsentHistoryEntry",
+    "ConsentPanelViewModel",
+    "ConsentRevokeIntent",
+    "ConsentStatus"
+  ],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ConsentChoice",
+      "sourcePath": "src/cornerstone/consent-panel/consent-choice.interface.ts",
+      "category": "workflows",
+      "description": "Consent Choice public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "description",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Description public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentContactDetail",
+      "sourcePath": "src/cornerstone/consent-panel/consent-contact-detail.interface.ts",
+      "category": "workflows",
+      "description": "Consent Contact Detail public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Value public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentContactUpdateIntent",
+      "sourcePath": "src/cornerstone/consent-panel/consent-contact-update-intent.interface.ts",
+      "category": "workflows",
+      "description": "Consent Contact Update Intent public API.",
+      "members": [
+        {
+          "name": "consentId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Consent Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentDecisionIntent",
+      "sourcePath": "src/cornerstone/consent-panel/consent-decision-intent.interface.ts",
+      "category": "workflows",
+      "description": "Consent Decision Intent public API.",
+      "members": [
+        {
+          "name": "groupId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Group Id public API."
+        },
+        {
+          "name": "choiceId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Choice Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentGroup",
+      "sourcePath": "src/cornerstone/consent-panel/consent-group.interface.ts",
+      "category": "workflows",
+      "description": "Consent Group public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "choices",
+          "role": "property",
+          "type": "readonly ConsentChoice[]",
+          "required": true,
+          "description": "Choices public API."
+        },
+        {
+          "name": "selected",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Selected public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentHistoryEntry",
+      "sourcePath": "src/cornerstone/consent-panel/consent-history-entry.interface.ts",
+      "category": "workflows",
+      "description": "Consent History Entry public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "ConsentStatus",
+          "required": true,
+          "description": "Status public API."
+        },
+        {
+          "name": "instant",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Instant public API."
+        },
+        {
+          "name": "actor",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Actor public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentPanelViewModel",
+      "sourcePath": "src/cornerstone/consent-panel/consent-panel-view-model.interface.ts",
+      "category": "workflows",
+      "description": "Consent Panel View Model public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "status",
+          "role": "property",
+          "type": "ConsentStatus",
+          "required": true,
+          "description": "Status public API."
+        },
+        {
+          "name": "groups",
+          "role": "property",
+          "type": "readonly ConsentGroup[]",
+          "required": true,
+          "description": "Groups public API."
+        },
+        {
+          "name": "history",
+          "role": "property",
+          "type": "readonly ConsentHistoryEntry[]",
+          "required": true,
+          "description": "History public API."
+        },
+        {
+          "name": "contacts",
+          "role": "property",
+          "type": "readonly ConsentContactDetail[]",
+          "required": true,
+          "description": "Contacts public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ConsentRevokeIntent",
+      "sourcePath": "src/cornerstone/consent-panel/consent-revoke-intent.interface.ts",
+      "category": "workflows",
+      "description": "Consent Revoke Intent public API.",
+      "members": [
+        {
+          "name": "consentId",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Consent Id public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "ConsentStatus",
+      "sourcePath": "src/cornerstone/consent-panel/consent-status.type.ts",
+      "category": "workflows",
+      "description": "Consent Status public API.",
+      "declaration": "'granted' | 'denied' | 'pending' | 'revoked'"
+    }
+  ]
+}

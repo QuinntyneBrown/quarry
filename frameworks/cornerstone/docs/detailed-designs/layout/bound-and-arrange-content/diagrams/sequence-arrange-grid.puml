@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Arrange a bounded grid
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application developer" as dev
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone layout runtime" #D1FADF
+  participant "ContainerComponent" as container
+  participant "CsGridDirective" as grid
+  participant "CsClusterDirective" as cluster
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Layout styles" as styles
+  participant "Theme stylesheet" as theme
+end box
+box "Browser — platform" #FFF4E5
+  participant "Layout engine" as browser
+end box
+
+dev -> page : Compose cs-container with csGrid children
+page -> container : Bind width='default', gutter='default'
+container -> styles : Apply the default bounds per L2-035
+styles -> theme : Read the container width token
+theme --> styles : Maximum inline size
+styles -> theme : Read the gutter spacing token for the current viewport step
+theme --> styles : Responsive gutter per L2-035
+container -> browser : Declare max-inline-size and centre the content
+
+page -> grid : Bind columns=3, gap='md'
+grid -> styles : Apply three equal tracks per L2-036
+styles -> theme : Read the md spacing step
+theme --> styles : Gap length
+grid -> browser : Declare the grid template and gap
+
+page -> cluster : Bind gap='sm', align='center' on the card action row
+cluster -> browser : Declare a wrapping inline arrangement per L2-036
+
+browser -> browser : Resolve tracks within the bounded inline size
+browser --> page : Arranged grid
+page --> dev : Bounded three-column layout
+@enduml

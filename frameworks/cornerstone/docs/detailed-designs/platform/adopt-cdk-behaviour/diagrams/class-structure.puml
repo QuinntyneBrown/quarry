@@ -1,0 +1,149 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Adopt CDK behaviour
+
+enum CsScrollStrategy {
+  reposition
+  block
+  close
+}
+
+enum CsOverlayPosition {
+  belowStart
+  belowEnd
+  aboveStart
+  aboveEnd
+  inlineStart
+  inlineEnd
+  centred
+}
+
+class CsOverlayConfig {
+  +origin: ElementRef<HTMLElement>
+  +positions: CsOverlayPosition
+  +scrollStrategy: CsScrollStrategy
+  +hasBackdrop: boolean
+  +panelClass: string[]
+  +direction: Direction
+}
+
+class CsOverlayService {
+  +open<T, R>(portal: ComponentType<T>, config: CsOverlayConfig): CsOverlayRef<R>
+  -buildPositionStrategy(config: CsOverlayConfig): FlexibleConnectedPositionStrategy
+  -buildScrollStrategy(strategy: CsScrollStrategy): ScrollStrategy
+}
+
+class CsOverlayRef<R> {
+  +overlayRef: OverlayRef
+  +closed: Observable<R | undefined>
+  +close(result?: R): void
+}
+
+class CsOverlayPositions {
+  +{static} preset(name: CsOverlayPosition): ConnectedPosition[]
+}
+
+class CsFocusTrapDirective {
+  +csFocusTrap: InputSignal<boolean>
+  +initialFocus: InputSignal<CsInitialFocus>
+  -trap: ConfigurableFocusTrap
+  +ngOnDestroy(): void
+}
+
+class CsFocusMonitorDirective {
+  +origin: OutputEmitterRef<FocusOrigin>
+}
+
+enum CsListOrientation {
+  vertical
+  horizontal
+}
+
+class CsListKeyManager<T> {
+  +orientation: CsListOrientation
+  +wrap: boolean
+  +typeaheadDebounce: number
+  +useActiveDescendant: boolean
+  +attach(items: QueryList<T>): void
+  +onKeydown(event: KeyboardEvent): void
+}
+
+class CsAnnouncerService {
+  -lastMessage: string | null
+  +announce(message: string, politeness: AriaLivePoliteness): void
+}
+
+class CsIdService {
+  +next(prefix: string): string
+}
+
+class CsBreakpointService {
+  +active: Signal<CsViewportClass>
+  +matches(query: CsBreakpointKey): Signal<boolean>
+}
+
+class CsAutosizeDirective {
+  +minRows: InputSignal<number>
+  +maxRows: InputSignal<number>
+}
+
+class CsVirtualListDirective {
+  +itemSize: InputSignal<number>
+  +minBufferPx: InputSignal<number>
+}
+
+class CsDragMove {
+  +itemId: string
+  +fromListId: string
+  +toListId: string
+  +fromIndex: number
+  +toIndex: number
+  +source: CsMoveSource
+}
+
+enum CsMoveSource {
+  pointer
+  keyboard
+}
+
+class CsDragListDirective {
+  +listId: InputSignal<string>
+  +connectedTo: InputSignal<string[]>
+  +moved: OutputEmitterRef<CsDragMove>
+}
+
+class CsDragItemDirective {
+  +itemId: InputSignal<string>
+  +disabled: InputSignal<boolean>
+}
+
+class CsKeyboardMoveDirective {
+  +onKeydown(event: KeyboardEvent): void
+  -lifted: boolean
+}
+
+CsOverlayService ..> CsOverlayConfig : reads
+CsOverlayService ..> CsOverlayPositions : resolves presets from
+CsOverlayService --> CsOverlayRef : returns
+CsOverlayConfig --> CsOverlayPosition : names
+CsOverlayConfig --> CsScrollStrategy : names
+CsListKeyManager --> CsListOrientation : has
+CsDragListDirective o-- "0..*" CsDragItemDirective : contains
+CsDragListDirective --> CsDragMove : emits
+CsDragMove --> CsMoveSource : records
+CsKeyboardMoveDirective ..> CsDragListDirective : drives
+CsKeyboardMoveDirective ..> CsAnnouncerService : announces through
+CsDragListDirective ..> CsAnnouncerService : announces through
+CsFocusTrapDirective ..> CsIdService : names the trapped region with
+@enduml

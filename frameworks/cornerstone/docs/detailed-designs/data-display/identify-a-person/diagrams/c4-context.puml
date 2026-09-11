@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Identify a person
+
+Person(dev, "Application developer", "Renders directories, rosters, and account menus from person data")
+Person(mentor, "Mentor", "Scans a cohort roster and opens a youth record in Word Up")
+Person(volunteer, "Volunteer", "Reads participant groups on session and assignment cards")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the avatar, avatar stack, and person row")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns person data and routing")
+System_Ext(cdk, "Angular CDK", "Layout observation behind the person row reflow")
+System_Ext(npm, "npm registry", "Distributes the published package")
+System_Ext(browser, "Browser platform", "Loads profile images and exposes the accessibility tree")
+
+Rel(dev, app, "Binds person summaries in")
+Rel(app, cornerstone, "Composes identity surfaces from")
+Rel(cornerstone, cdk, "Observes viewport width through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Requests profile images and writes ARIA state to")
+Rel(mentor, browser, "Opens a person row in")
+Rel(volunteer, browser, "Reads participant groups in")
+Rel(browser, app, "Delivers activation intents to")
+@enduml

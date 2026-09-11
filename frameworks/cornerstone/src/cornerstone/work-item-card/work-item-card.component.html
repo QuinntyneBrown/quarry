@@ -1,0 +1,9 @@
+<cs-card interactive (activated)="opened.emit({ itemId: item().id })"
+  ><h3>{{ item().title }}</h3>
+  @if (item().description) {
+    <p>{{ item().description }}</p>
+  }
+  @if (item().status) {
+    <cs-badge>{{ item().status }}</cs-badge>
+  }
+</cs-card>

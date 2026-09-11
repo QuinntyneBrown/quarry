@@ -1,0 +1,104 @@
+{
+  "kind": "class",
+  "name": "WizardComponent",
+  "sourcePath": "src/cornerstone/wizard/wizard.component.ts",
+  "category": "forms",
+  "description": "Wizard public API.",
+  "members": [
+    {
+      "name": "steps",
+      "bindingName": "steps",
+      "role": "input",
+      "type": "readonly WizardStep[]",
+      "required": true,
+      "description": "Steps public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "active",
+      "bindingName": "active",
+      "role": "model",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Active public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "completed",
+      "bindingName": "completed",
+      "role": "output",
+      "type": "void",
+      "required": false,
+      "description": "Completed public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "stepChanged",
+      "bindingName": "stepChanged",
+      "role": "output",
+      "type": "number",
+      "required": false,
+      "description": "Step Changed public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-wizard",
+  "slug": "wizard",
+  "label": "Wizard",
+  "tokens": [],
+  "relatedSymbols": ["Step", "WizardStep", "WizardStepState"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "Step",
+      "sourcePath": "src/cornerstone/wizard/step.type.ts",
+      "category": "forms",
+      "description": "Step public API.",
+      "declaration": "WizardStep"
+    },
+    {
+      "kind": "interface",
+      "name": "WizardStep",
+      "sourcePath": "src/cornerstone/wizard/wizard-step.interface.ts",
+      "category": "forms",
+      "description": "Wizard Step public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "optional",
+          "role": "property",
+          "type": "boolean",
+          "required": false,
+          "description": "Optional public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "WizardStepState",
+      "sourcePath": "src/cornerstone/wizard/wizard-step-state.type.ts",
+      "category": "forms",
+      "description": "Wizard Step State public API.",
+      "declaration": "'upcoming' | 'current' | 'complete' | 'error'"
+    }
+  ]
+}

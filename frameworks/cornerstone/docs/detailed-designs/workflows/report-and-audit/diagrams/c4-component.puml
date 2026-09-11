@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Report and audit
+
+Person(admin, "Administrator", "Narrows the report and inspects the audit trail")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(filters, "ReportFiltersComponent", "Standalone component, OnPush", "Date, cohort, track, and mentor controls; emits one debounced intent carrying the complete filter state")
+  Component(dashboard, "ReportDashboardComponent", "Standalone component, OnPush", "Overview, youth, cohort, and staff views; computes no figure and generates no file")
+  Component(panels, "KPI, ring, and bar panels", "Composed Cornerstone panels", "Present figures with the data alternative required by L2-097")
+  Component(audit, "AuditLogComponent", "Standalone component (L2-093 table, L2-074 paginator)", "Paged event table with source, target, and private indicators and expandable detail")
+  Component(detail, "Audit detail region", "Rendered region", "Renders only the supplied fields; emits no element for a withheld field")
+  Component(printcss, "Report print rules", "Print stylesheet", "Renders charts, KPIs, and the filter summary and omits interactive chrome")
+  Component(models, "Report and audit types", "TypeScript types", "ReportFilterState, ReportViewModel, AuditEvent and their intents")
+}
+
+Container_Boundary(app, "Consuming application — reporting pages") {
+  Component(reportcmp, "Reporting page component", "Angular feature page", "Runs the query and maps results into the report view model")
+  Component(auditcmp, "Audit page component", "Angular feature page", "Pages the events and maps them into the audit view model")
+  Component(authz, "Authorization service", "Angular service", "Decides which audit fields the reader may see and removes the rest")
+  Component(exporter, "Export service", "Angular service", "Generates the export file from the filter state and view")
+}
+
+System_Ext(cdk, "Angular CDK", "LiveAnnouncer and BreakpointObserver")
+
+Rel(admin, filters, "Narrows the report in")
+Rel(admin, dashboard, "Reads figures in")
+Rel(admin, audit, "Inspects events in")
+Rel(dashboard, panels, "Composes")
+Rel(dashboard, printcss, "Applies when the page is printed")
+Rel(audit, detail, "Renders one per expanded row")
+Rel(filters, models, "Emits the filter state defined in")
+Rel(filters, reportcmp, "Emits filtersChanged carrying the complete filter state to")
+Rel(filters, auditcmp, "Emits filtersChanged carrying the complete filter state to")
+Rel(reportcmp, dashboard, "Binds ReportViewModel and the panel state to")
+Rel(dashboard, reportcmp, "Emits viewChanged and exportRequested to")
+Rel(reportcmp, exporter, "Generates the export file through")
+Rel(auditcmp, authz, "Removes fields the reader may not see through")
+Rel(authz, auditcmp, "Returns events carrying only permitted fields to")
+Rel(auditcmp, audit, "Binds the redacted AuditEvent list to")
+Rel(audit, auditcmp, "Emits pageChanged, filtersCleared, and detailToggled to")
+Rel(dashboard, cdk, "Announces the applied filters and record count through", "LiveAnnouncer")
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Survey a portfolio and the adapter contract
+
+Person(user, "Application user", "Activates a project card")
+
+Container_Boundary(page, "Consuming application feature page") {
+  Component(vocab, "Application vocabulary", "Phase names and copy", "Owned entirely by the application")
+  Component(colours, "Phase palette keys", "Token names", "Names design tokens; carries no literal colour")
+  Component(rules, "Enforcement results", "GateSummary map", "Computed by application services; no rule crosses the boundary")
+  Component(adapter, "CsProcessAdapter", "Typed adapter input", "The single boundary carrying labels, palette, ordering, and enforcement into the subsystem per L2-143")
+  Component(handler, "Intent handler", "Component method", "Resolves the project open intent into routing")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(lane, "PhaseLaneComponent", "Standalone component", "Labelled phase region in card, grid, and board layouts per L2-141")
+  Component(pcard, "ProjectCardComponent", "Standalone component", "Project state, metadata, and gate indication per L2-141")
+  Component(wall, "GratitudeWallComponent", "Standalone component", "Responsive collection with loading and empty states per L2-142")
+  Component(note, "GratitudeNoteComponent", "Standalone component", "Figure, blockquote, and figcaption semantics per L2-142")
+  Component(provider, "provideCsProcessAdapter()", "Angular provider function", "Registers the adapter for a route subtree")
+  Component(others, "Process subsystem components", "Rail, journey, gate, movement, and kanban components", "Read the same adapter and hold no application vocabulary")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver and LiveAnnouncer")
+System_Ext(browser, "Browser platform", "Cascade, layout, and accessibility tree")
+
+Rel(vocab, adapter, "Supplies labels to")
+Rel(colours, adapter, "Supplies palette keys to")
+Rel(rules, adapter, "Supplies enforcement results to")
+Rel(adapter, provider, "Is registered through")
+Rel(provider, lane, "Injects the adapter into")
+Rel(provider, pcard, "Injects the adapter into")
+Rel(provider, wall, "Injects the adapter into")
+Rel(provider, others, "Injects the adapter into")
+Rel(lane, pcard, "Renders each project as")
+Rel(wall, note, "Renders each note as")
+Rel(pcard, handler, "Emits ProjectOpenIntent to", "output()")
+Rel(lane, cdk, "Observes the XS breakpoint through")
+Rel(wall, cdk, "Announces the empty state through")
+Rel(lane, browser, "Renders the region name with the phase and project count to")
+Rel(note, browser, "Renders figure and blockquote semantics to")
+Rel(user, browser, "Activates a project card in")
+@enduml

@@ -1,0 +1,119 @@
+{
+  "kind": "class",
+  "name": "ReportDashboardComponent",
+  "sourcePath": "src/cornerstone/report-dashboard/report-dashboard.component.ts",
+  "category": "workflows",
+  "description": "Report Dashboard public API.",
+  "members": [
+    {
+      "name": "view",
+      "bindingName": "view",
+      "role": "input",
+      "type": "ReportViewModel",
+      "required": true,
+      "description": "View public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Opened public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-report-dashboard",
+  "slug": "report-dashboard",
+  "label": "Report Dashboard",
+  "tokens": [],
+  "relatedSymbols": ["PanelState", "ReportView", "ReportViewModel"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "PanelState",
+      "sourcePath": "src/cornerstone/report-dashboard/panel-state.type.ts",
+      "category": "workflows",
+      "description": "Panel State public API.",
+      "declaration": "'loading' | 'empty' | 'error' | 'ready'"
+    },
+    {
+      "kind": "interface",
+      "name": "ReportView",
+      "sourcePath": "src/cornerstone/report-dashboard/report-view.interface.ts",
+      "category": "workflows",
+      "description": "Report View public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "value",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Value public API."
+        },
+        {
+          "name": "formatted",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Formatted public API."
+        },
+        {
+          "name": "delta",
+          "role": "property",
+          "type": "number",
+          "required": false,
+          "description": "Delta public API."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "name": "ReportViewModel",
+      "sourcePath": "src/cornerstone/report-dashboard/report-view-model.interface.ts",
+      "category": "workflows",
+      "description": "Report View Model public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "panels",
+          "role": "property",
+          "type": "readonly ReportView[]",
+          "required": true,
+          "description": "Panels public API."
+        },
+        {
+          "name": "state",
+          "role": "property",
+          "type": "PanelState",
+          "required": true,
+          "description": "State public API."
+        }
+      ]
+    }
+  ]
+}

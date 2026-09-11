@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Publish the documentation site
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Library maintainer" as maintainer
+box "Developer workstation" #E0F2FE
+  participant "Local repository" as repo
+end box
+box "Backend — GitHub Actions" #D1FADF
+  participant "Deploy design system workflow" as workflow
+  participant "Azure Static Web Apps upload" as upload
+end box
+box "Backend — Build and verification" #ECFDF3
+  participant "API extractor" as extractor
+  participant "npm run build:docs" as build
+  participant "Documentation quality checks" as checks
+end box
+box "Backend — npm registry" #FFF4E5
+  participant "Dependency install" as install
+end box
+
+maintainer -> repo : Add a component page, examples, and guide edits
+repo -> workflow : Push to main touching design-system or the library
+workflow -> install : Run npm ci on Node 22
+install --> workflow : Locked dependency tree
+
+workflow -> extractor : Walk public-api.ts
+extractor -> extractor : Emit one entry per exported symbol per L2-150
+alt Every exported symbol carries documentation
+  extractor --> workflow : api.json written
+else A symbol has no documentation page
+  extractor --> workflow : Fail the workflow per L2-149
+end
+
+workflow -> build : Build the documentation site
+build -> build : Apply the 500 kB warning and 1 MB error initial budget
+build --> workflow : dist/design-system/browser
+
+workflow -> checks : Run accessibility, responsive, and performance checks per L2-153
+checks --> workflow : Pass or fail per page
+workflow -> checks : Confirm the seven guides are routed per L2-152
+checks --> workflow : Guide inventory result
+
+opt Azure deployment token configured
+  workflow -> upload : Upload the built output
+  upload --> workflow : Deployment accepted per L2-153
+end
+workflow --> maintainer : Published documentation site
+@enduml

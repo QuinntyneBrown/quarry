@@ -1,0 +1,5 @@
+<h2>{{ result().title }}</h2>
+<cs-progress-ring [value]="result().score" [max]="result().max" /><cs-badge>{{
+  result().outcome
+}}</cs-badge
+><ng-content /><button csButton (click)="action.emit({ action: 'continue' })">Continue</button>

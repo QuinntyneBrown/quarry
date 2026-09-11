@@ -1,0 +1,61 @@
+@startuml
+title UML sequence behaviour — Render a disabled card with dividers
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+end box
+box "Frontend — Cornerstone card" #D1FADF
+  participant "CardComponent" as card
+  participant "CsCardFooterComponent" as footer
+  participant "DividerComponent" as divider
+end box
+box "Frontend — Cornerstone styles" #ECFDF3
+  participant "Card styles" as styles
+  participant "Theme stylesheet" as theme
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as browser
+end box
+
+page -> card : Bind presentation='selected', disabled=true
+card -> styles : Apply the disabled treatment per L2-039
+styles -> theme : Read the disabled surface and ink tokens
+theme --> styles : Resolved values
+card -> browser : Set aria-disabled='true' on the single activation target
+card -> browser : Suppress the hover and active treatments
+card -> browser : Keep the card in the accessibility tree
+
+card -> footer : Project the metadata slot
+footer -> divider : Render a rule above the footer
+
+alt Divider is decorative
+  divider -> browser : Set aria-hidden='true' and no role per L2-040
+else Divider separates independent content
+  divider -> browser : Set role='separator' per L2-040
+  divider -> browser : Set aria-orientation='vertical' for the vertical orientation
+end
+
+divider -> styles : Apply the inset variant and the bound spacing step per L2-040
+styles -> theme : Read the rule colour and spacing tokens
+theme --> styles : Resolved values
+
+user -> browser : Activate the card surface
+browser -> card : Activation event
+card -> card : Suppress the output while disabled per L2-039
+card --> page : No activated emission
+browser --> user : Card readable and announced as unavailable
+@enduml

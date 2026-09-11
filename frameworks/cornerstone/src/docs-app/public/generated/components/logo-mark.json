@@ -1,0 +1,84 @@
+{
+  "kind": "class",
+  "name": "LogoMarkComponent",
+  "sourcePath": "src/cornerstone/logo-mark/logo-mark.component.ts",
+  "category": "marketing",
+  "description": "Logo Mark public API.",
+  "members": [
+    {
+      "name": "brand",
+      "bindingName": "brand",
+      "role": "input",
+      "type": "CsBrandName",
+      "required": false,
+      "defaultValue": "'faithtech'",
+      "description": "Brand public API.",
+      "structured": false,
+      "options": ["faithtech", "liturgy", "wordup"]
+    },
+    {
+      "name": "size",
+      "bindingName": "size",
+      "role": "input",
+      "type": "CsBrandSize",
+      "required": false,
+      "defaultValue": "'medium'",
+      "description": "Size public API.",
+      "structured": false,
+      "options": ["small", "medium", "large"]
+    },
+    {
+      "name": "treatment",
+      "bindingName": "treatment",
+      "role": "input",
+      "type": "CsBrandTreatment",
+      "required": false,
+      "description": "Treatment public API.",
+      "structured": false,
+      "options": ["light", "dark", "mono"]
+    },
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-logo-mark",
+  "slug": "logo-mark",
+  "label": "Logo Mark",
+  "tokens": ["--cs-lime-strong"],
+  "relatedSymbols": ["CsBrandName", "CsBrandSize", "CsBrandTreatment"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsBrandName",
+      "sourcePath": "src/cornerstone/core/marketing/cs-brand-name.type.ts",
+      "category": "marketing",
+      "description": "Cs Brand Name public API.",
+      "declaration": "'faithtech' | 'liturgy' | 'wordup'"
+    },
+    {
+      "kind": "type",
+      "name": "CsBrandSize",
+      "sourcePath": "src/cornerstone/core/marketing/cs-brand-size.type.ts",
+      "category": "marketing",
+      "description": "Cs Brand Size public API.",
+      "declaration": "'small' | 'medium' | 'large'"
+    },
+    {
+      "kind": "type",
+      "name": "CsBrandTreatment",
+      "sourcePath": "src/cornerstone/core/marketing/cs-brand-treatment.type.ts",
+      "category": "marketing",
+      "description": "Cs Brand Treatment public API.",
+      "declaration": "'light' | 'dark' | 'mono'"
+    }
+  ]
+}

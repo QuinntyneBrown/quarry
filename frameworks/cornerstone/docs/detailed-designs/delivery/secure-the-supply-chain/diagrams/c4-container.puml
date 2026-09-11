@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Secure the supply chain
+
+Person(maintainer, "Library maintainer", "Reviews audit findings and holds no credential locally")
+
+System_Boundary(cornerstone, "Cornerstone workspace") {
+  Container(lib, "cornerstone library", "Angular library", "Holds the URL policy and the sanitizer rules every component observes")
+  Container(lock, "package-lock.json", "Committed lockfile", "Pins every direct and transitive dependency version")
+  Container(docs, "design-system docs app", "Angular application", "Hosts the gallery the injection suite drives")
+  Container(site, "marketing site", "Angular application", "Renders external links and embedded media through the same policy")
+}
+
+System_Boundary(ci, "GitHub Actions") {
+  Container(verify, "CI workflow", ".github/workflows/ci.yml", "Installs with npm ci and runs the security-scan and audit jobs")
+  Container(release, "Release workflow", ".github/workflows/release.yml", "Packs, inspects, and publishes with id-token write and provenance")
+}
+
+System_Ext(advisories, "Advisory database", "Severity-graded vulnerability reports")
+System_Ext(npm, "npm registry", "Stores the tarball and its attestation")
+System_Ext(secrets, "Repository secret store", "Holds the npm token")
+
+Rel(maintainer, verify, "Reads audit and licence findings from")
+Rel(verify, lib, "Lints the sanitizer and URL rules of")
+Rel(verify, docs, "Drives hostile payloads through the gallery of")
+Rel(verify, lock, "Installs from", "npm ci")
+Rel(verify, advisories, "Queries production dependencies against")
+Rel(verify, release, "Gates")
+Rel(release, lock, "Installs from without resolving a floating version")
+Rel(release, secrets, "Reads the npm token from", "repository secret")
+Rel(release, npm, "Publishes with provenance to", "npm publish --provenance")
+Rel(site, lib, "Renders links and iframes through the policy of")
+@enduml

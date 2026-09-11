@@ -1,0 +1,9 @@
+<cs-search-field
+  [value]="value().search ?? ''"
+  (searched)="changed.emit({ ...value(), search: $event })"
+/><ng-content /><button
+  csButton="secondary"
+  (click)="exported.emit({ format: 'csv', filters: value() })"
+>
+  Export
+</button>

@@ -1,0 +1,51 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Render on the server and localize
+
+Person(dev, "Application developer", "Supplies a partial translated token set")
+
+Container_Boundary(platform, "Platform guard layer") {
+  Component(guard, "csIsBrowser() / csOnBrowser()", "TypeScript helpers", "Guard or defer every browser global read")
+  Component(defaults, "CsServerDefaults", "Documented default values", "Theme, viewport class, and direction emitted by the server pass")
+  Component(ids, "CsIdService", "Injectable service", "Produces the same identifier sequence on the server and the client")
+}
+
+Container_Boundary(i18n, "Localization layer") {
+  Component(token, "CS_LOCALIZATION", "Injection token", "Holds every default string keyed by component family")
+  Component(provider, "provideCsLocalization()", "Angular provider function", "Merges a partial override over the English defaults")
+  Component(service, "CsLocalizationService", "Injectable service", "Resolves keys, interpolates parameters, and selects plural forms")
+  Component(dir, "CsDirectionService", "Injectable service", "Reports the ambient text direction as a signal")
+  Component(format, "CsFormatService and pipes", "csDate, csNumber, csCurrency, csRelative, csPlural", "Delegate to Angular locale-aware formatting")
+}
+
+Container_Boundary(styles, "Theme stylesheet") {
+  Component(logical, "_logical.scss", "CSS rules", "Expresses spacing, alignment, borders, and insets logically")
+  Component(expand, "Text expansion rules", "CSS rules", "Wrap or truncate a long translated label without clipping")
+}
+
+Container_Boundary(gates, "Verification gates") {
+  Component(harness, "CsSsrHarness", "Test harness", "Server-renders, hydrates, and asserts no mismatch")
+  Component(ssrgate, "ssr-coverage gate", "Build step", "Fails on an untested, mismatching, or throwing component")
+  Component(i18ngate, "i18n-coverage gate", "Build step", "Fails on an unresolved literal or a physical directional property")
+}
+
+System_Ext(cdk, "Angular CDK", "Directionality and overlay")
+System_Ext(server, "Node server renderer", "Angular SSR")
+
+Rel(dev, provider, "Calls in the application config")
+Rel(provider, token, "Populates")
+Rel(service, token, "Resolves keys from")
+Rel(dir, cdk, "Reads Directionality from")
+Rel(guard, server, "Reports the platform under")
+Rel(defaults, guard, "Is selected by")
+Rel(ids, guard, "Generates without a browser global through")
+Rel(format, service, "Selects plural forms through")
+Rel(logical, dir, "Mirrors under the direction reported by")
+Rel(expand, service, "Wraps the strings resolved by")
+Rel(harness, guard, "Asserts every browser read passes through")
+Rel(harness, ids, "Asserts identifier parity across passes of")
+Rel(ssrgate, harness, "Reads results from")
+Rel(i18ngate, token, "Asserts every literal resolves from")
+Rel(i18ngate, logical, "Rejects a physical directional property outside")
+@enduml

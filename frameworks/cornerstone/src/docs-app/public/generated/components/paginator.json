@@ -1,0 +1,94 @@
+{
+  "kind": "class",
+  "name": "PaginatorComponent",
+  "sourcePath": "src/cornerstone/paginator/paginator.component.ts",
+  "category": "navigation",
+  "description": "Paginator public API.",
+  "members": [
+    {
+      "name": "page",
+      "bindingName": "page",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "1",
+      "description": "Page public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "pageSize",
+      "bindingName": "pageSize",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "25",
+      "description": "Page Size public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "length",
+      "bindingName": "length",
+      "role": "input",
+      "type": "number",
+      "required": false,
+      "defaultValue": "0",
+      "description": "Length public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "pageSizeOptions",
+      "bindingName": "pageSizeOptions",
+      "role": "input",
+      "type": "readonly number[]",
+      "required": false,
+      "defaultValue": "[10, 25, 50, 100]",
+      "description": "Page Size Options public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "pageChange",
+      "bindingName": "pageChange",
+      "role": "output",
+      "type": "PageChange",
+      "required": false,
+      "description": "Page Change public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-paginator",
+  "slug": "paginator",
+  "label": "Paginator",
+  "tokens": [],
+  "relatedSymbols": ["PageChange"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "PageChange",
+      "sourcePath": "src/cornerstone/paginator/page-change.interface.ts",
+      "category": "navigation",
+      "description": "Page Change public API.",
+      "members": [
+        {
+          "name": "page",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Page public API."
+        },
+        {
+          "name": "pageSize",
+          "role": "property",
+          "type": "number",
+          "required": true,
+          "description": "Page Size public API."
+        }
+      ]
+    }
+  ]
+}

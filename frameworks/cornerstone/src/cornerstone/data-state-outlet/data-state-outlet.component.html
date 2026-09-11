@@ -1,0 +1,17 @@
+@switch (state().status) {
+  @case ('loading') {
+    <cs-skeleton />
+  }
+  @case ('empty') {
+    <ng-content select="[csEmpty]" />
+  }
+  @case ('error') {
+    <ng-content select="[csError]" />
+  }
+  @case ('ready') {
+    <ng-content select="[csReady]" />
+  }
+  @default {
+    <ng-content select="[csIdle]" />
+  }
+}

@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Debounce a search query
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone selection components" #D1FADF
+  participant "SearchFieldComponent" as search
+  participant "Live status region" as live
+end box
+box "Browser — platform" #FFF4E5
+  participant "Native search input" as dom
+  participant "Assistive technology" as at
+end box
+
+page -> search : Bind debounceMs and mode 'live' per L2-055
+search -> dom : Render the search icon and the native input
+
+user -> dom : Type three characters in quick succession
+dom -> search : input events
+search -> search : Restart the debounce timer on each keystroke
+search -> dom : Render the clear button while the value is non-empty per L2-055
+
+search -> page : search(query) once after the interval elapses per L2-055
+page -> services : Run the directory query
+services --> page : Result set
+page -> search : Set resultCount
+search -> live : Announce the count in the documented format per L2-055
+live -> at : Polite announcement
+
+alt Submit mode
+  page -> search : Bind mode 'submit'
+  user -> dom : Press Enter
+  search -> page : search(query) immediately regardless of the interval per L2-055
+else Clear activated
+  user -> dom : Activate the clear button
+  search -> dom : Clear the value and return focus to the input per L2-055
+  search -> live : Announce that the search was cleared
+  live -> at : Polite announcement
+  search -> dom : Remove the clear button while the value is empty
+end
+
+search --> page : Query state settled
+@enduml

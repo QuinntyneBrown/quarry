@@ -1,0 +1,9 @@
+<label
+  ><input
+    type="checkbox"
+    [checked]="value()"
+    [indeterminate]="indeterminate()"
+    [disabled]="disabled()"
+    (change)="toggle()"
+    (blur)="markTouched()" /><span><ng-content /></span
+></label>

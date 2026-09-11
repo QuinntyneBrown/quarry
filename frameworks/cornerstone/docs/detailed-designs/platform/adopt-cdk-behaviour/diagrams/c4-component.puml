@@ -1,0 +1,58 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Adopt CDK behaviour
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(menu, "CsMenuDirective / PopoverComponent", "Angular directives and component", "Anchored surfaces opened from a trigger")
+  Component(dialog, "DialogService / DrawerComponent", "Angular service and component", "Modal surfaces that trap and restore focus")
+  Component(board, "KanbanBoardComponent", "Angular component", "Column board with pointer and keyboard moves")
+  Component(field, "CsTextareaDirective", "Angular directive", "Textarea that grows with its content")
+}
+
+Container_Boundary(adapters, "CDK adapter layer") {
+  Component(overlay, "CsOverlayService", "Injectable service", "Applies flexible connected positioning, scroll strategy, and backdrop")
+  Component(positions, "CsOverlayPositions", "Position preset table", "Named ConnectedPosition sets ordered preferred to fallback")
+  Component(trap, "CsFocusTrapDirective", "Angular directive", "Builds a ConfigurableFocusTrap and restores focus on destroy")
+  Component(monitor, "CsFocusMonitorDirective", "Angular directive", "Reports the focus origin for focus styling")
+  Component(keys, "CsListKeyManager", "Injectable adapter", "Selects FocusKeyManager or ActiveDescendantKeyManager per widget")
+  Component(announcer, "CsAnnouncerService", "Injectable service", "Announces status and suppresses a repeated message")
+  Component(ids, "CsIdService", "Injectable service", "Generates document-unique cs- prefixed identifiers")
+  Component(bp, "CsBreakpointService", "Injectable service", "Reports the active viewport class as a signal")
+  Component(autosize, "CsAutosizeDirective", "Angular directive", "Binds minRows and maxRows onto CDK textarea autosize")
+  Component(vlist, "CsVirtualListDirective", "Angular directive", "Mounts a CDK virtual scroll viewport")
+  Component(drag, "CsDragListDirective / CsDragItemDirective", "Angular directives", "Compose CDK drop list and drag with a typed intent")
+  Component(kbd, "CsKeyboardMoveDirective", "Angular directive", "Keyboard alternative that drives the same drop list")
+}
+
+System_Ext(cdkOverlay, "@angular/cdk/overlay", "Position strategies, scroll strategies, overlay container")
+System_Ext(cdkA11y, "@angular/cdk/a11y", "Focus trap, focus monitor, key managers, live announcer, id generator")
+System_Ext(cdkLayout, "@angular/cdk/layout", "BreakpointObserver")
+System_Ext(cdkMisc, "@angular/cdk text-field, scrolling, drag-drop", "Autosize, virtual scroll, and drag-drop primitives")
+
+Rel(menu, overlay, "Opens an anchored surface through")
+Rel(dialog, overlay, "Opens a modal surface through")
+Rel(dialog, trap, "Traps focus with")
+Rel(menu, keys, "Moves the active item with")
+Rel(board, drag, "Transfers items with")
+Rel(board, kbd, "Offers the keyboard alternative through")
+Rel(board, announcer, "Announces the resulting position through")
+Rel(field, autosize, "Grows the control through")
+Rel(menu, ids, "Names trigger and panel through")
+Rel(menu, monitor, "Reads the focus origin from")
+Rel(board, bp, "Switches column layout on")
+Rel(board, vlist, "Virtualizes long columns with")
+
+Rel(overlay, positions, "Reads presets from")
+Rel(overlay, cdkOverlay, "Calls")
+Rel(trap, cdkA11y, "Calls")
+Rel(monitor, cdkA11y, "Calls")
+Rel(keys, cdkA11y, "Calls")
+Rel(announcer, cdkA11y, "Calls")
+Rel(ids, cdkA11y, "Calls")
+Rel(bp, cdkLayout, "Calls")
+Rel(autosize, cdkMisc, "Calls")
+Rel(vlist, cdkMisc, "Calls")
+Rel(drag, cdkMisc, "Calls")
+Rel(kbd, drag, "Reuses the drop list of")
+@enduml

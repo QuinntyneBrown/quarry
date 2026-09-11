@@ -1,0 +1,46 @@
+{
+  "kind": "class",
+  "name": "PageComponent",
+  "sourcePath": "src/cornerstone/page/page.component.ts",
+  "category": "foundations",
+  "description": "Page public API.",
+  "members": [
+    {
+      "name": "title",
+      "bindingName": "title",
+      "role": "input",
+      "type": "string",
+      "required": true,
+      "description": "Title public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "subtitle",
+      "bindingName": "subtitle",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Subtitle public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-page",
+  "slug": "page",
+  "label": "Page",
+  "tokens": ["--cs-font-display", "--cs-ink-muted", "--cs-space-3", "--cs-space-6", "--cs-text-xl"],
+  "relatedSymbols": ["PageActionsDirective"],
+  "relatedEntries": [
+    {
+      "kind": "class",
+      "name": "PageActionsDirective",
+      "sourcePath": "src/cornerstone/page/page-actions.directive.ts",
+      "category": "foundations",
+      "description": "Page Actions public API.",
+      "members": []
+    }
+  ]
+}

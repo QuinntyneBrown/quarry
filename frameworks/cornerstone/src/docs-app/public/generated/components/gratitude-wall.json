@@ -1,0 +1,64 @@
+{
+  "kind": "class",
+  "name": "GratitudeWallComponent",
+  "sourcePath": "src/cornerstone/gratitude-wall/gratitude-wall.component.ts",
+  "category": "process",
+  "description": "Gratitude Wall public API.",
+  "members": [
+    {
+      "name": "notes",
+      "bindingName": "notes",
+      "role": "input",
+      "type": "readonly GratitudeNote[]",
+      "required": true,
+      "description": "Notes public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-gratitude-wall",
+  "slug": "gratitude-wall",
+  "label": "Gratitude Wall",
+  "tokens": ["--cs-space-4"],
+  "relatedSymbols": ["GratitudeNote"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "GratitudeNote",
+      "sourcePath": "src/cornerstone/gratitude-note/gratitude-note.interface.ts",
+      "category": "process",
+      "description": "Gratitude Note public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Body public API."
+        },
+        {
+          "name": "author",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Author public API."
+        },
+        {
+          "name": "createdAt",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Created At public API."
+        }
+      ]
+    }
+  ]
+}

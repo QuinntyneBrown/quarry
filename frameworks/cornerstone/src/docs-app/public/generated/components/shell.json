@@ -1,0 +1,47 @@
+{
+  "kind": "class",
+  "name": "ShellComponent",
+  "sourcePath": "src/cornerstone/shell/shell.component.ts",
+  "category": "navigation",
+  "description": "Shell public API.",
+  "members": [
+    {
+      "name": "opened",
+      "bindingName": "opened",
+      "role": "model",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Opened public API.",
+      "structured": false,
+      "options": []
+    },
+    {
+      "name": "mode",
+      "bindingName": "mode",
+      "role": "input",
+      "type": "ShellSidenavMode",
+      "required": false,
+      "defaultValue": "'auto'",
+      "description": "Mode public API.",
+      "structured": false,
+      "options": ["side", "over", "compact", "auto"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-shell",
+  "slug": "shell",
+  "label": "Shell",
+  "tokens": ["--cs-duration", "--cs-ink", "--cs-paper"],
+  "relatedSymbols": ["ShellSidenavMode"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "ShellSidenavMode",
+      "sourcePath": "src/cornerstone/shell/shell-sidenav-mode.type.ts",
+      "category": "navigation",
+      "description": "Shell Sidenav Mode public API.",
+      "declaration": "'side' | 'over' | 'compact' | 'auto'"
+    }
+  ]
+}

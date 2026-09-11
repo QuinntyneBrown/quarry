@@ -1,0 +1,19 @@
+@switch (media().kind) {
+  @case ('image') {
+    <img [src]="media().src | csSafeUrl" [alt]="media().alt ?? media().title" />
+  }
+  @case ('video') {
+    <video controls [src]="media().src | csSafeUrl" [poster]="media().poster"></video>
+  }
+  @case ('audio') {
+    <audio controls [src]="media().src | csSafeUrl"></audio>
+  }
+  @case ('iframe') {
+    <iframe
+      [src]="media().src | csSafeUrl"
+      [title]="media().title"
+      sandbox="allow-scripts allow-forms allow-popups"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  }
+}

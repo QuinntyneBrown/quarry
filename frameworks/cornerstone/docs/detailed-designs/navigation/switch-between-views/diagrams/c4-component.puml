@@ -1,0 +1,43 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Switch between views
+
+Person(user, "Application user", "Selects a tab, segment, section, or page")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(tabs, "TabGroupComponent", "Standalone component", "Tablist with roving tabindex, badges, disabled tabs, and overflow")
+  Component(tab, "TabComponent", "Standalone component", "Declarative single tab projecting its panel content")
+  Component(segment, "SegmentedControlComponent", "Standalone component", "Compact radiogroup with roving focus and forms integration")
+  Component(accordion, "AccordionComponent", "Standalone component", "Single or multiple expansion across its sections")
+  Component(accitem, "AccordionItemComponent", "Standalone component", "Heading button with aria-expanded and a deferred body")
+  Component(paginator, "PaginatorComponent", "Standalone component", "Previous and next controls, page count, page size, and result summary")
+  Component(defer, "Deferred content host", "Component-scoped template", "Renders panel and section content on first reveal")
+  Component(live, "Live region", "Component-scoped template", "Announces the result range after each page change")
+  Component(menu, "CsMenuDirective", "Attribute directive", "Holds the tabs that do not fit under the menu overflow resolution")
+}
+
+Container_Boundary(appb, "Consuming application") {
+  Component(page, "Feature page", "Angular component", "Supplies item configuration and consumes the change outputs")
+}
+
+System_Ext(cdk, "Angular CDK", "Roving focus, overlay, layout observation")
+
+Rel(user, tabs, "Moves selection with arrow keys in")
+Rel(user, segment, "Moves selection with arrow keys in")
+Rel(user, accitem, "Activates the section heading of")
+Rel(user, paginator, "Selects a page or page size in")
+Rel(tabs, tab, "Renders each declarative tab as")
+Rel(tabs, defer, "Renders the selected panel through")
+Rel(accordion, accitem, "Coordinates expansion across")
+Rel(accitem, defer, "Renders its body through")
+Rel(tabs, menu, "Moves overflowing tabs into")
+Rel(menu, cdk, "Positions the panel with", "Overlay")
+Rel(tabs, cdk, "Manages roving focus with", "FocusKeyManager")
+Rel(segment, cdk, "Manages roving focus with", "FocusKeyManager")
+Rel(paginator, live, "Publishes the new range to")
+Rel(tabs, page, "Emits selectionChange to")
+Rel(paginator, page, "Emits pageChange to")
+Rel(page, accordion, "Binds the expanded identifier list of")
+Rel(page, segment, "Binds the selected value of")
+@enduml

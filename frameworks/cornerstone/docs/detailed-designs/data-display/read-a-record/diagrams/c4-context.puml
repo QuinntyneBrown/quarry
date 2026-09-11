@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Read a record
+
+Person(dev, "Application developer", "Composes detail surfaces from the reading presentations")
+Person(mentor, "Mentor", "Reads a member record, its related items, and its history")
+Person(youth, "Youth", "Reads a story and its scripture quotation")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the list, definition list, timeline, quotation, and tooltip")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application that owns the record and the ordering")
+System_Ext(cdk, "Angular CDK", "Overlay positioning and list key management")
+System_Ext(browser, "Browser platform", "Renders the markup, reports pointer and touch input, and exposes the accessibility tree")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes reading presentations from")
+Rel(dev, app, "Owns the record view model in")
+Rel(app, cornerstone, "Passes DefinitionItem and TimelineEntry values to")
+Rel(cornerstone, app, "Emits activation and selection intents to")
+Rel(cornerstone, cdk, "Positions tooltips and manages roving focus through")
+Rel(cornerstone, browser, "Renders lists, rails, quotations, and overlays to")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(browser, mentor, "Presents the record detail to")
+Rel(browser, youth, "Presents the story and the quotation to")
+Rel(mentor, browser, "Hovers, focuses, and long-presses in")
+@enduml

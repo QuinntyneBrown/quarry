@@ -1,0 +1,33 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Navigate the public site
+
+Person(dev, "Application developer", "Places the marketing header and footer on public routes")
+Person_Ext(visitor, "Visitor", "Browses public routes without a session")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components", "Supplies MarketingHeaderComponent and MarketingFooterComponent")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares the type, colour, spacing, and motion tokens the public chrome reads")
+  Container(docs, "Documentation site", "Angular application", "Publishes the link model and the public class hooks")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(public, "Public route layout", "Angular component", "Frames every public page with the header and footer")
+  Container(page, "Marketing page", "Angular routed components", "Renders the public content between the header and the footer")
+  Container(config, "Public link configuration", "Plain data", "Declares brand, link groups, social links, legal links, and the call to action")
+}
+
+System_Ext(browser, "Browser platform", "Viewport width, anchor activation, and focus")
+System_Ext(external, "External destinations", "Social platforms and legal documents")
+
+Rel(dev, public, "Declares the header and footer in")
+Rel(config, public, "Supplies brand, links, and the call to action to")
+Rel(public, lib, "Renders the public chrome of")
+Rel(page, public, "Renders between the header and the footer of")
+Rel(lib, theme, "Resolves visual values from")
+Rel(lib, browser, "Renders header, nav, and footer landmarks in")
+Rel(browser, visitor, "Presents the public navigation to")
+Rel(browser, external, "Opens external links in")
+Rel(docs, lib, "Documents the link model of")
+@enduml

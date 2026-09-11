@@ -1,0 +1,23 @@
+<section>
+  <header>
+    <h2>{{ title() }}</h2>
+    @if (summary()) {
+      <p>{{ summary() }}</p>
+    }
+  </header>
+  <div [class]="variant()">
+    @for (card of cards(); track card.id) {
+      <cs-card
+        ><h3>{{ card.title }}</h3>
+        <p>{{ card.body }}</p></cs-card
+      >
+    }
+    @for (stat of stats(); track stat.id) {
+      <div>
+        <strong>{{ stat.value }}</strong
+        ><span>{{ stat.label }}</span>
+      </div>
+    }
+    <ng-content />
+  </div>
+</section>

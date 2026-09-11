@@ -1,0 +1,64 @@
+@startuml
+title UML sequence behaviour — Confirm a destructive action
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "Application services" as appsvc
+end box
+box "Frontend — Cornerstone overlay runtime" #D1FADF
+  participant "DialogService" as service
+  participant "DialogShellComponent" as shell
+  participant "ConfirmDialogComponent" as confirm
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Dialog and FocusTrap" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Document and focus" as browser
+end box
+
+user -> page : Activate the delete control
+page -> service : confirm({ tone: 'danger', confirmAction })
+service -> cdk : Attach the dialog and record the trigger element
+cdk -> shell : Instantiate the shell
+shell -> confirm : Project the confirm dialog
+confirm -> confirm : Render the danger icon tone per L2-103
+confirm -> browser : Render the projected destructive-action copy per L2-103
+shell -> cdk : Create the focus trap
+cdk -> browser : Move focus to the cancel action
+
+user -> confirm : Activate the confirm action
+confirm -> shell : Set disableClose while the action runs
+confirm -> confirm : Enter the pending state per L2-103
+confirm -> appsvc : Await confirmAction()
+
+alt Action resolves
+  appsvc --> confirm : Resolved
+  confirm -> service : close('confirmed') per L2-103
+  service -> cdk : Detach the overlay and destroy the trap
+  cdk -> browser : Restore focus to the trigger element per L2-102
+  service --> page : Emit 'confirmed'
+  page --> user : Record removed from the screen
+else Action rejects
+  appsvc --> confirm : Rejected with a message
+  confirm -> confirm : Clear the pending state and record the error per L2-103
+  confirm -> shell : Release disableClose
+  confirm -> browser : Render the error in the alert region
+  confirm -> browser : Return focus to the confirm action for retry
+  confirm --> user : Dialog stays open with the error shown
+end
+@enduml

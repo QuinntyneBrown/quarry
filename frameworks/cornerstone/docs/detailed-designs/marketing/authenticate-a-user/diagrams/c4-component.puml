@@ -1,0 +1,37 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Authenticate a user
+
+Person(user, "Application user", "Reads the screen and submits credentials")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(layout, "AuthLayoutComponent", "Standalone component", "Owns the centered and split page arrangement and the panel tone")
+  Component(card, "AuthCardComponent", "Standalone component", "Renders the h1 title, lede, error alert, form region, and alternate action")
+  Component(brandd, "AuthBrandDirective", "Attribute directive", "Sizes and positions the projected brand lockup per variant")
+  Component(paneld, "AuthPanelDirective", "Attribute directive", "Applies the panel tone and constrained measure")
+  Component(altd, "AuthAlternateDirective", "Attribute directive", "Lays out the links beneath the form")
+  Component(footerd, "AuthFooterDirective", "Attribute directive", "Renders the legal and support links at the page foot")
+  Component(lockup, "BrandLockupComponent", "Standalone component", "Supplies the mark and wordmark per L2-148")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(styles, "Auth layout styles", "Component-scoped CSS", "Declare the grid, breakpoint, tone, and container bound from --cs- tokens")
+}
+
+System_Ext(form, "Application credential form", "Fields, validation, and submit control owned by the application")
+System_Ext(browser, "Browser platform", "Rendering, focus, and viewport width")
+
+Rel(user, card, "Reads the heading and submits from")
+Rel(layout, card, "Positions")
+Rel(layout, brandd, "Projects the brand region through")
+Rel(layout, paneld, "Projects the artwork panel through")
+Rel(layout, footerd, "Projects the page footer through")
+Rel(brandd, lockup, "Sizes")
+Rel(card, altd, "Projects the alternate action through")
+Rel(card, form, "Projects")
+Rel(layout, styles, "Resolves the grid and breakpoint from")
+Rel(card, styles, "Resolves the surface and heading scale from")
+Rel(card, browser, "Moves focus to the alert region in")
+Rel(styles, browser, "Is resolved by", "CSS cascade")
+@enduml

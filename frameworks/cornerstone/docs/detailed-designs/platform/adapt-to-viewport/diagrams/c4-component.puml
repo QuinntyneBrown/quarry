@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Adapt to viewport
+
+Container_Boundary(bp, "Breakpoint source") {
+  Component(constant, "CsBreakpoints", "Typed TypeScript constant", "Five entries with pixel values and BreakpointObserver query strings")
+  Component(mixins, "_breakpoints.scss", "Sass mixins", "cs-from, cs-until, and cs-between emitting the same thresholds")
+  Component(props, "--cs-bp- custom properties", "CSS custom properties", "Exposes the thresholds to runtime CSS")
+}
+
+Container_Boundary(adapters, "CDK adapter layer") {
+  Component(service, "CsBreakpointService", "Injectable service", "Reports the active class as a signal and the server default under a server renderer")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(region, "CsResponsiveRegionDirective", "Angular directive", "Collapses a region to stack, drawer, or overflow below a named class")
+  Component(rtable, "ResponsiveTableDirective", "Angular directive", "Reflows a table to labelled cards, preserving header association")
+  Component(scroll, "CsScrollRegionDirective", "Angular directive", "Makes a documented horizontal scroller keyboard scrollable and named")
+  Component(targets, "Target size rules", "Shared CSS rules", "Gives every pointer target a 24 by 24 CSS pixel box")
+  Component(consumers, "ShellComponent / DataToolbarComponent / KanbanBoardComponent", "Angular components", "Change navigation, filters, and columns by class")
+}
+
+Container_Boundary(harness, "Responsive verification harness") {
+  Component(viewport, "CsViewportHarness", "Test harness", "Renders a component at XS, SM, MD, LG, and XL")
+  Component(coverage, "responsive-coverage gate", "Build step", "Fails on an unasserted transform or a missing XS affordance assertion")
+}
+
+System_Ext(cdk, "Angular CDK layout", "BreakpointObserver")
+
+Rel(service, constant, "Builds its queries from")
+Rel(service, cdk, "Observes through")
+Rel(mixins, constant, "Emits the same thresholds as")
+Rel(props, constant, "Publishes the values of")
+Rel(region, service, "Reads the active class from")
+Rel(rtable, service, "Reads the active class from")
+Rel(consumers, region, "Collapse their chrome through")
+Rel(consumers, rtable, "Reflow their tables through")
+Rel(consumers, scroll, "Expose their horizontal scrollers through")
+Rel(consumers, targets, "Size their pointer targets by")
+Rel(viewport, constant, "Iterates the five classes of")
+Rel(viewport, consumers, "Renders and asserts")
+Rel(coverage, viewport, "Reads the asserted transforms from")
+@enduml

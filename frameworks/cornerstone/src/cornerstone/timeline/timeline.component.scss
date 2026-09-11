@@ -1,0 +1,17 @@
+ol {
+  list-style: none;
+  border-inline-start: 2px solid var(--cs-border);
+}
+li {
+  position: relative;
+  padding: 0 0 var(--cs-space-5) var(--cs-space-5);
+}
+li::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -0.45rem;
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: 50%;
+  background: var(--cs-lime-strong);
+}

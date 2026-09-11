@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Open a drawer
+
+Person(user, "Application user", "Opens and dismisses the panel")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(drawer, "DrawerComponent", "Standalone component", "Renders the anchored panel and holds the opened, position, and mode state")
+  Component(container, "DrawerContainerComponent", "Standalone component", "Reflows the page content beside a non-modal drawer")
+  Component(service, "DrawerService", "Injectable service", "Opens a drawer programmatically and returns a typed handle")
+  Component(ref, "DrawerRef<R, C>", "Handle object", "Carries close(result) and the closed observable")
+  Component(headerd, "DrawerHeaderDirective", "Attribute directive", "Lays out the title and close control and supplies aria-labelledby")
+  Component(footerd, "DrawerFooterDirective", "Attribute directive", "Pins the action region to the bottom edge of the panel")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(panel, "Drawer styles", "Component-scoped CSS", "Declare extent, elevation, and slide duration from --cs- tokens")
+}
+
+System_Ext(cdkoverlay, "Angular CDK Overlay", "Overlay attachment, backdrop, and block-scroll strategy")
+System_Ext(cdka11y, "Angular CDK a11y", "cdkTrapFocus and FocusMonitor")
+System_Ext(cdklayout, "Angular CDK layout", "BreakpointObserver and Directionality")
+System_Ext(browser, "Browser platform", "Viewport, focus, and scrolling")
+
+Rel(user, drawer, "Opens and dismisses")
+Rel(service, cdkoverlay, "Attaches the panel through")
+Rel(service, ref, "Returns")
+Rel(drawer, cdka11y, "Traps focus while modal through")
+Rel(drawer, cdkoverlay, "Blocks page scrolling while modal through")
+Rel(drawer, cdklayout, "Resolves start and end and the responsive breakpoint through")
+Rel(drawer, panel, "Resolves extent and motion from")
+Rel(container, drawer, "Reserves the non-modal region for")
+Rel(headerd, drawer, "Supplies the accessible name to")
+Rel(footerd, drawer, "Fills the pinned action region of")
+Rel(cdka11y, browser, "Moves and restores focus in")
+Rel(cdklayout, browser, "Reads the viewport of")
+@enduml

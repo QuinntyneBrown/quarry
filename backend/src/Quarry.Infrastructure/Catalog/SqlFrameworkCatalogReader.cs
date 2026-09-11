@@ -77,6 +77,7 @@ public sealed class SqlFrameworkCatalogReader : IFrameworkCatalogReader, IFramew
             JsonSerializer.Deserialize<List<string>>(entry.UseCasesJson) ?? [],
             JsonSerializer.Deserialize<List<FrameworkComponentDescriptor>>(entry.ComponentsJson) ?? [],
             preview is null ? null : new PreviewManifest(entry.Id, entry.Revision, preview.PreviewUri!,
-                preview.ComponentIds!.Select(id => id!).ToArray(), preview.BuildId!, preview.ProtocolVersion, preview.IsIllustrative!.Value));
+                preview.ComponentIds!.Select(id => id!).ToArray(), preview.BuildId!, preview.ProtocolVersion, preview.IsIllustrative!.Value),
+            entry.DesignSystemUri);
     }
 }

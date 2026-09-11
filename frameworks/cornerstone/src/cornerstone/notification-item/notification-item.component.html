@@ -1,0 +1,12 @@
+<article [class.unread]="!notification().read">
+  <span>{{ notification().category }}</span>
+  <h3>{{ notification().title }}</h3>
+  <p>{{ notification().body }}</p>
+  <time [attr.datetime]="notification().instant">{{ notification().instant }}</time
+  ><button
+    type="button"
+    (click)="activated.emit({ id: notification().id, target: notification().target })"
+  >
+    Open
+  </button>
+</article>

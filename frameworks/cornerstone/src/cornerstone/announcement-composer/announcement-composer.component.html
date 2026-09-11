@@ -1,0 +1,12 @@
+<form (submit)="submit($event)">
+  <cs-field label="Subject"><input csInput [value]="value().subject" /></cs-field
+  ><cs-field label="Body">
+    <textarea csTextarea maxlength="5000">{{ value().body }}</textarea>
+  </cs-field>
+  @if (value().delivery === 'scheduled') {
+    <cs-field label="Schedule"><cs-date-time-field /></cs-field>
+  }
+  <button csButton="secondary" type="button" (click)="previewRequested.emit(value())">
+    Preview</button
+  ><button csButton type="submit">Send</button>
+</form>

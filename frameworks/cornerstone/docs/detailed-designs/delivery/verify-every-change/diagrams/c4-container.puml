@@ -1,0 +1,36 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Verify every change
+
+Person(maintainer, "Library maintainer", "Pushes a branch and opens a pull request")
+
+System_Boundary(verification, "Cornerstone verification system") {
+  Container(job, "CI verify job", "GitHub Actions job on ubuntu-latest, Node 22", "Runs npm ci and every check in one job")
+  Container(unit, "Unit and behaviour suites", "Vitest over jsdom via @angular/build:unit-test", "Covers documented inputs, outputs, states, and edge cases")
+  Container(visual, "Visual runner", "Headless browser screenshot comparison", "Renders every documented variant in the light and dark themes")
+  Container(cross, "Cross-browser runner", "Browser automation across the support matrix", "Executes behaviour suites in each supported engine")
+  Container(trace, "Traceability gate", "Node script", "Parses Traces to headers and compares against the specification")
+  ContainerDb(baselines, "Approved baselines", "PNG files under verification/baselines", "One image per variant, theme, and viewport")
+  ContainerDb(srlog, "Screen-reader log", "Markdown record", "One record per component, pattern, reader, and version")
+}
+
+System_Ext(cornerstone, "Cornerstone", "Library and documentation site under verification")
+System_Ext(specs, "Requirement specification", "docs/specs/L2.md")
+System_Ext(matrix, "Support matrix", "Declared Angular, Node, and browser support")
+System_Ext(repo, "GitHub repository", "Branch protection on main")
+
+Rel(maintainer, repo, "Pushes a branch to")
+Rel(repo, job, "Triggers on push to any branch and on pull request")
+Rel(job, unit, "Runs npm test")
+Rel(job, visual, "Runs the visual comparison")
+Rel(job, cross, "Runs the cross-browser suites")
+Rel(job, trace, "Runs the traceability gate")
+Rel(unit, cornerstone, "Exercises the public API of")
+Rel(visual, cornerstone, "Renders documented variants of")
+Rel(visual, baselines, "Compares renders against")
+Rel(cross, matrix, "Reads the browser list from")
+Rel(trace, specs, "Reads declared identifiers from")
+Rel(trace, srlog, "Confirms a record exists for each ARIA pattern")
+Rel(job, repo, "Reports the required check to")
+@enduml

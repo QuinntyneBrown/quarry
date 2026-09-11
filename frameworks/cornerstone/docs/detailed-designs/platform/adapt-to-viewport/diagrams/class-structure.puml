@@ -1,0 +1,102 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Adapt to viewport
+
+enum CsViewportClass {
+  xs
+  sm
+  md
+  lg
+  xl
+}
+
+class CsBreakpointDefinition {
+  +key: CsViewportClass
+  +minWidthPx: number
+  +query: string
+}
+
+class CsBreakpoints <<constant>> {
+  +{static} xs: CsBreakpointDefinition
+  +{static} sm: CsBreakpointDefinition
+  +{static} md: CsBreakpointDefinition
+  +{static} lg: CsBreakpointDefinition
+  +{static} xl: CsBreakpointDefinition
+  +{static} all(): readonly CsBreakpointDefinition[]
+  +{static} classFor(widthPx: number): CsViewportClass
+}
+
+class CsBreakpointService {
+  +active: Signal<CsViewportClass>
+  +matches(key: CsViewportClass): Signal<boolean>
+  +atOrAbove(key: CsViewportClass): Signal<boolean>
+  -serverDefault: CsViewportClass
+}
+
+enum CsCollapseMode {
+  stack
+  drawer
+  overflow
+}
+
+class CsResponsiveRegionDirective {
+  +collapseBelow: InputSignal<CsViewportClass>
+  +mode: InputSignal<CsCollapseMode>
+  +collapsed: Signal<boolean>
+  +collapsedChange: OutputEmitterRef<boolean>
+}
+
+class ResponsiveTableDirective {
+  +reflowBelow: InputSignal<CsViewportClass>
+  +cardLabelSource: InputSignal<CsLabelSource>
+  +reflowed: Signal<boolean>
+  -headerIdFor(columnIndex: number): string
+}
+
+enum CsLabelSource {
+  columnHeader
+  ariaLabel
+}
+
+class CsScrollRegionDirective {
+  +axis: InputSignal<CsScrollAxis>
+  +label: InputSignal<string>
+  +tabIndex: number
+}
+
+enum CsScrollAxis {
+  inline
+  block
+  both
+}
+
+class CsViewportHarness {
+  +atClass(key: CsViewportClass): Promise<ComponentFixture<unknown>>
+  +forEachClass(assert: (key: CsViewportClass) => Promise<void>): Promise<void>
+  +assertTransform(key: CsViewportClass, name: string): Promise<void>
+}
+
+CsBreakpoints *-- "5" CsBreakpointDefinition : declares
+CsBreakpointDefinition --> CsViewportClass : keyed by
+CsBreakpointService ..> CsBreakpoints : builds queries from
+CsBreakpointService --> CsViewportClass : reports
+CsResponsiveRegionDirective ..> CsBreakpointService : reads the active class from
+CsResponsiveRegionDirective --> CsCollapseMode : has
+ResponsiveTableDirective ..> CsBreakpointService : reads the active class from
+ResponsiveTableDirective --> CsLabelSource : has
+ResponsiveTableDirective o-- "0..1" CsScrollRegionDirective : delegates overflow to
+CsScrollRegionDirective --> CsScrollAxis : has
+CsViewportHarness ..> CsBreakpoints : iterates
+CsViewportHarness ..> ResponsiveTableDirective : asserts the transform of
+@enduml

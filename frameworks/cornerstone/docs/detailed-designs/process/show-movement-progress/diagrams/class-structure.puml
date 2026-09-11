@@ -1,0 +1,109 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show movement progress
+
+enum MovementState {
+  done
+  current
+  locked
+}
+
+enum DialVariant {
+  paper
+  dark
+}
+
+enum MovementListVariant {
+  rail
+  page
+}
+
+class Movement {
+  +id: string
+  +label: string
+  +shortLabel?: string
+  +state: MovementState
+  +lockReason?: string
+}
+
+interface CsProcessAdapter {
+  +labels: CsProcessLabels
+  +palette: CsProcessPalette
+}
+
+class CsProcessPalette {
+  +stateToken: ReadonlyMap<MovementState, string>
+  +defaultToken: string
+}
+
+class CsProcessLabels {
+  +doneLabel: string
+  +currentLabel: string
+  +lockedLabel: string
+  +positionSummary: (current: number, total: number) => string
+}
+
+class MovementDialComponent {
+  +segments: InputSignal<number>
+  +completed: InputSignal<number>
+  +label: InputSignal<string>
+  +valueText: InputSignal<string | null>
+  +variant: InputSignal<DialVariant>
+  +adapter: InputSignal<CsProcessAdapter>
+  -segmentPaths: Signal<readonly string[]>
+}
+
+class MovementListComponent {
+  +movements: InputSignal<readonly Movement[]>
+  +variant: InputSignal<MovementListVariant>
+  +adapter: InputSignal<CsProcessAdapter>
+  +movementActivated: OutputEmitterRef<MovementActivation>
+  -accessibleName(item: Movement): string
+  -isActivatable(item: Movement): boolean
+}
+
+class PipStripComponent {
+  +count: InputSignal<number>
+  +current: InputSignal<number>
+  +labels: InputSignal<readonly string[] | null>
+  +adapter: InputSignal<CsProcessAdapter>
+  -summaryText: Signal<string>
+}
+
+class ProgressRingComponent {
+  +value: InputSignal<number>
+  +size: InputSignal<CsRingSize>
+  +tone: InputSignal<CsRingTone>
+  +label: InputSignal<string>
+  +indeterminate: InputSignal<boolean>
+}
+
+class MovementActivation {
+  +movementId: string
+  +index: number
+}
+
+MovementDialComponent *-- ProgressRingComponent : renders through
+MovementDialComponent --> DialVariant : has
+MovementListComponent "1" o-- "0..*" Movement : renders
+MovementListComponent --> MovementListVariant : has
+MovementListComponent ..> PipStripComponent : renders per-movement pips through
+Movement --> MovementState : has
+MovementDialComponent --> CsProcessAdapter : reads labels from
+MovementListComponent --> CsProcessAdapter : reads labels from
+PipStripComponent --> CsProcessAdapter : reads labels from
+CsProcessAdapter *-- CsProcessLabels
+CsProcessAdapter *-- CsProcessPalette
+MovementListComponent ..> MovementActivation : emits
+@enduml

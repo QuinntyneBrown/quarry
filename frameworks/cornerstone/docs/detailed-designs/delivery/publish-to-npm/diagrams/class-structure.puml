@@ -1,0 +1,127 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Publish to npm
+
+enum CsCommitType {
+  feat
+  fix
+  perf
+  refactor
+  docs
+  test
+  chore
+  ci
+  style
+}
+
+enum CsBumpKind {
+  major
+  minor
+  patch
+  none
+}
+
+enum CsDistTag {
+  latest
+  next
+}
+
+enum CsReleaseOutcome {
+  published
+  skippedNoReleasableCommits
+  skippedVersionExists
+  failedVerification
+  failedPublish
+  failedPostPublish
+}
+
+class CsCommitRecord {
+  +sha: string
+  +type: CsCommitType
+  +scope: string
+  +subject: string
+  +breaking: boolean
+  +url: string
+  +bump(): CsBumpKind
+}
+
+class CsCommitConvention {
+  +acceptedTypes: CsCommitType[]
+  +breakingMarker: '!'
+  +breakingFooter: 'BREAKING CHANGE:'
+  +validate(subject: string): boolean
+}
+
+class CsReleasePlan {
+  +previousTag: string
+  +commitSha: string
+  +commits: CsCommitRecord[]
+  +bump: CsBumpKind
+  +version: string
+  +distTag: CsDistTag
+  +isReleasable(): boolean
+}
+
+class CsIdempotencyProbe {
+  +packageName: '@quinntyne/cornerstone'
+  +version: string
+  +existsOnRegistry(): boolean
+  +reason: string
+}
+
+class CsChangelogEntry {
+  +version: string
+  +releasedOn: string
+  +groups: Map<CsCommitType, CsCommitRecord[]>
+  +breakingChanges: string[]
+  +toMarkdown(): string
+}
+
+class CsReleaseArtifacts {
+  +annotatedTag: string
+  +githubReleaseUrl: string
+  +tarballFiles: string[]
+  +attestationId: string
+}
+
+class CsPublishedCheck {
+  +installedVersion: string
+  +compilesSmokeComponent: boolean
+  +resolvedSubpaths: string[]
+  +passed(): boolean
+}
+
+class CsReleaseSummary {
+  +runId: string
+  +commitSha: string
+  +version: string
+  +outcome: CsReleaseOutcome
+  +reason: string
+  +notify(): void
+}
+
+CsCommitRecord --> CsCommitType
+CsCommitRecord ..> CsBumpKind : derives
+CsCommitConvention ..> CsCommitRecord : validates
+CsReleasePlan "1" *-- "0..*" CsCommitRecord
+CsReleasePlan --> CsBumpKind
+CsReleasePlan --> CsDistTag
+CsReleasePlan ..> CsIdempotencyProbe : is probed by
+CsReleasePlan ..> CsChangelogEntry : produces
+CsChangelogEntry --> CsReleaseArtifacts : is published in
+CsReleaseArtifacts ..> CsPublishedCheck : is verified by
+CsReleaseSummary --> CsReleaseOutcome
+CsReleaseSummary o-- CsReleasePlan
+CsReleaseSummary o-- CsPublishedCheck
+@enduml

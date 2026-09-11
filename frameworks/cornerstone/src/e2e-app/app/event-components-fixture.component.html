@@ -1,0 +1,39 @@
+<h1>Event component acceptance fixtures</h1>
+<section aria-label="Countdown example">
+  <cs-countdown [now]="clock()" [target]="2000" />
+  <button csButton type="button" (click)="clock.set(2000)">Reveal result</button>
+  <button csButton type="button" (click)="clock.set(8000)">Finish celebration</button>
+</section>
+<section aria-label="Dialog example">
+  <button csButton type="button" (click)="dialogOpen.set(true)">Open review</button>
+  <cs-review-dialog title="Review changes" [open]="dialogOpen()" (closed)="close()">
+    <label>Review note <input /></label>
+    <button csButton type="button" (click)="dialogOpen.set(false)">Save review</button>
+  </cs-review-dialog>
+  <cs-review-dialog title="Second review">Second dialog content</cs-review-dialog>
+  <output data-testid="close-count">{{ closeCount() }}</output>
+</section>
+<section aria-label="Team board example">
+  <button csButton type="button" (click)="disabled.set(!disabled())">Toggle disabled</button>
+  <button csButton type="button" (click)="editable.set(!editable())">Toggle editing</button>
+  <cs-team-board
+    [groups]="groups"
+    [members]="members"
+    [projects]="projects"
+    [editable]="editable()"
+    [disabled]="disabled()"
+    currentMember="ada"
+    (moved)="move($event)"
+    (assigned)="assign($event)"
+    (newTeamRequested)="createLog.set($event.memberId)"
+  />
+  <cs-team-board [groups]="groups" [members]="members" [editable]="true" />
+  <output data-testid="move-log">{{ moveLog() }}</output>
+  <output data-testid="assignment-log">{{ assignmentLog() }}</output>
+  <output data-testid="create-log">{{ createLog() }}</output>
+</section>
+<section aria-label="Raffle example">
+  <cs-raffle-stage [result]="result()" [now]="clock()" [forceFallback]="forcedFallback()" />
+  <button csButton type="button" (click)="lateDraw()">Load past draw</button>
+  <button csButton type="button" (click)="forcedFallback.set(false)">Try GPU</button>
+</section>

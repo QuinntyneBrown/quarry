@@ -1,0 +1,40 @@
+<section class="stage" [class.celebrating]="celebrating()" [attr.aria-label]="labels().ariaLabel">
+  <canvas #canvas aria-hidden="true" [hidden]="!celebrating() || fallback()"></canvas>
+  @if (celebrating() && fallback()) {
+    <div class="particles" aria-hidden="true">
+      @for (piece of pieces; track piece.id) {
+        <span
+          [style.left.%]="piece.x"
+          [style.animation-delay.s]="piece.delay"
+          [style.--drift]="piece.drift + 'vw'"
+          [style.background]="piece.color"
+        ></span>
+      }
+    </div>
+  }
+  <div class="content">
+    @if (result()) {
+      @if (drawing()) {
+        <cs-badge tone="lime">{{ labels().drawingBadge }}</cs-badge>
+        <p class="cycling" aria-hidden="true">{{ cycling() }}</p>
+        <p class="live-message" role="status">{{ labels().drawingAnnouncement }}</p>
+      } @else {
+        <cs-badge tone="lime">{{ labels().winnerBadge }}</cs-badge>
+        <div role="status">
+          <h2 class="winner">{{ winnerName() }}</h2>
+          <p class="identity">{{ winnerDetail() }}</p>
+          <p class="celebration-copy">{{ labels().winnerDescription }}</p>
+        </div>
+      }
+      @if (effectsActive()) {
+        <button csButton="ghost" type="button" (click)="stopEffects()">
+          {{ labels().stopEffects }}
+        </button>
+      }
+    } @else {
+      <span class="sparkle" aria-hidden="true">✳</span>
+      <h2>{{ labels().waitingTitle }}</h2>
+      <p>{{ labels().waitingDescription }}</p>
+    }
+  </div>
+</section>

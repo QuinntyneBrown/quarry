@@ -1,0 +1,51 @@
+{
+  "kind": "class",
+  "name": "NavGroupComponent",
+  "sourcePath": "src/cornerstone/nav-group/nav-group.component.ts",
+  "category": "navigation",
+  "description": "Nav Group public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "''",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-nav-group",
+  "slug": "nav-group",
+  "label": "Nav Group",
+  "tokens": ["--cs-ink-muted", "--cs-text-xs"],
+  "relatedSymbols": ["NavGroup"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "NavGroup",
+      "sourcePath": "src/cornerstone/nav-group/nav-group.interface.ts",
+      "category": "navigation",
+      "description": "Nav Group public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "items",
+          "role": "property",
+          "type": "readonly CsNavItem[]",
+          "required": true,
+          "description": "Items public API."
+        }
+      ]
+    }
+  ]
+}

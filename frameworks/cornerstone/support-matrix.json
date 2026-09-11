@@ -1,0 +1,6 @@
+{
+  "angular": ">=21.0.0 <22.0.0",
+  "node": ">=22.0.0 <23.0.0",
+  "browsers": ["chromium-latest-2", "firefox-latest-2", "webkit-latest-2"],
+  "deprecationMinorReleases": 2
+}

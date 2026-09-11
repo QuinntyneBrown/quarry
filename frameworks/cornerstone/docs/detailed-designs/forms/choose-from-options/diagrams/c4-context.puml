@@ -1,0 +1,26 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Choose from options
+
+Person(dev, "Application developer", "Supplies the option set and binds a form control per group")
+Person(youth, "Youth", "Answers quiz questions and records a mood or RSVP in Word Up")
+Person(guardian, "Guardian", "Records consent decisions in Word Up")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying selects, checkboxes, radios, switches, and choice cards")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application owning the option data and validators")
+System_Ext(cdk, "Angular CDK", "Roving focus management for grouped controls")
+System_Ext(browser, "Browser platform", "Native select rendering, checkbox semantics, and reduced-motion preference")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes choice controls from")
+Rel(dev, app, "Declares option view models in")
+Rel(app, cornerstone, "Binds group form controls to")
+Rel(cornerstone, cdk, "Manages roving focus through")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+Rel(cornerstone, browser, "Renders native select and checkbox hosts to")
+Rel(youth, browser, "Selects an answer in")
+Rel(guardian, browser, "Selects a consent choice in")
+Rel(browser, cornerstone, "Reports pointer, key, and change events to")
+@enduml

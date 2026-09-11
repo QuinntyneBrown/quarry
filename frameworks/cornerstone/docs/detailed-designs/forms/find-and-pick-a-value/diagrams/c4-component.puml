@@ -1,0 +1,39 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Find and pick a value
+
+Person(dev, "Application developer", "Binds the option set and the query handler")
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(search, "SearchFieldComponent", "Angular standalone component", "Search icon, clear button, debounce and submit modes, and an accessible result status")
+  Component(combobox, "ComboboxComponent", "Angular standalone component", "ARIA combobox with typeahead, single and multiple selection, and asynchronous loading")
+  Component(listbox, "Overlay listbox", "CDK overlay panel", "Holds the option list, the active descendant, and the empty state")
+  Component(chips, "Selection chips", "Angular template", "Renders removable chips with accessible names in multiple mode")
+  Component(datef, "DateFieldComponent", "Angular standalone component", "Native-first date control with an ISO-8601 calendar date contract")
+  Component(datetimef, "DateTimeFieldComponent", "Angular standalone component", "Native-first date-time control with a timezone-explicit contract")
+  Component(bounds, "Bound validator", "Angular validator", "Reports the documented error for a value outside min or max")
+  Component(live, "Live status region", "Polite live region", "Announces the result count, the loading state, and the empty state")
+}
+
+Container_Boundary(themec, "Theme stylesheet") {
+  Component(tokens, "Control and listbox tokens", "CSS custom properties", "Declares control height, panel elevation, chip tone, and focus ring")
+}
+
+System_Ext(cdk, "Angular CDK", "Overlay positioning and virtual scrolling")
+System_Ext(browser, "Browser platform", "Native inputs, platform picker, and timezone")
+
+Rel(dev, combobox, "Binds the option set to")
+Rel(dev, search, "Handles the search output of")
+Rel(combobox, listbox, "Opens and marks the active descendant in")
+Rel(combobox, chips, "Reflects the selection as")
+Rel(combobox, live, "Announces loading and empty results through")
+Rel(search, live, "Announces the result count and the cleared state through")
+Rel(listbox, cdk, "Is positioned and virtualized by", "Overlay and cdk-virtual-scroll")
+Rel(datef, bounds, "Validates against")
+Rel(datetimef, bounds, "Validates against")
+Rel(datef, browser, "Delegates the picker and the native value to")
+Rel(datetimef, browser, "Reads the local timezone from")
+Rel(combobox, tokens, "Resolves panel and chip values from")
+Rel(search, tokens, "Resolves control height and focus ring from")
+@enduml

@@ -1,0 +1,9 @@
+<textarea csTextarea [value]="value()" (input)="value.set($any($event.target).value)"></textarea
+><button
+  csButton
+  type="button"
+  [disabled]="state() === 'running'"
+  (click)="run.emit({ source: value(), language: language() })"
+>
+  Run
+</button>

@@ -1,0 +1,87 @@
+@startuml
+title UML sequence behaviour — Filter and select an option
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Mentor" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Feature page" as page
+  participant "FormControl" as control
+  participant "Application services" as services
+end box
+box "Frontend — Cornerstone selection components" #D1FADF
+  participant "ComboboxComponent" as combobox
+  participant "Overlay listbox" as listbox
+  participant "Live status region" as live
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Overlay and virtual scroll" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "Rendered control" as dom
+  participant "Assistive technology" as at
+end box
+
+control -> combobox : registerOnChange(fn)
+control -> combobox : registerOnTouched(fn)
+control -> combobox : writeValue(existingSelection)
+combobox -> dom : Render the label through displayWith
+
+user -> dom : Press ArrowDown on the closed control
+dom -> combobox : keydown
+combobox -> listbox : Open the panel
+listbox -> cdk : Position and virtualize per L2-056
+cdk --> listbox : Rendered option buffer
+combobox -> dom : Set aria-expanded=true and the first active descendant per L2-056
+
+user -> dom : Type a query
+dom -> combobox : input event
+combobox -> combobox : Apply the shared debounce contract per L2-055
+combobox -> page : queryChanged(query)
+combobox -> listbox : Set aria-busy=true
+combobox -> live : Announce that results are loading per L2-056
+live -> at : Polite announcement
+page -> services : Resolve the query
+services --> page : Resolved options
+
+alt Matches resolved
+  page -> combobox : Supply the option set
+  combobox -> listbox : Render the filtered options
+  user -> dom : Press ArrowDown
+  combobox -> dom : Update aria-activedescendant without moving DOM focus per L2-056
+  listbox -> cdk : Scroll the active option into view
+  user -> dom : Press Enter
+  combobox -> control : onChange(selectedOption)
+  combobox -> listbox : Close in single mode and keep focus on the input per L2-056
+else No matches
+  page -> combobox : Supply an empty option set
+  combobox -> listbox : Render the documented empty state per L2-056
+  combobox -> live : Announce that no results were found per L2-056
+  live -> at : Polite announcement
+end
+
+opt Multiple mode
+  combobox -> listbox : Keep the panel open and set aria-selected=true
+  combobox -> dom : Reflect the selection as removable chips per L2-056
+end
+
+opt Escape pressed
+  user -> dom : Press Escape
+  combobox -> listbox : Close the panel
+  combobox -> dom : Revert the input per the documented policy and keep focus per L2-056
+end
+
+combobox -> control : onTouched()
+control --> page : Selection and validity
+@enduml

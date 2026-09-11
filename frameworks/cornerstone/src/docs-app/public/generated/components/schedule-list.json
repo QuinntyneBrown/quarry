@@ -1,0 +1,60 @@
+{
+  "kind": "class",
+  "name": "ScheduleListComponent",
+  "sourcePath": "src/cornerstone/schedule-list/schedule-list.component.ts",
+  "category": "communication",
+  "description": "Schedule List public API.",
+  "members": [
+    {
+      "name": "groups",
+      "bindingName": "groups",
+      "role": "input",
+      "type": "readonly ScheduleGroup[]",
+      "required": true,
+      "description": "Groups public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "activated",
+      "bindingName": "activated",
+      "role": "output",
+      "type": "string",
+      "required": false,
+      "description": "Activated public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-schedule-list",
+  "slug": "schedule-list",
+  "label": "Schedule List",
+  "tokens": [],
+  "relatedSymbols": ["ScheduleGroup"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ScheduleGroup",
+      "sourcePath": "src/cornerstone/schedule-list/schedule-group.interface.ts",
+      "category": "communication",
+      "description": "Schedule Group public API.",
+      "members": [
+        {
+          "name": "label",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Label public API."
+        },
+        {
+          "name": "events",
+          "role": "property",
+          "type": "readonly CsEventViewModel[]",
+          "required": true,
+          "description": "Events public API."
+        }
+      ]
+    }
+  ]
+}

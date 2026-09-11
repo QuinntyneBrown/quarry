@@ -1,0 +1,97 @@
+{
+  "kind": "class",
+  "name": "ConfirmDialogComponent",
+  "sourcePath": "src/cornerstone/confirm-dialog/confirm-dialog.component.ts",
+  "category": "overlays",
+  "description": "Confirm Dialog public API.",
+  "members": [
+    {
+      "name": "data",
+      "bindingName": "data",
+      "role": "input",
+      "type": "ConfirmDialogData",
+      "required": true,
+      "description": "Data public API.",
+      "structured": true,
+      "options": []
+    },
+    {
+      "name": "resolved",
+      "bindingName": "resolved",
+      "role": "output",
+      "type": "ConfirmResult",
+      "required": false,
+      "description": "Resolved public API.",
+      "structured": false,
+      "options": ["confirm", "cancel"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-confirm-dialog",
+  "slug": "confirm-dialog",
+  "label": "Confirm Dialog",
+  "tokens": [],
+  "relatedSymbols": ["ConfirmDialogData", "ConfirmResult", "ConfirmTone"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "ConfirmDialogData",
+      "sourcePath": "src/cornerstone/confirm-dialog/confirm-dialog-data.interface.ts",
+      "category": "overlays",
+      "description": "Confirm Dialog Data public API.",
+      "members": [
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "message",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Message public API."
+        },
+        {
+          "name": "confirmLabel",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Confirm Label public API."
+        },
+        {
+          "name": "cancelLabel",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Cancel Label public API."
+        },
+        {
+          "name": "tone",
+          "role": "property",
+          "type": "ConfirmTone",
+          "required": false,
+          "description": "Tone public API."
+        }
+      ]
+    },
+    {
+      "kind": "type",
+      "name": "ConfirmResult",
+      "sourcePath": "src/cornerstone/confirm-dialog/confirm-result.type.ts",
+      "category": "overlays",
+      "description": "Confirm Result public API.",
+      "declaration": "'confirm' | 'cancel'"
+    },
+    {
+      "kind": "type",
+      "name": "ConfirmTone",
+      "sourcePath": "src/cornerstone/confirm-dialog/confirm-tone.type.ts",
+      "category": "overlays",
+      "description": "Confirm Tone public API.",
+      "declaration": "'default' | 'danger'"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "FormActionsComponent",
+  "sourcePath": "src/cornerstone/form-actions/form-actions.component.ts",
+  "category": "forms",
+  "description": "Form Actions public API.",
+  "members": [
+    {
+      "name": "pending",
+      "bindingName": "pending",
+      "role": "input",
+      "type": "boolean",
+      "required": false,
+      "defaultValue": "false",
+      "description": "Pending public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-form-actions",
+  "slug": "form-actions",
+  "label": "Form Actions",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

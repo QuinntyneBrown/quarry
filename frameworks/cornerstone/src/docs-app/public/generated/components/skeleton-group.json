@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "SkeletonGroupComponent",
+  "sourcePath": "src/cornerstone/skeleton-group/skeleton-group.component.ts",
+  "category": "foundations",
+  "description": "Skeleton Group public API.",
+  "members": [
+    {
+      "name": "label",
+      "bindingName": "label",
+      "role": "input",
+      "type": "string",
+      "required": false,
+      "defaultValue": "'Loading'",
+      "description": "Label public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-skeleton-group",
+  "slug": "skeleton-group",
+  "label": "Skeleton Group",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

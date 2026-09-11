@@ -1,0 +1,64 @@
+{
+  "kind": "class",
+  "name": "TimelineComponent",
+  "sourcePath": "src/cornerstone/timeline/timeline.component.ts",
+  "category": "data-display",
+  "description": "Timeline public API.",
+  "members": [
+    {
+      "name": "entries",
+      "bindingName": "entries",
+      "role": "input",
+      "type": "readonly TimelineEntry[]",
+      "required": true,
+      "description": "Entries public API.",
+      "structured": true,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-timeline",
+  "slug": "timeline",
+  "label": "Timeline",
+  "tokens": ["--cs-border", "--cs-lime-strong", "--cs-space-5"],
+  "relatedSymbols": ["TimelineEntry"],
+  "relatedEntries": [
+    {
+      "kind": "interface",
+      "name": "TimelineEntry",
+      "sourcePath": "src/cornerstone/timeline/timeline-entry.interface.ts",
+      "category": "data-display",
+      "description": "Timeline Entry public API.",
+      "members": [
+        {
+          "name": "id",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Id public API."
+        },
+        {
+          "name": "title",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Title public API."
+        },
+        {
+          "name": "date",
+          "role": "property",
+          "type": "string",
+          "required": true,
+          "description": "Date public API."
+        },
+        {
+          "name": "body",
+          "role": "property",
+          "type": "string",
+          "required": false,
+          "description": "Body public API."
+        }
+      ]
+    }
+  ]
+}

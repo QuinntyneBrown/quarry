@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Open a dialog
+
+Person(dev, "Application developer", "Opens dialogs from Liturgy and Word Up feature code")
+Person(user, "Application user", "Completes the task the dialog presents, using pointer or keyboard")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the dialog service, shell, and result types")
+System_Ext(app, "Consuming application", "Liturgy or Word Up Angular application")
+System_Ext(cdk, "Angular CDK", "Dialog, overlay, focus trap, and scroll strategy primitives")
+System_Ext(browser, "Browser platform", "Owns focus, keyboard events, stacking, and document scrolling")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, app, "Injects DialogService in")
+Rel(app, cornerstone, "Opens dialogs through")
+Rel(cornerstone, cdk, "Builds overlay, trap, and scroll blocking on")
+Rel(cornerstone, browser, "Attaches the panel and moves focus in")
+Rel(cdk, browser, "Positions the overlay container in")
+Rel(browser, user, "Presents the dialog to")
+Rel(user, browser, "Types, clicks, and presses Escape in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

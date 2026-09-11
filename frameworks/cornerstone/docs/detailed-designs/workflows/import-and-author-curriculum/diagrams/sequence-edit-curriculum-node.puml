@@ -1,0 +1,80 @@
+@startuml
+title UML sequence behaviour — Edit and reorder a curriculum node
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Administrator" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Curriculum authoring page component" as page
+  participant "Curriculum policy service" as rules
+  participant "Curriculum store" as store
+end box
+box "Frontend — Cornerstone curriculum composite" #D1FADF
+  participant "CurriculumTreeComponent" as tree
+  participant "CurriculumEditorComponent" as editor
+  participant "UnsavedChangesDialogComponent" as unsaved
+  participant "ConfirmDialogComponent" as confirm
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "Drag-drop and LiveAnnouncer" as cdk
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and input" as browser
+end box
+
+page -> tree : Bind the curriculum nodes
+tree -> browser : Render role=tree with aria-level, aria-setsize, and aria-posinset per L2-128
+tree -> browser : Keep exactly one tree item in the tab order per L2-128
+browser --> user : Track, module, lesson, and question hierarchy
+
+user -> tree : Select a lesson node
+tree -> editor : Publish the selected node identifier per L2-128
+editor -> browser : Render the nested lesson form
+user -> editor : Change the lesson title
+editor -> editor : Report the dirty state per L2-128
+
+user -> tree : Select another node while the editor is dirty
+tree -> unsaved : Present the unsaved-changes dialog per L2-105
+user -> unsaved : Choose 'save'
+unsaved --> editor : Save
+editor -> page : Emit CsCurriculumSaveIntent per L2-128
+page -> rules : Decide whether the edit is permitted
+rules --> page : Permitted
+page -> store : Persist the node
+store --> page : Next node list
+page -> tree : Bind the next node list
+
+user -> browser : Perform the documented keyboard move on a sibling node
+browser -> tree : Keyboard move sequence
+tree -> page : Emit CsCurriculumReorderIntent per L2-128
+tree -> cdk : Announce the resulting position politely per L2-128
+cdk --> browser : Polite live region update
+
+opt Administrator deletes a draft node
+  user -> tree : Activate the delete action
+  tree -> confirm : Open with destructive presentation per L2-103
+  user -> confirm : Confirm
+  confirm --> tree : Confirmed
+  tree -> page : Emit one CsCurriculumDeleteIntent per L2-128
+  page -> store : Remove the node
+  store --> page : Next node list
+  page -> tree : Bind the next node list
+end
+
+opt A published node renders
+  tree -> browser : State the published status in text per L2-128
+  editor -> browser : Present the documented locked edit affordances per L2-128
+  browser --> user : Published node shown as locked
+end
+@enduml

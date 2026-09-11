@@ -1,0 +1,36 @@
+{
+  "name": "@quinntyne/cornerstone-design-system",
+  "version": "0.1.0",
+  "description": "Cornerstone design tokens, independent of Angular and the component library.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "styles",
+    "tokens.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./tokens.scss": {
+      "sass": "./styles/tokens.scss",
+      "default": "./styles/tokens.scss"
+    }
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "sass": "1.97.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuinntyneBrown/Cornerstone.git",
+    "directory": "design-system"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "class",
+  "name": "AttendanceChoiceComponent",
+  "sourcePath": "src/cornerstone/attendance-choice/attendance-choice.component.ts",
+  "category": "workflows",
+  "description": "Attendance Choice public API.",
+  "members": [
+    {
+      "name": "value",
+      "bindingName": "value",
+      "role": "input",
+      "type": "CsAttendanceState",
+      "required": false,
+      "defaultValue": "'unknown'",
+      "description": "Value public API.",
+      "structured": false,
+      "options": ["present", "absent", "late", "excused", "unknown"]
+    },
+    {
+      "name": "changed",
+      "bindingName": "changed",
+      "role": "output",
+      "type": "CsAttendanceState",
+      "required": false,
+      "description": "Changed public API.",
+      "structured": false,
+      "options": ["present", "absent", "late", "excused", "unknown"]
+    }
+  ],
+  "component": true,
+  "selector": "cs-attendance-choice",
+  "slug": "attendance-choice",
+  "label": "Attendance Choice",
+  "tokens": [],
+  "relatedSymbols": ["CsAttendanceState"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsAttendanceState",
+      "sourcePath": "src/cornerstone/core/workflows/cs-attendance-state.type.ts",
+      "category": "workflows",
+      "description": "Cs Attendance State public API.",
+      "declaration": "'present' | 'absent' | 'late' | 'excused' | 'unknown'"
+    }
+  ]
+}

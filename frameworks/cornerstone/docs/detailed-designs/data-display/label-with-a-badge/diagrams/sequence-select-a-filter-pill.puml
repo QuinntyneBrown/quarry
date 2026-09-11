@@ -1,0 +1,59 @@
+@startuml
+title UML sequence behaviour — Select a filter pill
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "Application user" as user
+box "Frontend — Consuming application" #E0F2FE
+  participant "Filter panel" as panel
+  participant "Application services" as svc
+end box
+box "Frontend — Cornerstone data display" #D1FADF
+  participant "ChipListComponent" as list
+  participant "PillComponent" as pill
+  participant "BadgeComponent" as badge
+end box
+box "Frontend — Angular CDK" #ECFDF3
+  participant "FocusKeyManager" as keys
+end box
+box "Browser — platform" #FFF4E5
+  participant "DOM and accessibility tree" as dom
+end box
+
+panel -> list : Project pills and set selectionMode 'multiple'
+list -> keys : Create manager over the projected chips
+list -> pill : Set tabindex 0 on the first chip, -1 on the rest per L2-078
+list -> dom : Write role, aria-label, and the single tab stop
+
+user -> dom : Press Tab, then ArrowRight
+dom -> list : Keydown event
+list -> keys : Delegate arrow handling
+keys -> pill : Activate the next chip
+pill -> dom : Move focus without clipping the focus ring per L2-078
+
+user -> dom : Press Space on the focused chip
+dom -> pill : Keydown event
+pill -> pill : Toggle the selected model
+pill -> dom : Write aria-pressed and render a check mark per L2-078
+pill -> list : Report the toggle
+list -> panel : Emit ChipSelectionChange with the full selected set
+
+panel -> svc : Apply the reported filter set
+svc --> panel : Filtered record set with a result count
+panel -> badge : Render the count presentation with value and max
+badge -> badge : Clamp the display to the documented overflow format per L2-077
+badge -> dom : Write the overflow text plus hidden exact value per L2-077
+badge -> dom : Resolve tone foreground and background from tokens per L2-077
+dom --> user : Updated result count and selected filters
+@enduml

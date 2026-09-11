@@ -1,0 +1,36 @@
+{
+  "kind": "class",
+  "name": "EvidencePreviewComponent",
+  "sourcePath": "src/cornerstone/evidence-preview/evidence-preview.component.ts",
+  "category": "communication",
+  "description": "Evidence Preview public API.",
+  "members": [
+    {
+      "name": "media",
+      "bindingName": "media",
+      "role": "input",
+      "type": "CsMediaViewModel | null",
+      "required": false,
+      "defaultValue": "null",
+      "description": "Media public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-evidence-preview",
+  "slug": "evidence-preview",
+  "label": "Evidence Preview",
+  "tokens": [],
+  "relatedSymbols": ["CsMediaViewModel"],
+  "relatedEntries": [
+    {
+      "kind": "type",
+      "name": "CsMediaViewModel",
+      "sourcePath": "src/cornerstone/core/communication/cs-media-view-model.type.ts",
+      "category": "communication",
+      "description": "Cs Media View Model public API.",
+      "declaration": "{\n  readonly kind: 'image' | 'video' | 'audio' | 'iframe';\n  readonly src: string;\n  readonly title: string;\n  readonly poster?: string;\n  readonly alt?: string;\n}"
+    }
+  ]
+}

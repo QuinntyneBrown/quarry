@@ -3,6 +3,9 @@ import { expect, type Page } from "@playwright/test";
 export class DetailsPage {
   public constructor(private readonly page: Page) {}
   public get dialog() { return this.page.getByRole("dialog"); }
+  public get designSystemTab() { return this.dialog.getByRole("tab", { name: "Design System" }); }
+  public async openDesignSystemTab() { await this.designSystemTab.click(); }
+  public get designSystemIframe() { return this.dialog.locator('iframe[title$=" design system"]'); }
   public async close() { await this.dialog.getByRole("button", { name: "Close details" }).click(); }
   public async clickContent() { await this.dialog.getByRole("heading", { level: 2 }).click(); }
   public async clickBackdrop() { await this.page.mouse.click(2, 2); }

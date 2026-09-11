@@ -1,0 +1,44 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Work a kanban board
+
+Person(user, "Application user", "Moves a work item by pointer or keyboard")
+
+Container_Boundary(page, "Consuming application feature page") {
+  Component(vm, "Column view model", "KanbanColumn[]", "Columns with items, accepted kinds, locked and done flags")
+  Component(adapter, "Process adapter", "CsProcessAdapter", "Consumer-supplied column titles, lock reasons, and empty-state copy per L2-143")
+  Component(handler, "Intent handler", "Component method", "Applies or rejects a move and rebinds the columns")
+}
+
+Container_Boundary(lib, "Cornerstone component library") {
+  Component(board, "KanbanBoardComponent", "Standalone component", "Horizontal responsive board connecting every column as a drop list per L2-139")
+  Component(column, "KanbanColumnComponent", "Standalone component", "Labelled region with allowed, blocked, locked, done, and empty states per L2-139")
+  Component(card, "WorkItemCardComponent", "Standalone component", "Code, title, tags, points, status, assignee, action menu, and drag handle per L2-140")
+  Component(keyboard, "KanbanKeyboardMove", "Injectable controller", "Keyboard alternative emitting the same move intent as a pointer drop")
+  Component(announcer, "KanbanAnnouncer", "Injectable helper", "Announces a refused drop and the landing column and position")
+  Component(strip, "PipStripComponent", "Standalone component", "Card progress semantics per L2-138")
+}
+
+System_Ext(cdk, "Angular CDK", "DragDropModule, LiveAnnouncer, and BreakpointObserver")
+System_Ext(browser, "Browser platform", "Pointer and keyboard events and the accessibility tree")
+
+Rel(vm, board, "Supplies columns and accepted kinds to", "input()")
+Rel(adapter, board, "Supplies every visible label to", "input()")
+Rel(adapter, column, "Supplies the title, lock reason, and empty text to", "input()")
+Rel(adapter, card, "Supplies status and action labels to", "input()")
+Rel(board, column, "Renders and connects as a drop list")
+Rel(column, card, "Renders each work item as")
+Rel(card, strip, "Renders progress through")
+Rel(board, cdk, "Registers connected drop lists with", "DragDropModule")
+Rel(board, keyboard, "Delegates the keyboard move sequence to")
+Rel(keyboard, board, "Requests the same move intent as a pointer drop")
+Rel(board, handler, "Emits WorkItemMoveIntent to", "output()")
+Rel(card, handler, "Emits WorkItemOpenIntent and WorkItemActionIntent to", "output()")
+Rel(board, announcer, "Announces refused drops through")
+Rel(keyboard, announcer, "Announces the landing column and position through")
+Rel(announcer, cdk, "Delegates announcement to", "LiveAnnouncer")
+Rel(board, cdk, "Observes the XS breakpoint through", "BreakpointObserver")
+Rel(user, browser, "Drags a card or presses the move keys in")
+Rel(browser, board, "Delivers pointer and keyboard events to")
+@enduml

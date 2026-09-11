@@ -1,0 +1,27 @@
+{
+  "kind": "class",
+  "name": "SkeletonComponent",
+  "sourcePath": "src/cornerstone/skeleton/skeleton.component.ts",
+  "category": "foundations",
+  "description": "Skeleton public API.",
+  "members": [
+    {
+      "name": "preset",
+      "bindingName": "preset",
+      "role": "input",
+      "type": "'text' | 'title' | 'circle' | 'block' | 'button' | 'table-row'",
+      "required": false,
+      "defaultValue": "'text'",
+      "description": "Preset public API.",
+      "structured": false,
+      "options": []
+    }
+  ],
+  "component": true,
+  "selector": "cs-skeleton",
+  "slug": "skeleton",
+  "label": "Skeleton",
+  "tokens": [],
+  "relatedSymbols": [],
+  "relatedEntries": []
+}

@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Navigate the public site
+
+Person(dev, "Application developer", "Declares the public link set and the call to action")
+Person_Ext(visitor, "Visitor", "Browses public routes without a session")
+
+System(cornerstone, "Cornerstone", "Angular UI library supplying the marketing header and footer")
+System_Ext(app, "Consuming application", "Word Up public site or the Liturgy cover page")
+System_Ext(browser, "Browser platform", "Reports the viewport width and resolves anchor activation")
+System_Ext(external, "External destinations", "Social platforms and legal documents reached by href")
+System_Ext(npm, "npm registry", "Distributes the published package")
+
+Rel(dev, cornerstone, "Composes the public page chrome from")
+Rel(dev, app, "Declares public routes and link data in")
+Rel(app, cornerstone, "Supplies brand, links, groups, and the call to action to")
+Rel(cornerstone, app, "Emits the call-to-action intent to")
+Rel(cornerstone, browser, "Renders the header and footer landmarks in")
+Rel(browser, visitor, "Presents the public navigation to")
+Rel(visitor, browser, "Activates a link or the call to action in")
+Rel(browser, external, "Opens external links in")
+Rel(cornerstone, npm, "Is published to")
+Rel(app, npm, "Installs from")
+@enduml

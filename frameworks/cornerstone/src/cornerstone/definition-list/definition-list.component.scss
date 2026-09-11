@@ -1,0 +1,20 @@
+dl {
+  display: grid;
+  gap: var(--cs-space-3);
+}
+dl > div {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) 2fr;
+  gap: var(--cs-space-4);
+}
+dt {
+  font-weight: 650;
+}
+dd {
+  margin: 0;
+}
+@media (max-width: 575.98px) {
+  dl > div {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Browse tabular data
+
+Person(dev, "Application developer", "Binds rows and query state to the table and toolbar")
+
+System_Boundary(cornerstone, "Cornerstone") {
+  Container(lib, "Component library", "Angular standalone components and directives", "Holds TableDirective, CsTableContainer, ResponsiveTableDirective, and CsDataToolbar")
+  Container(theme, "Theme stylesheet", "Sass / CSS custom properties", "Declares density, sticky-header, chip, and reflow resolutions")
+  Container(docs, "Documentation site", "Angular application", "Publishes the sorting hooks, the selection model, and the reflow contract")
+}
+
+System_Boundary(app, "Consuming application") {
+  Container(page, "Feature page", "Angular standalone component", "Holds the row list, the filter set, and the result count")
+  Container(services, "Application services", "Angular injectables", "Runs the query, applies the sort, and produces the export file")
+}
+
+System_Ext(cdk, "Angular CDK", "BreakpointObserver, LiveAnnouncer, and Overlay")
+System_Ext(browser, "Browser platform", "Rendering, scrolling, and accessibility tree")
+
+Rel(dev, page, "Binds rows and query state in")
+Rel(page, lib, "Passes rows, filters, and the result count to")
+Rel(lib, page, "Emits search, sort, selection, and export intents to")
+Rel(page, services, "Re-runs the query and requests the export from")
+Rel(services, page, "Publishes rows and the result count to")
+Rel(lib, theme, "Resolves density and reflow values from")
+Rel(lib, cdk, "Observes the reflow breakpoint and announces the count through")
+Rel(lib, browser, "Renders table semantics and the scroll region to")
+Rel(docs, lib, "Documents the table contract of")
+@enduml
